@@ -36,6 +36,7 @@ class UserProfile(models.Model):
     approval = boolean.BooleanField('Пользователь подтверждён', default = False)
     def __str__(self):  
         return "Профиль для %s" % self.user 
+    #TODO зарегистрировать в админке
 
 def create_user_profile(sender, instance, created, **kwargs):  
     if created:  
