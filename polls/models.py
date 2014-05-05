@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
 class Poll(models.Model):
     name = models.CharField('Название опроса', max_length=50)
@@ -17,10 +19,26 @@ class Poll(models.Model):
         (OWN , 'Свой вариант'),
     )
     answer_type = models.CharField(max_length=10, choices = ANSWER_TYPE_CHOICES, default = ONE)
+    #TODO привязать уже проголосовавших user
 
 
 class Choice(models.Model):
     poll = models.ForeignKey(Poll)
     choice_text = models.CharField(max_length=200)
     votes = models.IntegerField(default=0)
+    #TODO привязать проголосовавших hash/user
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    middlename = models.CharField('Отчество', max_length=20)
+    group = models.CharField('Номер группы', max_length=5)
+    room = models.CharField('Номер комнаты', max_length=4)
+    approval = boolean.BooleanField('Пользователь подтверждён', default = False)
+    def __str__(self):  
+        return "Профиль для %s" % self.user 
+
+def create_user_profile(sender, instance, created, **kwargs):  
+    if created:  
+        profile, created = UserProfile.objects.get_or_create(user=instance) 
+
+post_save.connect(create_user_profile, sender=User)
