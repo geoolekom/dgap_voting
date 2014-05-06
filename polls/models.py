@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
+#TODO необходимые методы в моделях
+#TODO метод approve_user и модели для базы поселения
+
 class Poll(models.Model):
     name = models.CharField('Название опроса', max_length=50)
     question = models.CharField('Вопрос', max_length=200)
