@@ -21,14 +21,18 @@ class Poll(models.Model):
         (MANY , 'Выбор нескольких вариантов'),
         (OWN , 'Свой вариант'),
     )
-    answer_type = models.CharField(max_length=10, choices = ANSWER_TYPE_CHOICES, default = ONE)
+    answer_type = models.CharField('Тип ответа', max_length=10, choices = ANSWER_TYPE_CHOICES, default = ONE)
     voted_users = models.ManyToManyField(User)
+    def __str__(self):
+        return self.name
 
 
 class Choice(models.Model):
     poll = models.ForeignKey(Poll)
-    choice_text = models.CharField(max_length=200)
+    choice_text = models.CharField("Текст ответа", max_length=200)
     votes = models.IntegerField(default=0)
+    def __str__(self):
+        return self.choice_text
 
 class Hash(models.Model):
     value = models.IntegerField(unique=True)#для очень старых опросов планируется удалять хэши, оставляя результаты в виде файла
@@ -43,7 +47,6 @@ class UserProfile(models.Model):
     approval = models.BooleanField('Пользователь подтверждён', default = False)
     def __str__(self):  
         return "Профиль для %s" % self.user 
-    #TODO зарегистрировать в админке
 
 def create_user_profile(sender, instance, created, **kwargs):  
     if created:  
