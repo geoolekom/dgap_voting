@@ -19,14 +19,18 @@ class Poll(models.Model):
         (OWN , 'Свой вариант'),
     )
     answer_type = models.CharField(max_length=10, choices = ANSWER_TYPE_CHOICES, default = ONE)
-    #TODO привязать уже проголосовавших user
+    voted_users = models.ManyToManyField(User)
 
 
 class Choice(models.Model):
     poll = models.ForeignKey(Poll)
     choice_text = models.CharField(max_length=200)
     votes = models.IntegerField(default=0)
-    #TODO привязать проголосовавших hash/user
+
+class Hash(models.Model):
+    value = models.IntegerField(unique=True)#для очень старых опросов планируется удалять хэши, оставляя результаты в виде файла
+    choice = models.ForeignKey(Choice)
+    user = models.ForeignKey(User)#при анонимном голосовании не заполнять это поле
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
