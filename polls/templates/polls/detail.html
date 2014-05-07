@@ -1,3 +1,4 @@
+<!--
 <h1>{{ poll.question }}</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
@@ -10,3 +11,45 @@
 {% endfor %}
 <input type="submit" value="Vote" />
 </form>
+-->
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Just voting</title>
+    <style type="text/css">
+      .usual_header {
+        height: 50px;
+        background: #F5F5DC;
+        padding-left: 20;
+        padding-right:20%;
+        padding-top: 10px;
+	padding-bottom: 10px;
+        text-align: center;
+      }
+      .layer1, .layer2 {
+        width: 50%;
+        height: 40%;
+        background: #B0C4DE; /* Цвет фона */
+        border: 1px solid #B0C4DE; /* Параметры рамки */
+        padding: 10px; /* Поля вокруг текста */
+        margin-left: 300; /* Отступ */
+        margin-right: 300;
+        margin-top: 20;
+      }
+    </style>
+  </head>
+  <body gcolor="#FFFFFF" background="images/bg.jpg">
+    <header>
+      <div class="usual_header">
+        <h3>Голосование. Сенат ФОПФ.</h3>
+      </div>
+    </header>
+    <div class="layer1">
+      Лев ревет только в том случае, когда сообщает, что территория принадлежит ему или провозглашает себя царем природы.
+    </div>
+    <div class="layer2">
+      Охотничий участок льва может иметь длину и ширину до тридцати километров.
+    </div>
+  </body>
+</html>
