@@ -7,7 +7,7 @@
     {% if latest_poll_list %}
     <ul>
     {% for poll in latest_poll_list %}
-    <li><pre>{{ poll.name }} <a href="/polls/{{ poll.id }}/">Голосовать</a> <a href="/polls/{{ poll.id }}/results/">Результаты</a></pre> </li>
+    <li><pre>{{ poll.name }} <a href="{% url 'polls:detail' poll.id %}">Голосовать</a> <a href="{% url 'polls:results' poll.id %}">Результаты</a></pre> </li>
     {% endfor %}
     </ul>
     {% else %}
