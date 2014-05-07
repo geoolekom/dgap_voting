@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
+#TODO необходимые методы в моделях
+#TODO метод approve_user и модели для базы поселения
+
 class Poll(models.Model):
     name = models.CharField('Название опроса', max_length=50)
     question = models.CharField('Вопрос', max_length=200)
@@ -18,15 +21,23 @@ class Poll(models.Model):
         (MANY , 'Выбор нескольких вариантов'),
         (OWN , 'Свой вариант'),
     )
-    answer_type = models.CharField(max_length=10, choices = ANSWER_TYPE_CHOICES, default = ONE)
-    #TODO привязать уже проголосовавших user
+    answer_type = models.CharField('Тип ответа', max_length=10, choices = ANSWER_TYPE_CHOICES, default = ONE)
+    voted_users = models.ManyToManyField(User)
+    def __str__(self):
+        return self.name
 
 
 class Choice(models.Model):
     poll = models.ForeignKey(Poll)
-    choice_text = models.CharField(max_length=200)
+    choice_text = models.CharField("Текст ответа", max_length=200)
     votes = models.IntegerField(default=0)
-    #TODO привязать проголосовавших hash/user
+    def __str__(self):
+        return self.choice_text
+
+class Hash(models.Model):
+    value = models.IntegerField(unique=True)#для очень старых опросов планируется удалять хэши, оставляя результаты в виде файла
+    choice = models.ForeignKey(Choice)
+    user = models.ForeignKey(User)#при анонимном голосовании не заполнять это поле
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
@@ -36,7 +47,6 @@ class UserProfile(models.Model):
     approval = models.BooleanField('Пользователь подтверждён', default = False)
     def __str__(self):  
         return "Профиль для %s" % self.user 
-    #TODO зарегистрировать в админке
 
 def create_user_profile(sender, instance, created, **kwargs):  
     if created:  
