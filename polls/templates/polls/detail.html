@@ -20,36 +20,51 @@
     <style type="text/css">
       .usual_header {
         height: 50px;
-        background: #F5F5DC;
-        padding-left: 20;
+	width: 60%;
+        background: #DCDCDC;
+        padding-left: 20%;
         padding-right:20%;
-        padding-top: 10px;
-	padding-bottom: 10px;
+        padding-top: 2px;
+	padding-bottom: 5px;
         text-align: center;
+        margin 0;
+	
       }
-      .layer1, .layer2 {
-        width: 50%;
-        height: 40%;
-        background: #B0C4DE; /* Цвет фона */
-        border: 1px solid #B0C4DE; /* Параметры рамки */
-        padding: 10px; /* Поля вокруг текста */
-        margin-left: 300; /* Отступ */
-        margin-right: 300;
-        margin-top: 20;
+      .question, .choices {
+        width: 40%;
+        padding-left: 30%; /* Поля вокруг текста */
+	padding-right: 30%;
+        text-align: left;
+/*	background: #DCDCDC;*/
       }
     </style>
   </head>
   <body gcolor="#FFFFFF" background="images/bg.jpg">
+    {% if error_message %}
+      <p>
+        <strong>
+          {{ error_message }}
+        </strong>
+      </p>
+    {% endif %}
     <header>
       <div class="usual_header">
-        <h3>Голосование. Сенат ФОПФ.</h3>
+        <h4>Голосовалка ФОПФ</h4>
       </div>
     </header>
-    <div class="layer1">
-      Лев ревет только в том случае, когда сообщает, что территория принадлежит ему или провозглашает себя царем природы.
+    <div class="question">
+      <h2>{{ poll.question }}</h2>
     </div>
-    <div class="layer2">
-      Охотничий участок льва может иметь длину и ширину до тридцати километров.
+    <div class="choices">
+      <form action="{% url 'polls:vote' poll.id %}" method="post">
+        {% csrf_token %}
+        {% for choice in poll.choice_set.all %}
+          <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+          <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />
+        {% endfor %}
+        <div><pre></pre></div>
+        <input type="submit" value="Vote" />
+      </form>
     </div>
   </body>
 </html>
