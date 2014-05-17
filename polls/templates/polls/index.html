@@ -1,8 +1,15 @@
 <html>
+  {% load staticfiles %}
   <head>
     <title>DGAP_Voting</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />
   </head>
   <body>
+    <header>
+      <div >
+        <h4>Голосовалка ФОПФ</h4>
+      </div>
+    </header>
     <p style = "text-align: center"><head>Список</head></p>
     {% if latest_poll_list %}
     <ul>
