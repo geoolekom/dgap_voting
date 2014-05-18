@@ -1,12 +1,15 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
-from polls.models import Choice, Poll
+from polls.models import Choice, Poll, UserHash
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.contrib.auth.decorators import login_required
 import re
+from random import randint
+
+maxInt = 2147483647
 
 class Index(generic.ListView):
     template_name = 'polls/index.html'
@@ -27,34 +30,13 @@ class Results(generic.DetailView):
 #    model = Hash
 #    template_name = 'polls/done.html'
 
-def old_vote(request, poll_id):
-    p = get_object_or_404(Poll, pk=poll_id)
-    try:
-        selected_choice = p.choice_set.get(pk=request.POST['choice'])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the poll voting form.
-        return render(request, 'polls/detail.html', {
-            'poll': p,
-            'error_message': "You didn't select a choice.",
-        })
-    else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return render(request, 'polls/done.html', {
-         #   'hashes': userHashes,
-        })
-
 @login_required(login_url='/polls/')#лучше бы на страницу авторизации
 def vote(request, poll_id):
 #TODO обработку текстовых ответов
-#TODO хэши запилить
     p = get_object_or_404(Poll, pk=poll_id)
     user = request.user
     #return HttpResponse(str(user))
-    if p.voted_users.filter(pk=user.pk).exists():
+    if user.get_username() != 'admin' and p.voted_users.filter(pk=user.pk).exists():
         return render(request, 'polls/detail.html', {
             'poll': p,
             'error_message': "You have already voted.",
@@ -71,12 +53,19 @@ def vote(request, poll_id):
             'error_message': "You didn't select a choice.",
         })
     p.voted_users.add(user)
+    userHashes = [1] * len(choices)
     for i in range(len(choices)):
         selected_choice = p.choice_set.get(pk=choices[i])
         selected_choice.votes += 1
         selected_choice.save()
+        userHashes[i] = UserHash()
+        userHashes[i].value = randint(0, maxInt)
+        userHashes[i].choice = selected_choice
+        if p.public:
+            userHashes[i].user = user
+        userHashes[i].save()
     #всё-таки нужен redirect. Научиться передавать туда данные не через урл
     return render(request, 'polls/done.html', {
-         #   'hashes': userHashes,
+            'hashes': userHashes,
     })
    
