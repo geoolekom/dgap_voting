@@ -47,14 +47,18 @@ def old_vote(request, poll_id):
          #   'hashes': userHashes,
         })
 
-@login_required(login_url='/polls/')
+@login_required(login_url='/polls/')#лучше бы на страницу авторизации
 def vote(request, poll_id):
-#TODO проверку на то, что человек голосовал
 #TODO обработку текстовых ответов
 #TODO хэши запилить
     p = get_object_or_404(Poll, pk=poll_id)
     user = request.user
     #return HttpResponse(str(user))
+    if p.voted_users.filter(pk=user.pk).exists():
+        return render(request, 'polls/detail.html', {
+            'poll': p,
+            'error_message': "You have already voted.",
+        })
     if user.userprofile.room != p.target_room or user.userprofile.group != p.target_group:
         return render(request, 'polls/detail.html', {
             'poll': p,
@@ -66,6 +70,7 @@ def vote(request, poll_id):
             'poll': p,
             'error_message': "You didn't select a choice.",
         })
+    p.voted_users.add(user)
     for i in range(len(choices)):
         selected_choice = p.choice_set.get(pk=choices[i])
         selected_choice.votes += 1
