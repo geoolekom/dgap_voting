@@ -37,7 +37,7 @@ class Choice(models.Model):
 class UserHash(models.Model):
     value = models.IntegerField(unique=True)#для очень старых опросов планируется удалять хэши, оставляя результаты в виде файла
     choice = models.ForeignKey(Choice)
-    user = models.ForeignKey(User)#при анонимном голосовании не заполнять это поле
+    user = models.ForeignKey(User, null=True, blank=True, default = None)#при анонимном голосовании не заполнять это поле
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
