@@ -2,23 +2,28 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
 from polls.models import Choice, Poll
 from django.http import Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
+from django.views import generic
 
-def index(request):
-    latest_poll_list = Poll.objects.order_by('-begin_date')
-    template = loader.get_template('polls/index.html')
-    context = RequestContext(request, {
-        'latest_poll_list': latest_poll_list,
-    })
-    return HttpResponse(template.render(context))
+class Index(generic.ListView):
+    template_name = 'polls/index.html'
+    context_object_name = 'latest_poll_list'
 
-def detail(request, poll_id):
-    poll = get_object_or_404(Poll, pk=poll_id)
-    return render(request, 'polls/detail.html', {'poll': poll})
+    def get_queryset(self):
+        return Poll.objects.order_by('-begin_date')[:25]
 
-def results(request, poll_id):
-    return HttpResponse("You're looking at the results of poll %s." % poll_id)
+class Detail(generic.DetailView):
+    model = Poll
+    template_name = 'polls/detail.html'
+
+class Results(generic.DetailView):
+    model = Poll
+    template_name = 'polls/results.html'
+
+#class Done(generic.DetailView):
+#    model = Hash
+#    template_name = 'polls/done.html'
 
 def vote(request, poll_id):
     p = get_object_or_404(Poll, pk=poll_id)
@@ -36,4 +41,6 @@ def vote(request, poll_id):
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-        return HttpResponseRedirect(reverse('polls:results', args=(p.id,)))
+        return render(request, 'polls/done.html', {
+         #   'hash': userHash,
+        })
