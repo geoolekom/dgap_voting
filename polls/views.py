@@ -5,6 +5,8 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.views import generic
+from django.contrib.auth.decorators import login_required
+import re
 
 class Index(generic.ListView):
     template_name = 'polls/index.html'
@@ -25,7 +27,7 @@ class Results(generic.DetailView):
 #    model = Hash
 #    template_name = 'polls/done.html'
 
-def vote(request, poll_id):
+def old_vote(request, poll_id):
     p = get_object_or_404(Poll, pk=poll_id)
     try:
         selected_choice = p.choice_set.get(pk=request.POST['choice'])
@@ -42,5 +44,33 @@ def vote(request, poll_id):
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
         return render(request, 'polls/done.html', {
-         #   'hash': userHash,
+         #   'hashes': userHashes,
         })
+
+def vote(request, poll_id):
+#TODO проверку на то, что человек голосовал
+#TODO обработку текстовых ответов
+#TODO хэши запилить
+    p = get_object_or_404(Poll, pk=poll_id)
+    user = request.user
+    #return HttpResponse(str(user))
+    if user.userprofile.room != p.target_room or user.userprofile.group != p.target_group:
+        return render(request, 'polls/detail.html', {
+            'poll': p,
+            'error_message': "You haven't permission.",
+        })
+    choices = request.POST.getlist('choice', False)
+    if not choices:
+        return render(request, 'polls/detail.html', {
+            'poll': p,
+            'error_message': "You didn't select a choice.",
+        })
+    for i in range(len(choices)):
+        selected_choice = p.choice_set.get(pk=choices[i])
+        selected_choice.votes += 1
+        selected_choice.save()
+    #всё-таки нужен redirect. Научиться передавать туда данные не через урл
+    return render(request, 'polls/done.html', {
+         #   'hashes': userHashes,
+    })
+   
