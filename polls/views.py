@@ -47,6 +47,7 @@ def old_vote(request, poll_id):
          #   'hashes': userHashes,
         })
 
+@login_required(login_url='/polls/')
 def vote(request, poll_id):
 #TODO проверку на то, что человек голосовал
 #TODO обработку текстовых ответов
