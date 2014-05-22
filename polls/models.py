@@ -6,12 +6,12 @@ from django.db.models.signals import post_save
 #TODO метод approve_user и модели для базы поселения
 
 class Poll(models.Model):
-    name = models.CharField('Название опроса', max_length=50)
+    name = models.CharField('Название опроса', max_length=200)
     question = models.CharField('Вопрос', max_length=200)
     begin_date = models.DateTimeField('Начало голосования')
     end_date = models.DateTimeField('Конец голосования')
-    target_room = models.CharField('Целевая комната', max_length=10) #предполагается использование регулярных выражений
-    target_group = models.CharField('Целевая группа', max_length=10) #TODO значения по умолчанию для target, покрывающие все комнаты/группы
+    target_room = models.CharField('Целевая комната', max_length=200, default = r'^\d\d\d.?.?$') #предполагается использование регулярных выражений
+    target_group = models.CharField('Целевая группа', max_length=200, default = r'^\d\d\d\d?.?$') 
     public = models.BooleanField('Открытое голосование', default = True)
     ONE = 'ONE'
     MANY = 'MANY'
@@ -29,7 +29,7 @@ class Poll(models.Model):
 
 class Choice(models.Model):
     poll = models.ForeignKey(Poll)
-    choice_text = models.CharField("Текст ответа", max_length=200)
+    choice_text = models.CharField("Текст ответа", max_length=800)
     votes = models.IntegerField(default=0)
     def __str__(self):
         return self.choice_text
@@ -41,7 +41,7 @@ class UserHash(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    middlename = models.CharField('Отчество', max_length=20, blank=True)
+    middlename = models.CharField('Отчество', max_length=100, blank=True)
     group = models.CharField('Номер группы', max_length=5, blank=True)
     room = models.CharField('Номер комнаты', max_length=4, blank=True)
     approval = models.BooleanField('Пользователь подтверждён', default = False)

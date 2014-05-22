@@ -41,10 +41,14 @@ def vote(request, poll_id):
     if not user.is_authenticated():
         messages.error(request, 'Вы не вошли как зарегистрированный пользователь')
         return redirect('polls:detail', pk=poll_id)
+    if not user.userprofile.approval:
+        messages.error(request, 'Вы не являетесь подтверждённым пользователем')
+        return redirect('polls:detail', pk=poll_id)
     if user.get_username() != 'admin' and p.voted_users.filter(pk=user.pk).exists():
         messages.error(request, 'Вы уже приняли участие в этом голосовании')
         return redirect('polls:detail', pk=poll_id)
-    if user.userprofile.room != p.target_room or user.userprofile.group != p.target_group:
+    if not ((re.compile(p.target_room, re.IGNORECASE)).match(user.userprofile.room) and
+            (re.compile(p.target_group, re.IGNORECASE)).match(user.userprofile.group)):
         messages.error(request, 'Вы не являетесь целевой аудиторией голосования')
         return redirect('polls:detail', pk=poll_id)
     choices = request.POST.getlist('choice', False)
