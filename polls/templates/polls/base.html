@@ -1,0 +1,28 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7" lang="ru"><![endif]-->
+<!--[if IE 7]><html class="lt-ie9 lt-ie8" lang="ru"><![endif]-->
+<!--[if IE 8]><html class="lt-ie9" lang="ru"><![endif]-->
+<!--[if gt IE 8]><!--><html lang="ru"><!--<![endif]-->
+	<head>
+		{% load staticfiles %}
+		<link href="{% static 'polls/framework.css' %}" rel="stylesheet">
+		<div class="f-nav-bar f-nav-bar-fixed">
+			<div class="f-nav-bar-body">
+				<div class="f-nav-bar-title">
+					<a href="{% url 'polls:index' %}">DGAP Voting</a>
+				</div><!-- f-nav-bar-title -->
+				<ul class="f-nav">
+					<li><a href="{% url 'polls:index' %}">Потом здесь что-то будет</a></li>
+				</ul><!-- f-nav -->
+			</div><!-- f-nav-bar-body -->
+		</div><!-- f-nav-bar -->
+		<!--[if lt IE 9]>
+			<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<div id="content">
+        		{% block content %}{% endblock %}
+    		</div>
+	</body>
+</html>

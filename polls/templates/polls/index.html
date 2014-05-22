@@ -1,16 +1,10 @@
-<html>
-  {% load staticfiles %}
-  <head>
-    <title>DGAP_Voting</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />
-  </head>
-  <body>
-    <header>
-      <div >
-        <h4>Голосовалка ФОПФ</h4>
-      </div>
-    </header>
-    <p style = "text-align: center"><head>Список</head></p>
+{% extends "polls/base.html" %}
+
+{% block content %}
+    <br>
+    <br>
+    <br>
+    <br>
     {% if latest_poll_list %}
     <ul>
     {% for poll in latest_poll_list %}
@@ -20,5 +14,4 @@
     {% else %}
     <p>No polls are available.</p>
     {% endif %}
-  </body>
-</html>
+{% endblock content %}
