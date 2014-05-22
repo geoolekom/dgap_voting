@@ -41,9 +41,9 @@ class UserHash(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    middlename = models.CharField('Отчество', max_length=20)
-    group = models.CharField('Номер группы', max_length=5)
-    room = models.CharField('Номер комнаты', max_length=4)
+    middlename = models.CharField('Отчество', max_length=20, blank=True)
+    group = models.CharField('Номер группы', max_length=5, blank=True)
+    room = models.CharField('Номер комнаты', max_length=4, blank=True)
     approval = models.BooleanField('Пользователь подтверждён', default = False)
     def __str__(self):  
         return "Профиль для %s" % self.user 
