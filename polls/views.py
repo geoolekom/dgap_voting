@@ -40,25 +40,17 @@ def vote(request, poll_id):
     user = request.user
     if not user.is_authenticated():
         messages.error(request, 'Вы не вошли как зарегистрированный пользователь')
-        return render(request, 'polls/detail.html', {
-            'poll': p,
-        })
+        return redirect('polls:detail', pk=poll_id)
     if user.get_username() != 'admin' and p.voted_users.filter(pk=user.pk).exists():
         messages.error(request, 'Вы уже приняли участие в этом голосовании')
-        return render(request, 'polls/detail.html', {
-            'poll': p,
-        })
+        return redirect('polls:detail', pk=poll_id)
     if user.userprofile.room != p.target_room or user.userprofile.group != p.target_group:
         messages.error(request, 'Вы не являетесь целевой аудиторией голосования')
-        return render(request, 'polls/detail.html', {
-            'poll': p,
-        })
+        return redirect('polls:detail', pk=poll_id)
     choices = request.POST.getlist('choice', False)
     if not choices:
         messages.error(request, 'Вы не выбрали вариант ответа')
-        return render(request, 'polls/detail.html', {
-            'poll': p,
-        })
+        return redirect('polls:detail', pk=poll_id)
     p.voted_users.add(user)
     userHashes = [1] * len(choices)
     message = 'Ваш голос учтён. Идентификационные ключи, соответствующие вашему выбору:\n'
