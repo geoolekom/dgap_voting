@@ -8,6 +8,7 @@ from django.views import generic
 from django.contrib.auth.decorators import login_required
 import re
 from random import randint
+from django.contrib import messages
 
 maxInt = 2147483647
 
@@ -26,34 +27,37 @@ class Results(generic.DetailView):
     model = Poll
     template_name = 'polls/results.html'
 
-#class Done(generic.DetailView):
-#    model = Hash
-#    template_name = 'polls/done.html'
+class Done(generic.base.TemplateView):
+    template_name = 'polls/done.html'
 
-@login_required(login_url='/polls/')#лучше бы на страницу авторизации
 def vote(request, poll_id):
 #TODO обработку текстовых ответов
     p = get_object_or_404(Poll, pk=poll_id)
     user = request.user
-    #return HttpResponse(str(user))
-    if user.get_username() != 'admin' and p.voted_users.filter(pk=user.pk).exists():
+    if not user.is_authenticated():
+        messages.error(request, 'Вы не вошли как зарегистрированный пользователь')
         return render(request, 'polls/detail.html', {
             'poll': p,
-            'error_message': "You have already voted.",
+        })
+    if user.get_username() != 'admin' and p.voted_users.filter(pk=user.pk).exists():
+        messages.error(request, 'Вы уже приняли участие в этом голосовании')
+        return render(request, 'polls/detail.html', {
+            'poll': p,
         })
     if user.userprofile.room != p.target_room or user.userprofile.group != p.target_group:
+        messages.error(request, 'Вы не являетесь целевой аудиторией голосования')
         return render(request, 'polls/detail.html', {
             'poll': p,
-            'error_message': "You haven't permission.",
         })
     choices = request.POST.getlist('choice', False)
     if not choices:
+        messages.error(request, 'Вы не выбрали вариант ответа')
         return render(request, 'polls/detail.html', {
             'poll': p,
-            'error_message': "You didn't select a choice.",
         })
     p.voted_users.add(user)
     userHashes = [1] * len(choices)
+    message = 'Ваш голос учтён. Идентификационные ключи, соответствующие вашему выбору:\n'
     for i in range(len(choices)):
         selected_choice = p.choice_set.get(pk=choices[i])
         selected_choice.votes += 1
@@ -61,11 +65,10 @@ def vote(request, poll_id):
         userHashes[i] = UserHash()
         userHashes[i].value = randint(0, maxInt)
         userHashes[i].choice = selected_choice
+        message += str(userHashes[i].value) + '\n'
         if p.public:
             userHashes[i].user = user
         userHashes[i].save()
-    #всё-таки нужен redirect. Научиться передавать туда данные не через урл
-    return render(request, 'polls/done.html', {
-            'hashes': userHashes,
-    })
+    messages.success(request, message)
+    return redirect('polls:done')
    
