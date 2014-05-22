@@ -27,8 +27,12 @@ class Results(generic.DetailView):
     model = Poll
     template_name = 'polls/results.html'
 
-class Done(generic.base.TemplateView):
-    template_name = 'polls/done.html'
+def done(request):
+    storage = messages.get_messages(request)
+    if storage:
+        return render(request, 'polls/done.html')
+    else:
+        return redirect('polls:index')
 
 def vote(request, poll_id):
 #TODO обработку текстовых ответов
