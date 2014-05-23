@@ -23,10 +23,16 @@ class Index(generic.ListView):
 class Detail(generic.DetailView):
     model = Poll
     template_name = 'polls/detail.html'
+    
+    def get_queryset(self):
+        return Poll.objects.filter(begin_date__lte=timezone.now(), end_date__gte=timezone.now())
 
 class Results(generic.DetailView):
     model = Poll
     template_name = 'polls/results.html'
+
+    def get_queryset(self):
+        return Poll.objects.filter(end_date__lte=timezone.now())
 
 def done(request):
     storage = messages.get_messages(request)
