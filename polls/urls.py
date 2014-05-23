@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, url
+from django.contrib.auth.views import login, logout
 
 from polls import views
 
@@ -13,4 +14,6 @@ urlpatterns = patterns('',
     url(r'^(?P<poll_id>\d+)/vote/$', views.vote, name='vote'),
     # ex:
     url(r'^done/$', views.done, name='done'),
+    url(r'^login/$', login, {'template_name': 'polls/login.html'}, name = 'login'),
+    url(r'^logout/$', logout, {'template_name': 'polls/logout.html'}, name = 'logout'),
 )
