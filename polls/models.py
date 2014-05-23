@@ -27,7 +27,7 @@ class Poll(models.Model):
     def __str__(self):
         return self.name
     def is_closed(self):
-        return self.end_date > timezone.now()
+        return self.end_date < timezone.now()
 
 
 class Choice(models.Model):
