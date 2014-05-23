@@ -984,7 +984,7 @@ input[disabled] {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   zoom: 1;
-  width: 940px;
+  width: 50%;
   height: 36px;
   line-height: 36px;
   margin: auto;

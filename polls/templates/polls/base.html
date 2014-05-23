@@ -1,8 +1,4 @@
-<!doctype html>
-<!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7" lang="ru"><![endif]-->
-<!--[if IE 7]><html class="lt-ie9 lt-ie8" lang="ru"><![endif]-->
-<!--[if IE 8]><html class="lt-ie9" lang="ru"><![endif]-->
-<!--[if gt IE 8]><!--><html lang="ru"><!--<![endif]-->
+<html lang="ru">
 	<head>
 		{% load staticfiles %}
 		<link href="{% static 'polls/framework.css' %}" rel="stylesheet">
@@ -11,31 +7,38 @@
 				<div class="f-nav-bar-title">
 					<a href="{% url 'polls:index' %}">DGAP Voting</a>
 				</div><!-- f-nav-bar-title -->
-				<ul class="f-nav">
-					<li><a href="{% url 'polls:index' %}">Потом здесь что-то будет</a></li>
+				{% if user.is_authenticated %}
+				<ul class="f-nav f-nav-right">
+					<li><a href="{% url 'polls:logout' %}">Выйти</a></li>
 				</ul><!-- f-nav -->
-				<ul class="f-nav">
+				{% endif %}
+
+				<ul class="f-nav f-nav-right">
 					<li>{% if user.is_authenticated %}
    						 Welcome, {{ user.username }}
 					{% else %}
 						<a href="{% url 'polls:login' %}">Войти</a>
 					{% endif %}</li>
-				</ul><!-- f-nav -->
-				{% if user.is_authenticated %}
-				<ul class="f-nav">
-					<li><a href="{% url 'polls:logout' %}">Выйти</a></li>
-				</ul><!-- f-nav -->
-				{% endif %}
 			</div><!-- f-nav-bar-body -->
 		</div><!-- f-nav-bar -->
 		<!--[if lt IE 9]>
 			<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 	</head>
+	
+	<style type="text/css">
+    	.layer1, .layer2 {
+    		width: 50%;
+		padding-left: 25%; 
+   	}	
+  </style>
+
 	<body>
-		<div id="content">
-			<br><br><br>
-        		{% block content %}{% endblock %}
-    		</div>
+			<div class="layer1" id="content">
+				<br><br><br>
+        			{% block content %}{% endblock %}
+    			</div>
+
+		
 	</body>
 </html>
