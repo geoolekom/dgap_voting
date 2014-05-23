@@ -1,10 +1,33 @@
 {% extends "polls/base.html" %}
 
 {% block content %}
+
+<style type="text/css">
+
+   .momentum{
+  border-radius: 3px;
+  background: #fdf6e3;
+  border: 1px solid #fcf1d5;
+  padding: 7px 7px;
+  margin-left: -24px;
+  margin-top: 8px;
+  }
+ </style>
+
    {% if latest_poll_list %}
     <ul>
     {% for poll in latest_poll_list %}
-    <li><pre>{{ poll.name }} <a href="{% url 'polls:detail' poll.id %}">Голосовать</a> <a href="{% url 'polls:results' poll.id %}">Результаты</a></pre> </li>
+    <div class="momentum">{{ poll.name }} 
+    	{% if not poll.is_closed %}
+	<object align="right">{{ poll.end_date |date:"d M Y" }} </object> 
+       	<object align="right">{{ poll.end_date |time:"H:i" }} &nbsp; </object>
+	<object align="right"><a href="{% url 'polls:detail' poll.id %}">Голосовать</a> &nbsp; </object>
+     	{% else %}
+	<object align="right">{{ poll.end_date |date:"d M Y" }} </object>
+	<object align="right">{{ poll.end_date |time:"H:i" }} &nbsp; </object>
+	<object align="right"><a href="{% url 'polls:results' poll.id %}">Результаты</a> &nbsp;</object>
+        {% endif %}
+    </div>
     {% endfor %}
     </ul>
     {% else %}
