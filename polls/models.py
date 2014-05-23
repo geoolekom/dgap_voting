@@ -25,6 +25,8 @@ class Poll(models.Model):
     voted_users = models.ManyToManyField(User)
     def __str__(self):
         return self.name
+    def is_closed(self):
+        return self.end_date > timezone.now()
 
 
 class Choice(models.Model):
