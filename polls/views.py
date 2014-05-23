@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 import re
 from random import randint
 from django.contrib import messages
+from django.utils import timezone
 
 maxInt = 2147483647
 
@@ -17,7 +18,7 @@ class Index(generic.ListView):
     context_object_name = 'latest_poll_list'
 
     def get_queryset(self):
-        return Poll.objects.order_by('-begin_date')[:25]
+        return Poll.objects.filter(begin_date__lte=timezone.now()).order_by('-begin_date')[:25]
 
 class Detail(generic.DetailView):
     model = Poll
