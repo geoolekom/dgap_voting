@@ -42,7 +42,6 @@ def done(request):
         return redirect('polls:index')
 
 def vote(request, poll_id):
-#TODO обработку текстовых ответов
     p = get_object_or_404(Poll, pk=poll_id)
     user = request.user
     if not user.is_authenticated():
@@ -65,6 +64,9 @@ def vote(request, poll_id):
     p.voted_users.add(user)
     userHashes = [1] * len(choices)
     message = 'Ваш голос учтён. Идентификационные ключи, соответствующие вашему выбору:\n'
+    if p.anwer_type == 'OWN':
+        c = p.choice_set.create(choice_text=choices[0], votes = 0)
+        choices[0] = c.pk
     for i in range(len(choices)):
         selected_choice = p.choice_set.get(pk=choices[i])
         selected_choice.votes += 1
