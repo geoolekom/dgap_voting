@@ -26,19 +26,21 @@
 		<![endif]-->
 	</head>
 	
-	<style type="text/css">
-    	.layer1, .layer2 {
-    		width: 48%;
-		margin-left: 25.5%; 
-   	}	
-  </style>
 
-	<body>
-			<div class="layer1" id="content">
-				<br><br><br>
-        			{% block content %}{% endblock %}
-    			</div>
+<style type="text/css">
+.layer1{
+	width: 48%;
+	margin-left: 25.5%; 
+}	
+</style>
 
-		
-	</body>
+
+<body>
+	<div class="layer1" id="content">
+		<br><br><br>
+        	{% block content %}{% endblock %}
+	</div>
+</body>
+
+
 </html>
