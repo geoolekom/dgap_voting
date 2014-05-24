@@ -1,8 +1,9 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
-from polls.models import Choice, Poll, UserHash
+from polls.models import Choice, Poll, UserHash, UserProfile
+from django.contrib.auth.models import User
 from django.http import Http404
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, render_to_response
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.contrib.auth.decorators import login_required
@@ -10,8 +11,30 @@ import re
 from random import randint
 from django.contrib import messages
 from django.utils import timezone
+from django.contrib.auth.forms import PasswordChangeForm
+from django.views.generic.edit import FormView
+from django.views.generic.edit import UpdateView
+from polls.forms import UserForm, UserProfileForm
 
 maxInt = 2147483647
+
+def profile_view(request):
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(request.POST, instance=request.user.userprofile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, "Данные успешно обновлены")
+            return redirect('polls:done')
+    else:
+        user_form = UserForm(instance = request.user)
+        profile_form = UserProfileForm(instance = request.user.userprofile)
+
+    return render(request, 'polls/profile.html', {
+        'user_form': user_form,
+        'profile_form': profile_form,
+    })
 
 class Index(generic.ListView):
     template_name = 'polls/index.html'
