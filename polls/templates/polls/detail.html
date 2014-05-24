@@ -19,7 +19,7 @@
 	<form action="{% url 'polls:vote' poll.id %}" method="post">
 		{% csrf_token %}
 		{% if poll.answer_type == 'OWN' %}
-			<input type="text" name="choice">
+			<textarea cols="90" rows="10" name="choice"></textarea>
 		{% else %}
 		       
 		{% for choice in poll.choice_set.all %}
@@ -32,7 +32,8 @@
 				<label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />
 		{% endfor %}
 		{% endif %}
-		<input type="submit" value="Vote" />
+		<br>
+		<input type="submit" value="Голосовать" />
 	</form>
 </div>
 
