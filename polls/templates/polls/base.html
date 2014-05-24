@@ -15,7 +15,7 @@
 
 				<ul class="f-nav f-nav-right">
 					<li>{% if user.is_authenticated %}
-   						 Welcome, {{ user.username }}
+   						 <a href="{% url 'polls:profile_view' %}">Welcome, {{ user.username }}</a>
 					{% else %}
 						<a href="{% url 'polls:login' %}">Войти</a>
 					{% endif %}</li>
