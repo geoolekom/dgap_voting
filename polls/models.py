@@ -50,6 +50,7 @@ class UserProfile(models.Model):
     group = models.CharField('Номер группы', max_length=5, blank=True)
     room = models.CharField('Номер комнаты', max_length=4, blank=True)
     approval = models.BooleanField('Пользователь подтверждён', default = False)
+    cardnumber = models.CharField(max_length=128)
     def __str__(self):  
         return "Профиль для %s" % self.user 
 
