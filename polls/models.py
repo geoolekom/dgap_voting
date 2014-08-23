@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.utils import timezone
 import django.db.models.options as options
-options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',)
+options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',) #добавление нового атрибута в мета
 
 #TODO необходимые методы в моделях
 #TODO метод approve_user и модели для базы поселения
