@@ -70,9 +70,27 @@ class LegacyUser(models.Model):
     address_confirmed = models.IntegerField()
     email = models.CharField(max_length=128)
     phone = models.CharField(max_length=14)
+    def __str__(self):
+        return self.name
     class Meta:
         managed = False
         db_table = 'users'
+        in_db = 'legacy_users'
+
+class LegacyDorm(models.Model):
+    id = models.IntegerField(primary_key=True)
+    dorm = models.IntegerField()
+    room = models.CharField(max_length=10)
+    group = models.CharField(max_length=10)
+    first_name = models.CharField(max_length=128)
+    middle_name = models.CharField(max_length=128)
+    last_name = models.CharField(max_length=128)
+    department = models.CharField(max_length=32)
+    def __str__(self):
+        return '{} {} {}'.format(self.last_name, self.first_name, self.middle_name)
+    class Meta:
+        managed = False
+        db_table = 'dorm'
         in_db = 'legacy_users'
 
 def create_user_profile(sender, instance, created, **kwargs):  
