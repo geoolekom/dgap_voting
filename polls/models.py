@@ -71,7 +71,7 @@ class LegacyUser(models.Model):
     class Meta:
         managed = False
         db_table = 'users'
-        legacy = True
+        db_label = 'legacy'
 
 def create_user_profile(sender, instance, created, **kwargs):  
     if created:  
