@@ -58,8 +58,7 @@ WSGI_APPLICATION = 'dgap_voting.wsgi.application'
 
 # SECURITY WARNING: don't run with this passwords in production!
 
-DATABASE_ROUTERS = ['polls.routers.DatabaseModelsRouter']
-DATABASE_MODELS_MAPPING = {'legacy': 'legacy_users'}
+DATABASE_ROUTERS = ['polls.routers.ModelDatabaseRouter']
 
 DATABASES = {
     'default': {

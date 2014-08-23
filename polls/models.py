@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.utils import timezone
+import django.db.models.options as options
+options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',)
 
 #TODO необходимые методы в моделях
 #TODO метод approve_user и модели для базы поселения
@@ -71,7 +73,7 @@ class LegacyUser(models.Model):
     class Meta:
         managed = False
         db_table = 'users'
-        db_label = 'legacy'
+        in_db = 'legacy_users'
 
 def create_user_profile(sender, instance, created, **kwargs):  
     if created:  
