@@ -51,6 +51,28 @@ class UserProfile(models.Model):
     def __str__(self):  
         return "Профиль для %s" % self.user 
 
+class LegacyUser(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255)
+    group = models.CharField(max_length=100)
+    dorm = models.IntegerField()
+    room = models.CharField(max_length=10)
+    card = models.CharField(unique=True, max_length=64)
+    access_bicycle = models.IntegerField()
+    birthday = models.DateField(blank=True, null=True)
+    cardnumber = models.CharField(max_length=128)
+    date = models.DateTimeField()
+    expire = models.DateField(blank=True, null=True)
+    enabled = models.IntegerField()
+    access_laundry = models.IntegerField()
+    address_confirmed = models.IntegerField()
+    email = models.CharField(max_length=128)
+    phone = models.CharField(max_length=14)
+    class Meta:
+        managed = False
+        db_table = 'users'
+        legacy = True
+
 def create_user_profile(sender, instance, created, **kwargs):  
     if created:  
         profile, created = UserProfile.objects.get_or_create(user=instance) 
