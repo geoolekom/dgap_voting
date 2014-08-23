@@ -66,6 +66,14 @@ DATABASES = {
         'PASSWORD': 'postgres2014',
         'HOST': '127.0.0.1',
         'PORT': '5432',
+    },
+    'users': {
+        'ENGINE': 'mysql.connector.django',
+        'NAME': 'wow',
+        'USER': 'root',
+        'PASSWORD': 'gsogso;;;',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
