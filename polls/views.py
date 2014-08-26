@@ -18,9 +18,6 @@ from polls.forms import UserForm, UserProfileForm
 
 maxInt = 2147483647
 
-def register(request):
-    pass
-
 def profile_view(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
