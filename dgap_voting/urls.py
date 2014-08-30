@@ -5,11 +5,14 @@ admin.autodiscover()
 
 from registration.backends.simple.views import RegistrationView
 
+from polls.views import Index
+
 class MyRegistrationView(RegistrationView):
     def get_success_url(self, request, user):
         return "/polls/profile"
 
 urlpatterns = patterns('',
+    url(r'^$', Index.as_view(), name='index'),
     url(r'^polls/', include('polls.urls', namespace='polls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/register/$', MyRegistrationView.as_view(), name='registration_register'),
