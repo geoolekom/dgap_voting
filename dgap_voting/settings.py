@@ -46,9 +46,9 @@ INSTALLED_APPS = (
     'polls',
 )
 
-BOOTSTRAP3 = {
-    'include_jquery': True,  
-}
+#BOOTSTRAP3 = {
+#    'include_jquery': True,  
+#}
 
 SITE_ID = 1
 

@@ -1,11 +1,39 @@
 {% extends "polls/base.html" %}
 
 {% block content %}
+{% load bootstrap3 %}
+<div class="row">
+	<div class="col-lg-6">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h1 class="panel-title"><strong>Profile</strong></h1> 
+			</div>
+			<div class="panel-body">
+	
+				<form action="{% url 'polls:profile_view' %}" method="post" class="form">
+					{% csrf_token %}
+					{% bootstrap_form user_form %}
+					{% bootstrap_form profile_form %}
+					{% buttons %}
+						<button type="submit" class="btn btn-primary">
+							Submit
+						</button>
+						<a href="{% url 'polls:password_change' %}" class="btn btn-default pull-right">Password changing</a>
+					{% endbuttons %}
+				</form>
+			</div>
+		</div>	
+	</div>
+</div>
+
+{% comment %}
 <a href="{% url 'polls:password_change' %}">Изменение пароля</a>
 <form action="{% url 'polls:profile_view' %}" method="post">{% csrf_token %}
 {{ user_form.as_p }}
 {{ profile_form.as_p }}
 <input type="submit" value="Submit" />
 </form>
+
+{% endcomment %}
 
 {% endblock content %}

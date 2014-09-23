@@ -1,45 +1,116 @@
+<!DOCTYPE html>
 <html lang="ru">
-	<head>
-		{% load staticfiles %}
-		<link href="{% static 'polls/framework.css' %}" rel="stylesheet">
-		<div class="f-nav-bar f-nav-bar-fixed">
-			<div class="f-nav-bar-body">
-				<div class="f-nav-bar-title">
-					<a href="{% url 'polls:index' %}">DGAP Voting</a>
-				</div><!-- f-nav-bar-title -->
-				{% if user.is_authenticated %}
-				<ul class="f-nav f-nav-right">
-					<li><a href="{% url 'polls:logout' %}">Выйти</a></li>
-				</ul><!-- f-nav -->
-				{% endif %}
+<head>
+	<meta charset="utf-8">
+	<title> DGAP voting </title>
 
-				<ul class="f-nav f-nav-right">
-					<li>{% if user.is_authenticated %}
-   						 <a href="{% url 'polls:profile_view' %}">Welcome, {{ user.username }}</a>
-					{% else %}
-						<a href="{% url 'polls:login' %}">Войти</a>
-					{% endif %}</li>
-			</div><!-- f-nav-bar-body -->
-		</div><!-- f-nav-bar -->
-		<!--[if lt IE 9]>
-			<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-	</head>
-	
+	{% load staticfiles %}
+	{% load bootstrap3 %}
 
-<style type="text/css">
-.layer1{
-	width: 48%;
-	margin-left: 25.5%; 
-}	
-</style>
+	{% bootstrap_css %}
 
+	<script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+	{% bootstrap_javascript %}
+
+	{# bootstrap_messages #}
+	<link href="{% static 'polls/sidebar.css' %}" rel="stylesheet">
+	{# <link href="{% static 'polls/js/countdown/jquery.countdown.css' %}" rel="stylesheet" > #} 
+	{% comment %}
+	<style type="text/css">
+		p{
+			padding: 50px;
+			font-size: 32px;
+			font-weight: bold;
+			text-align: center;
+			background: #f2f2f2;
+		}
+	</style>
+	{% endcomment %}
+	<script src="{% static 'polls/js/countdown/jquery.plugin.min.js' %}"></script> 
+	<script src="{% static 'polls/js/countdown/jquery.countdown.min.js' %}"></script> 
+	<script>
+		{# TODO serverSync #}
+		$(function () {
+				var startDay = new Date();
+				startDay = new Date(startDay.getFullYear(), startDay.getMonth(), startDay.getDate());
+				$('#defaultTime').countdown({since: startDay, compact: true, format: 'HMS', description: ''});
+		});
+	</script>
+</head>
 
 <body>
-	<div class="layer1" id="content">
-		<br><br><br>
-        	{% block content %}{% endblock %}
-	</div>
+    <nav role="navigation" class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid"> 
+        <div class="navbar-header">
+            <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+			<a href="{% url 'polls:index' %}" class="navbar-brand">DGAP voting</a>
+        </div>
+        <div id="navbarCollapse" class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				{# <li class="active"><a href="#">Home</a></li> #}
+				<li><a> <div id="defaultTime"></div></a></li>
+			</ul>  
+            <ul class="nav navbar-nav navbar-right">
+				{% if user.is_authenticated %}
+					<li><a href="{% url 'polls:profile_view' %}">Profile</a></li>
+					<li><a href="{% url 'polls:logout' %}">Logout</a></li>
+				{% else %}
+					<li><a href="{% url 'registration_register' %}">Registration</a></li>
+					<li><a href="{% url 'polls:login' %}">Login</a></li>
+				{% endif %}
+            </ul>
+        </div>
+		</div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row row-offcanvas row-offcanvas-left">
+        
+        <!-- sidebar -->
+        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+			{% comment %} 
+             <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#">Link 1</a></li>
+              <li><a href="#">Link 2</a></li>
+              <li><a href="#">Link 3</a></li>              
+			</ul> 
+			{% endcomment %} 
+        </div>
+  	
+        <!-- main area -->
+		<div class="col-xs-12 col-sm-9" style="padding-top:16px;"{# class="container" #}>
+		{% comment %}
+			<div class="row">
+				<div class="col-lg-6"><p class="wow">Box 1</p></div>
+				<div class="col-lg-6"><p>Box 2</p></div>
+				<div class="col-lg-6"><p>Box 3</p></div>
+				<div class="col-lg-6"><p>Box 4</p></div>
+				<div class="col-lg-6"><p>Box 5</p></div>
+				<div class="col-lg-6"><p>Box 6</p></div>
+				<div class="col-lg-6"><p>Box 7</p></div>
+				<div class="col-lg-6"><p>Box 8</p></div>
+				<div class="col-lg-6"><p>Box 9</p></div>
+				<div class="col-lg-6"><p>Box 10</p></div>
+				<div class="col-lg-6"><p>Box 11</p></div>
+				<div class="col-lg-6"><p>Box 12</p></div>
+				<div class="col-lg-6"><p>Box 13</p></div>
+			</div>
+		</div>
+		{% endcomment %}
+
+		{% block content %}
+		{% endblock %}
+
+        
+    </div><!--/.row-->
+  </div><!--/.container-->
+
 </body>
 
 

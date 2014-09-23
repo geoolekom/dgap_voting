@@ -2,39 +2,66 @@
 
 {% block content %}
 
-<h1>{{ poll.question }}</h1>
+<div class="row">
+	<div class="col-lg-6">
+		<div class="panel panel-success">
+			<div class="panel-heading clearfix">
+				<h1 class="panel-title pull-left">{{ poll.name }} </h1> 
+				<h1 class="panel-title pull-right">Closed</h1> 
+			</div>
+			<div class="panel-body">
+				<div class="col-lg-9">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h1 class="panel-title">{{ poll.question }}</h1> 
+						</div>
+						<ul class="list-group">
+							{% for choice in poll.choice_set.all %}
+								<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">
+									<div class="radio">
+										<div class="pull-left">
+											{{ choice.choice_text }}
+										</div>
+										<div class="pull-right">
+											{{ choice.votes }}
+										</div>
+									</div>
+								</li>
+							{% endfor %}
+						</ul>
+						<div class="panel-footer clearfix">
+							<a href="{% url 'polls:results' poll.id %}" class="btn btn-default">Detailed results</a>
+						</div>
+					</div>
 
-<style type="text/css">
-.momentum{
-	border-radius: 3px;
-	background: #fdf6e3;
-	border: 1px solid #fcf1d5;
-	padding: 7px 7px;
-	margin-left: -24px;
-	margin-top: 8px;
-}
-</style>
+				</div>
+				<div class="col-lg-3">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h1 class="panel-title">Type</h1> 
+						</div>
+						<div class="panel-body">
+							{% if poll.public %}
+								Public
+							{% else %}
+								Anonymous
+							{% endif %}
+						</div>
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h1 class="panel-title">Ending</h1> 
+						</div>
+						<div class="panel-body">
+							{{ poll.end_date |date:"d M" }}
+							{{ poll.end_date |time:"H:i" }}	
+						</div>
+					</div>
+				</div>
 
-<ul>
-	{% for choice in poll.choice_set.all %}
-		{% if poll.answer_type == 'ONE' %}
-			<div class="momentum">
-				{{ choice.choice_text }}
-				<object align="right">{{ choice.votes }}</object>
 			</div>
-		{% endif %}
-		{% if poll.answer_type == 'MANY' %}
-			<div class="momentum">
-				{{ choice.choice_text }}
-				<object align="right">{{ choice.votes }}</object>
-			</div>
-		{% endif %}
-		{% if poll.answer_type == 'OWN' %}
-			<div class="momentum">
-        	        	{{ choice.choice_text }}
-			</div>
-		{% endif %}
-        {% endfor %}
-</ul>
+		</div>
+	</div>
+</div>
 
 {% endblock content %}

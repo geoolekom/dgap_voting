@@ -2,27 +2,17 @@
 
 {% block content %}
 
-<style type="text/css">
-.momentum{
-	border-radius: 3px;
-	background: #fdf6e3;
-	border: 1px solid #fcf1d5;
-	padding: 7px 7px;
-	margin-left: 0px;
-	margin-top: 8px;
-}
-</style>
-
-
-<div class="momentum">
-	{% if messages %}
-		<ul class="messages">
-			{% for message in messages %}
-				<object{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</object>
-			{% endfor %}
-		</ul>
-	{% endif %}
-</div>
-
+{% if messages %}
+	<div class="row">
+		{% for message in messages %}
+			<div class="col-lg-4">
+				<div class="alert {% if message.tags %} alert-{{ message.tags }}{% else %}info{% endif %}">
+					<a class="close" data-dismiss="alert" href="/">&times;</a>
+					{{ message }}
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% endif %}
 
 {% endblock content %}
