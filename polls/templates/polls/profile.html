@@ -8,8 +8,50 @@
 			<div class="panel-heading">
 				<h1 class="panel-title"><strong>Profile</strong></h1> 
 			</div>
+			{% if user.userprofile.approval %}
 			<div class="panel-body">
-	
+				<table class="table table-bordered">
+					<tbody>
+						<tr>
+							<td>Username</td>
+							<td>{{ user.username}}</td>
+						</tr>
+						<tr>
+							<td>Фамилия</td>
+							<td>{{ user.last_name}}</td>
+						</tr>
+						<tr>
+							<td>Имя</td>
+							<td>{{ user.first_name}}</td>
+						</tr>
+						<tr>
+							<td>Отчество</td>
+							<td>{{ user.userprofile.middlename }}</td>
+						</tr>
+						<tr>
+							<td>Комната</td>
+							<td>{{ user.userprofile.room }}</td>
+						</tr>
+						<tr>
+							<td>Группа</td>
+							<td>{{ user.userprofile.group }}</td>
+						</tr>
+					</tbody>
+				</table>
+				{% buttons %}
+					<a href="{% url 'polls:password_change' %}" class="btn btn-default">Password changing</a>
+				{% endbuttons %}
+			</div>
+			{% else %}
+			<div class="panel-body">
+				{% if messages %}
+					{% for message in messages %}
+						<div class="alert alert-danger">
+							<a class="close" data-dismiss="alert" href="#">&times;</a>
+							{{ message }}
+						</div>
+					{% endfor %}
+				{% endif %}
 				<form action="{% url 'polls:profile_view' %}" method="post" class="form">
 					{% csrf_token %}
 					{% bootstrap_form user_form %}
@@ -22,6 +64,7 @@
 					{% endbuttons %}
 				</form>
 			</div>
+			{% endif %}
 		</div>	
 	</div>
 </div>

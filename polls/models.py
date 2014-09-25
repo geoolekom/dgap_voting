@@ -44,16 +44,6 @@ class UserHash(models.Model):
     choice = models.ForeignKey(Choice)
     user = models.ForeignKey(User, null=True, blank=True, default = None)#при анонимном голосовании не заполнять это поле
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User)
-    middlename = models.CharField('Отчество', max_length=100, blank=True)
-    group = models.CharField('Номер группы', max_length=5, blank=True)
-    room = models.CharField('Номер комнаты', max_length=4, blank=True)
-    approval = models.BooleanField('Пользователь подтверждён', default = False)
-    cardnumber = models.CharField(max_length=128)
-    def __str__(self):  
-        return "Профиль для %s" % self.user 
-
 class LegacyUser(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255)
@@ -93,6 +83,17 @@ class LegacyDorm(models.Model):
         managed = False
         db_table = 'dorm'
         in_db = 'legacy_users'
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    dorm = models.IntegerField(default=0)
+    middlename = models.CharField('Отчество', max_length=100, blank=True)
+    group = models.CharField('Номер группы', max_length=5, blank=True)
+    room = models.CharField('Номер комнаты', max_length=4, blank=True)
+    approval = models.BooleanField('Пользователь подтверждён', default = False)
+    cardnumber = models.IntegerField('Последние пять цифр номера социальной карты', null=True, max_length=5)
+    def __str__(self):  
+        return "Профиль для %s" % self.user 
 
 def create_user_profile(sender, instance, created, **kwargs):  
     if created:  

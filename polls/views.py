@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
-from polls.models import Choice, Poll, UserHash, UserProfile
+from polls.models import Choice, Poll, UserHash, UserProfile, LegacyUser, LegacyDorm
 from django.contrib.auth.models import User
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect, render_to_response
@@ -18,15 +18,41 @@ from polls.forms import UserForm, UserProfileForm
 
 maxInt = 2147483647
 
+def check_user(request):
+    candidat = LegacyUser.objects.filter(name__icontains='{} {}'.format(request.POST['last_name'], request.POST['first_name'])).filter(cardnumber__regex=r'^.{14}' + request.POST['cardnumber'] + r'..{8}$') 
+    if len(candidat) != 1:
+        return False
+    dorm = LegacyDorm.objects.filter(last_name=request.POST['last_name']).filter(first_name=request.POST['first_name'])
+    if len(dorm) != 1:
+        return False
+    return True
+
+def check_dorm(id):
+    return UserProfile.objects.filter(dorm=id).exists()
+
 def profile_view(request):
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = UserProfileForm(request.POST, instance=request.user.userprofile)
         if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            messages.success(request, "Данные успешно обновлены")
-            return redirect('polls:done')
+            if check_user(request):
+                dorm = LegacyDorm.objects.filter(last_name=request.POST['last_name']).filter(first_name=request.POST['first_name'])
+                dorm = dorm[0]
+                if check_dorm(dorm.id):
+                    messages.error(request, "Пользователь с такими данными уже зарегистрирован")
+                else:
+                    user_form.save()
+                    profile_form.save()
+                    request.user.userprofile.dorm = dorm.id
+                    request.user.userprofile.middlename = dorm.middle_name
+                    request.user.userprofile.room = dorm.room
+                    request.user.userprofile.group = dorm.group
+                    request.user.userprofile.approval = True 
+                    request.user.userprofile.save()
+                    messages.success(request, "Регистрация пройдена. Теперь вы можете участвовать в голосовании")
+                    return redirect('polls:done')
+            else:
+                messages.error(request, "Пользователя с данными именем, фамилией и номером карты в базе не обнаружено")
     else:
         user_form = UserForm(instance = request.user)
         profile_form = UserProfileForm(instance = request.user.userprofile)
