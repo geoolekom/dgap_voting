@@ -5,7 +5,7 @@
 {% if messages %}
 	<div class="row">
 		{% for message in messages %}
-			<div class="col-lg-4">
+			<div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-3">
 				<div class="alert {% if message.tags %} alert-{{ message.tags }}{% else %}info{% endif %}">
 					<a class="close" data-dismiss="alert" href="/">&times;</a>
 					{{ message }}

@@ -3,17 +3,17 @@
 {% block content %}
 {% load bootstrap3 %}
 <div class="row">
-	<div class="col-lg-6">
+	<div class="col-sm-6 col-sm-offset-3">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
-				<h1 class="panel-title"><strong>Profile</strong></h1> 
+				<h1 class="panel-title"><strong>Профиль</strong></h1> 
 			</div>
 			{% if user.userprofile.approval %}
 			<div class="panel-body">
 				<table class="table table-bordered">
 					<tbody>
 						<tr>
-							<td>Username</td>
+							<td>Логин</td>
 							<td>{{ user.username}}</td>
 						</tr>
 						<tr>
@@ -39,7 +39,7 @@
 					</tbody>
 				</table>
 				{% buttons %}
-					<a href="{% url 'polls:password_change' %}" class="btn btn-default">Password changing</a>
+					<a href="{% url 'polls:password_change' %}" class="btn btn-default">Изменение пароля</a>
 				{% endbuttons %}
 			</div>
 			{% else %}
@@ -58,9 +58,9 @@
 					{% bootstrap_form profile_form %}
 					{% buttons %}
 						<button type="submit" class="btn btn-primary">
-							Submit
+							Сохранить
 						</button>
-						<a href="{% url 'polls:password_change' %}" class="btn btn-default pull-right">Password changing</a>
+						<a href="{% url 'polls:password_change' %}" class="btn btn-default pull-right">Изменение пароля</a>
 					{% endbuttons %}
 				</form>
 			</div>

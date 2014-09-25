@@ -57,11 +57,11 @@
 			</ul>  
             <ul class="nav navbar-nav navbar-right">
 				{% if user.is_authenticated %}
-					<li><a href="{% url 'polls:profile_view' %}">Profile</a></li>
-					<li><a href="{% url 'polls:logout' %}">Logout</a></li>
+					<li><a href="{% url 'polls:profile_view' %}">Профиль</a></li>
+					<li><a href="{% url 'polls:logout' %}">Выход</a></li>
 				{% else %}
-					<li><a href="{% url 'registration_register' %}">Registration</a></li>
-					<li><a href="{% url 'polls:login' %}">Login</a></li>
+					<li><a href="{% url 'registration_register' %}">Регистрация</a></li>
+					<li><a href="{% url 'polls:login' %}">Вход</a></li>
 				{% endif %}
             </ul>
         </div>
@@ -72,7 +72,7 @@
       <div class="row row-offcanvas row-offcanvas-left">
         
         <!-- sidebar -->
-        <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+        <div class="col-xs-6 col-lg-1 sidebar-offcanvas" id="sidebar" role="navigation">
 			{% comment %} 
              <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
@@ -84,25 +84,7 @@
         </div>
   	
         <!-- main area -->
-		<div class="col-xs-12 col-sm-9" style="padding-top:16px;"{# class="container" #}>
-		{% comment %}
-			<div class="row">
-				<div class="col-lg-6"><p class="wow">Box 1</p></div>
-				<div class="col-lg-6"><p>Box 2</p></div>
-				<div class="col-lg-6"><p>Box 3</p></div>
-				<div class="col-lg-6"><p>Box 4</p></div>
-				<div class="col-lg-6"><p>Box 5</p></div>
-				<div class="col-lg-6"><p>Box 6</p></div>
-				<div class="col-lg-6"><p>Box 7</p></div>
-				<div class="col-lg-6"><p>Box 8</p></div>
-				<div class="col-lg-6"><p>Box 9</p></div>
-				<div class="col-lg-6"><p>Box 10</p></div>
-				<div class="col-lg-6"><p>Box 11</p></div>
-				<div class="col-lg-6"><p>Box 12</p></div>
-				<div class="col-lg-6"><p>Box 13</p></div>
-			</div>
-		</div>
-		{% endcomment %}
+		<div class="col-xs-12 col-lg-11" style="padding-top:16px;"{# class="container" #}>
 
 		{% block content %}
 		{% endblock %}
