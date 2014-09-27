@@ -33,7 +33,7 @@
 							{% for choice in poll.choice_set.all %}
 								{% if poll.answer_type == 'MANY' %}
 									<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">
-										<div class="checkbox">
+										<div class="checkbox clearfix">
 											<label>
 												<input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
 												{{ choice.choice_text }}
@@ -43,7 +43,7 @@
 								{% endif %}
 								{% if poll.answer_type == 'ONE' %}
 									<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">
-										<div class="radio">
+										<div class="radio clearfix">
 											<label>
 												<input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
 												{{ choice.choice_text }}

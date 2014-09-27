@@ -80,7 +80,7 @@ DATABASES = {
         'ENGINE':'django.db.backends.postgresql_psycopg2',
         'NAME': 'dgap_voting_db',
         'USER': 'postgres',
-        'PASSWORD': 'postgres2014',
+        'PASSWORD': 'postgres2014', 
         'HOST': '127.0.0.1',
         'PORT': '5432',
     },
