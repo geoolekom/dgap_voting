@@ -18,12 +18,12 @@ from polls.forms import UserForm, UserProfileForm
 
 maxInt = 2147483647
 
-def check_user(request):
-    candidat = LegacyUser.objects.filter(name__icontains='{} {}'.format(request.POST['last_name'], request.POST['first_name'])).filter(cardnumber__regex=r'^.{14}' + request.POST['cardnumber'] + r'..{8}$') 
-    if len(candidat) != 1:
+def check_user(request): 
+    candidat = LegacyUser.objects.filter(name__icontains='{} {}'.format(request.POST['last_name'], request.POST['first_name'])).filter(cardnumber__regex=r'^.{14}' + request.POST['cardnumber']) 
+    if not candidat.exists():
         return False
-    dorm = LegacyDorm.objects.filter(last_name=request.POST['last_name']).filter(first_name=request.POST['first_name'])
-    if len(dorm) != 1:
+    dorm = LegacyDorm.objects.filter(last_name=request.POST['last_name']).filter(first_name=request.POST['first_name']).filter(room=request.POST['room'])
+    if not dorm.exists():
         return False
     return True
 
@@ -36,16 +36,26 @@ def profile_view(request):
         profile_form = UserProfileForm(request.POST, instance=request.user.userprofile)
         if user_form.is_valid() and profile_form.is_valid():
             if check_user(request):
-                dorm = LegacyDorm.objects.filter(last_name=request.POST['last_name']).filter(first_name=request.POST['first_name'])
-                dorm = dorm[0]
-                if check_dorm(dorm.id):
+#TODO тут уже надо нормально разобраться с кучей карточек и людьми с одинаковыми именами и фамилиями одновременно
+# долгое и мучительное обдумывание привело к выводу: candidat, у которых одинаковые firts_name, last_name, cardnumber, считаются одинаковыми по определению
+# по сути, проверяем, есть ли вообще подходящие карточки. Если нет, то уже выпилили. Если есть, то неважно, сколько их. Вероятность того, что в базе будет два человека с одинаковыми ФИ и днём рождения, считается малой
+
+                dorm = LegacyDorm.objects.filter(last_name=request.POST['last_name']).filter(first_name=request.POST['first_name']).filter(room=request.POST['room'])
+
+# что делать, если в базе несколько человек с одинаовыми ФИ?
+# считаем, что их не поселят в одну комнату, иначе ручная обработка 
+
+                if len(dorm) > 1:
+                    messages.error(request, "К сожалению, мы не ФСБ, поэтому не можем однозначно определить вашу личность")
+                elif check_dorm(dorm[0].id):
                     messages.error(request, "Пользователь с такими данными уже зарегистрирован")
                 else:
+                    dorm = dorm[0]
                     user_form.save()
                     profile_form.save()
                     request.user.userprofile.dorm = dorm.id
                     request.user.userprofile.middlename = dorm.middle_name
-                    request.user.userprofile.room = dorm.room
+                    #request.user.userprofile.room = dorm.room
                     request.user.userprofile.group = dorm.group
                     request.user.userprofile.approval = True 
                     request.user.userprofile.save()

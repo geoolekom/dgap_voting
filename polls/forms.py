@@ -14,5 +14,5 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         #exclude = ('user', 'approval')
-        fields = ('cardnumber',)
+        fields = ('room', 'cardnumber',)
 
