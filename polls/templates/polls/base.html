@@ -58,10 +58,10 @@
             <ul class="nav navbar-nav navbar-right">
 				{% if user.is_authenticated %}
 					<li><a href="{% url 'polls:profile_view' %}">Профиль</a></li>
-					<li><a href="{% url 'polls:logout' %}">Выход</a></li>
+					<li><a href="{% url 'logout' %}">Выход</a></li>
 				{% else %}
 					<li><a href="{% url 'registration_register' %}">Регистрация</a></li>
-					<li><a href="{% url 'polls:login' %}">Вход</a></li>
+					<li><a href="{% url 'login' %}">Вход</a></li>
 				{% endif %}
             </ul>
         </div>

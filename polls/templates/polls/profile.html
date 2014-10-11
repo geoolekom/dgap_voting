@@ -39,7 +39,7 @@
 					</tbody>
 				</table>
 				{% buttons %}
-					<a href="{% url 'polls:password_change' %}" class="btn btn-default">Изменение пароля</a>
+					<a href="{% url 'password_change' %}" class="btn btn-default">Изменение пароля</a>
 				{% endbuttons %}
 			</div>
 			{% else %}
@@ -60,7 +60,7 @@
 						<button type="submit" class="btn btn-primary">
 							Сохранить
 						</button>
-						<a href="{% url 'polls:password_change' %}" class="btn btn-default pull-right">Изменение пароля</a>
+						<a href="{% url 'password_change' %}" class="btn btn-default pull-right">Изменение пароля</a>
 					{% endbuttons %}
 				</form>
 			</div>
