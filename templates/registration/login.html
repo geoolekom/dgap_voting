@@ -25,6 +25,7 @@
 						<input type="password" class="form-control" name="password" id="{{ form.password.id_for_label }}" placeholder="Password">
 					</div>
 					<button type="submit" value="login" class="btn btn-default">Войти</button>
+					<a class="pull-right btn" href="{% url 'password_reset' %}">Забыли пароль?</a>
 				</form>
 			</div>
 		</div>	
