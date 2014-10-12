@@ -46,9 +46,9 @@ def profile_view(request):
 # считаем, что их не поселят в одну комнату, иначе ручная обработка 
 
                 if len(dorm) > 1:
-                    messages.error(request, "К сожалению, мы не ФСБ, поэтому не можем однозначно определить вашу личность")
+                    messages.error(request, 'Поздравляем! Судя по нашим данным, вам очень повезло с соседом. Если вы уверены в правильности введённых данных, пишите на vote@dgap.mipt.ru, указывая тему письма "Замечательный сосед"')
                 elif check_dorm(dorm[0].id):
-                    messages.error(request, "Пользователь с такими данными уже зарегистрирован")
+                    messages.error(request, 'Пользователь с такими данными уже зарегистрирован. Если вы уверены в правильности введённых данных, пишите на vote@dgap.mipt.ru, указывая тему письма "Проблемы при регистрации"')
                 else:
                     dorm = dorm[0]
                     user_form.save()
@@ -62,7 +62,7 @@ def profile_view(request):
                     messages.success(request, "Регистрация пройдена. Теперь вы можете участвовать в голосовании")
                     return redirect('polls:done')
             else:
-                messages.error(request, "Пользователя с данными именем, фамилией и номером карты в базе не обнаружено")
+                messages.error(request, 'Пользователя с данными именем, фамилией и номером карты в базе не обнаружено. Если вы уверены в правильности введённых данных, пишите на vote@dgap.mipt.ru, указывая тему письма "Проблемы при регистрации"')
     else:
         user_form = UserForm(instance = request.user)
         profile_form = UserProfileForm(instance = request.user.userprofile)
