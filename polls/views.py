@@ -15,6 +15,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.views.generic.edit import FormView
 from django.views.generic.edit import UpdateView
 from polls.forms import UserForm, UserProfileForm
+import csv
 
 maxInt = 2147483647
 
@@ -92,6 +93,40 @@ class Results(generic.DetailView):
 
     def get_queryset(self):
         return Poll.objects.filter(end_date__lte=timezone.now())
+
+def detailed(request, poll_id):
+    p = get_object_or_404(Poll, pk=poll_id, end_date__lte=timezone.now())
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(poll_id)
+
+    writer = csv.writer(response)
+    writer.writerow([p.name])
+    writer.writerow([])
+    writer.writerow(['Вариант ответа', 'Количество голосов'])
+    for choice in p.choice_set.all():
+        writer.writerow([choice.choice_text, choice.votes])
+    writer.writerow([])
+    if p.public:
+        writer.writerow(['Фамилия', 'Имя', 'Отчество', 'Группа', 'Комната', 'Голос'])
+    else:
+        writer.writerow(['Ключ', 'Голос'])
+    for choice in p.choice_set.all():
+        for user_hash in choice.userhash_set.all():
+            if p.public:
+                writer.writerow([
+                    user_hash.user.last_name, 
+                    user_hash.user.first_name, 
+                    user_hash.user.userprofile.middlename,
+                    user_hash.user.userprofile.group,
+                    user_hash.user.userprofile.room,
+                    choice.choice_text
+                    ])
+            else:
+                writer.writerow([
+                    user_hash.value,
+                    choice.choice_text
+                    ])
+    return response
 
 def done(request):
     storage = messages.get_messages(request)
