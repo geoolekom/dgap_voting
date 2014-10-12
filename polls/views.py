@@ -97,8 +97,7 @@ class Results(generic.DetailView):
 def detailed(request, poll_id):
     p = get_object_or_404(Poll, pk=poll_id, end_date__lte=timezone.now())
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(poll_id)
-
+    response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(p.name).encode('utf-8')
     writer = csv.writer(response)
     writer.writerow([p.name])
     writer.writerow([])
