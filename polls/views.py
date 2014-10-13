@@ -75,10 +75,16 @@ def profile_view(request):
 
 class Index(generic.ListView):
     template_name = 'polls/index.html'
-    context_object_name = 'latest_poll_list'
+    context_object_name = 'poll_list'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(Index, self).get_context_data(*args, **kwargs)
+        context['voted_poll_list'] = [poll for poll in Poll.objects.filter(end_date__gte=timezone.now()).order_by('-begin_date') if poll.is_user_voted(self.request.user)][:12]
+        context['closed_poll_list'] = Poll.objects.filter(end_date__lte=timezone.now()).order_by('-end_date')[:12]
+        return context 
 
     def get_queryset(self):
-        return Poll.objects.filter(begin_date__lte=timezone.now()).order_by('-begin_date')[:25]
+        return [poll for poll in Poll.objects.filter(begin_date__lte=timezone.now()).filter(end_date__gte=timezone.now()).order_by('-begin_date') if poll.is_user_target(self.request.user) and not poll.is_user_voted(self.request.user)][:12]
 
 class Detail(generic.DetailView):
     model = Poll
@@ -144,11 +150,10 @@ def vote(request, poll_id):
     if not user.userprofile.approval:
         messages.error(request, 'Вы не являетесь подтверждённым пользователем')
         return redirect('polls:detail', pk=poll_id)
-    if user.get_username() != 'admin' and p.voted_users.filter(pk=user.pk).exists():
+    if user.get_username() != 'admin' and p.is_user_voted(user):
         messages.error(request, 'Вы уже приняли участие в этом голосовании')
         return redirect('polls:detail', pk=poll_id)
-    if not ((re.compile(p.target_room, re.IGNORECASE)).match(user.userprofile.room) and
-            (re.compile(p.target_group, re.IGNORECASE)).match(user.userprofile.group)):
+    if not p.is_user_target(user):
         messages.error(request, 'Вы не являетесь целевой аудиторией голосования')
         return redirect('polls:detail', pk=poll_id)
     choices = request.POST.getlist('choice', False)

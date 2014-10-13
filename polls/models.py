@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.utils import timezone
 import django.db.models.options as options
+import re
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',) #добавление нового атрибута в мета
 
 #TODO необходимые методы в моделях
@@ -30,6 +31,11 @@ class Poll(models.Model):
         return self.name
     def is_closed(self):
         return self.end_date < timezone.now()
+    def is_user_voted(self, user):
+        return self.voted_users.filter(pk=user.pk).exists()
+    def is_user_target(self, user):
+        return ((re.compile(self.target_room, re.IGNORECASE)).match(user.userprofile.room) and
+            (re.compile(self.target_group, re.IGNORECASE)).match(user.userprofile.group))
 
 
 class Choice(models.Model):
