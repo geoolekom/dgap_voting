@@ -79,12 +79,16 @@ class Index(generic.ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(Index, self).get_context_data(*args, **kwargs)
-        context['voted_poll_list'] = [poll for poll in Poll.objects.filter(end_date__gte=timezone.now()).order_by('-begin_date') if poll.is_user_voted(self.request.user)][:12]
+        if self.request.user.is_authenticated():
+            context['voted_poll_list'] = [poll for poll in Poll.objects.filter(end_date__gte=timezone.now()).order_by('-begin_date') if poll.is_user_voted(self.request.user)][:12]
         context['closed_poll_list'] = Poll.objects.filter(end_date__lte=timezone.now()).order_by('-end_date')[:12]
         return context 
 
     def get_queryset(self):
-        return [poll for poll in Poll.objects.filter(begin_date__lte=timezone.now()).filter(end_date__gte=timezone.now()).order_by('-begin_date') if poll.is_user_target(self.request.user) and not poll.is_user_voted(self.request.user)][:12]
+        if self.request.user.is_authenticated():
+            return [poll for poll in Poll.objects.filter(begin_date__lte=timezone.now()).filter(end_date__gte=timezone.now()).order_by('-begin_date') if poll.is_user_target(self.request.user) and not poll.is_user_voted(self.request.user)][:12]
+        else:
+            return []
 
 class Detail(generic.DetailView):
     model = Poll
