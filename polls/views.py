@@ -136,6 +136,11 @@ def detailed(request, poll_id):
                     user_hash.value,
                     choice.choice_text
                     ])
+    if not p.public:
+        writer.writerow([])
+        writer.writerow(["Участники"])
+        for user in p.voted_users.all():
+            writer.writerow(["{} {} {}".format(user.last_name, user.first_name, user.userprofile.middlename )])
     return response
 
 def done(request):
