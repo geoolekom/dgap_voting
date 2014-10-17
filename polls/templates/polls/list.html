@@ -22,7 +22,7 @@
 										<textarea class="form-control" rows="5" name="choice"></textarea>
 									</div>
 							{% endif %}
-							{% for choice in poll.choice_set.all %}
+							{% for choice in poll.get_ordered_choices %}
 								{% if poll.answer_type == 'MANY' %}
 									<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">
 										<div class="checkbox clearfix">

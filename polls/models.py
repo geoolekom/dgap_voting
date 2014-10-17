@@ -26,6 +26,13 @@ class Poll(models.Model):
         (OWN , 'Свой вариант'),
     )
     answer_type = models.CharField('Тип ответа', max_length=10, choices = ANSWER_TYPE_CHOICES, default = ONE)
+    CREATION = 'created'
+    RANDOM = '?'
+    ORDER_TYPES = (
+        (CREATION, 'В порядке добавления'),
+        (RANDOM, 'В случайном порядке'),
+    )
+    choices_order = models.CharField('Порядок вариантов ответа', max_length=10, choices = ORDER_TYPES, default = CREATION)
     voted_users = models.ManyToManyField(User)
     def __str__(self):
         return self.name
@@ -36,14 +43,20 @@ class Poll(models.Model):
     def is_user_target(self, user):
         return ((re.compile(self.target_room, re.IGNORECASE)).match(user.userprofile.room) and
             (re.compile(self.target_group, re.IGNORECASE)).match(user.userprofile.group))
-
+    def get_ordered_choices(self):
+        return self.choice_set.all().order_by(self.choices_order)
 
 class Choice(models.Model):
     poll = models.ForeignKey(Poll)
     choice_text = models.CharField("Текст ответа", max_length=800)
     votes = models.IntegerField(default=0)
+    created = models.DateTimeField(editable=False, null=True)
     def __str__(self):
         return self.choice_text
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.created = timezone.now()
+        return super(Choice, self).save(*args, **kwargs)
 
 class UserHash(models.Model):
     value = models.BigIntegerField()#для очень старых опросов планируется удалять хэши, оставляя результаты в виде файла
