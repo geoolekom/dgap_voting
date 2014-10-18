@@ -139,7 +139,7 @@ def detailed(request, poll_id):
     if not p.public:
         writer.writerow([])
         writer.writerow(["Участники"])
-        for user in p.voted_users.all():
+        for user in p.voted_users.order_by('last_name', 'first_name'):
             writer.writerow(["{} {} {}".format(user.last_name, user.first_name, user.userprofile.middlename )])
     return response
 
