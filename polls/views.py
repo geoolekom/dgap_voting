@@ -121,7 +121,7 @@ def detailed(request, poll_id):
     else:
         writer.writerow(['Ключ', 'Голос'])
     for choice in p.choice_set.all():
-        for user_hash in choice.userhash_set.all():
+        for user_hash in choice.userhash_set.order_by('value'):
             if p.public:
                 writer.writerow([
                     user_hash.user.last_name, 
