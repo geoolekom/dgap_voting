@@ -110,7 +110,7 @@ class UserProfile(models.Model):
     group = models.CharField('Номер группы', max_length=5, blank=True)
     room = models.CharField('Номер комнаты', max_length=4, blank=True)
     approval = models.BooleanField('Пользователь подтверждён', default = False)
-    cardnumber = models.IntegerField('Последние пять цифр номера социальной карты', null=True, max_length=5)
+    cardnumber = models.CharField('Последние пять цифр номера социальной карты', null=True, blank = True, max_length=5)
     def __str__(self):  
         return "Профиль для %s" % self.user 
 
