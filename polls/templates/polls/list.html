@@ -1,7 +1,7 @@
 {% block content %}
 
 {% for poll in current_list %}
-	<div class="col-md-6">
+	<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 		<div class="panel panel-{% if not poll.is_closed %}primary{% else %}info{% endif %}">
 			<div class="panel-heading clearfix">
 				<h1 class="panel-title pull-left">{{ poll.name }} </h1> 
