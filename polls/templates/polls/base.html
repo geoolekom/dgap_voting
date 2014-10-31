@@ -70,26 +70,13 @@
     </nav>
 
     <div class="container-fluid">
-      <div class="row row-offcanvas row-offcanvas-left">
+      <div class="row">
         
-        <!-- sidebar -->
-        <div class="col-xs-6 col-lg-1 sidebar-offcanvas" id="sidebar" role="navigation">
-			{% comment %} 
-             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#">Link 1</a></li>
-              <li><a href="#">Link 2</a></li>
-              <li><a href="#">Link 3</a></li>              
-			</ul> 
-			{% endcomment %} 
-        </div>
-  	
-        <!-- main area -->
-		<div class="col-xs-12 col-lg-11" style="padding-top:16px;"{# class="container" #}>
+		<div class="col-xs-12 col-lg-10 col-lg-offset-1" style="padding-top:16px;"{# class="container" #}>
 
 		{% block content %}
 		{% endblock %}
-
+		</div>
         
     </div><!--/.row-->
   </div><!--/.container-->

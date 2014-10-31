@@ -2,6 +2,12 @@ body {
   padding-top: 51px;  
 }
 
+img.centered {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .text-center {
   padding-top: 20px;
 }
