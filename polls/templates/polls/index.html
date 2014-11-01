@@ -3,9 +3,7 @@
 {% block content %}
 
 <div class="row"> 
-	{% include "polls/list.html" with target="available" current_list=poll_list %}
-	{% include "polls/list.html" with target="voted" current_list=voted_poll_list %}
-	{% include "polls/list.html" with target="closed" current_list=closed_poll_list %}
+	{% include "polls/list.html" with current_list=poll_list %}
 </div>
 
 {% endblock content %}

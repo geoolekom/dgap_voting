@@ -65,6 +65,16 @@
 			<ul class="nav navbar-nav">
 				{# <li class="active"><a href="#">Home</a></li> #}
 				<li><a> <div id="defaultTime"></div></a></li>
+                <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">Голосования<b class="caret"></b></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="{% url 'polls:available' %}">Доступные для участия</a></li>
+                        <li><a href="{% url 'polls:voted' %}">Доступные для просмотра</a></li>
+						<li class="divider"></li>
+                        <li><a href="{% url 'polls:closed' %}">Завершённые</a></li>
+						{# жаль, пафосное "Вотированные" не подходит #}
+                    </ul>
+                </li>
 			</ul>  
             <ul class="nav navbar-nav navbar-right">
 				{% if user.is_authenticated %}

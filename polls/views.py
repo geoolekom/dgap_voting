@@ -76,15 +76,35 @@ def profile_view(request):
 def server_time(request):
     return render(request, 'polls/servertime.html')
 
-class Index(generic.ListView):
+class IndexBase(generic.ListView):
     template_name = 'polls/index.html'
     context_object_name = 'poll_list'
 
+class Closed(IndexBase):
     def get_context_data(self, *args, **kwargs):
-        context = super(Index, self).get_context_data(*args, **kwargs)
+        context = super(Closed, self).get_context_data(*args, **kwargs)
+        context['target'] = 'closed'
+        return context 
+
+    def get_queryset(self):
+        return Poll.objects.filter(end_date__lte=timezone.now()).order_by('-end_date')[:12]
+
+class Voted(IndexBase):
+    def get_context_data(self, *args, **kwargs):
+        context = super(Voted, self).get_context_data(*args, **kwargs)
+        context['target'] = 'voted'
+        return context 
+
+    def get_queryset(self):
         if self.request.user.is_authenticated():
-            context['voted_poll_list'] = [poll for poll in Poll.objects.filter(end_date__gte=timezone.now()).order_by('-begin_date') if poll.is_user_voted(self.request.user)][:12]
-        context['closed_poll_list'] = Poll.objects.filter(end_date__lte=timezone.now()).order_by('-end_date')[:12]
+            return [poll for poll in Poll.objects.filter(end_date__gte=timezone.now()).order_by('-begin_date') if poll.is_user_voted(self.request.user)][:12]
+        else:
+            return []
+
+class Available(IndexBase):
+    def get_context_data(self, *args, **kwargs):
+        context = super(Available, self).get_context_data(*args, **kwargs)
+        context['target'] = 'available'
         return context 
 
     def get_queryset(self):
@@ -92,6 +112,19 @@ class Index(generic.ListView):
             return [poll for poll in Poll.objects.filter(begin_date__lte=timezone.now()).filter(end_date__gte=timezone.now()).order_by('-begin_date') if poll.is_user_target(self.request.user) and not poll.is_user_voted(self.request.user)][:12]
         else:
             return []
+
+class Index(Closed, Available):
+    def get_context_data(self, *args, **kwargs):
+        if self.request.user.is_authenticated():
+            return Available.get_context_data(self, *args, **kwargs)
+        else:
+            return Closed.get_context_data(self, *args, **kwargs)
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated():
+            return Available.get_queryset(self)
+        else:
+            return Closed.get_queryset(self)
 
 class Detail(generic.DetailView):
     model = Poll
