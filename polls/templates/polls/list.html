@@ -74,7 +74,7 @@
 							{% endfor %}
 						</ul>
 						<div class="panel-footer clearfix">
-							<a href="{% url 'polls:results' poll.id %}" class="btn btn-default">Результаты</a>
+							<a href="{% url 'polls:detailed' poll.id %}" class="btn btn-default">Результаты</a>
 						</div>
 					</div>
 
@@ -108,14 +108,7 @@
 
 		</div>
 	</div>
-	{% if forloop.counter|divisibleby:2 %}
-	<div class="clearfix visible-lg-block"></div>
-	<div class="clearfix visible-md-block"></div>
-	{% endif %}
 {% endfor %}
-	<div class="clearfix visible-lg-block"></div>
-	<div class="clearfix visible-md-block"></div>
-	
 
 {% endblock content %}
 
