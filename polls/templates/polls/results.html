@@ -2,65 +2,7 @@
 
 {% block content %}
 
-<div class="row">
-	<div class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-2">
-		<div class="panel panel-success">
-			<div class="panel-heading clearfix">
-				<h1 class="panel-title pull-left">{{ poll.name }} </h1> 
-			</div>
-			<div class="panel-body">
-				<div class="col-xs-9">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h1 class="panel-title">{{ poll.question }}</h1> 
-						</div>
-						<ul class="list-group">
-							{% for choice in poll.choice_set.all %}
-								<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">
-									<div class="radio clearfix">
-										<div class="pull-left">
-											{{ choice.choice_text }}
-										</div>
-										<div class="pull-right">
-											{{ choice.votes }}
-										</div>
-									</div>
-								</li>
-							{% endfor %}
-						</ul>
-						<div class="panel-footer clearfix">
-							<a href="{% url 'polls:detailed' poll.id %}" class="btn btn-default">Детализированные результаты</a>
-						</div>
-					</div>
-
-				</div>
-				<div class="col-xs-3">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h1 class="panel-title">Тип</h1> 
-						</div>
-						<div class="panel-body">
-							{% if poll.public %}
-								Открытое
-							{% else %}
-								Тайное
-							{% endif %}
-						</div>
-					</div>
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h1 class="panel-title">Конец</h1> 
-						</div>
-						<div class="panel-body">
-							{{ poll.end_date |date:"d M" }}
-							{{ poll.end_date |time:"H:i" }}	
-						</div>
-					</div>
-				</div>
-
-			</div>
-		</div>
-	</div>
-</div>
+{% include "polls/poll.html" %}
 
 {% endblock content %}
+

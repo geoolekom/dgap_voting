@@ -1,9 +1,7 @@
 {% extends "polls/base.html" %}
 
 {% block content %}
-
-<div class="row">
-	<div class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-2">
+	<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 		{% if messages %}
 			{% for message in messages %}
 				<div class="alert alert-danger">
@@ -12,119 +10,9 @@
 				</div>
 			{% endfor %}
 		{% endif %}
-		<div class="panel panel-primary">
-			<div class="panel-heading clearfix">
-				<h1 class="panel-title pull-left">{{ poll.name }} </h1> 
-			</div>
-			<div class="panel-body">
-				<div class="col-xs-9">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h1 class="panel-title">{{ poll.question }}</h1> 
-						</div>
-						<ul class="list-group">
-						<form action="{% url 'polls:vote' poll.id %}" method="post">
-							{% csrf_token %}
-							{% if poll.answer_type == 'OWN' %}
-									<div class="form-group" style="margin-bottom:0px">
-										<textarea class="form-control" rows="5" name="choice"></textarea>
-									</div>
-							{% endif %}
-							{% for choice in poll.choice_set.all %}
-								{% if poll.answer_type == 'MANY' %}
-									<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">
-										<div class="checkbox clearfix">
-											<label>
-												<input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-												{{ choice.choice_text }}
-											</label>
-										</div>
-									</li>
-								{% endif %}
-								{% if poll.answer_type == 'ONE' %}
-									<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">
-										<div class="radio clearfix">
-											<label>
-												<input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-												{{ choice.choice_text }}
-											</label>
-										</div>
-									</li>
-								{% endif %}
-							{% endfor %}
-						</ul>
-						<div class="panel-footer clearfix">
-							<button type="submit" value="vote" class="btn btn-default">Голосовать</button>
-						</form>
-						</div>
-					</div>
-				</div>
-			<div class="col-xs-3">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h1 class="panel-title">Тип</h1> 
-						</div>
-						<div class="panel-body">
-							{% if poll.public %}
-								Открытое
-							{% else %}
-								Тайное
-							{% endif %}
-						</div>
-					</div>
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h1 class="panel-title">Конец</h1> 
-						</div>
-						<div class="panel-body">
-							{{ poll.end_date |date:"d M" }}
-							{{ poll.end_date |time:"H:i" }}	
-						</div>
-					</div>
-				</div>
-
-			</div>
-		</div>
 	</div>
-</div>
 
-
-{% comment %}
-	{% if messages %}
-		<ul class="messages">
-			{% for message in messages %}
-				<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-			{% endfor %}
-		</ul>
-	{% endif %} 
-
-<div>
-      <h1>{{ poll.question }}</h1>
-</div>
-    
-
-<div>
-	<form action="{% url 'polls:vote' poll.id %}" method="post">
-		{% csrf_token %}
-		{% if poll.answer_type == 'OWN' %}
-			<textarea cols="90" rows="10" name="choice"></textarea>
-		{% else %}
-		       
-		{% for choice in poll.choice_set.all %}
-			{% if poll.answer_type == 'ONE' %}
-				<input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
-			{% endif %}
-			{% if poll.answer_type == 'MANY' %}
-				<input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
-			{% endif %}
-				<label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />
-		{% endfor %}
-		{% endif %}
-		<br>
-		<input type="submit" value="Голосовать" />
-	</form>
-</div>
-
-{% endcomment %}
+{% include "polls/poll.html" %}
 
 {% endblock content %}
+
