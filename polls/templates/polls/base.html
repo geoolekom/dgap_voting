@@ -44,8 +44,7 @@
 		$(function () {
 				var startDay = new Date();
 				startDay = new Date(startDay.getFullYear(), startDay.getMonth(), startDay.getDate());
-				timezone = -serverTime().getTimezoneOffset()/60;
-				$('#defaultTime').countdown({since: startDay, compact: true, format: 'HMS', description: '', serverSync: serverTime, timezone: timezone});
+				$('#defaultTime').countdown({since: startDay, compact: true, format: 'HMS', description: '', serverSync: serverTime});
 		});
 	</script>
 </head>
