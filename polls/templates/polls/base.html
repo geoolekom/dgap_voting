@@ -30,12 +30,6 @@
 	<script src="{% static 'polls/js/countdown/jquery.plugin.min.js' %}"></script> 
 	<script src="{% static 'polls/js/countdown/jquery.countdown.min.js' %}"></script> 
 	<script>
-		{# TODO serverSync #}
-		$(function () {
-				var startDay = new Date();
-				startDay = new Date(startDay.getFullYear(), startDay.getMonth(), startDay.getDate());
-				$('#defaultTime').countdown({since: startDay, compact: true, format: 'HMS', description: '', serverSync: serverTime });
-		});
 		function serverTime() { 
 			var time = null; 
 			$.ajax({url: "{% url 'polls:server_time' %}", 
@@ -47,6 +41,12 @@
 			}}); 
 			return time; 
 		}
+		$(function () {
+				var startDay = new Date();
+				startDay = new Date(startDay.getFullYear(), startDay.getMonth(), startDay.getDate());
+				timezone = -serverTime().getTimezoneOffset();
+				$('#defaultTime').countdown({since: startDay, compact: true, format: 'HMS', description: '', serverSync: serverTime, timezone: timezone});
+		});
 	</script>
 </head>
 
