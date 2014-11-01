@@ -3,6 +3,7 @@ from django.conf.urls import patterns, url
 from polls import views
 
 urlpatterns = patterns('',
+    url(r'^servertime/$', views.server_time, name='server_time'),
     # ex: /polls/
     url(r'^$', views.Index.as_view(), name='index'),
     # ex: /polls/5/

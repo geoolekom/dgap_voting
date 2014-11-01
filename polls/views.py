@@ -73,6 +73,9 @@ def profile_view(request):
         'profile_form': profile_form,
     })
 
+def server_time(request):
+    return render(request, 'polls/servertime.html')
+
 class Index(generic.ListView):
     template_name = 'polls/index.html'
     context_object_name = 'poll_list'

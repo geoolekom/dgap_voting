@@ -34,8 +34,19 @@
 		$(function () {
 				var startDay = new Date();
 				startDay = new Date(startDay.getFullYear(), startDay.getMonth(), startDay.getDate());
-				$('#defaultTime').countdown({since: startDay, compact: true, format: 'HMS', description: ''});
+				$('#defaultTime').countdown({since: startDay, compact: true, format: 'HMS', description: '', serverSync: serverTime });
 		});
+		function serverTime() { 
+			var time = null; 
+			$.ajax({url: "{% url 'polls:server_time' %}", 
+				async: false, dataType: 'text', 
+				success: function(text) { 
+					time = new Date(text); 
+				}, error: function(http, message, exc) { 
+					time = new Date(); 
+			}}); 
+			return time; 
+		}
 	</script>
 </head>
 
