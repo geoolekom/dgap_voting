@@ -40,11 +40,24 @@
 					time = new Date(); 
 			}}); 
 			return time; 
-		}
+		};
+		function serverTimezone() { 
+			var timezone = 0; 
+			$.ajax({url: "{% url 'polls:server_timezone' %}", 
+				async: false, dataType: 'text', 
+				success: function(text) { 
+					timezone = parseInt(text, 10)/100;  
+				}, error: function(http, message, exc) { 
+					time = new Date();  
+					timezone = -time.getTimezoneOffset()/60; 
+			}}); 
+			return timezone; 
+		};
 		$(function () {
 				var startDay = new Date();
 				startDay = new Date(startDay.getFullYear(), startDay.getMonth(), startDay.getDate());
-				$('#defaultTime').countdown({since: startDay, compact: true, format: 'HMS', description: '', serverSync: serverTime});
+				timezone = serverTimezone();
+				$('#defaultTime').countdown({since: startDay, compact: true, format: 'HMS', description: '', serverSync: serverTime, timezone: timezone});
 		});
 	</script>
 </head>

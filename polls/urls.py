@@ -4,6 +4,7 @@ from polls import views
 
 urlpatterns = patterns('',
     url(r'^servertime/$', views.server_time, name='server_time'),
+    url(r'^servertimezone/$', views.server_timezone, name='server_timezone'),
     # ex: /polls/
     url(r'^$', views.Index.as_view(), name='index'),
     url(r'^closed/$', views.Closed.as_view(), name='closed'),
