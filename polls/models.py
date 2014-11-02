@@ -44,7 +44,10 @@ class Poll(models.Model):
         return ((re.compile(self.target_room, re.IGNORECASE)).match(user.userprofile.room) and
             (re.compile(self.target_group, re.IGNORECASE)).match(user.userprofile.group))
     def get_ordered_choices(self):
-        return self.choice_set.all().order_by(self.choices_order)
+        if self.is_closed():
+            return self.choice_set.all().order_by('-votes')
+        else:
+            return self.choice_set.all().order_by(self.choices_order)
 
 class Choice(models.Model):
     poll = models.ForeignKey(Poll)

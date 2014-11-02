@@ -157,7 +157,7 @@ def make_csv(p, filename):
             writer.writerow([p.name])
             writer.writerow([])
             writer.writerow(['Вариант ответа', 'Количество голосов'])
-            for choice in p.choice_set.all():
+            for choice in p.choice_set.all().order_by('-votes'):
                 writer.writerow([choice.choice_text, choice.votes])
             writer.writerow([])
             if p.public:

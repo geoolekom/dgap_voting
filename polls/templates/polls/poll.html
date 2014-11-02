@@ -59,7 +59,7 @@
 							<h1 class="panel-title">{{ poll.question }}</h1> 
 						</div>
 						<ul class="list-group">
-							{% for choice in poll.choice_set.all %}
+							{% for choice in poll.get_ordered_choices %}
 								<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">
 									<div class="radio clearfix">
 										<div class="pull-left">
