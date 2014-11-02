@@ -205,7 +205,8 @@ def detailed(request, poll_id):
             message = "Результаты недоступны в данный момент, попробуйте позже."
             messages.warning(request, message)
             return redirect('polls:done')
-    if request.user_agent.os.family == 'Windows':
+    print(request.user_agent.os.family)
+    if 'Windows' in request.user_agent.os.family or 'windows' in request.user_agent.os.family:
         oldfilename = filename
         filename = os.path.join(settings.SENDFILE_ROOT, "poll{}win.csv".format(poll_id))
         if not os.path.isfile(filename):
