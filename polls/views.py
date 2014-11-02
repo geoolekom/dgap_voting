@@ -199,7 +199,7 @@ def make_win_csv(oldfilename, filename):
 
 def detailed(request, poll_id):
     p = get_object_or_404(Poll, pk=poll_id, end_date__lte=timezone.now())
-    filename = os.path.join(settings.MEDIA_ROOT, "poll{}.csv".format(poll_id))
+    filename = os.path.join(settings.SENDFILE_ROOT, "poll{}.csv".format(poll_id))
     if not os.path.isfile(filename):
         if not make_csv(p, filename):
             message = "Результаты недоступны в данный момент, попробуйте позже."
@@ -207,7 +207,7 @@ def detailed(request, poll_id):
             return redirect('polls:done')
     if request.user_agent.os.family == 'Windows':
         oldfilename = filename
-        filename = os.path.join(settings.MEDIA_ROOT, "poll{}win.csv".format(poll_id))
+        filename = os.path.join(settings.SENDFILE_ROOT, "poll{}win.csv".format(poll_id))
         if not os.path.isfile(filename):
             if not make_win_csv(oldfilename, filename):
                 message = "Результаты недоступны в данный момент, попробуйте позже."
