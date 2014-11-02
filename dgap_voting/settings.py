@@ -1,3 +1,8 @@
+try:
+    from local_settings import *
+except ImportError:
+    pass
+
 """
 Django settings for dgap_voting project.
 
@@ -128,7 +133,4 @@ STATIC_ROOT = (os.path.join(BASE_DIR, 'static'))
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/polls/'
 
-try:
-    from local_settings import *
-except ImportError:
-    pass
+
