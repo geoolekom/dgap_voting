@@ -79,6 +79,9 @@ def server_time(request):
 def server_timezone(request):
     return render(request, 'polls/servertimezone.html')
 
+def server_date(request):
+    return render(request, 'polls/serverdate.html')
+
 class IndexBase(generic.ListView):
     template_name = 'polls/index.html'
     context_object_name = 'poll_list'

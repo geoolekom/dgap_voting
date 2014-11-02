@@ -41,6 +41,18 @@
 			}}); 
 			return time; 
 		};
+		function serverDate() { 
+			var time = null; 
+			$.ajax({url: "{% url 'polls:server_date' %}", 
+				async: false, dataType: 'text', 
+				success: function(text) { 
+					time = new Date(text); 
+				}, error: function(http, message, exc) { 
+					time = new Date(); 
+			}}); 
+			return time; 
+		}; 
+		{% comment %}
 		function serverTimezone() { 
 			var timezone = 0; 
 			$.ajax({url: "{% url 'polls:server_timezone' %}", 
@@ -53,11 +65,10 @@
 			}}); 
 			return timezone; 
 		};
+		{% endcomment %}
 		$(function () {
-				var startDay = new Date();
-				startDay = new Date(startDay.getFullYear(), startDay.getMonth(), startDay.getDate());
-				timezone = serverTimezone();
-				$('#defaultTime').countdown({since: startDay, compact: true, format: 'HMS', description: '', serverSync: serverTime, timezone: timezone});
+				var startDay = serverDate();
+				$('#defaultTime').countdown({since: startDay, compact: true, format: 'HMS', description: '', serverSync: serverTime});
 		});
 	</script>
 </head>
