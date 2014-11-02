@@ -44,11 +44,21 @@ INSTALLED_APPS = (
     'registration',
     'bootstrap3',
     'polls',
+    'django_user_agents',
 )
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
 
 #BOOTSTRAP3 = {
 #    'include_jquery': True,  
 #}
+
+SENDFILE_BACKEND = 'sendfile.backends.development'
 
 SITE_ID = 1
 
@@ -61,6 +71,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
 )
 
 ROOT_URLCONF = 'dgap_voting.urls'
@@ -115,3 +126,8 @@ MEDIA_ROOT = (os.path.join(BASE_DIR, 'media'))
 STATIC_ROOT = (os.path.join(BASE_DIR, 'static'))
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/polls/'
+
+try:
+    from local_settings import *
+except ImportError:
+    pass

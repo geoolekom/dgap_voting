@@ -16,6 +16,10 @@ from django.views.generic.edit import FormView
 from django.views.generic.edit import UpdateView
 from polls.forms import UserForm, UserProfileForm
 import csv
+from sendfile import sendfile
+import os.path
+from django.conf import settings
+import subprocess
 
 maxInt = 2147483647
 
@@ -146,44 +150,70 @@ class Results(generic.DetailView):
     def get_queryset(self):
         return Poll.objects.filter(end_date__lte=timezone.now())
 
+def make_csv(p, filename):
+    try:
+        with open(filename, 'x') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow([p.name])
+            writer.writerow([])
+            writer.writerow(['Вариант ответа', 'Количество голосов'])
+            for choice in p.choice_set.all():
+                writer.writerow([choice.choice_text, choice.votes])
+            writer.writerow([])
+            if p.public:
+                writer.writerow(['Фамилия', 'Имя', 'Отчество', 'Группа', 'Комната', 'Голос'])
+            else:
+                writer.writerow(['Ключ', 'Голос'])
+            for choice in p.choice_set.all():
+                for user_hash in choice.userhash_set.order_by('value'):
+                    if p.public:
+                        writer.writerow([
+                            user_hash.user.last_name, 
+                            user_hash.user.first_name, 
+                            user_hash.user.userprofile.middlename,
+                            user_hash.user.userprofile.group,
+                            user_hash.user.userprofile.room,
+                            choice.choice_text
+                            ])
+                    else:
+                        writer.writerow([
+                            user_hash.value,
+                            choice.choice_text
+                            ])
+            if not p.public:
+                writer.writerow([])
+                writer.writerow(["Участники"])
+                for user in p.voted_users.order_by('last_name', 'first_name'):
+                    writer.writerow(["{} {} {}".format(user.last_name, user.first_name, user.userprofile.middlename )])
+    except FileExistsError:
+        return False
+    else: 
+        return True
+
+def make_win_csv(oldfilename, filename):
+    error = subprocess.call(["iconv", "-t", "WINDOWS-1251", oldfilename, "-o", filename])
+    if error:
+        return False
+    else:
+        return True
+
 def detailed(request, poll_id):
     p = get_object_or_404(Poll, pk=poll_id, end_date__lte=timezone.now())
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(poll_id)
-
-    writer = csv.writer(response)
-    writer.writerow([p.name])
-    writer.writerow([])
-    writer.writerow(['Вариант ответа', 'Количество голосов'])
-    for choice in p.choice_set.all():
-        writer.writerow([choice.choice_text, choice.votes])
-    writer.writerow([])
-    if p.public:
-        writer.writerow(['Фамилия', 'Имя', 'Отчество', 'Группа', 'Комната', 'Голос'])
-    else:
-        writer.writerow(['Ключ', 'Голос'])
-    for choice in p.choice_set.all():
-        for user_hash in choice.userhash_set.order_by('value'):
-            if p.public:
-                writer.writerow([
-                    user_hash.user.last_name, 
-                    user_hash.user.first_name, 
-                    user_hash.user.userprofile.middlename,
-                    user_hash.user.userprofile.group,
-                    user_hash.user.userprofile.room,
-                    choice.choice_text
-                    ])
-            else:
-                writer.writerow([
-                    user_hash.value,
-                    choice.choice_text
-                    ])
-    if not p.public:
-        writer.writerow([])
-        writer.writerow(["Участники"])
-        for user in p.voted_users.order_by('last_name', 'first_name'):
-            writer.writerow(["{} {} {}".format(user.last_name, user.first_name, user.userprofile.middlename )])
-    return response
+    filename = os.path.join(settings.MEDIA_ROOT, "poll{}.csv".format(poll_id))
+    if not os.path.isfile(filename):
+        if not make_csv(p, filename):
+            message = "Результаты недоступны в данный момент, попробуйте позже."
+            messages.warning(request, message)
+            return redirect('polls:done')
+    if request.user_agent.os.family == 'Windows':
+        oldfilename = filename
+        filename = os.path.join(settings.MEDIA_ROOT, "poll{}win.csv".format(poll_id))
+        if not os.path.isfile(filename):
+            if not make_win_csv(oldfilename, filename):
+                message = "Результаты недоступны в данный момент, попробуйте позже."
+                messages.warning(request, message)
+                return redirect('polls:done')
+    return sendfile(request, filename, attachment=True)
 
 def done(request):
     storage = messages.get_messages(request)
