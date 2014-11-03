@@ -205,7 +205,6 @@ def detailed(request, poll_id):
             message = "Результаты недоступны в данный момент, попробуйте позже."
             messages.warning(request, message)
             return redirect('polls:done')
-    print(request.user_agent.os.family)
     if 'Windows' in request.user_agent.os.family or 'windows' in request.user_agent.os.family:
         oldfilename = filename
         filename = os.path.join(settings.SENDFILE_ROOT, "poll{}win.csv".format(poll_id))
@@ -214,7 +213,7 @@ def detailed(request, poll_id):
                 message = "Результаты недоступны в данный момент, попробуйте позже."
                 messages.warning(request, message)
                 return redirect('polls:done')
-    return sendfile(request, filename, attachment=True)
+    return sendfile(request, filename, attachment=True, attachment_filename="{}.csv".format(p.name))
 
 def done(request):
     storage = messages.get_messages(request)
