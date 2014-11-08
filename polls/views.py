@@ -153,7 +153,7 @@ class Results(generic.DetailView):
 def make_csv(p, filename):
     try:
         with open(filename, 'x') as csvfile:
-            writer = csv.writer(csvfile)
+            writer = csv.writer(csvfile, dialect='excel-tab')
             writer.writerow([p.name])
             writer.writerow([])
             writer.writerow(['Вариант ответа', 'Количество голосов'])
