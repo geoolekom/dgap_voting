@@ -1,0 +1,22 @@
+<html>
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body>
+<div align="center">
+<h1> Внимание-внимание! </h1>
+
+<h4>На {{ site_name }} доступен новый опрос
+"{{ poll_obj.name }}". </h4>
+
+{{ main_text }} <br><br>
+
+<i>Выразить своё мнение можно с {{ poll_obj.begin_date }} по {{ poll_obj.end_date }} <br><br>
+
+по адресу: <a href = "{{ poll_address }}" > {{ poll_address }} </a></i> <br><br> </div>
+
+<div align="right"> С уважением, {{ author_name }}. </div>
+</body>
+</html>

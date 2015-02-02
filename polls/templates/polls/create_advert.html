@@ -1,0 +1,18 @@
+{% extends "polls/base.html" %}
+
+{% block content %}
+
+<form action="{% url 'polls:pdf_advert' poll_id %}" method="post">
+		{% csrf_token %}
+		<div class="form-group" style="margin-bottom:0px">
+		<textarea class="form-control" rows="1" name="author_name"></textarea>
+		<br>
+		<textarea class="form-control" rows="5" name="main_text"></textarea>
+		</div>
+
+		<div class="panel-footer clearfix">
+		<button type="submit" value="vote" class="btn btn-default">Генерировать объявление</button>
+		</div>
+</form>
+
+{% endblock content %}
