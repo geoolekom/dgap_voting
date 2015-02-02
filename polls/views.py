@@ -152,14 +152,14 @@ class Results(generic.DetailView):
 
 def make_html_advert(request, poll_id):
 	poll_obj = get_object_or_404(Poll, pk=poll_id)
-	return loader.render_to_string(request, 'polls/advert.html', {
+	return loader.render_to_string('polls/advert.html', {
         'poll_obj': poll_obj,
         'filename': 'adv_html',
         'main_text': request.POST['main_text'],
         'author_name': request.POST['author_name'],
 		'poll_address': request.build_absolute_uri('..'),
 		'site_name': request.get_host()
-    })
+    }, RequestContext(request))
 
 def create_advert(request, poll_id):
 	poll_obj = get_object_or_404(Poll, pk=poll_id)
@@ -178,16 +178,18 @@ def make_pdf(request, poll_id):
 	filename = os.path.join(settings.SENDFILE_ROOT, "poll{}".format(poll_id)) 
 	html_filename = "{}.html".format(filename)
 	pdf_filename = "{}.pdf".format(filename)
-	
-	with open(html_filename, 'w') as htmlfile:
-		htmlfile.write(make_html_advert(request, poll_id))
+	try:
+		with open(html_filename, 'w') as htmlfile:
+			htmlfile.write(make_html_advert(request, poll_id))
+	except Exception as e:
+		print(str(e))
 		
 	if not html_to_pdf(html_filename, pdf_filename):
 		message = "Невозможно сгенерировать объявление, попробуйте позже"
 		messages.warning(request, message)
 		return redirect('polls:done')
     
-	return sendfile(request, pdf_filename, attachment=True, attachment_filename="{}_advert.pdf".format(p.name))
+	return sendfile(request, pdf_filename, attachment=True, attachment_filename="{}_advert.pdf".format(poll_id))
 
 def make_csv(p, filename):
     try:
