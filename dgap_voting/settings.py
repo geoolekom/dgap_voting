@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'polls',
     'django_user_agents',
+    'django_bleach',
 )
 
 CACHES = {
@@ -105,6 +106,23 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+
+
+# Bleach default settings
+BLEACH_ALLOWED_TAGS = ['b', 'i', 'u', 's', 'a', 'p', 'div', 'ul', 'li', 'img', 'h1', 'h2', 'h3']
+
+BLEACH_ALLOWED_ATTRIBUTES = ['href', 'title', 'style', 'src', 'align']
+
+# Which CSS properties are allowed in 'style' attributes (assuming style is
+# an allowed attribute)
+BLEACH_ALLOWED_STYLES = ['font-size', 'color', 'height', 'width']
+
+# Strip unknown tags if True, replace with HTML escaped characters if False
+BLEACH_STRIP_TAGS = False
+
+# To strip HTML comments, or not to strip?
+BLEACH_STRIP_COMMENTS = False
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/

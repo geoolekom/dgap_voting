@@ -11,14 +11,14 @@ class ChoiceInline(admin.TabularInline):
     extra = 1
 
 class PollAdmin(admin.ModelAdmin):
-	# button generating pdf and html
-	def name_with_button(self, obj):
-		return mark_safe(obj.name + '  <input type="button", value="pdf", onclick="location.href=\'' + Site.objects.all()[0].domain + 'polls/' + str(obj.id) + '/create_advert/\'">')
-	name_with_button.short_description = 'Название опроса'
+	# button generating pdf
+	def pdf_button(self, obj):
+		return mark_safe('<a href=\'' + Site.objects.all()[0].domain + 'polls/' + str(obj.id) + '/create_advert/\'">Генерировать pdf</a>')
+	pdf_button.short_description = 'Создание объявления'
 	
 	exclude = ('voted_users',)
 	inlines = [ChoiceInline,]
-	list_display=['name_with_button']
+	list_display=['name', 'pdf_button']
 
 admin.site.register(Poll, PollAdmin)
 

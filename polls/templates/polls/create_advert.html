@@ -2,12 +2,63 @@
 
 {% block content %}
 
+<style type="text/css">
+	.suggest_author {
+		color: grey;
+		border-bottom: 1px dotted grey;
+	}
+
+	.suggest_author:hover {
+		color: black;
+		border-bottom: 1px dotted black;
+	}
+</style>
+<script>
+	$(document).ready(function () {
+		$('.suggest_author').click(function() {
+			$(this).parent().find('textarea[name="author_name"]').val($(this).text());
+		});
+	});
+</script>
+
 <form action="{% url 'polls:pdf_advert' poll_id %}" method="post">
 		{% csrf_token %}
 		<div class="form-group" style="margin-bottom:0px">
-		<textarea class="form-control" rows="1" name="author_name"></textarea>
-		<br>
-		<textarea class="form-control" rows="5" name="main_text"></textarea>
+			<div>
+				Автор опроса <span style="color:grey">(например, </span><span class="suggest_author">Сенат ФОПФ</span><span style="color:grey">)</span>
+				<textarea class="form-control" rows="1" name="author_name"></textarea>
+			</div>
+			<br>
+			
+			<div>
+				Основной текст объявления (возможно использование HTML): <br>
+				<span style="color:grey"><ul>
+				<li>Разрешённые тэги: 
+					{% for tag in allowed_tags|slice:':-1' %}
+						'{{ tag }}',  
+					{% endfor %}
+					{% for tag in allowed_tags|slice:'-1:' %}
+						'{{ tag }}' 
+					{% endfor %}
+					
+				<li>Разрешённые атрибуты: 
+					{% for tag in allowed_attrs|slice:':-1' %}
+						'{{ tag }}',  
+					{% endfor %}
+					{% for tag in allowed_attrs|slice:'-1:' %}
+						'{{ tag }}' 
+					{% endfor %}
+					
+				<li>Разрешённые стили: 
+					{% for tag in allowed_styles|slice:':-1' %}
+						'{{ tag }}',  
+					{% endfor %}
+					{% for tag in allowed_styles|slice:'-1:' %}
+						'{{ tag }}' 
+					{% endfor %}
+				</ul></span>
+				<textarea class="form-control" rows="5" name="main_text"></textarea>
+			</div>
 		</div>
 
 		<div class="panel-footer clearfix">

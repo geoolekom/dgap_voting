@@ -16,17 +16,7 @@
 	<link href="{% static 'polls/sidebar.css' %}" rel="stylesheet">
 	<link rel="shortcut icon" type="image/png" href="{% static 'polls/favicon.png' %}"/>
 	{# <link href="{% static 'polls/js/countdown/jquery.countdown.css' %}" rel="stylesheet" > #} 
-	{% comment %}
-	<style type="text/css">
-		p{
-			padding: 50px;
-			font-size: 32px;
-			font-weight: bold;
-			text-align: center;
-			background: #f2f2f2;
-		}
-	</style>
-	{% endcomment %}
+
 	<script src="{% static 'polls/js/countdown/jquery.plugin.min.js' %}"></script> 
 	<script src="{% static 'polls/js/countdown/jquery.countdown.min.js' %}"></script> 
 	<script>
@@ -52,24 +42,12 @@
 			}}); 
 			return time; 
 		}; 
-		{% comment %}
-		function serverTimezone() { 
-			var timezone = 0; 
-			$.ajax({url: "{% url 'polls:server_timezone' %}", 
-				async: false, dataType: 'text', 
-				success: function(text) { 
-					timezone = parseInt(text, 10)/100;  
-				}, error: function(http, message, exc) { 
-					time = new Date();  
-					timezone = -time.getTimezoneOffset()/60; 
-			}}); 
-			return timezone; 
-		};
-		{% endcomment %}
+
 		$(function () {
 				var startDay = serverDate();
 				$('#defaultTime').countdown({since: startDay, compact: true, format: 'HMS', description: '', serverSync: serverTime});
 		});
+});
 	</script>
 </head>
 
