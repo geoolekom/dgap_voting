@@ -187,9 +187,5 @@ SOCIAL_AUTH_PIPELINE = (
     'polls.psa.cut_firstname',  # cut firstname from mixed name from phystech.edu
 )
 
-<<<<<<< HEAD
-from dgap_voting.local_settings import *
-=======
-from dgap_voting.local_settings import *
 
->>>>>>> f3d2d45a6000ee0855ce7a7d28407b5d2bfd705a
+from dgap_voting.local_settings import *
