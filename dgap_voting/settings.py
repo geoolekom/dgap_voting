@@ -91,7 +91,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_user_agents.middleware.UserAgentMiddleware',
-    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    #'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'polls.psa.SocialAuthExceptionMiddlewareExtended',
 )
 
 ROOT_URLCONF = 'dgap_voting.urls'
