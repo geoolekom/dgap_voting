@@ -22,10 +22,11 @@
 					</div>
 					<div class="form-group">
 						<label for="{{ form.password.id_for_label }}">Пароль</label>
+						<a class="pull-right" href="{% url 'password_reset' %}">Забыли пароль?</a>
 						<input type="password" class="form-control" name="password" id="{{ form.password.id_for_label }}" placeholder="Password">
 					</div>
 					<button type="submit" value="login" class="btn btn-default">Войти</button>
-					<a class="pull-right btn" href="{% url 'password_reset' %}">Забыли пароль?</a>
+					<a class="pull-right btn btn-default" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'polls:index' %}">Войти через phystech.edu</a>
 				</form>
 			</div>
 		</div>	

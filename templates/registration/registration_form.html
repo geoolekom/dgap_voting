@@ -16,6 +16,7 @@
 						<button type="submit" class="btn btn-default">
 							Submit
 						</button>
+						<a class="pull-right btn btn-default" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'polls:profile_view' %}">Войти через phystech.edu</a>
 					{% endbuttons %}
 				</form>
 			</div>
