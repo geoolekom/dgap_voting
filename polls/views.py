@@ -194,15 +194,16 @@ def make_pdf_error(request, poll_id):
 	return redirect('polls:done')
 
 def make_pdf(request, poll_id):
-	filename = os.path.join(settings.SENDFILE_ROOT, "poll{}".format(poll_id)) 
-	html_filename = "{}.html".format(filename)
-	pdf_filename = "{}.pdf".format(filename)
 	try:
+		poll_obj = get_object_or_404(Poll, pk=poll_id)
+		filename = os.path.join(settings.SENDFILE_ROOT, "poll{}".format(poll_id)) 
+		html_filename = "{}.html".format(filename)
+		pdf_filename = "{}.pdf".format(filename)
 		with open(html_filename, 'w') as htmlfile:
 			htmlfile.write(make_html_advert(request, poll_id))
 		if not html_to_pdf(html_filename, pdf_filename):
 			raise Exception("Something wrong with wkhtmltopdf")
-		return sendfile(request, pdf_filename, attachment=True, attachment_filename="{}_advert.pdf".format(poll_id))
+		return sendfile(request, pdf_filename, attachment=True, attachment_filename="{}.pdf".format(poll_obj.name))
 		#message = "Объявление успешно создано, ожидайте загрузки"
 		#messages.success(request, message)
 		#return redirect('polls:done')
