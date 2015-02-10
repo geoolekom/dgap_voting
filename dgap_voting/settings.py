@@ -46,9 +46,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'polls',
     'django_user_agents',
-<<<<<<< HEAD
     'django_bleach',
-=======
     'social.apps.django_app.default',
 )
 
@@ -67,7 +65,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
->>>>>>> f3d2d45a6000ee0855ce7a7d28407b5d2bfd705a
 )
 
 CACHES = {
