@@ -171,7 +171,7 @@ def make_html_advert(request, poll_id):
         'filename': 'adv_html',
         'main_text': request.POST['main_text'],
         'author_name': request.POST['author_name'],
-		'poll_address': request.build_absolute_uri('../..'),
+		'poll_address': request.build_absolute_uri('../{}'.format(poll_id)),
 		'site_name': request.get_host()
     }, RequestContext(request))
 
