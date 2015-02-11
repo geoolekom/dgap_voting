@@ -185,7 +185,7 @@ def create_advert(request, poll_id):
     })
 
 def html_to_pdf(html_filename, pdf_filename):
-    error = subprocess.call(["wkhtmltopdf", "--minimum-font-size", "18", "--margin-top", "30mm", "--margin-bottom", "30mm", "--margin-left", "20mm", "--margin-right", "20mm", html_filename, pdf_filename])
+    error = subprocess.call(["wkhtmltopdf", "--minimum-font-size", "18", "--margin-top", "25mm", "--margin-bottom", "25mm", "--margin-left", "20mm", "--margin-right", "20mm", html_filename, pdf_filename])
     return not error
 
 def make_pdf_error(request, poll_id):
