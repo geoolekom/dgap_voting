@@ -8,30 +8,33 @@
 
 <div align="center">
 	<h1> Внимание! </h1>
+	<br>
 	<h2>
 		На {{ site_name }} доступен новый опрос
 		<br> 
 		&laquo;{{ poll_obj.question }}&raquo;. 
 	</h2>
 
-	<br><br>
+	<br>
 	{% load bleach_tags %}
 	{{ main_text|bleach|linebreaks }} 
-	<br><br><br>
+	<br><br>
 </div>
 
 <table cellpadding="10">
 	<tr>
-		<td> <span style="font-size:24"><b>Когда?</b></span> </td>
-		<td> <i>Выразить своё мнение можно с {{ poll_obj.begin_date|date:"j E Y (l), H:i"|lower }} <br> по {{ poll_obj.end_date|date:"j E Y (l), H:i"|lower }}.</i> </td>
+		<td> <span style="font-size:28"><b>Когда?</b></span> </td>
+		<td> <i>Выразить своё мнение можно с {{ poll_obj.begin_date|date:"j E Y (l), H:i"|lower }} по {{ poll_obj.end_date|date:"j E Y (l), H:i"|lower }}.</i> </td>
 	</tr>
 	<tr>
-		<td> <span style="font-size:24"><b>Где?</b></span> </td>
+		<td> <span style="font-size:28"><b>Где?</b></span> </td>
 		<td> <i>По адресу <a href = "{{ poll_address }}" > {{ poll_address }} </a></i>  </td>
 	</tr>
 </table>
 
-<div align="right"> 
+<br>
+
+<div align="right" style="font-size:24"> 
 	С уважением, {{ author_name }}. 
 </div>
 

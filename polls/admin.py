@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from polls.models import Poll, Choice, UserProfile
-from django.contrib.sites.models import Site, get_current_site
+from django.contrib.sites.models import Site
 from django.utils.safestring import mark_safe
 import os
 
