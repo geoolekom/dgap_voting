@@ -171,7 +171,7 @@ def make_html_advert(request, poll_id):
         'filename': 'adv_html',
         'main_text': request.POST['main_text'],
         'author_name': request.POST['author_name'],
-		'poll_address': request.build_absolute_uri('../..'),
+		'poll_address': request.build_absolute_uri('..'),
 		'site_name': request.get_host()
     }, RequestContext(request))
 
@@ -185,7 +185,7 @@ def create_advert(request, poll_id):
 	})
 
 def html_to_pdf(html_filename, pdf_filename):
-    error = subprocess.call(["wkhtmltopdf", "--minimum-font-size", "12", "--margin-top", "10mm", "--margin-bottom", "25mm", "--margin-left", "20mm", "--margin-right", "20mm", html_filename, pdf_filename])
+    error = subprocess.call(["wkhtmltopdf", "--minimum-font-size", "18", "--margin-top", "30mm", "--margin-bottom", "30mm", "--margin-left", "20mm", "--margin-right", "20mm", html_filename, pdf_filename])
     return not error
 
 def make_pdf_error(request, poll_id):
