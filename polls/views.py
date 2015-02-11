@@ -165,50 +165,50 @@ class Results(generic.DetailView):
         return Poll.objects.filter(end_date__lte=timezone.now())
 
 def make_html_advert(request, poll_id):
-	poll_obj = get_object_or_404(Poll, pk=poll_id)
-	return loader.render_to_string('polls/advert.html', {
+    poll_obj = get_object_or_404(Poll, pk=poll_id)
+    return loader.render_to_string('polls/advert.html', {
         'poll_obj': poll_obj,
         'filename': 'adv_html',
         'main_text': request.POST['main_text'],
         'author_name': request.POST['author_name'],
-		'poll_address': request.build_absolute_uri('..'),
-		'site_name': request.get_host()
+        'poll_address': request.build_absolute_uri('..'),
+        'site_name': request.get_host()
     }, RequestContext(request))
 
 def create_advert(request, poll_id):
-	poll_obj = get_object_or_404(Poll, pk=poll_id)
-	return render(request, 'polls/create_advert.html', {
-		'poll_id': poll_id,
-		'allowed_tags': settings.BLEACH_ALLOWED_TAGS,
-		'allowed_attrs': settings.BLEACH_ALLOWED_ATTRIBUTES,
-		'allowed_styles': settings.BLEACH_ALLOWED_STYLES
-	})
+    poll_obj = get_object_or_404(Poll, pk=poll_id)
+    return render(request, 'polls/create_advert.html', {
+        'poll_id': poll_id,
+        'allowed_tags': settings.BLEACH_ALLOWED_TAGS,
+        'allowed_attrs': settings.BLEACH_ALLOWED_ATTRIBUTES,
+        'allowed_styles': settings.BLEACH_ALLOWED_STYLES
+    })
 
 def html_to_pdf(html_filename, pdf_filename):
     error = subprocess.call(["wkhtmltopdf", "--minimum-font-size", "18", "--margin-top", "30mm", "--margin-bottom", "30mm", "--margin-left", "20mm", "--margin-right", "20mm", html_filename, pdf_filename])
     return not error
 
 def make_pdf_error(request, poll_id):
-	message = "Невозможно сгенерировать объявление. При повторном возникновении проблемы обратитесь к администратору."
-	messages.warning(request, message)
-	return redirect('polls:done')
+    message = "Невозможно сгенерировать объявление. При повторном возникновении проблемы обратитесь к администратору."
+    messages.warning(request, message)
+    return redirect('polls:done')
 
 def make_pdf(request, poll_id):
-	try:
-		poll_obj = get_object_or_404(Poll, pk=poll_id)
-		filename = os.path.join(settings.SENDFILE_ROOT, "poll{}".format(poll_id)) 
-		html_filename = "{}.html".format(filename)
-		pdf_filename = "{}.pdf".format(filename)
-		with open(html_filename, 'w') as htmlfile:
-			htmlfile.write(make_html_advert(request, poll_id))
-		if not html_to_pdf(html_filename, pdf_filename):
-			raise Exception("Something wrong with wkhtmltopdf")
-		return sendfile(request, pdf_filename, attachment=True, attachment_filename="{}.pdf".format(poll_obj.name))
-		#message = "Объявление успешно создано, ожидайте загрузки"
-		#messages.success(request, message)
-		#return redirect('polls:done')
-	except Exception as e:
-		return make_pdf_error(request, poll_id)
+    try:
+        poll_obj = get_object_or_404(Poll, pk=poll_id)
+        filename = os.path.join(settings.SENDFILE_ROOT, "poll{}".format(poll_id)) 
+        html_filename = "{}.html".format(filename)
+        pdf_filename = "{}.pdf".format(filename)
+        with open(html_filename, 'w') as htmlfile:
+            htmlfile.write(make_html_advert(request, poll_id))
+        if not html_to_pdf(html_filename, pdf_filename):
+            raise Exception("Something wrong with wkhtmltopdf")
+        return sendfile(request, pdf_filename, attachment=True, attachment_filename="{}.pdf".format(poll_obj.name))
+        #message = "Объявление успешно создано, ожидайте загрузки"
+        #messages.success(request, message)
+        #return redirect('polls:done')
+    except Exception as e:
+        return make_pdf_error(request, poll_id)
 
 def make_csv(p, filename):
     try:

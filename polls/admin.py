@@ -12,17 +12,17 @@ class ChoiceInline(admin.TabularInline):
     extra = 1
 
 class PollAdmin(admin.ModelAdmin):
-	# button generating pdf
-	def pdf_button(self, obj):
-		site_url = Site.objects.all()[0].domain
-		if not site_url.startswith('http://'):
-			site_url = 'http://%s'%site_url
-		return mark_safe('<a href=\'' + os.path.join(site_url, 'polls', str(obj.id), 'create_advert') +'\'">Генерировать pdf</a>')
-	pdf_button.short_description = 'Создание объявления'
-	
-	exclude = ('voted_users',)
-	inlines = [ChoiceInline,]
-	list_display=['name', 'pdf_button']
+    # button generating pdf
+    def pdf_button(self, obj):
+        site_url = Site.objects.all()[0].domain
+        if not site_url.startswith('http://'):
+            site_url = 'http://%s'%site_url
+        return mark_safe('<a href=\'' + os.path.join(site_url, 'polls', str(obj.id), 'create_advert') +'\'">Генерировать pdf</a>')
+    pdf_button.short_description = 'Создание объявления'
+    
+    exclude = ('voted_users',)
+    inlines = [ChoiceInline,]
+    list_display=['name', 'pdf_button']
 
 admin.site.register(Poll, PollAdmin)
 
