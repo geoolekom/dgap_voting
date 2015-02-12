@@ -5,6 +5,7 @@ from polls.models import Poll, Choice, UserProfile
 from django.contrib.sites.models import Site
 from django.utils.safestring import mark_safe
 import os
+from django.core.urlresolvers import reverse
 
 class ChoiceInline(admin.TabularInline):
     model = Choice
@@ -14,10 +15,10 @@ class ChoiceInline(admin.TabularInline):
 class PollAdmin(admin.ModelAdmin):
     # button generating pdf
     def pdf_button(self, obj):
-        site_url = Site.objects.all()[0].domain
+        site_url = Site.objects.get_current().domain
         if not site_url.startswith('http://'):
             site_url = 'http://%s'%site_url
-        return mark_safe('<a href=\'' + os.path.join(site_url, 'polls', str(obj.id), 'create_advert') +'\'">Генерировать pdf</a>')
+        return mark_safe('<a href=\'' + os.path.join(site_url, reverse('polls:create_advert', args=[obj.pk,])) +'\'">Генерировать pdf</a>')
     pdf_button.short_description = 'Создание объявления'
     
     exclude = ('voted_users',)
