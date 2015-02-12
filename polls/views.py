@@ -21,6 +21,7 @@ import os.path
 from django.conf import settings
 import subprocess
 from django_bleach.models import BleachField
+import pyqrcode
 
 maxInt = 2147483647
 
@@ -166,13 +167,22 @@ class Results(generic.DetailView):
 
 def make_html_advert(request, poll_id):
     poll_obj = get_object_or_404(Poll, pk=poll_id)
+    qrcode_addr = os.path.join(settings.SENDFILE_ROOT, "qrcode{}.png".format(poll_id))
+    
+    try:
+        qr = pyqrcode.create(reverse('polls:detail', args=[poll_id,]))
+        qr.png(qrcode_addr, scale=6)
+    except ErrorType:
+        pass
+    
     return loader.render_to_string('polls/advert.html', {
         'poll_obj': poll_obj,
         'filename': 'adv_html',
         'main_text': request.POST['main_text'],
         'author_name': request.POST['author_name'],
         'poll_address': request.build_absolute_uri(reverse('polls:detail', args=[poll_id,])),
-        'site_name': request.get_host()
+        'site_name': request.get_host(),
+        'qrcode_addr': qrcode_addr
     }, RequestContext(request))
 
 def create_advert(request, poll_id):
@@ -199,15 +209,17 @@ def make_pdf(request, poll_id):
         filename = os.path.join(settings.SENDFILE_ROOT, "poll{}".format(poll_id)) 
         html_filename = "{}.html".format(filename)
         pdf_filename = "{}.pdf".format(filename)
+        
         with open(html_filename, 'w') as htmlfile:
             htmlfile.write(make_html_advert(request, poll_id))
+        
         if not html_to_pdf(html_filename, pdf_filename):
             raise Exception("Something wrong with wkhtmltopdf")
         return sendfile(request, pdf_filename, attachment=True, attachment_filename="{}.pdf".format(poll_obj.name))
         #message = "Объявление успешно создано, ожидайте загрузки"
         #messages.success(request, message)
         #return redirect('polls:done')
-    except Exception as e:
+    except ErrorType as e:
         return make_pdf_error(request, poll_id, e)
 
 def make_csv(p, filename):
