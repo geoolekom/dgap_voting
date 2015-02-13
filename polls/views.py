@@ -170,7 +170,7 @@ def make_html_advert(request, poll_id):
     qrcode_addr = os.path.join(settings.SENDFILE_ROOT, "qrcode{}.png".format(poll_id))
     
     try:
-        qr = pyqrcode.create(reverse('polls:detail', args=[poll_id,]))
+        qr = pyqrcode.create(request.build_absolute_uri(reverse('polls:detail', args=[poll_id,])))
         qr.png(qrcode_addr, scale=6)
     except ErrorType:
         pass
