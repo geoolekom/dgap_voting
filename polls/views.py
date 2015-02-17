@@ -268,6 +268,15 @@ def make_win_csv(oldfilename, filename):
         return False
     else:
         return True
+    
+def voters(request, poll_id):
+    poll_obj = get_object_or_404(Poll, pk=poll_id)
+    people = [voter for voter in UserProfile.objects.all().order_by('user__last_name') if voter.approval and poll_obj.is_user_target(voter.user)]
+    
+    return render(request, 'polls/people.html', {
+        'voters': people,
+        'voters_num': len(people)
+    })
 
 def detailed(request, poll_id):
     p = get_object_or_404(Poll, pk=poll_id, end_date__lte=timezone.now())

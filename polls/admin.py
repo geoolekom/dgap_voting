@@ -13,7 +13,7 @@ class ChoiceInline(admin.TabularInline):
     extra = 1
 
 class PollAdmin(admin.ModelAdmin):
-    # button generating pdf
+    # link for generating pdf
     def pdf_button(self, obj):
         site_url = Site.objects.get_current().domain
         if not site_url.startswith('http://'):
@@ -21,9 +21,17 @@ class PollAdmin(admin.ModelAdmin):
         return mark_safe('<a href=\'' + os.path.join(site_url, reverse('polls:create_advert', args=[obj.pk,])) +'\'">Генерировать pdf</a>')
     pdf_button.short_description = 'Создание объявления'
     
+    #link for target audience list_display
+    def audit_button(self, obj):
+        site_url = Site.objects.get_current().domain
+        if not site_url.startswith('http://'):
+            site_url = 'http://%s'%site_url
+        return mark_safe('<a href=\'' + os.path.join(site_url, reverse('polls:people', args=[obj.pk,])) +'\'">Показать список избирателей</a>')
+    audit_button.short_description = 'Целевая аудитория'
+    
     exclude = ('voted_users',)
     inlines = [ChoiceInline,]
-    list_display=['name', 'pdf_button']
+    list_display=['name', 'pdf_button', 'audit_button']
 
 admin.site.register(Poll, PollAdmin)
 

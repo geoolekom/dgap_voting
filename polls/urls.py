@@ -24,4 +24,5 @@ urlpatterns = patterns('',
     url(r'^profile/$', views.profile_view, name='profile_view'),
     url(r'^(?P<poll_id>\d+)/pdf_advert/$', views.make_pdf, name='pdf_advert'),
     url(r'^(?P<poll_id>\d+)/create_advert/$', views.create_advert, name='create_advert'),
+    url(r'^(?P<poll_id>\d+)/voters/$', views.voters, name='people'),
 )

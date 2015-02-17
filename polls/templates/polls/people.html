@@ -1,0 +1,14 @@
+{% extends "polls/base.html" %}
+
+{% block content %}
+
+<h1>Всего избирателей: {{ voters_num }}</h1>
+
+<ol>
+{% for voter in voters %}
+<li> {{ voter.user.last_name }} {{ voter.user.first_name }}, группа {{ voter.group }}
+{% endfor %}
+</ol>
+
+{% endblock content %}
+
