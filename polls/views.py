@@ -22,6 +22,7 @@ from django.conf import settings
 import subprocess
 from django_bleach.models import BleachField
 import pyqrcode
+from django.core.exceptions import PermissionDenied
 
 maxInt = 2147483647
 
@@ -271,6 +272,11 @@ def make_win_csv(oldfilename, filename):
     
 def voters(request, poll_id):
     poll_obj = get_object_or_404(Poll, pk=poll_id)
+    
+    #forbid non-staff users to see this list
+    if not request.user.is_staff:
+        raise PermissionDenied()
+    
     people = [voter for voter in UserProfile.objects.all().order_by('user__last_name') if voter.approval and poll_obj.is_user_target(voter.user)]
     
     return render(request, 'polls/people.html', {
