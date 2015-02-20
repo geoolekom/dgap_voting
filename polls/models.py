@@ -6,9 +6,6 @@ import django.db.models.options as options
 import re
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',) #добавление нового атрибута в мета
 
-#TODO необходимые методы в моделях
-#TODO метод approve_user и модели для базы поселения
-
 class Poll(models.Model):
     name = models.CharField('Название опроса', max_length=200)
     question = models.CharField('Вопрос', max_length=200)
@@ -63,6 +60,7 @@ class Choice(models.Model):
 
 class UserHash(models.Model):
     value = models.BigIntegerField()#для очень старых опросов планируется удалять хэши, оставляя результаты в виде файла
+#надо переосмыслить предыдущий комментарий
     choice = models.ForeignKey(Choice)
     user = models.ForeignKey(User, null=True, blank=True, default = None)#при анонимном голосовании не заполнять это поле
 
@@ -112,6 +110,7 @@ class UserProfile(models.Model):
     middlename = models.CharField('Отчество', max_length=100, blank=True)
     group = models.CharField('Номер группы', max_length=5, blank=True)
     room = models.CharField('Номер комнаты', max_length=4, blank=True)
+    #TODO is_approved
     approval = models.BooleanField('Пользователь подтверждён', default = False)
     cardnumber = models.CharField('Последние пять цифр номера социальной карты', null=True, blank = True, max_length=5)
     def __str__(self):  

@@ -1,19 +1,13 @@
-from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
 from polls.models import Choice, Poll, UserHash, UserProfile, LegacyUser, LegacyDorm
 from django.contrib.auth.models import User
-from django.http import Http404
-from django.shortcuts import render, get_object_or_404, redirect, render_to_response
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.views import generic
-from django.contrib.auth.decorators import login_required
 import re
 from random import randint
 from django.contrib import messages
 from django.utils import timezone
-from django.contrib.auth.forms import PasswordChangeForm
-from django.views.generic.edit import FormView
-from django.views.generic.edit import UpdateView
 from polls.forms import UserForm, UserProfileForm, UserProfileFormReduced
 import csv
 from sendfile import sendfile
@@ -45,6 +39,15 @@ def check_dorm(id):
     return UserProfile.objects.filter(dorm=id).exists()
 
 def profile_view(request):
+#TODO переписать на человеческий язык код этой процедуры и связанных с ней. Может даже вообще переосмыслить
+    """
+     долгое и мучительное обдумывание привело к выводу: candidat, у которых одинаковые firts_name, last_name, cardnumber, считаются одинаковыми по определению
+     по сути, проверяем, есть ли вообще подходящие карточки. Если нет, то уже выпилили. Если есть, то неважно, сколько их. Вероятность того, что в базе будет два человека с одинаковыми ФИ и днём рождения, считается малой
+
+
+     что делать, если в базе несколько человек с одинаовыми ФИ?
+     считаем, что их не поселят в одну комнату, иначе ручная обработка 
+    """
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
         if request.user.social_auth.exists():
@@ -54,14 +57,6 @@ def profile_view(request):
         if profile_form.is_valid() and (request.user.social_auth.exists() or user_form.is_valid()):
             dorm = check_user(request)
             if dorm:
-#DONE тут уже надо нормально разобраться с кучей карточек и людьми с одинаковыми именами и фамилиями одновременно
-# долгое и мучительное обдумывание привело к выводу: candidat, у которых одинаковые firts_name, last_name, cardnumber, считаются одинаковыми по определению
-# по сути, проверяем, есть ли вообще подходящие карточки. Если нет, то уже выпилили. Если есть, то неважно, сколько их. Вероятность того, что в базе будет два человека с одинаковыми ФИ и днём рождения, считается малой
-
-
-# что делать, если в базе несколько человек с одинаовыми ФИ?
-# считаем, что их не поселят в одну комнату, иначе ручная обработка 
-
                 if len(dorm) > 1:
                     messages.error(request, 'Поздравляем! Судя по нашим данным, вам очень повезло с соседом. Если вы уверены в правильности введённых данных, пишите на vote@dgap.mipt.ru, указывая тему письма "Замечательный сосед"')
                 elif check_dorm(dorm[0].id):
@@ -103,6 +98,7 @@ def server_date(request):
     return render(request, 'polls/serverdate.html')
 
 class IndexBase(generic.ListView):
+#TODO в наследниках этого класса в методах есть магические числа (12). Избавиться от них, научиться постраничному показу, что ли.
     template_name = 'polls/index.html'
     context_object_name = 'poll_list'
 
@@ -167,6 +163,7 @@ class Results(generic.DetailView):
         return Poll.objects.filter(end_date__lte=timezone.now())
 
 def make_html_advert(request, poll_id):
+#TODO передавать сюда poll_obj, а не по новой доставать его из базы
     poll_obj = get_object_or_404(Poll, pk=poll_id)
     qrcode_addr = os.path.join(settings.SENDFILE_ROOT, "qrcode{}.png".format(poll_id))
     
@@ -174,6 +171,7 @@ def make_html_advert(request, poll_id):
         qr = pyqrcode.create(request.build_absolute_uri(reverse('polls:detail', args=[poll_id,])))
         qr.png(qrcode_addr, scale=6)
     except ErrorType:
+#TODO вывести инфу об ошибке в лог
         pass
     
     return loader.render_to_string('polls/advert.html', {
@@ -200,6 +198,7 @@ def html_to_pdf(html_filename, pdf_filename):
     return not error
 
 def make_pdf_error(request, poll_id, e):
+#TODO убрать лишние аргументы
     message = "Невозможно сгенерировать объявление. При повторном возникновении проблемы обратитесь к администратору."
     messages.warning(request, message)
     return redirect('polls:done')
@@ -215,12 +214,16 @@ def make_pdf(request, poll_id):
             htmlfile.write(make_html_advert(request, poll_id))
         
         if not html_to_pdf(html_filename, pdf_filename):
+#TODO более информативное описание исключение
             raise Exception("Something wrong with wkhtmltopdf")
         return sendfile(request, pdf_filename, attachment=True, attachment_filename="{}.pdf".format(poll_obj.name))
+#TODO удалить реликтовые комментарии
         #message = "Объявление успешно создано, ожидайте загрузки"
         #messages.success(request, message)
         #return redirect('polls:done')
     except ErrorType as e:
+#Нужна ли вообще отдельная процедура для записи сообщения и редиректа? 
+#TODO логгирование ошибки
         return make_pdf_error(request, poll_id, e)
 
 def make_csv(p, filename):
@@ -259,6 +262,7 @@ def make_csv(p, filename):
                 for user in p.voted_users.order_by('last_name', 'first_name'):
                     writer.writerow(["{} {} {}".format(user.last_name, user.first_name, user.userprofile.middlename )])
     except FileExistsError:
+#TODO логгируй
         return False
     else: 
         return True
@@ -318,6 +322,7 @@ def vote(request, poll_id):
     if not user.userprofile.approval:
         messages.error(request, 'Вы не являетесь подтверждённым пользователем')
         return redirect('polls:detail', pk=poll_id)
+#TODO пусть admin (любой стафф) сможет доголосовывать только при режиме отладки
     if user.get_username() != 'admin' and p.is_user_voted(user):
         messages.error(request, 'Вы уже приняли участие в этом голосовании')
         return redirect('polls:detail', pk=poll_id)
