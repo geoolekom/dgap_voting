@@ -35,6 +35,8 @@ class Poll(models.Model):
         return self.name
     def is_closed(self):
         return self.end_date < timezone.now()
+    def is_started(self):
+        return self.begin_date < timezone.now()
     def is_user_voted(self, user):
         return self.voted_users.filter(pk=user.pk).exists()
     def is_user_target(self, user):

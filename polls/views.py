@@ -152,8 +152,8 @@ class Detail(generic.DetailView):
     model = Poll
     template_name = 'polls/detail.html'
     
-    def get_queryset(self):
-        return Poll.objects.filter(begin_date__lte=timezone.now(), end_date__gte=timezone.now())
+    #def get_queryset(self):
+    #    return Poll.objects.filter(begin_date__lte=timezone.now(), end_date__gte=timezone.now())
 
 class Results(generic.DetailView):
     model = Poll
@@ -314,7 +314,7 @@ def done(request):
         return redirect('polls:index')
 
 def vote(request, poll_id):
-    p = get_object_or_404(Poll, pk=poll_id)
+    p = get_object_or_404(Poll, pk=poll_id, begin_date__lte=timezone.now(), end_date__gte=timezone.now())
     user = request.user
     if not user.is_authenticated():
         messages.error(request, 'Вы не вошли как зарегистрированный пользователь')
