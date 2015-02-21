@@ -110,11 +110,12 @@ class UserProfile(models.Model):
     middlename = models.CharField('Отчество', max_length=100, blank=True)
     group = models.CharField('Номер группы', max_length=5, blank=True)
     room = models.CharField('Номер комнаты', max_length=4, blank=True)
-    #TODO is_approved
-    approval = models.BooleanField('Пользователь подтверждён', default = False)
+    approval = models.BooleanField('Пользователь подтверждён', default = False) # using approval is deprecated. Use is_approved instead
     cardnumber = models.CharField('Последние пять цифр номера социальной карты', null=True, blank = True, max_length=5)
     def __str__(self):  
         return "Профиль для %s" % self.user 
+    def is_approved(self):
+        return self.approval
 
 def create_user_profile(sender, instance, created, **kwargs):  
     if created:  
