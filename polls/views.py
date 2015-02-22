@@ -20,68 +20,82 @@ from django.core.exceptions import PermissionDenied
 
 maxInt = 2147483647
 
-def check_user(request): 
+def find_user(request): 
     if not request.user.social_auth.exists():
-        candidat = LegacyUser.objects.filter(name__icontains='{} {}'.format(request.POST['last_name'], request.POST['first_name'])).filter(cardnumber__regex=r'^.{14}' + request.POST['cardnumber']) 
-        if not candidat.exists():
+        candidate = LegacyUser.objects.\
+                        filter(name__icontains='{} {}'.format(\
+                                request.POST['last_name'],\
+                                request.POST['first_name'])\
+                               ).\
+                        filter(cardnumber__regex=r'^.{14}' + request.POST['cardnumber']) 
+        if not candidate.exists():
             return False
         last_name = request.POST['last_name'] 
         first_name = request.POST['first_name']
     else:
         last_name = request.user.last_name 
         first_name = request.user.first_name
-    dorm = LegacyDorm.objects.filter(last_name=last_name).filter(first_name=first_name).filter(room=request.POST['room'])
-    if not dorm.exists():
+    candidate = LegacyDorm.objects.\
+                    filter(last_name=last_name).\
+                    filter(first_name=first_name).\
+                    filter(room=request.POST['room'])
+    if not candidate.exists():
         return False
-    return dorm
+    return candidate
 
-def check_dorm(id):
+def is_registered(id):
     return UserProfile.objects.filter(dorm=id).exists()
 
 def profile_view(request):
-#TODO переписать на человеческий язык код этой процедуры и связанных с ней. Может даже вообще переосмыслить
     """
-     долгое и мучительное обдумывание привело к выводу: candidat, у которых одинаковые firts_name, last_name, cardnumber, считаются одинаковыми по определению
-     по сути, проверяем, есть ли вообще подходящие карточки. Если нет, то уже выпилили. Если есть, то неважно, сколько их. Вероятность того, что в базе будет два человека с одинаковыми ФИ и днём рождения, считается малой
+     долгое и мучительное обдумывание привело к выводу:\
+     candidat, у которых одинаковые firts_name, last_name, cardnumber, считаются одинаковыми по определению
 
+     по сути, проверяем, есть ли вообще подходящие карточки. Если нет, то уже выпилили. Если есть, то неважно, сколько их.\
+     Вероятность того, что в базе будет два человека с одинаковыми ФИ и днём рождения, считается малой
 
      что делать, если в базе несколько человек с одинаовыми ФИ?
      считаем, что их не поселят в одну комнату, иначе ручная обработка 
     """
+    user = request.user
+    profile = user.userprofile
+    if user.social_auth.exists():
+        ProfileForm = UserProfileFormReduced
+    else:
+        ProfileForm = UserProfileForm
     if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=request.user)
-        if request.user.social_auth.exists():
-            profile_form = UserProfileFormReduced(request.POST, instance=request.user.userprofile)
-        else:
-            profile_form = UserProfileForm(request.POST, instance=request.user.userprofile)
-        if profile_form.is_valid() and (request.user.social_auth.exists() or user_form.is_valid()):
-            dorm = check_user(request)
-            if dorm:
-                if len(dorm) > 1:
-                    messages.error(request, 'Поздравляем! Судя по нашим данным, вам очень повезло с соседом. Если вы уверены в правильности введённых данных, пишите на vote@dgap.mipt.ru, указывая тему письма "Замечательный сосед"')
-                elif check_dorm(dorm[0].id):
-                    messages.error(request, 'Пользователь с такими данными уже зарегистрирован. Если вы уверены в правильности введённых данных, пишите на vote@dgap.mipt.ru, указывая тему письма "Проблемы при регистрации"')
+        user_form = UserForm(request.POST, instance = user)
+        profile_form = ProfileForm(request.POST, instance = profile)
+        if profile_form.is_valid() and (user.social_auth.exists() or user_form.is_valid()):
+            candidate = find_user(request)
+            if candidate:
+                if len(candidate) > 1:
+                    messages.error(request, 'Поздравляем! Судя по нашим данным, вам очень повезло с соседом.\
+                                             Если вы уверены в правильности введённых данных, пишите на \
+                                             vote@dgap.mipt.ru, указывая тему письма "Замечательный сосед"')
+                elif is_registered(candidate[0].id):
+                    messages.error(request, 'Пользователь с такими данными уже зарегистрирован. Если вы уверены\
+                                             в правильности введённых данных, пишите на vote@dgap.mipt.ru,\
+                                             указывая тему письма "Проблемы при регистрации"')
                 else:
-                    dorm = dorm[0]
-                    if not request.user.social_auth.exists():
+                    candidate = candidate[0]
+                    if not user.social_auth.exists():
                         user_form.save()
                     profile_form.save()
-                    request.user.userprofile.dorm = dorm.id
-                    request.user.userprofile.middlename = dorm.middle_name
-                    #request.user.userprofile.room = dorm.room
-                    request.user.userprofile.group = dorm.group
-                    request.user.userprofile.approval = True 
-                    request.user.userprofile.save()
+                    profile.dorm = candidate.id
+                    profile.middlename = candidate.middle_name
+                    profile.group = candidate.group
+                    profile.approval = True 
+                    profile.save()
                     messages.success(request, "Регистрация пройдена. Теперь вы можете участвовать в голосовании")
                     return redirect('polls:done')
             else:
-                messages.error(request, 'Пользователя, удовлетворяющего введённым данным, в базе не обнаружено. Если вы уверены в правильности введённых данных, пишите на vote@dgap.mipt.ru, указывая тему письма "Проблемы при регистрации"')
+                messages.error(request, 'Пользователя, удовлетворяющего введённым данным, в базе не обнаружено. \
+                                         Если вы уверены в правильности введённых данных, пишите на vote@dgap.mipt.ru,\
+                                         указывая тему письма "Проблемы при регистрации"')
     else:
-        user_form = UserForm(instance = request.user)
-        if request.user.social_auth.exists():
-            profile_form = UserProfileFormReduced(instance = request.user.userprofile)
-        else:
-            profile_form = UserProfileForm(instance = request.user.userprofile)
+        user_form = UserForm(instance = user)
+        profile_form = ProfileForm(instance = profile)
 
     return render(request, 'polls/profile.html', {
         'user_form': user_form,
