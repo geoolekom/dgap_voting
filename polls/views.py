@@ -22,6 +22,7 @@ from django.conf import settings
 import subprocess
 from django_bleach.models import BleachField
 import pyqrcode
+from django.core.management import call_command
 
 maxInt = 2147483647
 
@@ -216,6 +217,7 @@ def make_pdf(request, poll_id):
         if not html_to_pdf(html_filename, pdf_filename):
             raise Exception("Something wrong with wkhtmltopdf")
         return sendfile(request, pdf_filename, attachment=True, attachment_filename="{}.pdf".format(poll_obj.name))
+        # TODO
         #message = "Объявление успешно создано, ожидайте загрузки"
         #messages.success(request, message)
         #return redirect('polls:done')
@@ -271,12 +273,48 @@ def make_win_csv(oldfilename, filename):
     
 def voters(request, poll_id):
     poll_obj = get_object_or_404(Poll, pk=poll_id)
+    
+    #forbid non-staff users to see this list
+    if not request.user.is_staff:
+        raise PermissionDenied()
+    
     people = [voter for voter in UserProfile.objects.all().order_by('user__last_name') if voter.approval and poll_obj.is_user_target(voter.user)]
     
     return render(request, 'polls/people.html', {
         'voters': people,
         'voters_num': len(people)
     })
+
+def approve_mailing(request, poll_id):
+    #forbid non-staff users to see the information on the page
+    if not request.user.is_staff:
+        raise PermissionDenied()
+    
+    poll_obj = get_object_or_404(Poll, pk=poll_id)
+    recipients = [profile.user for profile in UserProfile.objects.filter(is_subscribed=True) if profile.is_approved() and poll_obj.is_user_target(profile.user) and not poll_obj.is_user_voted(profile.user)]
+    
+    return render(request, 'polls/mailing_confirm.html', {
+        'poll_id': poll_id,
+        'poll': poll_obj,
+        'addr_num': len(recipients)
+    })
+
+def mail_unvoted(request, poll_id):    
+    #forbid non-staff users to mail somebody
+    poll_obj = get_object_or_404(Poll, pk=poll_id)
+    
+    if not request.user.is_staff:
+        raise PermissionDenied()
+    
+    call_command('mailing_unvoted', poll_id)
+    
+    poll_obj.last_mailing = timezone.now()
+    poll_obj.times_mailed += 1
+    poll_obj.save()
+    
+    message = "Рассылка успешно произведена"
+    messages.info(request, message)
+    return redirect('admin:polls_poll_changelist')
 
 def detailed(request, poll_id):
     p = get_object_or_404(Poll, pk=poll_id, end_date__lte=timezone.now())

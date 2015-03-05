@@ -3,7 +3,6 @@ from polls.models import UserProfile
 from django.core.mail import send_mass_mail
 
 class Command(BaseCommand):
-    #args = '<poll_id poll_id ...>'
     help = 'Sends emails to unapproved users'
 
     def handle(self, *args, **options):
@@ -20,6 +19,3 @@ class Command(BaseCommand):
             personal_message = message.format(username=user.username)
             datatuple.append((subject, personal_message, from_email, [user.email]))
         send_mass_mail(datatuple)
-
-            
-
