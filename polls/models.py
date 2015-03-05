@@ -31,6 +31,9 @@ class Poll(models.Model):
     )
     choices_order = models.CharField('Порядок вариантов ответа', max_length=10, choices = ORDER_TYPES, default = CREATION)
     voted_users = models.ManyToManyField(User)
+    times_mailed = models.IntegerField(default=0) #how many times the mailing was made
+    last_mailing = models.DateTimeField('Последняя рассылка', null=True) #when was the last informational mailing made
+    
     def __str__(self):
         return self.name
     def is_closed(self):
@@ -114,6 +117,8 @@ class UserProfile(models.Model):
     room = models.CharField('Номер комнаты', max_length=4, blank=True)
     approval = models.BooleanField('Пользователь подтверждён', default = False) # using approval is deprecated. Use is_approved instead
     cardnumber = models.CharField('Последние пять цифр номера социальной карты', null=True, blank = True, max_length=5)
+    is_subscribed = models.BooleanField('Пользователь подписан на рассылку', default=True)
+
     def __str__(self):  
         return "Профиль для %s" % self.user 
     def is_approved(self):

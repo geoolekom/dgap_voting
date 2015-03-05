@@ -1,0 +1,36 @@
+{% extends "polls/base.html" %}
+
+{% block content %}
+
+<form action="{% url 'polls:mail' poll_id %}" method="post">
+    {% csrf_token %}    
+    {% if addr_num == 0 %}
+    
+    <p><b> Все пользователи, имеющие доступ к этому опросу и разрешившие рассылку, уже проголосовали. </b></p><br>
+    
+    {% else %}
+    
+    <p>Вы действительно хотите сделать рассылку для опроса &laquo;{{ poll.name }}&raquo;? </p>
+    <p>Информационное письмо получат только пользователи, имеющие доступ к нему и ранее не голосовавшие в этом опросе</p>
+    <p>Количество адресов, на которые будет произведена рассылка: <b>{{ addr_num }}</b> </p><br>
+    <p>
+    {% if poll.times_mailed == 0 %}
+    <b>Рассылка для этого опроса ещё не производилась.</b>
+    {% else %}
+    <b>Количество произведённых рассылок по этому опросу: {{ poll.times_mailed }} <br>
+    Последняя рассылка: {{ poll.last_mailing|date:"j E Y, H:i"|lower }} </b>
+    {% endif %}
+    </p>
+    <br>
+    {% endif %}
+    
+    <div class="panel-footer clearfix">
+    <button type="button" value="cancel_mailing" class="btn btn-default" onclick="location.href='{% url 'admin:polls_poll_changelist' %}'">Отмена</button>
+    {% if addr_num > 0 %}
+    <button type="submit" value="mail" class="btn btn-default">Сделать рассылку</button>
+    {% endif %}
+    </div>
+</form>
+                    
+{% endblock content %}
+                    
