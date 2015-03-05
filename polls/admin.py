@@ -32,15 +32,16 @@ class PollAdmin(admin.ModelAdmin):
     # link for mailing for those who can vote but hadn't done it yet
     # number in [] shows number of mailings already mage for the poll
     def mailing_button(self, obj):
+        times_mailed = obj.times_mailed
         site_url = Site.objects.get_current().domain
         if not site_url.startswith('http://'):
             site_url = 'http://%s'%site_url
-        return mark_safe('<a href=\'' + os.path.join(site_url, reverse('polls:approve_mailing', args=[obj.pk,])) +'\'">Сделать рассылку</a> [{times_mailed}]'.format(times_mailed=obj.times_mailed))
+        return mark_safe('<a href=\'' + os.path.join(site_url, reverse('polls:approve_mailing', args=[obj.pk,])) +'\'">Сделать рассылку</a> [{times_mailed}]'.format(times_mailed=times_mailed))
     mailing_button.short_description = 'Уведомление о голосовании'
     
-    exclude = ('voted_users',)
+    exclude = ('voted_users', 'times_mailed', 'last_mailing',)
     inlines = [ChoiceInline,]
-    list_display=['name', 'pdf_button', 'audit_button', 'mailing_button']
+    list_display=['name', 'pdf_button', 'audit_button', 'mailing_button',]
 
 admin.site.register(Poll, PollAdmin)
 

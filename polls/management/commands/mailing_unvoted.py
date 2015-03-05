@@ -42,7 +42,7 @@ class Command(BaseCommand):
             
             recipients = [profile.user for profile in UserProfile.objects.filter(is_subscribed=True) if profile.is_approved() and poll.is_user_target(profile.user) and not poll.is_user_voted(profile.user)]
             
-            subject = 'Вам доступен опрос "{}"'.format(poll.question)
+            subject = 'Вам доступен опрос "{}"'.format(poll.name)
             
             plain_message_template = """Здравствуйте, {username}! 
             
