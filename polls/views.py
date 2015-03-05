@@ -1,19 +1,13 @@
-from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
 from polls.models import Choice, Poll, UserHash, UserProfile, LegacyUser, LegacyDorm
 from django.contrib.auth.models import User
-from django.http import Http404
-from django.shortcuts import render, get_object_or_404, redirect, render_to_response
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.views import generic
-from django.contrib.auth.decorators import login_required
 import re
 from random import randint
 from django.contrib import messages
 from django.utils import timezone
-from django.contrib.auth.forms import PasswordChangeForm
-from django.views.generic.edit import FormView
-from django.views.generic.edit import UpdateView
 from polls.forms import UserForm, UserProfileForm, UserProfileFormReduced
 import csv
 from sendfile import sendfile
@@ -22,71 +16,87 @@ from django.conf import settings
 import subprocess
 from django_bleach.models import BleachField
 import pyqrcode
+from django.core.exceptions import PermissionDenied
 from django.core.management import call_command
 
 maxInt = 2147483647
 
-def check_user(request): 
+def find_user(request): 
     if not request.user.social_auth.exists():
-        candidat = LegacyUser.objects.filter(name__icontains='{} {}'.format(request.POST['last_name'], request.POST['first_name'])).filter(cardnumber__regex=r'^.{14}' + request.POST['cardnumber']) 
-        if not candidat.exists():
+        candidate = LegacyUser.objects.\
+                        filter(name__icontains='{} {}'.format(\
+                                request.POST['last_name'],\
+                                request.POST['first_name'])\
+                               ).\
+                        filter(cardnumber__regex=r'^.{14}' + request.POST['cardnumber']) 
+        if not candidate.exists():
             return False
         last_name = request.POST['last_name'] 
         first_name = request.POST['first_name']
     else:
         last_name = request.user.last_name 
         first_name = request.user.first_name
-    dorm = LegacyDorm.objects.filter(last_name=last_name).filter(first_name=first_name).filter(room=request.POST['room'])
-    if not dorm.exists():
+    candidate = LegacyDorm.objects.\
+                    filter(last_name=last_name).\
+                    filter(first_name=first_name).\
+                    filter(room=request.POST['room'])
+    if not candidate.exists():
         return False
-    return dorm
+    return candidate
 
-def check_dorm(id):
+def is_registered(id):
     return UserProfile.objects.filter(dorm=id).exists()
 
 def profile_view(request):
+    """
+     долгое и мучительное обдумывание привело к выводу:\
+     candidat, у которых одинаковые firts_name, last_name, cardnumber, считаются одинаковыми по определению
+
+     по сути, проверяем, есть ли вообще подходящие карточки. Если нет, то уже выпилили. Если есть, то неважно, сколько их.\
+     Вероятность того, что в базе будет два человека с одинаковыми ФИ и днём рождения, считается малой
+
+     что делать, если в базе несколько человек с одинаовыми ФИ?
+     считаем, что их не поселят в одну комнату, иначе ручная обработка 
+    """
+    user = request.user
+    profile = user.userprofile
+    if user.social_auth.exists():
+        ProfileForm = UserProfileFormReduced
+    else:
+        ProfileForm = UserProfileForm
     if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=request.user)
-        if request.user.social_auth.exists():
-            profile_form = UserProfileFormReduced(request.POST, instance=request.user.userprofile)
-        else:
-            profile_form = UserProfileForm(request.POST, instance=request.user.userprofile)
-        if profile_form.is_valid() and (request.user.social_auth.exists() or user_form.is_valid()):
-            dorm = check_user(request)
-            if dorm:
-#DONE тут уже надо нормально разобраться с кучей карточек и людьми с одинаковыми именами и фамилиями одновременно
-# долгое и мучительное обдумывание привело к выводу: candidat, у которых одинаковые firts_name, last_name, cardnumber, считаются одинаковыми по определению
-# по сути, проверяем, есть ли вообще подходящие карточки. Если нет, то уже выпилили. Если есть, то неважно, сколько их. Вероятность того, что в базе будет два человека с одинаковыми ФИ и днём рождения, считается малой
-
-
-# что делать, если в базе несколько человек с одинаовыми ФИ?
-# считаем, что их не поселят в одну комнату, иначе ручная обработка 
-
-                if len(dorm) > 1:
-                    messages.error(request, 'Поздравляем! Судя по нашим данным, вам очень повезло с соседом. Если вы уверены в правильности введённых данных, пишите на vote@dgap.mipt.ru, указывая тему письма "Замечательный сосед"')
-                elif check_dorm(dorm[0].id):
-                    messages.error(request, 'Пользователь с такими данными уже зарегистрирован. Если вы уверены в правильности введённых данных, пишите на vote@dgap.mipt.ru, указывая тему письма "Проблемы при регистрации"')
+        user_form = UserForm(request.POST, instance = user)
+        profile_form = ProfileForm(request.POST, instance = profile)
+        if profile_form.is_valid() and (user.social_auth.exists() or user_form.is_valid()):
+            candidate = find_user(request)
+            if candidate:
+                if len(candidate) > 1:
+                    messages.error(request, 'Поздравляем! Судя по нашим данным, вам очень повезло с соседом.\
+                                             Если вы уверены в правильности введённых данных, пишите на \
+                                             vote@dgap.mipt.ru, указывая тему письма "Замечательный сосед"')
+                elif is_registered(candidate[0].id):
+                    messages.error(request, 'Пользователь с такими данными уже зарегистрирован. Если вы уверены\
+                                             в правильности введённых данных, пишите на vote@dgap.mipt.ru,\
+                                             указывая тему письма "Проблемы при регистрации"')
                 else:
-                    dorm = dorm[0]
-                    if not request.user.social_auth.exists():
+                    candidate = candidate[0]
+                    if not user.social_auth.exists():
                         user_form.save()
                     profile_form.save()
-                    request.user.userprofile.dorm = dorm.id
-                    request.user.userprofile.middlename = dorm.middle_name
-                    #request.user.userprofile.room = dorm.room
-                    request.user.userprofile.group = dorm.group
-                    request.user.userprofile.approval = True 
-                    request.user.userprofile.save()
+                    profile.dorm = candidate.id
+                    profile.middlename = candidate.middle_name
+                    profile.group = candidate.group
+                    profile.approval = True 
+                    profile.save()
                     messages.success(request, "Регистрация пройдена. Теперь вы можете участвовать в голосовании")
                     return redirect('polls:done')
             else:
-                messages.error(request, 'Пользователя, удовлетворяющего введённым данным, в базе не обнаружено. Если вы уверены в правильности введённых данных, пишите на vote@dgap.mipt.ru, указывая тему письма "Проблемы при регистрации"')
+                messages.error(request, 'Пользователя, удовлетворяющего введённым данным, в базе не обнаружено. \
+                                         Если вы уверены в правильности введённых данных, пишите на vote@dgap.mipt.ru,\
+                                         указывая тему письма "Проблемы при регистрации"')
     else:
-        user_form = UserForm(instance = request.user)
-        if request.user.social_auth.exists():
-            profile_form = UserProfileFormReduced(instance = request.user.userprofile)
-        else:
-            profile_form = UserProfileForm(instance = request.user.userprofile)
+        user_form = UserForm(instance = user)
+        profile_form = ProfileForm(instance = profile)
 
     return render(request, 'polls/profile.html', {
         'user_form': user_form,
@@ -103,6 +113,7 @@ def server_date(request):
     return render(request, 'polls/serverdate.html')
 
 class IndexBase(generic.ListView):
+#TODO в наследниках этого класса в методах есть магические числа (12). Избавиться от них, научиться постраничному показу, что ли.
     template_name = 'polls/index.html'
     context_object_name = 'poll_list'
 
@@ -156,8 +167,8 @@ class Detail(generic.DetailView):
     model = Poll
     template_name = 'polls/detail.html'
     
-    def get_queryset(self):
-        return Poll.objects.filter(begin_date__lte=timezone.now(), end_date__gte=timezone.now())
+    #def get_queryset(self):
+    #    return Poll.objects.filter(begin_date__lte=timezone.now(), end_date__gte=timezone.now())
 
 class Results(generic.DetailView):
     model = Poll
@@ -167,6 +178,7 @@ class Results(generic.DetailView):
         return Poll.objects.filter(end_date__lte=timezone.now())
 
 def make_html_advert(request, poll_id):
+#TODO передавать сюда poll_obj, а не по новой доставать его из базы
     poll_obj = get_object_or_404(Poll, pk=poll_id)
     qrcode_addr = os.path.join(settings.SENDFILE_ROOT, "qrcode{}.png".format(poll_id))
     
@@ -174,6 +186,7 @@ def make_html_advert(request, poll_id):
         qr = pyqrcode.create(request.build_absolute_uri(reverse('polls:detail', args=[poll_id,])))
         qr.png(qrcode_addr, scale=6)
     except ErrorType:
+#TODO вывести инфу об ошибке в лог
         pass
     
     return loader.render_to_string('polls/advert.html', {
@@ -200,6 +213,7 @@ def html_to_pdf(html_filename, pdf_filename):
     return not error
 
 def make_pdf_error(request, poll_id, e):
+#TODO убрать лишние аргументы
     message = "Невозможно сгенерировать объявление. При повторном возникновении проблемы обратитесь к администратору."
     messages.warning(request, message)
     return redirect('polls:done')
@@ -215,13 +229,17 @@ def make_pdf(request, poll_id):
             htmlfile.write(make_html_advert(request, poll_id))
         
         if not html_to_pdf(html_filename, pdf_filename):
+#TODO более информативное описание исключение
             raise Exception("Something wrong with wkhtmltopdf")
         return sendfile(request, pdf_filename, attachment=True, attachment_filename="{}.pdf".format(poll_obj.name))
+    
         # TODO
         #message = "Объявление успешно создано, ожидайте загрузки"
         #messages.success(request, message)
         #return redirect('polls:done')
     except ErrorType as e:
+#Нужна ли вообще отдельная процедура для записи сообщения и редиректа? 
+#TODO логгирование ошибки
         return make_pdf_error(request, poll_id, e)
 
 def make_csv(p, filename):
@@ -260,6 +278,7 @@ def make_csv(p, filename):
                 for user in p.voted_users.order_by('last_name', 'first_name'):
                     writer.writerow(["{} {} {}".format(user.last_name, user.first_name, user.userprofile.middlename )])
     except FileExistsError:
+#TODO логгируй
         return False
     else: 
         return True
@@ -342,7 +361,7 @@ def done(request):
         return redirect('polls:index')
 
 def vote(request, poll_id):
-    p = get_object_or_404(Poll, pk=poll_id)
+    p = get_object_or_404(Poll, pk=poll_id, begin_date__lte=timezone.now(), end_date__gte=timezone.now())
     user = request.user
     if not user.is_authenticated():
         messages.error(request, 'Вы не вошли как зарегистрированный пользователь')
@@ -350,6 +369,7 @@ def vote(request, poll_id):
     if not user.userprofile.approval:
         messages.error(request, 'Вы не являетесь подтверждённым пользователем')
         return redirect('polls:detail', pk=poll_id)
+#TODO пусть admin (любой стафф) сможет доголосовывать только при режиме отладки
     if user.get_username() != 'admin' and p.is_user_voted(user):
         messages.error(request, 'Вы уже приняли участие в этом голосовании')
         return redirect('polls:detail', pk=poll_id)

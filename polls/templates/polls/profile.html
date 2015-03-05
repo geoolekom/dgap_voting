@@ -17,6 +17,8 @@
 							<td>Логин</td>
 							<td>{{ user.username}}</td>
 						</tr>
+					</tbody>
+					<tbody>
 						<tr>
 							<td>Фамилия</td>
 							<td>{{ user.last_name}}</td>
@@ -29,6 +31,8 @@
 							<td>Отчество</td>
 							<td>{{ user.userprofile.middlename }}</td>
 						</tr>
+					</tbody>
+					<tbody>
 						<tr>
 							<td>Комната</td>
 							<td>{{ user.userprofile.room }}</td>
@@ -38,9 +42,25 @@
 							<td>{{ user.userprofile.group }}</td>
 						</tr>
 					</tbody>
+					<tbody>
+						<tr>
+							<td>Почтовый адрес</td>
+							<td>{{ user.email }}</td>
+						</tr>
+						<tr>
+							<td>Аккаунт phystech.edu</td>
+							{% if not user.social_auth.exists %}
+								<td><a class="btn btn-success" role="button" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'polls:profile_view' %}">Привязать аккаунт</a></td>
+							{% else %}
+							<td>{{ user.social_auth.get.uid }}<td>
+							{% endif %}
+						</tr>
+					</tbody>
 				</table>
+			</div>
+			<div class="panel-footer clearfix">
 				{% buttons %}
-					<a href="{% url 'password_change' %}" class="btn btn-default">Изменение пароля</a>
+					<a href="{% url 'password_change' %}" class="btn btn-primary">Изменение пароля</a>
 				{% endbuttons %}
 			</div>
 			{% else %}

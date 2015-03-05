@@ -95,7 +95,15 @@
 
     <div class="container-fluid">
       <div class="row">
-        
+		{% if user.is_authenticated and not user.userprofile.is_approved %}
+			<div style="padding-top:32px;" class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+				<div class="alert alert-info">
+					<a class="close" data-dismiss="alert" href="#">&times;</a>
+					<p style="text-align:center"> <a href="{% url 'polls:profile_view' %}">Ваш аккаунт не подтверждён. Завершите процедуру регистрации, чтобы иметь возможность принять участие в голосованиях</a></p>
+				</div>
+			</div>
+		{% endif %}
+       
         <div class="col-xs-12" style="padding-top:16px;"{# class="container" #}>
 
         {% block content %}

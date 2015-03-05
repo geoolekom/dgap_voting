@@ -171,6 +171,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = ['phystech.edu']
 
 SOCIAL_AUTH_LOGIN_ERROR_URL = 'polls:done'
 
+SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email']
+
 SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_details',
     'social.pipeline.social_auth.social_uid',
