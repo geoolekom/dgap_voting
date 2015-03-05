@@ -18,6 +18,10 @@ from django_bleach.models import BleachField
 import pyqrcode
 from django.core.exceptions import PermissionDenied
 from django.core.management import call_command
+from django.contrib.auth.decorators import login_required
+from django.views.generic.edit import UpdateView, DeleteView
+from django.core.urlresolvers import reverse_lazy
+from django.utils.decorators import method_decorator
 
 maxInt = 2147483647
 
@@ -47,6 +51,24 @@ def find_user(request):
 def is_registered(id):
     return UserProfile.objects.filter(dorm=id).exists()
 
+class UserChangeEmail(UpdateView):
+    model = User
+    fields = ['email']
+    template_name = 'polls/user_change_email.html'
+    success_url = reverse_lazy('polls:done')
+
+    def form_valid(self, form):
+        messages.success(self.request, "Ваш email был успешно изменён")
+        return super(UserChangeEmail, self).form_valid(form)
+
+    def get_object(self, *args, **kwargs):
+        return self.request.user
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(UserChangeEmail, self).dispatch(*args, **kwargs)
+
+@login_required
 def profile_view(request):
     """
      долгое и мучительное обдумывание привело к выводу:\
@@ -55,7 +77,7 @@ def profile_view(request):
      по сути, проверяем, есть ли вообще подходящие карточки. Если нет, то уже выпилили. Если есть, то неважно, сколько их.\
      Вероятность того, что в базе будет два человека с одинаковыми ФИ и днём рождения, считается малой
 
-     что делать, если в базе несколько человек с одинаовыми ФИ?
+     что делать, если в базе несколько человек с одинаковыми ФИ?
      считаем, что их не поселят в одну комнату, иначе ручная обработка 
     """
     user = request.user
