@@ -45,7 +45,7 @@
 					<tbody>
 						<tr>
 							<td>Почтовый адрес</td>
-							<td>{{ user.email }}</td>
+							<td>{{ user.email }} <a href="{% url 'polls:profile_change_email' %}">(изменить)</a></td>
 						</tr>
 						<tr>
 							<td>Аккаунт phystech.edu</td>
@@ -60,7 +60,7 @@
 			</div>
 			<div class="panel-footer clearfix">
 				{% buttons %}
-					<a href="{% url 'password_change' %}" class="btn btn-primary">Изменение пароля</a>
+					<a href="{% url 'password_change' %}" class="btn btn-default">Изменить пароль</a>
 				{% endbuttons %}
 			</div>
 			{% else %}
