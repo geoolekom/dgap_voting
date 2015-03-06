@@ -47,10 +47,19 @@ admin.site.register(Poll, PollAdmin)
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
+    list_display = ['approval',]
     can_delete = False
 
 class UserAdmin(UserAdmin):
     inlines = (UserProfileInline,)
+
+    def get_formsets_with_inlines(self, request, obj=None):
+        for inline in self.get_inline_instances(request, obj):
+            # hide UserProfileInline in the add view
+            if isinstance(inline, UserProfileInline) and obj is None:
+                continue
+            yield inline.get_formset(request, obj), inline
+
 
 #TODO нормальное отображение профиля юзера в админке, разобраться, нужно ли показывать права доступа и группы 
 
