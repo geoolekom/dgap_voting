@@ -47,7 +47,6 @@ admin.site.register(Poll, PollAdmin)
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
-    list_display = ['approval',]
     can_delete = False
 
 class UserAdmin(UserAdmin):
@@ -60,6 +59,12 @@ class UserAdmin(UserAdmin):
                 continue
             yield inline.get_formset(request, obj), inline
 
+    def get_approved(self, obj):
+        return obj.userprofile.is_approved()
+    get_approved.boolean = True
+    get_approved.short_description = 'Подтверждён'
+    
+    list_display = ['username', 'email', 'first_name', 'last_name', 'is_staff', 'get_approved',]
 
 #TODO нормальное отображение профиля юзера в админке, разобраться, нужно ли показывать права доступа и группы 
 
