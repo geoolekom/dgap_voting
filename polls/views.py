@@ -392,7 +392,8 @@ def vote(request, poll_id):
         messages.error(request, 'Вы не являетесь подтверждённым пользователем')
         return redirect('polls:detail', pk=poll_id)
 #TODO пусть admin (любой стафф) сможет доголосовывать только при режиме отладки
-    if user.get_username() != 'admin' and p.is_user_voted(user):
+   # if user.get_username() != 'admin' and p.is_user_voted(user):
+    if p.is_user_voted(user) and not (user.is_staff and settings.DEBUG):
         messages.error(request, 'Вы уже приняли участие в этом голосовании')
         return redirect('polls:detail', pk=poll_id)
     if not p.is_user_target(user):
