@@ -4,6 +4,27 @@
 
 <div class="row"> 
 	{% include "polls/list.html" with current_list=poll_list %}
+
+	{% if is_paginated %}
+	<div class="col-xs-12 text-center">
+		<ul class="pagination">
+			{% if page_obj.has_previous %}
+				<li><a href="?page=1">&#171;</a></li>
+				<li><a href="?page={{ page_obj.previous_page_number }}">&#8249;</a></li>
+			{% endif %}
+
+			{% for i in paginator.page_range %}
+				<li {% if page_obj.number == i %} class="active" {% endif %}><a href="?page={{i}}">{{i}}</a></li>
+			{% endfor %}
+
+			{% if page_obj.has_next %}
+				<li><a href="?page={{ page_obj.next_page_number }}">&#8250;</a></li>
+				<li><a href="?page={{ page_obj.paginator.num_pages }}">&#187;</a></li>
+			{% endif %}
+		</ul>
+	</div>
+	{% endif %}
+
 </div>
 
 {% endblock content %}

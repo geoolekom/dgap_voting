@@ -135,9 +135,9 @@ def server_date(request):
     return render(request, 'polls/serverdate.html')
 
 class IndexBase(generic.ListView):
-#TODO в наследниках этого класса в методах есть магические числа (12). Избавиться от них, научиться постраничному показу, что ли.
     template_name = 'polls/index.html'
     context_object_name = 'poll_list'
+    paginate_by = 10
 
 class Closed(IndexBase):
     def get_context_data(self, *args, **kwargs):
@@ -146,7 +146,7 @@ class Closed(IndexBase):
         return context 
 
     def get_queryset(self):
-        return Poll.objects.filter(end_date__lte=timezone.now()).order_by('-end_date')[:12]
+        return Poll.objects.filter(end_date__lte=timezone.now()).order_by('-end_date')
 
 class Voted(IndexBase):
     def get_context_data(self, *args, **kwargs):
@@ -156,7 +156,7 @@ class Voted(IndexBase):
 
     def get_queryset(self):
         if self.request.user.is_authenticated():
-            return [poll for poll in Poll.objects.filter(end_date__gte=timezone.now()).order_by('-begin_date') if poll.is_user_voted(self.request.user)][:12]
+            return [poll for poll in Poll.objects.filter(end_date__gte=timezone.now()).order_by('-begin_date') if poll.is_user_voted(self.request.user)]
         else:
             return []
 
@@ -168,7 +168,7 @@ class Available(IndexBase):
 
     def get_queryset(self):
         if self.request.user.is_authenticated():
-            return [poll for poll in Poll.objects.filter(begin_date__lte=timezone.now()).filter(end_date__gte=timezone.now()).order_by('-begin_date') if poll.is_user_target(self.request.user) and not poll.is_user_voted(self.request.user)][:12]
+            return [poll for poll in Poll.objects.filter(begin_date__lte=timezone.now()).filter(end_date__gte=timezone.now()).order_by('-begin_date') if poll.is_user_target(self.request.user) and not poll.is_user_voted(self.request.user)]
         else:
             return []
 
