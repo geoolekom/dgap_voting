@@ -21,6 +21,7 @@ urlpatterns = patterns('',
     # account management
     url(r'^profile/$', views.profile_view, name='profile_view'),
     url(r'^profile/change_email/$', views.UserChangeEmail.as_view(), name='profile_change_email'),
+    url(r'^profile/change_subscribing/$', views.change_subscribing_status, name='change_subscribing'),
     # ad making
     url(r'^(?P<poll_id>\d+)/pdf_advert/$', views.make_pdf, name='pdf_advert'),
     url(r'^(?P<poll_id>\d+)/create_advert/$', views.create_advert, name='create_advert'),

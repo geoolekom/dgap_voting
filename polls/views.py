@@ -69,6 +69,18 @@ class UserChangeEmail(UpdateView):
         return super(UserChangeEmail, self).dispatch(*args, **kwargs)
 
 @login_required
+def change_subscribing_status(request):
+    profile = request.user.userprofile
+    profile.is_subscribed = not profile.is_subscribed
+    profile.save()
+    if profile.is_subscribed:
+        messages.success(request, 'Вы подписаны на рассылку')
+    else:
+        messages.success(request, 'Вы больше не подписаны на рассылку')
+    return redirect('polls:done')
+
+
+@login_required
 def profile_view(request):
     """
      долгое и мучительное обдумывание привело к выводу:\
@@ -391,8 +403,6 @@ def vote(request, poll_id):
     if not user.userprofile.approval:
         messages.error(request, 'Вы не являетесь подтверждённым пользователем')
         return redirect('polls:detail', pk=poll_id)
-#TODO пусть admin (любой стафф) сможет доголосовывать только при режиме отладки
-   # if user.get_username() != 'admin' and p.is_user_voted(user):
     if p.is_user_voted(user) and not (user.is_staff and settings.DEBUG):
         messages.error(request, 'Вы уже приняли участие в этом голосовании')
         return redirect('polls:detail', pk=poll_id)
