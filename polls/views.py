@@ -315,12 +315,14 @@ def make_win_csv(oldfilename, filename):
 
 
 def is_staff(user):
-    return user.is_staff()
+    return user.is_staff
 
 
 @login_required
 @user_passes_test(is_staff)
-def voters(request, poll_id):    
+def voters(request, poll_id):   
+    poll_obj = get_object_or_404(Poll, pk=poll_id)
+    
     people = [voter for voter in UserProfile.objects.all().order_by('user__last_name') if voter.approval and poll_obj.is_user_target(voter.user)]
     
     return render(request, 'polls/people.html', {
@@ -345,6 +347,8 @@ def approve_mailing(request, poll_id):
 @login_required
 @user_passes_test(is_staff)
 def mail_unvoted(request, poll_id):    
+    poll_obj = get_object_or_404(Poll, pk=poll_id)
+    
     call_command('mailing_unvoted', poll_id)
     
     poll_obj.last_mailing = timezone.now()
