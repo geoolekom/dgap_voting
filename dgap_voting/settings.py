@@ -18,6 +18,11 @@ TEMPLATE_DIRS += (os.path.join(BASE_DIR, 'templates'),)
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# WARNING override it in local_settings!
+ADMINS = (
+    ('DGAP_Voting Admins', 'levyi@email.com'),
+)
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -186,5 +191,35 @@ SOCIAL_AUTH_PIPELINE = (
     'polls.psa.cut_firstname',  # cut firstname from mixed name from phystech.edu
 )
 
+import sys
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console': {
+            'level': 'WARNING',
+            'class': 'logging.StreamHandler',
+            'stream': sys.stderr
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins', 'console'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+    }
+}
 
 from dgap_voting.local_settings import *

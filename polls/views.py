@@ -18,12 +18,14 @@ from django_bleach.models import BleachField
 import pyqrcode
 from django.core.exceptions import PermissionDenied
 from django.core.management import call_command
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.generic.edit import UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.utils.decorators import method_decorator
+import logging
 
 maxInt = 2147483647
+logger = logging.getLogger('django.request')
 
 def find_user(request): 
     if not request.user.social_auth.exists():
@@ -211,17 +213,14 @@ class Results(generic.DetailView):
     def get_queryset(self):
         return Poll.objects.filter(end_date__lte=timezone.now())
 
-def make_html_advert(request, poll_id):
-#TODO передавать сюда poll_obj, а не по новой доставать его из базы
-    poll_obj = get_object_or_404(Poll, pk=poll_id)
+def make_html_advert(request, poll_id, poll_obj):
     qrcode_addr = os.path.join(settings.SENDFILE_ROOT, "qrcode{}.png".format(poll_id))
     
     try:
         qr = pyqrcode.create(request.build_absolute_uri(reverse('polls:detail', args=[poll_id,])))
         qr.png(qrcode_addr, scale=6)
-    except ErrorType:
-#TODO вывести инфу об ошибке в лог
-        pass
+    except Exception as e:
+        logger.warning(e)
     
     return loader.render_to_string('polls/advert.html', {
         'poll_obj': poll_obj,
@@ -244,13 +243,7 @@ def create_advert(request, poll_id):
 
 def html_to_pdf(html_filename, pdf_filename):
     error = subprocess.call(["wkhtmltopdf", "--minimum-font-size", "18", "--margin-top", "25mm", "--margin-bottom", "25mm", "--margin-left", "20mm", "--margin-right", "20mm", html_filename, pdf_filename])
-    return not error
-
-def make_pdf_error(request, poll_id, e):
-#TODO убрать лишние аргументы
-    message = "Невозможно сгенерировать объявление. При повторном возникновении проблемы обратитесь к администратору."
-    messages.warning(request, message)
-    return redirect('polls:done')
+    return not error  
 
 def make_pdf(request, poll_id):
     try:
@@ -260,21 +253,16 @@ def make_pdf(request, poll_id):
         pdf_filename = "{}.pdf".format(filename)
         
         with open(html_filename, 'w') as htmlfile:
-            htmlfile.write(make_html_advert(request, poll_id))
+            htmlfile.write(make_html_advert(request, poll_id, poll_obj))
         
         if not html_to_pdf(html_filename, pdf_filename):
-#TODO более информативное описание исключение
-            raise Exception("Something wrong with wkhtmltopdf")
+            raise Exception("Something is wrong with wkhtmltopdf, see logs to understand")
         return sendfile(request, pdf_filename, attachment=True, attachment_filename="{}.pdf".format(poll_obj.name))
-    
-        # TODO
-        #message = "Объявление успешно создано, ожидайте загрузки"
-        #messages.success(request, message)
-        #return redirect('polls:done')
-    except ErrorType as e:
-#Нужна ли вообще отдельная процедура для записи сообщения и редиректа? 
-#TODO логгирование ошибки
-        return make_pdf_error(request, poll_id, e)
+    except Exception as e: 
+        logger.warning(e)
+        message = "Невозможно сгенерировать объявление. При повторном возникновении проблемы обратитесь к администратору."
+    messages.warning(request, message)
+    return redirect('polls:done')
 
 def make_csv(p, filename):
     try:
@@ -311,8 +299,8 @@ def make_csv(p, filename):
                 writer.writerow(["Участники"])
                 for user in p.voted_users.order_by('last_name', 'first_name'):
                     writer.writerow(["{} {} {}".format(user.last_name, user.first_name, user.userprofile.middlename )])
-    except FileExistsError:
-#TODO логгируй
+    except FileExistsError as e:
+        logger.warning(e)
         return False
     else: 
         return True
@@ -320,17 +308,19 @@ def make_csv(p, filename):
 def make_win_csv(oldfilename, filename):
     error = subprocess.call(["iconv", "-t", "WINDOWS-1251", oldfilename, "-o", filename])
     if error:
+        logger.warning('"iconv" failed while processing "make_win_csv", see logs to understand')
         return False
     else:
         return True
-    
-def voters(request, poll_id):
-    poll_obj = get_object_or_404(Poll, pk=poll_id)
-    
-    #forbid non-staff users to see this list
-    if not request.user.is_staff:
-        raise PermissionDenied()
-    
+
+
+def is_staff(user):
+    return user.is_staff()
+
+
+@login_required
+@user_passes_test(is_staff)
+def voters(request, poll_id):    
     people = [voter for voter in UserProfile.objects.all().order_by('user__last_name') if voter.approval and poll_obj.is_user_target(voter.user)]
     
     return render(request, 'polls/people.html', {
@@ -338,11 +328,10 @@ def voters(request, poll_id):
         'voters_num': len(people)
     })
 
-def approve_mailing(request, poll_id):
-    #forbid non-staff users to see the information on the page
-    if not request.user.is_staff:
-        raise PermissionDenied()
-    
+
+@login_required
+@user_passes_test(is_staff)
+def approve_mailing(request, poll_id):    
     poll_obj = get_object_or_404(Poll, pk=poll_id)
     recipients = [profile.user for profile in UserProfile.objects.filter(is_subscribed=True) if profile.is_approved() and poll_obj.is_user_target(profile.user) and not poll_obj.is_user_voted(profile.user)]
     
@@ -352,13 +341,10 @@ def approve_mailing(request, poll_id):
         'addr_num': len(recipients)
     })
 
+
+@login_required
+@user_passes_test(is_staff)
 def mail_unvoted(request, poll_id):    
-    #forbid non-staff users to mail somebody
-    poll_obj = get_object_or_404(Poll, pk=poll_id)
-    
-    if not request.user.is_staff:
-        raise PermissionDenied()
-    
     call_command('mailing_unvoted', poll_id)
     
     poll_obj.last_mailing = timezone.now()
