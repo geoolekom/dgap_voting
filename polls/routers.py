@@ -15,7 +15,7 @@ class ModelDatabaseRouter(object):
             return model._meta.in_db        
         return None
     
-    def allow_syncdb(self, db, model):      
+    def allow_migrate(self, db, model):      
         # Specify target database with field in_db in model's Meta class
         if hasattr(model._meta, 'in_db'):
             if model._meta.in_db == db:
