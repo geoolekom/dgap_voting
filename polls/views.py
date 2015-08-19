@@ -134,9 +134,20 @@ def profile_view(request):
         user_form = UserForm(instance = user)
         profile_form = ProfileForm(instance = profile)
 
+    mipt = False
+    phystech = False
+    if user.social_auth.exists():
+        if user.social_auth.filter(provider='mipt-oauth2'):
+            mipt = user.social_auth.get(provider='mipt-oauth2').uid
+        if user.social_auth.filter(provider='google-oauth2'):
+            #phystech = user.social_auth.get(provider='google-oauth2').login
+            phystech = user.social_auth.get(provider='google-oauth2').uid
+
     return render(request, 'polls/profile.html', {
         'user_form': user_form,
         'profile_form': profile_form,
+        'mipt': mipt,
+        'phystech': phystech,
     })
 
 def server_time(request):

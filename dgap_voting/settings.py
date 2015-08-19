@@ -34,7 +34,7 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ["canetoad.mooo.com"]
+ALLOWED_HOSTS = ['canetoad.mooo.com', 'vote.dgap-mipt.ru']
 
 
 # Application definition
@@ -70,6 +70,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
+    'polls.psa.MiptOAuth2',
 )
 
 CACHES = {

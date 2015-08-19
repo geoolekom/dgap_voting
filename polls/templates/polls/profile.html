@@ -49,10 +49,19 @@
 						</tr>
 						<tr>
 							<td>Аккаунт phystech.edu</td>
-							{% if not user.social_auth.exists %}
+							{% if not phystech %}
 								<td><a class="btn btn-success" role="button" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'polls:profile_view' %}">Привязать аккаунт</a></td>
 							{% else %}
-							<td>{{ user.social_auth.get.uid }}<td>
+							<td>{{ phystech }}<td>
+							{% endif %}
+						</tr>
+						<tr>
+						<td>Аккаунт mipt.ru</td>
+							{% if not mipt %}
+								<td><a class="btn btn-success" role="button" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'polls:profile_view' %}">Привязать аккаунт</a></td>
+							{% else %}
+							<td>{{ mipt }}
+							<a class="btn btn-success" role="button" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'polls:profile_view' %}">Привязать аккаунт</a></td>
 							{% endif %}
 						</tr>
 					</tbody>
