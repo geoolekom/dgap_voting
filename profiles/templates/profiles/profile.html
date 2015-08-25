@@ -45,12 +45,12 @@
 					<tbody>
 						<tr>
 							<td>Почтовый адрес</td>
-							<td>{{ user.email }} <a href="{% url 'polls:profile_change_email' %}">(изменить)</a></td>
+							<td>{{ user.email }} <a href="{% url 'profiles:profile_change_email' %}">(изменить)</a></td>
 						</tr>
 						<tr>
 							<td>Аккаунт phystech.edu</td>
 							{% if not phystech %}
-								<td><a class="btn btn-success" role="button" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'polls:profile_view' %}">Привязать аккаунт</a></td>
+								<td><a class="btn btn-success" role="button" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт</a></td>
 							{% else %}
 							<td>{{ phystech }}<td>
 							{% endif %}
@@ -58,10 +58,10 @@
 						<tr>
 						<td>Аккаунт mipt.ru</td>
 							{% if not mipt %}
-								<td><a class="btn btn-success" role="button" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'polls:profile_view' %}">Привязать аккаунт</a></td>
+								<td><a class="btn btn-success" role="button" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт</a></td>
 							{% else %}
 							<td>{{ mipt }}
-							<a class="btn btn-success" role="button" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'polls:profile_view' %}">Привязать аккаунт</a></td>
+							<a class="btn btn-success" role="button" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт</a></td>
 							{% endif %}
 						</tr>
 					</tbody>
@@ -70,7 +70,7 @@
 			<div class="panel-footer clearfix">
 				{% buttons %}
 					<a href="{% url 'password_change' %}" class="btn btn-default">Изменить пароль</a>
-					<a href="{% url 'polls:change_subscribing' %}" class="btn btn-default pull-right">{% if user.userprofile.is_subscribed %}Отписаться от рассылки{% else %}Подписаться на рассылку{% endif %}</a>
+					<a href="{% url 'profiles:change_subscribing' %}" class="btn btn-default pull-right">{% if user.userprofile.is_subscribed %}Отписаться от рассылки{% else %}Подписаться на рассылку{% endif %}</a>
 					{% comment %}
 						Судя по всему, реализация через форму изменения рассылки не даёт никакого выигрыша
 					{% endcomment %}
@@ -82,7 +82,7 @@
 				<table class="table table-bordered">
 					<tbody>
 						<tr>
-							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'polls:profile_view' %}">Привязать аккаунт phystech.edu</a>
+							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт phystech.edu</a>
 						</tr>
 					</tbody>
 				</table>
@@ -106,7 +106,7 @@
 						</div>
 					{% endfor %}
 				{% endif %}
-				<form action="{% url 'polls:profile_view' %}" method="post" class="form clearfix">
+				<form action="{% url 'profiles:profile_view' %}" method="post" class="form clearfix">
 					{% csrf_token %}
 					{% if user.social_auth.exists %}
 					{% bootstrap_form profile_form %} 

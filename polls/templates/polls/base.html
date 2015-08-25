@@ -82,7 +82,7 @@
                 <li><a href="https://docs.google.com/document/d/1FZ1HLd2Q9O3Z4m0e7yd1bPzbs8pJ8Xjb_3nAk6w75W0/edit?usp=sharing" target="_blank">FAQ</a></li>
                 <li class="nav-divider"></li>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'polls:profile_view' %}">Профиль</a></li>
+                    <li><a href="{% url 'profiles:profile_view' %}">Профиль</a></li>
                     <li><a href="{% url 'logout' %}">Выход</a></li>
                 {% else %}
                     <li><a href="{% url 'registration_register' %}">Регистрация</a></li>
@@ -99,7 +99,7 @@
 			<div style="padding-top:32px;" class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 				<div class="alert alert-info">
 					<a class="close" data-dismiss="alert" href="#">&times;</a>
-					<p style="text-align:center"> <a href="{% url 'polls:profile_view' %}">Ваш аккаунт не подтверждён. Завершите процедуру регистрации, чтобы иметь возможность принять участие в голосованиях</a></p>
+					<p style="text-align:center"> <a href="{% url 'profiles:profile_view' %}">Ваш аккаунт не подтверждён. Завершите процедуру регистрации, чтобы иметь возможность принять участие в голосованиях</a></p>
 				</div>
 			</div>
 		{% endif %}
