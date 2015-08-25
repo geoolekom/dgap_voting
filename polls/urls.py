@@ -3,10 +3,6 @@ from django.conf.urls import patterns, url
 from polls import views
 
 urlpatterns = patterns('',
-    # servertime
-    url(r'^servertime/$', views.server_time, name='server_time'),
-    url(r'^serverdate/$', views.server_date, name='server_date'),
-    url(r'^servertimezone/$', views.server_timezone, name='server_timezone'),
     # polls
     url(r'^$', views.Index.as_view(), name='index'),
     url(r'^closed/$', views.Closed.as_view(), name='closed'),

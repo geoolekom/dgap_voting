@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'django_user_agents',
     'django_bleach',
     'social.apps.django_app.default',
+    'servertime',
 )
 
 TEMPLATES = [

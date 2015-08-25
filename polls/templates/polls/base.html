@@ -22,7 +22,7 @@
     <script>
         function serverTime() { 
             var time = null; 
-            $.ajax({url: "{% url 'polls:server_time' %}", 
+            $.ajax({url: "{% url 'servertime:server_time' %}", 
                 async: false, dataType: 'text', 
                 success: function(text) { 
                     time = new Date(text); 
@@ -33,7 +33,7 @@
         };
         function serverDate() { 
             var time = null; 
-            $.ajax({url: "{% url 'polls:server_date' %}", 
+            $.ajax({url: "{% url 'servertime:server_date' %}", 
                 async: false, dataType: 'text', 
                 success: function(text) { 
                     time = new Date(text); 
