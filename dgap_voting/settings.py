@@ -78,7 +78,7 @@ TEMPLATES = [
 AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
-    'polls.psa.MiptOAuth2',
+    'profiles.psa.MiptOAuth2',
 )
 
 CACHES = {
@@ -107,7 +107,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_user_agents.middleware.UserAgentMiddleware',
     #'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
-    'polls.psa.SocialAuthExceptionMiddlewareExtended',
+    'profiles.psa.SocialAuthExceptionMiddlewareExtended',
 )
 
 ROOT_URLCONF = 'dgap_voting.urls'
@@ -197,7 +197,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.social_auth.load_extra_data',
     'social.pipeline.user.user_details',
-    'polls.psa.cut_firstname',  # cut firstname from mixed name from phystech.edu
+    'profiles.psa.cut_firstname',  # cut firstname from mixed name from phystech.edu
 )
 
 import sys
