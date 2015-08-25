@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, url
 
 from polls import views
+from polls import admaking
+from polls import mailing
 
 urlpatterns = patterns('',
     # polls
@@ -12,13 +14,13 @@ urlpatterns = patterns('',
     url(r'^(?P<pk>\d+)/results/$', views.Results.as_view(), name='results'),
     url(r'^(?P<poll_id>\d+)/results/detailed/$', views.detailed, name='detailed'),
     url(r'^(?P<poll_id>\d+)/vote/$', views.vote, name='vote'),
+    url(r'^(?P<poll_id>\d+)/voters/$', views.voters, name='people'), 
     # done
     url(r'^done/$', views.done, name='done'),
     # ad making
-    url(r'^(?P<poll_id>\d+)/pdf_advert/$', views.make_pdf, name='pdf_advert'),
-    url(r'^(?P<poll_id>\d+)/create_advert/$', views.create_advert, name='create_advert'),
-    url(r'^(?P<poll_id>\d+)/voters/$', views.voters, name='people'), #эту скорее в polls
+    url(r'^(?P<poll_id>\d+)/pdf_advert/$', admaking.make_pdf, name='pdf_advert'),
+    url(r'^(?P<poll_id>\d+)/create_advert/$', admaking.create_advert, name='create_advert'),
     # mailing
-    url(r'^(?P<poll_id>\d+)/mail/$', views.mail_unvoted, name='mail'),
-    url(r'^(?P<poll_id>\d+)/approve_mailing/$', views.approve_mailing, name='approve_mailing'),
+    url(r'^(?P<poll_id>\d+)/mail/$', mailing.mail_unvoted, name='mail'),
+    url(r'^(?P<poll_id>\d+)/approve_mailing/$', mailing.approve_mailing, name='approve_mailing'),
 )

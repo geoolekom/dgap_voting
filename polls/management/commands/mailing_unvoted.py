@@ -38,7 +38,7 @@ class Command(BaseCommand):
                 site_url = 'http://%s'%site_url
                 
             poll_url = os.path.join(site_url, reverse('polls:detail', args=[poll_id,])[1:])
-            unsubscribe_url = os.path.join(site_url, reverse('polls:profile_view')[1:])                                         
+            unsubscribe_url = os.path.join(site_url, reverse('profiles:profile_view')[1:])                                         
             
             recipients = [profile.user for profile in UserProfile.objects.filter(is_subscribed=True) if profile.is_approved() and poll.is_user_target(profile.user) and not poll.is_user_voted(profile.user)]
             
