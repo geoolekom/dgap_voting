@@ -8,8 +8,8 @@ class Poll(models.Model):
     question = models.CharField('Вопрос', max_length=200)
     begin_date = models.DateTimeField('Начало голосования')
     end_date = models.DateTimeField('Конец голосования')
-    target_room = models.CharField('Целевая комната', max_length=200, default = r'^\d\d\d.?.?$') #предполагается использование регулярных выражений
-    target_group = models.CharField('Целевая группа', max_length=200, default = r'^\d\d\d\d?.?.?$') 
+    target_room = models.CharField('Целевая комната', max_length=200, default = r'^') #предполагается использование регулярных выражений
+    target_group = models.CharField('Целевая группа', max_length=200, default = r'^') 
     public = models.BooleanField('Открытое голосование', default = True)
     ONE = 'ONE'
     MANY = 'MANY'
