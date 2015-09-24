@@ -85,8 +85,12 @@
                     <li><a href="{% url 'profiles:profile_view' %}">Профиль</a></li>
                     <li><a href="{% url 'logout' %}">Выход</a></li>
                 {% else %}
+					{% comment %}
                     <li><a href="{% url 'registration_register' %}">Регистрация</a></li>
                     <li><a href="{% url 'login' %}">Вход</a></li>
+					{% endcomment %}
+					<li><a href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'polls:index' %}">Войти через phystech.edu</a>
+</li>
                 {% endif %}
             </ul>
         </div>
@@ -103,7 +107,15 @@
 				</div>
 			</div>
 		{% endif %}
-       
+       {% if not user.is_authenticated %}
+			<div style="padding-top:32px;" class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+				<div class="alert alert-info">
+					<a class="close" data-dismiss="alert" href="#">&times;</a>
+					<p style="text-align:center"> <a href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'profiles:profile_view' %}">Создать аккаунт для участия в голосованиях, используя email на phystech.edu. Перед использованем этой ссылки убедитесь, что Вы вошли в свой аккаунт на phystech.edu</a>
+</p>
+				</div>
+			</div>
+		{% endif %}
         <div class="col-xs-12" style="padding-top:16px;"{# class="container" #}>
 
         {% block content %}
