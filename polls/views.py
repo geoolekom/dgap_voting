@@ -189,7 +189,7 @@ def vote(request, poll_id):
     if not user.is_authenticated():
         messages.error(request, 'Вы не вошли как зарегистрированный пользователь')
         return redirect('polls:detail', pk=poll_id)
-    if not user.userprofile.approval:
+    if not user.userprofile.is_approved:
         messages.error(request, 'Вы не являетесь подтверждённым пользователем')
         return redirect('polls:detail', pk=poll_id)
     if p.is_user_voted(user) and not (user.is_staff and settings.DEBUG):
