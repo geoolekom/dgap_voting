@@ -100,10 +100,12 @@
 						<tr>
 							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт phystech.edu</a>
 						</tr>
+
+					{% comment %}
 						<tr>
 							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт mipt.ru</a>
 						</tr>
-
+					{% endcomment %}
 					</tbody>
 				</table>
 			</div>
