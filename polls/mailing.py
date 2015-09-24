@@ -14,7 +14,7 @@ def is_staff(user):
 @user_passes_test(is_staff)
 def approve_mailing(request, poll_id):    
     poll_obj = get_object_or_404(Poll, pk=poll_id)
-    recipients = [profile.user for profile in UserProfile.objects.filter(is_subscribed=True) if profile.is_approved() and poll_obj.is_user_target(profile.user) and not poll_obj.is_user_voted(profile.user)]
+    recipients = [profile.user for profile in UserProfile.objects.filter(is_subscribed=True) if profile.is_approved and poll_obj.is_user_target(profile.user) and not poll_obj.is_user_voted(profile.user)]
     
     return render(request, 'polls/mailing_confirm.html', {
         'poll_id': poll_id,

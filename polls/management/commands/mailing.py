@@ -6,7 +6,7 @@ class Command(BaseCommand):
     help = 'Sends emails to unapproved users'
 
     def handle(self, *args, **options):
-        recipients = [profile.user for profile in UserProfile.objects.filter(approval=False)]
+        recipients = [profile.user for profile in UserProfile.objects.filter(is_approved=False)]
         datatuple = []
         subject = "Проблемы при регистрации"
         message = """Здравствуйте, {username}!

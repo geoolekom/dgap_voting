@@ -6,8 +6,8 @@ class Command(BaseCommand):
     help = 'Deletes unapproved users'
 
     def handle(self, *args, **options):
-        users_to_delete = [profile.user for profile in UserProfile.objects.filter(approval=False)]
-        num_users_left = len([profile.user for profile in UserProfile.objects.filter(approval=True)])
+        users_to_delete = [profile.user for profile in UserProfile.objects.filter(is_approved=False)]
+        num_users_left = len([profile.user for profile in UserProfile.objects.filter(is_approved=True)])
         
         print('Gonna delete {} users, {} remaining'.format(len(users_to_delete), num_users_left))
         print("If it's all right, type 'yes', else type 'no'")
