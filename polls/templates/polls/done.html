@@ -6,12 +6,21 @@
 	<div class="row">
 		{% for message in messages %}
 			<div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4">
-				<div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}">
+				<div class="alert alert-{% if message.tags %}{% if 'error' in message.tags %}danger	{% elif 'warning' in message.tags %}warning{% elif 'success' in message.tags %}success{% endif %}{% else %}info	{% endif %}">
 					<a class="close" data-dismiss="alert" href="/">&times;</a>
 					{{ message }}
 				</div>
 			</div>
+			{% if 'error' in message.tags %}
+				<div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4">
+					<div class="alert alert-info">
+						<a class="close" data-dismiss="alert" href="/">&times;</a>
+						<a href="https://docs.google.com/document/d/1FZ1HLd2Q9O3Z4m0e7yd1bPzbs8pJ8Xjb_3nAk6w75W0/edit#bookmark=id.sgm1cn1hny0e">Есть вопросы? Скорее всего, ответ есть в FAQ</a>
+					</div>
+				</div>
+			{% endif %}
 		{% endfor %}
+
 	</div>
 {% endif %}
 
