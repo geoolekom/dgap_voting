@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
-from polls.models import UserProfile, Poll
+from profiles.models import UserProfile
+from polls.models import Poll
 from django.core.mail import send_mass_mail
 from django.core.mail import get_connection, EmailMultiAlternatives
 from django.core.urlresolvers import reverse
