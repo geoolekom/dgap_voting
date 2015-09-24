@@ -6,9 +6,14 @@ Here are some functions I need working with python-social-auth
 def set_middlename(backend, user, response, *args, **kwargs):
     # print(response)
     if backend.name == 'google-oauth2':
-        user.first_name, user.userprofile.middlename = user.first_name.split()
-        user.save()
-        user.userprofile.save()
+        name = user.first_name.split()
+        if len(name) == 2:
+            user.first_name, user.userprofile.middlename = name
+            user.save()
+            user.userprofile.save()
+        elif len(name) == 1:
+            user.userprofile.middlename = ''
+            user.userprofile.save()
     elif backend.name == 'mipt-oauth2':
         user.userprofile.middlename = response['secondname']
         user.userprofile.save()
