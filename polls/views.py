@@ -1,5 +1,6 @@
 from django.template import RequestContext, loader
-from polls.models import Choice, Poll, UserHash, UserProfile, LegacyUser, LegacyDorm
+from polls.models import Choice, Poll, UserHash
+from profiles.models import UserProfile
 from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
@@ -8,7 +9,6 @@ import re
 from random import randint
 from django.contrib import messages
 from django.utils import timezone
-from polls.forms import UserForm, UserProfileForm, UserProfileFormReduced
 import csv
 from sendfile import sendfile
 import os.path
@@ -101,7 +101,7 @@ def is_staff(user):
 def voters(request, poll_id):   
     poll_obj = get_object_or_404(Poll, pk=poll_id)
     
-    people = [voter for voter in UserProfile.objects.all().order_by('user__last_name') if voter.approval and poll_obj.is_user_target(voter.user)]
+    people = [voter for voter in UserProfile.objects.all().order_by('user__last_name') if voter.is_approved and poll_obj.is_user_target(voter.user)]
     
     return render(request, 'polls/people.html', {
         'voters': people,

@@ -9,8 +9,16 @@
 			<div class="panel-heading">
 				<h1 class="panel-title"><strong>Профиль</strong></h1> 
 			</div>
-			{% if user.userprofile.approval %}
+			{% if user.userprofile.is_approved or user.social_auth.exists %}
 			<div class="panel-body">
+				{% if messages %}
+					{% for message in messages %}
+						<div class="alert alert-danger">
+							<a class="close" data-dismiss="alert" href="#">&times;</a>
+							{{ message }}
+						</div>
+					{% endfor %}
+				{% endif %}
 				<table class="table table-bordered">
 					<tbody>
 						<tr>
@@ -45,7 +53,7 @@
 					<tbody>
 						<tr>
 							<td>Почтовый адрес</td>
-							<td>{{ user.email }} <a href="{% url 'profiles:profile_change_email' %}">(изменить)</a></td>
+							<td>{{ user.email }} {% comment %} <a href="{% url 'profiles:profile_change_email' %}">(изменить)</a> {% endcomment %}</td>
 						</tr>
 						<tr>
 							<td>Аккаунт phystech.edu</td>
@@ -60,8 +68,7 @@
 							{% if not mipt %}
 								<td><a class="btn btn-success" role="button" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт</a></td>
 							{% else %}
-							<td>{{ mipt }}
-							<a class="btn btn-success" role="button" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт</a></td>
+							<td>{{ mipt }}<td>
 							{% endif %}
 						</tr>
 					</tbody>
@@ -78,26 +85,6 @@
 			</div>
 			{% else %}
 			<div class="panel-body">
-				{% if not user.social_auth.exists %}
-				<table class="table table-bordered">
-					<tbody>
-						<tr>
-							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт phystech.edu</a>
-						</tr>
-					</tbody>
-				</table>
-				{% endif %}
-				{% if user.social_auth.exists %}
-				<div class="alert alert-info">
-					<a class="close" data-dismiss="alert" href="#">&times;</a>
-					Для завершения регистрации Вам необходимо указать комнату проживания
-				</div>
-				{% else %}
-				<div class="alert alert-info">
-					<a class="close" data-dismiss="alert" href="#">&times;</a>
-					Для завершения регистрации Вам необходимо указать дополнительную информацию о себе. Привяжите аккаунт на phystech.edu или заполните расположенную ниже форму. В поле "Номер карты" следует вводить последние пять цифр номера, находящегося на обратной стороне социальной карты. 
-				</div>
-				{% endif %}
 				{% if messages %}
 					{% for message in messages %}
 						<div class="alert alert-danger">
@@ -106,27 +93,23 @@
 						</div>
 					{% endfor %}
 				{% endif %}
-				<form action="{% url 'profiles:profile_view' %}" method="post" class="form clearfix">
-					{% csrf_token %}
-					{% if user.social_auth.exists %}
-					{% bootstrap_form profile_form %} 
-					{% else %}
-					{% bootstrap_form user_form %}
-					{% bootstrap_form profile_form %} 
-					{# <a href="http://stiralka.fopf.mipt.ru/images/card.jpg">Пример нужных цифр</a> #}
-					<img class ="centered" src="{% static 'polls/card.jpg' %}" alt="Example">
-					{% endif %}
+				<table class="table table-bordered">
+					<tbody>
+						<tr>
+							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт phystech.edu</a>
+						</tr>
+						<tr>
+							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт mipt.ru</a>
+						</tr>
+
+					</tbody>
+				</table>
 			</div>
 			<div class="panel-footer clearfix">
 					{% buttons %}
-						<button type="submit" class="btn btn-primary">
-							Сохранить
-						</button>
 						<a class="pull-right btn btn-default" role="button" href="{% url 'password_change' %}" >Изменение пароля</a>
-
 					{% endbuttons %}
 			</div>
-				</form>
 			{% endif %}
 		</div>	
 	</div>

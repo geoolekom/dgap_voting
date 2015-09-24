@@ -9,7 +9,7 @@ from polls.views import Index
 
 class MyRegistrationView(RegistrationView):
     def get_success_url(self, request, user):
-        return "/polls/profile"
+        return "/profiles"
 
 urlpatterns = patterns('',
     url(r'^$', Index.as_view(), name='index'),

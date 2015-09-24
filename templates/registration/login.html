@@ -26,7 +26,10 @@
 						<input type="password" class="form-control" name="password" id="{{ form.password.id_for_label }}" placeholder="Password">
 					</div>
 					<button type="submit" value="login" class="btn btn-default">Войти</button>
-					<a class="pull-right btn btn-default" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'polls:index' %}">Войти через phystech.edu</a>
+					<div class="pull-right">
+					<a class=" btn btn-default" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'polls:index' %}">Войти через mipt.ru</a>
+					<a class="btn btn-default" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'polls:index' %}">Войти через phystech.edu</a>
+					</div>
 				</form>
 			</div>
 		</div>	
