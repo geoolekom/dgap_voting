@@ -17,7 +17,8 @@
 							Submit
 						</button>
 						<div class = 'pull-right'>
-							<a class="btn btn-default" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'profiles:profile_view' %}">Войти через mipt.ru</a>
+							{% comment %} <a class="btn btn-default" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'profiles:profile_view' %}">Войти через mipt.ru</a>
+							{% endcomment %}
 							<a class="btn btn-default" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'profiles:profile_view' %}">Войти через phystech.edu</a>
 						</div>
 					{% endbuttons %}

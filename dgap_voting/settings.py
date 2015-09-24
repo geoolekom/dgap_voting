@@ -78,7 +78,7 @@ TEMPLATES = [
 AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
-    'profiles.psa.MiptOAuth2',
+    #'profiles.psa.MiptOAuth2',
 )
 
 CACHES = {
