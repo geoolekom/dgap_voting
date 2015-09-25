@@ -12,10 +12,15 @@ def find_user(request):
     last_name = request.user.last_name 
     first_name = request.user.first_name
     middle_name = request.user.userprofile.middlename
-    candidate = LegacyDorm.objects.\
+    if middle_name:
+        candidate = LegacyDorm.objects.\
                     filter(last_name=last_name).\
                     filter(first_name=first_name).\
                     filter(middle_name=middle_name)
+    else:
+        candidate = LegacyDorm.objects.\
+                    filter(last_name=last_name).\
+                    filter(first_name=first_name)
     if not candidate.exists():
         return False
     return candidate
