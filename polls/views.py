@@ -208,7 +208,7 @@ def vote(request, poll_id):
     if p.answer_type == 'OWN':
         c = p.choice_set.create(choice_text=choices[0], votes = 0)
         choices[0] = c.pk
-    if p.answer_type == 'ONE':
+    if p.answer_type != 'MANY':
         if len(choices) > 1:
             messages.error(request, 'Вы должны выбрать один вариант ответа')
             return redirect('polls:detail', pk=poll_id)
