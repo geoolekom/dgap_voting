@@ -23,6 +23,7 @@ from django.views.generic.edit import UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.utils.decorators import method_decorator
 import logging
+from django.db.models import F
 
 maxInt = 2147483647
 logger = logging.getLogger('django.request')
