@@ -208,6 +208,10 @@ def vote(request, poll_id):
     if p.answer_type == 'OWN':
         c = p.choice_set.create(choice_text=choices[0], votes = 0)
         choices[0] = c.pk
+    if p.answer_type == 'ONE':
+        if len(choices) > 1:
+            messages.error(request, 'Вы должны выбрать один вариант ответа')
+            return redirect('polls:detail', pk=poll_id)
     for i in range(len(choices)):
         selected_choice = p.choice_set.get(pk=choices[i])
         selected_choice.votes += 1
