@@ -198,7 +198,7 @@ def vote(request, poll_id):
     if not p.is_user_target(user):
         messages.error(request, 'Вы не являетесь целевой аудиторией голосования')
         return redirect('polls:detail', pk=poll_id)
-    choices = set(request.POST.getlist('choice', False))
+    choices = list(set(request.POST.getlist('choice', False)))
     if not choices:
         messages.error(request, 'Вы не выбрали вариант ответа')
         return redirect('polls:detail', pk=poll_id)
