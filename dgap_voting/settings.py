@@ -78,6 +78,7 @@ TEMPLATES = [
 AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
+    'social.backends.vk.VKOAuth2',
     #'profiles.psa.MiptOAuth2',
 )
 
