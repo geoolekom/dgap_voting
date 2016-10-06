@@ -93,6 +93,10 @@ class Results(generic.DetailView):
     def get_queryset(self):
         return Poll.objects.filter(end_date__lte=timezone.now())
 
+#TODO: Implement FAQ as set of Q/A, not as huge HTML-file
+class Faq(generic.TemplateView):
+    template_name = 'polls/faq.html'
+
 def is_staff(user):
     return user.is_staff
 

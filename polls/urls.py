@@ -23,4 +23,5 @@ urlpatterns = patterns('',
     # mailing
     url(r'^(?P<poll_id>\d+)/mail/$', mailing.mail_unvoted, name='mail'),
     url(r'^(?P<poll_id>\d+)/approve_mailing/$', mailing.approve_mailing, name='approve_mailing'),
+    url(r'^faq/$', views.Faq.as_view(), name='faq'),
 )
