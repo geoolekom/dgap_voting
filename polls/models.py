@@ -86,4 +86,4 @@ class QA(models.Model):
 
     class Meta:
         verbose_name = 'Question/Answer'
-        verbose_name_plural = 'Faq'
+        verbose_name_plural = 'FAQ'
