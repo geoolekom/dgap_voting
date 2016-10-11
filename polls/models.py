@@ -78,3 +78,12 @@ class QA(models.Model):
                                 default=VOTING)
     question = models.CharField(max_length=800)
     answer = BleachField(max_length=800)
+
+    def __str__(self):
+        for item in self.AUDIENCE_CHOICES:
+            if item[0] == self.audience:
+                return item[1] + ': ' + self.question
+
+    class Meta:
+        verbose_name = 'Question/Answer'
+        verbose_name_plural = 'Faq'
