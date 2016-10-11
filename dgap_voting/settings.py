@@ -90,7 +90,7 @@ CACHES = {
 }
 
 #BOOTSTRAP3 = {
-#    'include_jquery': True,  
+#    'include_jquery': True,
 #}
 
 SENDFILE_BACKEND = 'sendfile.backends.development'
@@ -128,7 +128,7 @@ DATABASES = {
         'ENGINE':'django.db.backends.postgresql_psycopg2',
         'NAME': 'dgap_voting_db',
         'USER': 'postgres',
-        'PASSWORD': 'postgres2014', 
+        'PASSWORD': 'postgres2014',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     },
@@ -144,7 +144,8 @@ DATABASES = {
 
 
 # Bleach default settings
-BLEACH_ALLOWED_TAGS = ['b', 'i', 'u', 's', 'a', 'p', 'div', 'ul', 'li', 'img', 'h1', 'h2', 'h3']
+BLEACH_ALLOWED_TAGS = ['b', 'i', 'u', 's', 'a', 'p', 'div', 'ul', 'li', 'img',
+                       'h1', 'h2', 'h3', 'font']
 
 BLEACH_ALLOWED_ATTRIBUTES = ['href', 'title', 'style', 'src', 'align']
 

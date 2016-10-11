@@ -60,3 +60,32 @@ img.centered {
   }
 }
 
+.faq .panel-body {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.arrow-down {
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 7px solid silver;
+}
+
+.arrow-down:hover {
+    border-top-color: gray;
+}
+
+.arrow-up {
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid silver;
+    display: None;
+}
+
+.arrow-up:hover {
+    border-top-color: gray;
+}

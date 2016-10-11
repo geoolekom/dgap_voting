@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django_bleach.models import BleachField
 import re
 
 class Poll(models.Model):
@@ -9,7 +10,7 @@ class Poll(models.Model):
     begin_date = models.DateTimeField('Начало голосования')
     end_date = models.DateTimeField('Конец голосования')
     target_room = models.CharField('Целевая комната', max_length=200, default = r'^') #предполагается использование регулярных выражений
-    target_group = models.CharField('Целевая группа', max_length=200, default = r'^') 
+    target_group = models.CharField('Целевая группа', max_length=200, default = r'^')
     public = models.BooleanField('Открытое голосование', default = True)
     ONE = 'ONE'
     MANY = 'MANY'
@@ -30,7 +31,7 @@ class Poll(models.Model):
     voted_users = models.ManyToManyField(User)
     times_mailed = models.IntegerField(default=0, blank=True) #how many times the mailing was made
     last_mailing = models.DateTimeField('Последняя рассылка', null=True) #when was the last informational mailing made
-    
+
     def __str__(self):
         return self.name
     def is_closed(self):
@@ -66,4 +67,14 @@ class UserHash(models.Model):
     choice = models.ForeignKey(Choice)
     user = models.ForeignKey(User, null=True, blank=True, default = None)#при анонимном голосовании не заполнять это поле
 
-
+class QA(models.Model):
+    VOTING = 'VOTING'
+    ORGANAZIER = 'ORGANAZIER'
+    AUDIENCE_CHOICES = (
+        (VOTING, 'Голосующему'),
+        (ORGANAZIER, 'Организатору голосования'),
+    )
+    audience = models.CharField(max_length=30, choices=AUDIENCE_CHOICES,
+                                default=VOTING)
+    question = models.CharField(max_length=800)
+    answer = BleachField(max_length=800)

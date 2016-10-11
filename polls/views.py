@@ -1,5 +1,5 @@
 from django.template import RequestContext, loader
-from polls.models import Choice, Poll, UserHash
+from polls.models import Choice, Poll, UserHash, QA
 from profiles.models import UserProfile
 from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
@@ -93,9 +93,13 @@ class Results(generic.DetailView):
     def get_queryset(self):
         return Poll.objects.filter(end_date__lte=timezone.now())
 
-#TODO: Implement FAQ as set of Q/A, not as huge HTML-file
-class Faq(generic.TemplateView):
+class Faq(generic.ListView):
+    model = QA
     template_name = 'polls/faq.html'
+
+    def get_queryset(self):
+        return [(item, QA.objects.filter(audience=item[0]))
+                for item in QA.AUDIENCE_CHOICES]
 
 def is_staff(user):
     return user.is_staff
