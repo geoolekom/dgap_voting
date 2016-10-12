@@ -65,6 +65,9 @@ img.centered {
     padding-bottom: 4px;
 }
 
+.faq .panel-info > .panel-heading {
+    cursor: pointer;
+}
 .arrow-down {
     width: 0;
     height: 0;
