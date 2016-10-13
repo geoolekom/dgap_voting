@@ -79,7 +79,7 @@
                 <li class="nav-divider"></li>
             </ul>  
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{%  url 'polls:faq' %}">FAQ</a></li>
+                <li><a href="{%  url 'faq:faq' %}">FAQ</a></li>
                 <li class="nav-divider"></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'profiles:profile_view' %}">Профиль</a></li>

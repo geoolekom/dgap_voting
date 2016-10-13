@@ -1,11 +1,7 @@
-from django.template import RequestContext, loader
-from polls.models import Choice, Poll, UserHash, QA
+from polls.models import Choice, Poll, UserHash
 from profiles.models import UserProfile
-from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
-from django.core.urlresolvers import reverse
 from django.views import generic
-import re
 from random import randint
 from django.contrib import messages
 from django.utils import timezone
@@ -14,14 +10,7 @@ from sendfile import sendfile
 import os.path
 from django.conf import settings
 import subprocess
-from django_bleach.models import BleachField
-import pyqrcode
-from django.core.exceptions import PermissionDenied
-from django.core.management import call_command
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.views.generic.edit import UpdateView, DeleteView
-from django.core.urlresolvers import reverse_lazy
-from django.utils.decorators import method_decorator
 import logging
 from django.db.models import F
 
@@ -79,12 +68,14 @@ class Index(Closed, Available):
         else:
             return Closed.get_queryset(self)
 
+
 class Detail(generic.DetailView):
     model = Poll
     template_name = 'polls/detail.html'
 
     #def get_queryset(self):
     #    return Poll.objects.filter(begin_date__lte=timezone.now(), end_date__gte=timezone.now())
+
 
 class Results(generic.DetailView):
     model = Poll
@@ -93,13 +84,6 @@ class Results(generic.DetailView):
     def get_queryset(self):
         return Poll.objects.filter(end_date__lte=timezone.now())
 
-class Faq(generic.ListView):
-    model = QA
-    template_name = 'polls/faq.html'
-
-    def get_queryset(self):
-        return [(item, QA.objects.filter(audience=item[0]))
-                for item in QA.AUDIENCE_CHOICES]
 
 def is_staff(user):
     return user.is_staff
@@ -116,6 +100,7 @@ def voters(request, poll_id):
         'voters': people,
         'voters_num': len(people)
     })
+
 
 def make_csv(p, filename):
     try:
@@ -158,6 +143,7 @@ def make_csv(p, filename):
     else:
         return True
 
+
 def make_win_csv(oldfilename, filename):
     error = subprocess.call(["iconv", "-t", "WINDOWS-1251", oldfilename, "-o", filename])
     if error:
@@ -185,12 +171,14 @@ def detailed(request, poll_id):
                 return redirect('polls:done')
     return sendfile(request, filename, attachment=True, attachment_filename="{}.csv".format(p.name))
 
+
 def done(request):
     storage = messages.get_messages(request)
     if storage:
         return render(request, 'polls/done.html')
     else:
         return redirect('polls:index')
+
 
 def vote(request, poll_id):
     p = get_object_or_404(Poll, pk=poll_id, begin_date__lte=timezone.now(), end_date__gte=timezone.now())

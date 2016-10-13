@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django_bleach.models import BleachField
 import re
 
 class Poll(models.Model):
@@ -66,24 +65,3 @@ class UserHash(models.Model):
 #надо переосмыслить предыдущий комментарий
     choice = models.ForeignKey(Choice)
     user = models.ForeignKey(User, null=True, blank=True, default = None)#при анонимном голосовании не заполнять это поле
-
-class QA(models.Model):
-    VOTING = 'VOTING'
-    ORGANAZIER = 'ORGANAZIER'
-    AUDIENCE_CHOICES = (
-        (VOTING, 'Голосующему'),
-        (ORGANAZIER, 'Организатору голосования'),
-    )
-    audience = models.CharField(max_length=30, choices=AUDIENCE_CHOICES,
-                                default=VOTING)
-    question = models.CharField(max_length=800)
-    answer = BleachField(max_length=800)
-
-    def __str__(self):
-        for item in self.AUDIENCE_CHOICES:
-            if item[0] == self.audience:
-                return item[1] + ': ' + self.question
-
-    class Meta:
-        verbose_name = 'Question/Answer'
-        verbose_name_plural = 'FAQ'

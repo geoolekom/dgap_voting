@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'social.apps.django_app.default',
     'servertime',
     'profiles',
+    'faq',
 )
 
 TEMPLATES = [

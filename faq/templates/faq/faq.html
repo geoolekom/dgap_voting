@@ -4,6 +4,7 @@
 {% load bleach_tags %}
 
 {% for audience, qa_list in object_list %}
+<div class="row">
 <div class="faq">
     <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
         <div class="panel panel-info" id="panel-info-{{ audience.0 }}">
@@ -38,6 +39,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <script>

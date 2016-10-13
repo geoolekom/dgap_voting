@@ -1,5 +1,5 @@
 from django.contrib import admin
-from polls.models import Poll, Choice, QA
+from polls.models import Poll, Choice
 from django.contrib.sites.models import Site
 from django.utils.safestring import mark_safe
 import os
@@ -43,4 +43,3 @@ class PollAdmin(admin.ModelAdmin):
     list_display=['name', 'pdf_button', 'audit_button', 'mailing_button',]
 
 admin.site.register(Poll, PollAdmin)
-admin.site.register(QA)
