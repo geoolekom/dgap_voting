@@ -3,16 +3,17 @@
 
 {% load bleach_tags %}
 
-{% for audience, qa_list in object_list %}
 <div class="row">
 <div class="faq">
     <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+    {% for audience, qa_list in object_list %}
         <div class="panel panel-info" id="panel-info-{{ audience.0 }}">
-            <div class="panel-heading clearfix">
+            <input type="radio" id="radio-collapse-{{ audience.0 }}" class="radio-collapse" data-toggle="collapse" href="#panel-all-body-{{ audience.0 }}">
+            <label class="panel-heading clearfix" for="radio-collapse-{{ audience.0 }}">
                 <h1 class="panel-title pull-left">{{ audience.1 }}</h1>
                 <div class="arrow-down pull-right"></div>
                 <div class="arrow-up pull-right"></div>
-            </div>
+            </label>
             <div id="panel-all-body-{{ audience.0 }}" class="panel-collapse collapse in">
                 {% for qa in qa_list %}
                 <div class="panel-body" style="padding-left:4px; padding-right:4px">
@@ -38,22 +39,8 @@
                 {% endfor %}
             </div>
         </div>
+    {% endfor %}
     </div>
 </div>
 </div>
-
-<script>
-$( document.getElementById("panel-info-" + "{{ audience.0 }}")).click(function() {
-    $( "#panel-all-body-" + "{{ audience.0 }}" ).toggle( "fold" );
-    if ($(this).find( ".arrow-down" ).is(":visible")) {
-        $(this).find( ".arrow-down" ).hide();
-        $(this).find( ".arrow-up" ).show();
-    } else {
-        $(this).find( ".arrow-down" ).show();
-        $(this).find( ".arrow-up" ).hide();
-    }
-});
-</script>
-
-{% endfor %}
 {% endblock content %}

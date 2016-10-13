@@ -68,6 +68,16 @@ img.centered {
 .faq .panel-info > .panel-heading {
     cursor: pointer;
 }
+
+.faq input[type="radio"].radio-collapse {
+    display: none;
+}
+
+label.panel-heading {
+	display: block;
+    margin: 0;
+}
+
 .arrow-down {
     width: 0;
     height: 0;
