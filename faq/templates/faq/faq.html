@@ -7,7 +7,7 @@
 <div class="faq">
     <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
     {% for audience, qa_list in object_list %}
-        <div class="panel panel-info" id="panel-info-{{ audience.0 }}">
+        <div class="panel panel-info">
             <input type="radio" id="radio-collapse-{{ audience.0 }}" class="radio-collapse" data-toggle="collapse" href="#panel-all-body-{{ audience.0 }}">
             <label class="panel-heading clearfix" for="radio-collapse-{{ audience.0 }}">
                 <h1 class="panel-title pull-left">{{ audience.1 }}</h1>

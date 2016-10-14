@@ -69,7 +69,7 @@ img.centered {
     cursor: pointer;
 }
 
-.faq input[type="radio"].radio-collapse {
+input[type="radio"].radio-collapse {
     display: none;
 }
 
