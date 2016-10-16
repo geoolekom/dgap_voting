@@ -195,13 +195,13 @@ def vote(request, poll_id):
     if not p.is_user_target(user):
         messages.error(request, 'Вы не являетесь целевой аудиторией голосования')
         return redirect('polls:detail', pk=poll_id)
-    choices = list(set(request.POST.getlist('choice', False)))
+    choices = request.POST.getlist('choice', False)
     if not choices:
         messages.error(request, 'Вы не выбрали вариант ответа')
         return redirect('polls:detail', pk=poll_id)
+    choices = list(set(choices))
     p.voted_users.add(user)
     userHashes = [1] * len(choices)
-    message = 'Ваш голос учтён. Идентификационные ключи, соответствующие вашему выбору:\n'
     if p.answer_type == 'OWN':
         c = p.choice_set.create(choice_text=choices[0], votes = 0)
         choices[0] = c.pk
@@ -209,6 +209,7 @@ def vote(request, poll_id):
         if len(choices) > 1:
             messages.error(request, 'Вы должны выбрать один вариант ответа')
             return redirect('polls:detail', pk=poll_id)
+    message = 'Ваш голос учтён. Идентификационные ключи, соответствующие вашему выбору:\n'
     for i in range(len(choices)):
         selected_choice = p.choice_set.get(pk=choices[i])
         selected_choice.votes = F('votes') + 1

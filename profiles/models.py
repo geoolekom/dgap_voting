@@ -56,13 +56,13 @@ class UserProfile(models.Model):
     is_approved = models.BooleanField('Пользователь подтверждён', default = False)
     is_subscribed = models.BooleanField('Пользователь подписан на рассылку', default=True)
 
-    def __str__(self):  
-        return "Профиль для %s" % self.user 
+    def __str__(self):
+        return "Профиль для %s" % self.user
 
 
-def create_user_profile(sender, instance, created, **kwargs):  
-    if created:  
-        profile, created = UserProfile.objects.get_or_create(user=instance) 
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        profile, created = UserProfile.objects.get_or_create(user=instance)
 
 
 post_save.connect(create_user_profile, sender=User)
