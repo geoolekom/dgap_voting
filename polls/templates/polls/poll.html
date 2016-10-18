@@ -2,11 +2,12 @@
 
 	<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 		<div class="panel panel-{% if not poll.is_closed %}primary{% else %}info{% endif %}">
-			<div class="panel-heading clearfix">
+            <input type="radio" id="radio-collapse-{{ poll.name }}" class="radio-collapse" data-toggle="collapse" href="#panel-body-{{ poll.name }}">
+			<label class="panel-heading clearfix" for="radio-collapse-{{ poll.name }}">
 				<h1 class="panel-title pull-left">{{ poll.name }} </h1> 
 				<h1 class="panel-title pull-right">{% if not poll.is_closed %}{% else %}Завершено{% endif %}</h1> 
-			</div>
-			<div class="panel-body" style="padding-left:4px; padding-right:4px">
+			</label>
+			<div class="panel-collapse collapse in" id="panel-body-{{ poll.name }}" style="padding-left:4px; padding-right:4px">
 				<div class="col-xs-9" style="padding-right:4px">
 					{% if not poll.is_closed %}
 					<div class="panel panel-default">
