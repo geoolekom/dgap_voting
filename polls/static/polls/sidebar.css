@@ -65,17 +65,14 @@ img.centered {
     padding-bottom: 4px;
 }
 
-.faq .panel-info > .panel-heading {
-    cursor: pointer;
-}
-
 input[type="radio"].radio-collapse {
     display: none;
 }
 
 label.panel-heading {
-	display: block;
+    display: block;
     margin: 0;
+    cursor: pointer;
 }
 
 .arrow-down {
