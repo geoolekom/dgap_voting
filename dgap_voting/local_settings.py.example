@@ -1,0 +1,10 @@
+import os
+
+DATABASES = {
+    'default': {
+        'ENGINE':'django.db.backends.postgresql_psycopg2',
+        'NAME': 'dgap_voting_db_test',
+        'USER': 'postgres',
+        'PASSWORD': '',
+    }
+}
