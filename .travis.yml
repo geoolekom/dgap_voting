@@ -1,0 +1,15 @@
+language: python
+services:
+    - potgresql
+python:
+    - "3.2"
+    - "3.3"
+    - "3.4"
+    - "3.5"
+install: "pip3 install -r requirements.txt"
+before_script:
+    - cp dgap_voting/local_settings.py.example dgap_voting/local_settings.py
+    - psql -c 'create database dgap_voting_db_test;' -U postgres
+    - python manage.py syncdb --migrate --no-input
+script:
+    - python manage.py test

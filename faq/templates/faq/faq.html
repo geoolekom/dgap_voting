@@ -8,13 +8,12 @@
     <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
     {% for audience, qa_list in object_list %}
         <div class="panel panel-info">
-            <input type="radio" id="radio-collapse-{{ audience.0 }}" class="radio-collapse" data-toggle="collapse" href="#panel-all-body-{{ audience.0 }}">
-            <label class="panel-heading clearfix" for="radio-collapse-{{ audience.0 }}">
+            <div class="panel-heading clearfix">
                 <h1 class="panel-title pull-left">{{ audience.1 }}</h1>
                 <div class="arrow-down pull-right"></div>
                 <div class="arrow-up pull-right"></div>
-            </label>
-            <div id="panel-all-body-{{ audience.0 }}" class="panel-collapse collapse in">
+            </div>
+            <div class="panel-collapse collapse in">
                 {% for qa in qa_list %}
                 <div class="panel-body" style="padding-left:4px; padding-right:4px">
                     <div class="col-xs-13" style="padding-right:4px">
