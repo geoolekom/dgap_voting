@@ -89,9 +89,8 @@
                     <li><a href="{% url 'registration_register' %}">Регистрация</a></li>
                     <li><a href="{% url 'login' %}">Вход</a></li>
 					{% endcomment %}
-					<li><a href="{% url 'social:begin' 'vk-oauth2' %}?next={% url 'polls:index' %}">Войти через vk</a>
-					<li><a href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'polls:index' %}">Войти через phystech.edu</a>
-</li>
+					<li><a href="{% url 'social:begin' 'vk-oauth2' %}?next={% url 'polls:index' %}">Войти через vk</a></li>
+					<li><a href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'polls:index' %}">Войти через phystech.edu</a></li>
                 {% endif %}
             </ul>
         </div>
