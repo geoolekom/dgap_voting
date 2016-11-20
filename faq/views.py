@@ -7,5 +7,5 @@ class Faq(generic.ListView):
     template_name = 'faq/faq.html'
 
     def get_queryset(self):
-        return [(item, QA.objects.filter(audience=item[0]))
+        return [(item, QA.objects.filter(audience=item[0]).order_by('id'))
                 for item in QA.AUDIENCE_CHOICES]
