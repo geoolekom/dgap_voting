@@ -47,14 +47,23 @@ class LegacyDorm(models.Model):
         in_db = 'legacy_users'
 
 
+class UserInformation(models.Model):
+    fio = models.CharField('ФИО', max_length=100, null=True, blank=True)
+    group = models.CharField('Группа', max_length=10, null=True, blank=True)
+    course = models.IntegerField(default=0)
+    phystech = models.CharField('phystech.edu', max_length=50, null=True, blank=True)
+    vk = models.CharField('vk', max_length=50, null=True, blank=True)
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     dorm = models.IntegerField(default=0)
     middlename = models.CharField('Отчество', max_length=100, blank=True)
     group = models.CharField('Номер группы', max_length=5, blank=True)
     room = models.CharField('Номер комнаты', max_length=4, blank=True)
-    is_approved = models.BooleanField('Пользователь подтверждён', default = False)
+    is_approved = models.BooleanField('Пользователь подтверждён', default=False)
     is_subscribed = models.BooleanField('Пользователь подписан на рассылку', default=True)
+    user_information = models.ForeignKey(UserInformation, default=None, null=True, blank=True)
 
     def __str__(self):
         return "Профиль для %s" % self.user
