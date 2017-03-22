@@ -1,3 +1,5 @@
+from django.core.exceptions import MultipleObjectsReturned
+
 from profiles.models import UserProfile, LegacyUser, LegacyDorm
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
@@ -6,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import UpdateView
 from django.core.urlresolvers import reverse_lazy
 from django.utils.decorators import method_decorator
+from profiles.models import UserInformation
 
 
 def find_user(request): 
@@ -63,32 +66,31 @@ def change_subscribing_status(request):
 @login_required
 def profile_view(request):
     user = request.user
-    profile = user.userprofile
     mipt = False
     phystech = False
-    if not profile.is_approved and user.social_auth.exists():
-        candidate = find_user(request)
-        if candidate:
-            if len(candidate) > 1:
-                messages.error(request, 'В базе более одного студента с данными ФИО. Пожалуйста, напишите на vote@dgap.mipt.ru, указывая тему письма "Проблемы при регистрации"')
-            elif is_registered(candidate[0].id):
-                messages.error(request, 'Пользователь с такими данными уже зарегистрирован. Если вы уверены в правильности введённых данных, пишите на vote@dgap.mipt.ru, указывая тему письма "Проблемы при регистрации"')
-            else:
-                candidate = candidate[0]
-                profile.dorm = candidate.id
-                profile.group = candidate.group
-                profile.room = candidate.room
-                profile.is_approved = True 
-                profile.save()
-                messages.success(request, "Регистрация пройдена. Теперь вы можете участвовать в голосовании")
-        else:
-            messages.error(request, 'Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите на vote@dgap.mipt.ru, указывая тему письма "Проблемы при регистрации"')
     if user.social_auth.exists():
-        if user.social_auth.filter(provider='mipt-oauth2'):
-            mipt = user.social_auth.get(provider='mipt-oauth2').extra_data['login']
         if user.social_auth.filter(provider='google-oauth2'):
-            #phystech = user.social_auth.get(provider='google-oauth2').login
+            user_informations = UserInformation.objects.filter(phystech=user.email)
+            if len(user_informations) == 1:
+                if not user.userprofile.is_approved:
+                    messages.error(request, 'Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите организатору голосования')
+            elif len(user_informations) < 1:
+                messages.error(request, 'Вы не прошли автоматическую верификацию, пишите организатору голосования')
+            else:
+                messages.error(request, 'В базе более одного студента с данной почтой. Вы можете попробовать авторизоваться через vk или напишите организатору голосования')
             phystech = user.social_auth.get(provider='google-oauth2').uid
+        elif user.social_auth.filter(provider='vk-oauth2'):
+            user_informations = UserInformation.objects.filter(vk='https://vk.com/' + user.username)
+            if len(user_informations) == 1:
+                if user.userprofile.is_approved:
+                    phystech = user.userprofile.user_information.phystech
+                else:
+                    messages.error(request, 'Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите организатору голосования')
+            elif len(user_informations) < 1:
+                messages.error(request, 'Вы не прошли автоматическую верификацию, пишите организатору голосования"')
+                messages.error(request, 'В базе более одного студента с данным профилем VK. Вы можете попробовать авторизоваться через phystech.edu или напишите организатору голосования')
+        else:
+            messages.error(request, 'Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите организатору голосования')
 
     return render(request, 'profiles/profile.html', {
         'mipt': mipt,

@@ -1,6 +1,7 @@
 """
 Here are some functions I need working with python-social-auth
 """
+from profiles.models import UserInformation
 
 
 def set_middlename(backend, user, response, *args, **kwargs):
@@ -17,6 +18,34 @@ def set_middlename(backend, user, response, *args, **kwargs):
     elif backend.name == 'mipt-oauth2':
         user.userprofile.middlename = response['secondname']
         user.userprofile.save()
+
+    if backend.name == 'google-oauth2':
+        user_informations = UserInformation.objects.filter(phystech__iexact=user.email)
+        if len(user_informations) == 1:
+            user.userprofile.is_approved = True
+            user.userprofile.user_information = user_informations[0]
+            user.userprofile.group = user_informations[0].group
+            user.userprofile.save()
+        elif len(user_informations) < 1:
+            user.userprofile.is_approved = False
+            user.userprofile.save()
+        else:
+            user.userprofile.is_approved = False
+            user.userprofile.save()
+    elif backend.name == 'vk-oauth2':
+        user_informations = UserInformation.objects.filter(vk='https://vk.com/' + user.username)
+        if len(user_informations) == 1:
+            user.userprofile.is_approved = True
+            user.userprofile.user_information = user_informations[0]
+            user.userprofile.group = user_informations[0].group
+            user.userprofile.save()
+        elif len(user_informations) < 1:
+            user.userprofile.is_approved = False
+            user.userprofile.save()
+        else:
+            user.userprofile.is_approved = False
+            user.userprofile.save()
+
 
 
 from social.apps.django_app.middleware import SocialAuthExceptionMiddleware

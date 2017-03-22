@@ -57,11 +57,11 @@
 						</tr>
 						<tr>
 							<td>Аккаунт phystech.edu</td>
-							{% if not phystech %}
-								<td><a class="btn btn-success" role="button" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт</a></td>
-							{% else %}
-							<td>{{ phystech }}<td>
-							{% endif %}
+                            {% if phystech %}
+							    <td>{{ phystech }}<td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
 						</tr>
 						{% comment %}
 						<tr>

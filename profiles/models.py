@@ -59,7 +59,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     dorm = models.IntegerField(default=0)
     middlename = models.CharField('Отчество', max_length=100, blank=True)
-    group = models.CharField('Номер группы', max_length=5, blank=True)
+    group = models.CharField('Номер группы', max_length=10, blank=True)
     room = models.CharField('Номер комнаты', max_length=4, blank=True)
     is_approved = models.BooleanField('Пользователь подтверждён', default=False)
     is_subscribed = models.BooleanField('Пользователь подписан на рассылку', default=True)
