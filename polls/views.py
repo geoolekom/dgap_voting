@@ -156,7 +156,8 @@ def make_csv(p, filename):
                 writer.writerow(["Участники"])
                 if p.poll_type == Poll.TARGET_LIST:
                     for participate in p.participant_set.all():
-                        writer.writerow(participate.user_information.fio)
+                        if participate.voted:
+                            writer.writerow([participate.user_information.fio])
                 else:
                     for user in p.voted_users.order_by('last_name', 'first_name'):
                         writer.writerow(["{} {} {}".format(user.last_name, user.first_name, user.userprofile.middlename )])
@@ -192,7 +193,7 @@ def detailed(request, poll_id):
                 message = "Результаты недоступны в данный момент, попробуйте позже."
                 messages.warning(request, message)
                 return redirect('polls:done')
-    return sendfile(request, filename, attachment=True, attachment_filename="{}.csv".format(p.name))
+    return sendfile(request, filename, attachment=True, attachment_filename="poll{}.csv".format(poll_id))
 
 
 def done(request):

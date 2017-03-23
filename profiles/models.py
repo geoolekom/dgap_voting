@@ -55,6 +55,7 @@ class UserInformation(models.Model):
     vk = models.CharField('vk', max_length=50, null=True, blank=True)
 
 
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     dorm = models.IntegerField(default=0)

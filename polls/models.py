@@ -127,6 +127,9 @@ class Participant(models.Model):
     poll = models.ForeignKey(Poll, default=None, null=True, blank=True)
     voted = models.BooleanField(default=False)
 
+    def __str__(self):
+        return "%s" % self.user_information.fio
+
 
 class Choice(models.Model):
     poll = models.ForeignKey(Poll)

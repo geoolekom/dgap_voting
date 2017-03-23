@@ -4,6 +4,16 @@ from django.contrib.sites.models import Site
 from django.utils.safestring import mark_safe
 import os
 from django.core.urlresolvers import reverse
+from polls.models import Participant
+
+
+class ParticipantInline(admin.TabularInline):
+    model = Participant
+    exclude = ('user_information', )
+    fields = ('voted', )
+
+    list_dispay = ['userprofile']
+
 
 class ChoiceInline(admin.TabularInline):
     model = Choice
@@ -39,7 +49,7 @@ class PollAdmin(admin.ModelAdmin):
     mailing_button.short_description = 'Уведомление о голосовании'
 
     exclude = ('voted_users', 'times_mailed', 'last_mailing',)
-    inlines = [ChoiceInline,]
+    inlines = [ChoiceInline, ParticipantInline, ]
     list_display=['name', 'pdf_button', 'audit_button', 'mailing_button',]
 
 admin.site.register(Poll, PollAdmin)
