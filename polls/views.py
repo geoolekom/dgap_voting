@@ -104,7 +104,16 @@ def is_staff(user):
 def voters(request, poll_id):
     poll_obj = get_object_or_404(Poll, pk=poll_id)
 
-    people = [voter for voter in UserProfile.objects.all().order_by('user__last_name') if voter.is_approved and poll_obj.is_user_target(voter.user)]
+    if poll_obj.poll_type == Poll.TARGET_LIST:
+        raw_people = [voter.user_information for voter in poll_obj.participant_set.all() if voter.user_information]
+        people = []
+        for item in raw_people:
+            if hasattr(item, 'userprofile_set'):
+                if item.userprofile_set:
+                    people.append(item.userprofile_set.all()[0])
+    else:
+        people = [voter for voter in UserProfile.objects.all().order_by('user__last_name') if voter.is_approved and poll_obj.is_user_target(voter.user)]
+
 
     return render(request, 'polls/people.html', {
         'voters': people,
@@ -145,8 +154,12 @@ def make_csv(p, filename):
             if not p.public:
                 writer.writerow([])
                 writer.writerow(["Участники"])
-                for user in p.voted_users.order_by('last_name', 'first_name'):
-                    writer.writerow(["{} {} {}".format(user.last_name, user.first_name, user.userprofile.middlename )])
+                if p.poll_type == Poll.TARGET_LIST:
+                    for participate in p.participant_set.all():
+                        writer.writerow(participate.user_information.fio)
+                else:
+                    for user in p.voted_users.order_by('last_name', 'first_name'):
+                        writer.writerow(["{} {} {}".format(user.last_name, user.first_name, user.userprofile.middlename )])
     except FileExistsError as e:
         logger.warning(e)
         return False
