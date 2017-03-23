@@ -58,7 +58,9 @@ class Poll(models.Model):
 
     def is_user_voted(self, user):
         if self.poll_type == Poll.TARGET_LIST:
-            participants = user.userprofile.participant_set.all()
+            if not hasattr(user.userprofile.user_information, 'participant_set'):
+                return True
+            participants = user.userprofile.user_information.participant_set.all()
             if not participants:
                 return True
             for item in participants:
@@ -70,7 +72,9 @@ class Poll(models.Model):
 
     def is_user_target(self, user):
         if self.poll_type == Poll.TARGET_LIST:
-            participants = user.userprofile.participant_set.all()
+            if not hasattr(user.userprofile.user_information, 'participant_set'):
+                return False
+            participants = user.userprofile.user_information.participant_set.all()
             if not participants:
                 return False
             for item in participants:
