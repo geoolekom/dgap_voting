@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.utils import timezone
 import re
 
-from profiles.models import UserInformation
+from profiles.models import UserInformation, UserProfile
 
 
 class Poll(models.Model):
@@ -43,6 +43,7 @@ class Poll(models.Model):
     )
     poll_type = models.CharField('Тип голосования', max_length=30, choices=POLL_TYPE,
                                  default=WITHOUT_TARGET_LIST)
+    only_for_staff = models.BooleanField(default=False)
     # target_list = models.ManyToManyField(UserInformation)
     # voted_users_from_list = models.ManyToManyField(UserInformation)
 
@@ -86,9 +87,22 @@ class Poll(models.Model):
         else:
             return self.choice_set.all().order_by(self.choices_order)
 
-    def create_target_list_from_group_room_course(self, group=None, room=None, course=None):
+    def create_target_list_from_group_room_course(self, group=None, room=None, course=None,
+                                                  only_staff=False):
         if self.poll_type != self.TARGET_LIST:
             return
+
+        if only_staff:
+            users = UserProfile.objects.filter(user__is_staff=True).all()
+            for user in users:
+                if user.user_information:
+                    if not self.participant_set.filter(user_information=user.user_information):
+                        Participant.objects.create(user_information=user.user_information,
+                                                   poll=self, voted=False)
+            self.only_for_staff = True
+            self.save()
+            return
+
         target_list = None
         for item in list(zip([group, room, course], ['group', 'room', 'course'])):
             if item[0] is not None:

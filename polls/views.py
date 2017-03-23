@@ -39,7 +39,9 @@ class Voted(IndexBase):
 
     def get_queryset(self):
         if self.request.user.is_authenticated():
-            return [poll for poll in Poll.objects.filter(end_date__gte=timezone.now()).order_by('-begin_date') if poll.is_user_voted(self.request.user)]
+            polls = [poll for poll in Poll.objects.filter(end_date__gte=timezone.now()).order_by('-begin_date') if poll.is_user_voted(self.request.user)]
+
+            return [poll for poll in polls if not poll.poll_type == Poll.TARGET_LIST or not poll.only_for_staff]
         else:
             return []
 
@@ -51,7 +53,8 @@ class Available(IndexBase):
 
     def get_queryset(self):
         if self.request.user.is_authenticated():
-            return [poll for poll in Poll.objects.filter(begin_date__lte=timezone.now()).filter(end_date__gte=timezone.now()).order_by('-begin_date') if poll.is_user_target(self.request.user) and not poll.is_user_voted(self.request.user)]
+            polls = [poll for poll in Poll.objects.filter(begin_date__lte=timezone.now()).filter(end_date__gte=timezone.now()).order_by('-begin_date') if poll.is_user_target(self.request.user) and not poll.is_user_voted(self.request.user)]
+            return [poll for poll in polls if not poll.poll_type == Poll.TARGET_LIST or not poll.only_for_staff]
         else:
             return []
 
