@@ -200,7 +200,17 @@ def vote(request, poll_id):
         messages.error(request, 'Вы не выбрали вариант ответа')
         return redirect('polls:detail', pk=poll_id)
     choices = list(set(choices))
-    p.voted_users.add(user)
+
+    if p.poll_type == Poll.TARGET_LIST:
+        participate = user.userprofile.user_information.participant_set.all()
+        for item in participate:
+            if item.poll.id == p.id:
+                item.voted = True
+                item.save()
+    else:
+        p.voted_users.add(user)
+
+
     userHashes = [1] * len(choices)
     if p.answer_type == 'OWN':
         c = p.choice_set.create(choice_text=choices[0], votes = 0)

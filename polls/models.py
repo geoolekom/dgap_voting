@@ -57,13 +57,27 @@ class Poll(models.Model):
 
     def is_user_voted(self, user):
         if self.poll_type == Poll.TARGET_LIST:
+            participants = user.userprofile.participant_set.all()
+            if not participants:
+                return True
+            for item in participants:
+                if item.poll.id == self.id:
+                    return False if not item.voted else True
             return True
         else:
             return self.voted_users.filter(pk=user.pk).exists()
 
-
     def is_user_target(self, user):
-        return ((re.compile(self.target_room, re.IGNORECASE)).match(user.userprofile.room) and
+        if self.poll_type == Poll.TARGET_LIST:
+            participants = user.userprofile.participant_set.all()
+            if not participants:
+                return False
+            for item in participants:
+                if item.poll.id == self.id:
+                    return True
+            return False
+        else:
+            return ((re.compile(self.target_room, re.IGNORECASE)).match(user.userprofile.room) and
             (re.compile(self.target_group, re.IGNORECASE)).match(user.userprofile.group))
 
     def get_ordered_choices(self):
