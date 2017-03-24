@@ -112,11 +112,11 @@ class Poll(models.Model):
             if item[0] is not None:
                 if target_list is None:
                     target_list = UserInformation.objects.filter(
-                        {item[1]+'__iregex', item[0]}
+                        **{str(item[1])+'__iregex': item[0]}
                     ).all()
                 else:
                     target_list = self.target_list.objects.filter(
-                        {item[1]+'__iregex', item[0]}
+                        **{str(item[1])+'__iregex': item[0]}
                     )
         for user in target_list:
             Participant.objects.create(user_information=user, poll=self, voted=False)

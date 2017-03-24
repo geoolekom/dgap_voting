@@ -70,7 +70,7 @@ def profile_view(request):
     phystech = False
     if user.social_auth.exists():
         if user.social_auth.filter(provider='google-oauth2'):
-            user_informations = UserInformation.objects.filter(phystech=user.email)
+            user_informations = UserInformation.objects.filter(phystech__iexact=user.email)
             if len(user_informations) == 1:
                 if not user.userprofile.is_approved:
                     messages.error(request, 'Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите организатору голосования')

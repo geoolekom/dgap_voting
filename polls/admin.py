@@ -11,9 +11,9 @@ class ParticipantInline(admin.TabularInline):
     model = Participant
     exclude = ('user_information', )
     fields = ('voted', )
+    ordering = ('user_information', )
 
     list_dispay = ['userprofile']
-
 
 class ChoiceInline(admin.TabularInline):
     model = Choice

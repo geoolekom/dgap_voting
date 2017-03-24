@@ -109,7 +109,7 @@ def voters(request, poll_id):
         people = []
         for item in raw_people:
             if hasattr(item, 'userprofile_set'):
-                if item.userprofile_set:
+                if item.userprofile_set.all():
                     people.append(item.userprofile_set.all()[0])
     else:
         people = [voter for voter in UserProfile.objects.all().order_by('user__last_name') if voter.is_approved and poll_obj.is_user_target(voter.user)]
