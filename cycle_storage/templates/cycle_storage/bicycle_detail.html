@@ -11,15 +11,19 @@
                     {% endif %}
                 </h2>
             </div>
-            <img class="panel-body">
-                <p>Производитель: {{ object.manufacturer }}</p>
-                <p>Модель: {{ object.model }}</p>
-                {% if object.place %}<p>Хранится: {{ object.place }}</p>{% endif %}
-                <p>Добавлен: {{ object.add_dttm }}</p>
-                <p>Статус: {% if object.verified %} <span style="color: green">проверен</span>
-                {% else %}<span style="color: red">не проверен</span>{% endif %}
-                </p>
-                <img src={{ object.photo.url }} width=100%>
+            <div class="panel-body">
+                {% if object %}
+                    <p>Производитель: {{ object.manufacturer }}</p>
+                    <p>Модель: {{ object.model }}</p>
+                    {% if object.place %}<p>Хранится: {{ object.place }}</p>{% endif %}
+                    <p>Добавлен: {{ object.add_dttm }}</p>
+                    <p>Статус:{% if object.verified %} <span style="color: green">проверен</span>
+                                {% else %}<span style="color: red">не проверен</span>{% endif %}</p>
+                    <img src={{ object.photo.url }} width=100%>
+                {% else %}
+                    <p>У вас нет зарегистрированных велосипедов.</p>
+                    <p><a href={% url "bicycle:bicycle_create" %}>Добавить</a></p>
+                {% endif %}
             </div>
         </div>
     </div>

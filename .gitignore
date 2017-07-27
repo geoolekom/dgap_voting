@@ -1,4 +1,7 @@
 venv/
+media/
+.idea/
 __pycache__/
 *.swp
-dgap_voting/local_settings.py
+*/local_settings.py
+*/migrations/

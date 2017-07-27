@@ -17,6 +17,8 @@ class ArticleDetail(generic.DetailView):
     model = Article
     template = "blog/article_detail"
 
+
+# Do we need to create posts NOT from admin panel?
 # @login_required()
 class ArticleCreate(generic.edit.CreateView):
     model = Article

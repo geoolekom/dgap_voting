@@ -4,11 +4,13 @@ from profiles.models import UserProfile
 
 class Bicycle(models.Model):
     owner = models.ForeignKey(UserProfile, blank=True, null=True)
-    manufacturer = models.CharField(max_length=255, default="Unknown", blank=True, null=True)
-    model = models.CharField(max_length=255, default="Unknown", blank=True, null=True)
+    manufacturer = models.CharField("Производитель", max_length=255, default="Неизвестно", blank=True, null=True)
+    model = models.CharField("Модель", max_length=255, default="Неизвестно", blank=True, null=True)
     add_dttm = models.DateTimeField('Publish datetime', auto_now_add=True)
-    photo = models.ImageField(upload_to='bicycles/')
+    photo = models.ImageField("Фотография", upload_to='bicycles/')
     verified = models.BooleanField(default=False)
+
+
 
     class Meta:
         verbose_name = "Велосипед"
@@ -20,8 +22,8 @@ class Bicycle(models.Model):
 
 # Storage room, contains several places for bicycles
 class Storage(models.Model):
-    dorm = models.CharField(max_length=255, default="6", blank=True, null=True)
-    name = models.CharField(max_length=255, default="Велокомната 6ки")
+    dorm = models.CharField("Общежитие", max_length=255, default="6", blank=True, null=True)
+    name = models.CharField("Номер места", max_length=255, default="Велокомната 6ки")
 
     class Meta:
         verbose_name = "Велохранилище"
@@ -47,7 +49,7 @@ class Storage(models.Model):
 class Place(models.Model):
     storage = models.ForeignKey(Storage)
     name = models.CharField(max_length=255)
-    bicycle = models.OneToOneField(Bicycle, default=None, blank=True, null=True)
+    bicycle = models.OneToOneField(Bicycle, on_delete=models.SET_NULL, default=None, blank=True, null=True)
 
     class Meta:
         verbose_name = "Место"
