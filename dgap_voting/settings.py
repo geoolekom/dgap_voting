@@ -45,6 +45,8 @@ INSTALLED_APPS = (
     'registration',
     'bootstrap3',
     'polls',
+    'blog',
+    'cycle_storage',
     'django_user_agents',
     'django_bleach',
     'social.apps.django_app.default',
@@ -181,6 +183,7 @@ USE_TZ = True
 MEDIA_ROOT = (os.path.join(BASE_DIR, 'media'))
 SENDFILE_ROOT = MEDIA_ROOT
 STATIC_ROOT = (os.path.join(BASE_DIR, 'static'))
+MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/'
 
