@@ -7,4 +7,3 @@ class BicycleCreateForm(forms.ModelForm):
     class Meta:
         model = Bicycle
         fields = ["manufacturer", "model", "photo"]
-

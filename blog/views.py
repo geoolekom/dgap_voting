@@ -1,7 +1,3 @@
-from django.shortcuts import redirect
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import PermissionDenied
 from django.views import generic
@@ -12,7 +8,7 @@ from .forms import ArticleCreateForm
 
 # may be not all stuff, but people with particular rights
 def can_view_hidden_post(user):
-    return user.is_superuser or user.is_stuff
+    return user.is_authenticated() and (user.is_superuser or user.is_stuff)
 
 
 class ArticleList(generic.ListView):
@@ -32,7 +28,7 @@ class ArticleDetail(generic.DetailView):
     model = Article
 
     def get_context_data(self, **kwargs):
-        context = super(ArticleList, self).get_context_data(**kwargs)
+        context = super(ArticleDetail, self).get_context_data(**kwargs)
         if not context["object"].is_visible(self.request.user):
             raise PermissionDenied
         return context

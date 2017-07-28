@@ -63,6 +63,14 @@
                                 <td></td>
                             {% endif %}
 						</tr>
+                        <tr>
+							<td>Аккаунт VK</td>
+                            {% if vk %}
+							    <td>{{ vk }}<td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+						</tr>
 						{% comment %}
 						<tr>
 						<td>Аккаунт mipt.ru</td>
@@ -100,7 +108,9 @@
 						<tr>
 							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт phystech.edu</a>
 						</tr>
-
+						<tr>
+							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'vk-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт VK</a>
+						</tr>
 					{% comment %}
 						<tr>
 							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт mipt.ru</a>

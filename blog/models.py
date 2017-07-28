@@ -17,7 +17,8 @@ class Article(models.Model):
         return reverse('blog:article_detail', args=[self.id])
 
     def is_visible(self, user):
-        return self.publish_dttm <= timezone.now() and self.hidden or user.is_superuser or user.is_staff
+        return self.publish_dttm <= timezone.now() and not self.hidden \
+               or (user.is_authenticated() and (user.is_superuser or user.is_staff))
 
     def __str__(self):
         return "{} posted: {} on {}".format(self.author.__str__(), self.title, self.publish_dttm.__str__())

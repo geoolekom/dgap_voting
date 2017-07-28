@@ -2,12 +2,17 @@ from django.db import models
 from profiles.models import UserProfile
 from django.core.urlresolvers import reverse
 
+
+def bike_photo_path(instance, filename):
+    return "bicycles/user{}_{}".format(instance.user.id, filename)
+
+
 class Bicycle(models.Model):
     owner = models.ForeignKey(UserProfile, blank=True, null=True)
     manufacturer = models.CharField("Производитель", max_length=255, default="Неизвестно", blank=True, null=True)
     model = models.CharField("Модель", max_length=255, default="Неизвестно", blank=True, null=True)
     add_dttm = models.DateTimeField('Publish datetime', auto_now_add=True)
-    photo = models.ImageField("Фотография", upload_to='bicycles/')
+    photo = models.ImageField("Фотография", upload_to=bike_photo_path)
     verified = models.BooleanField(default=False)
 
     class Meta:

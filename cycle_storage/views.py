@@ -2,14 +2,21 @@ from cycle_storage.models import Bicycle, Storage, Place
 from cycle_storage.forms import BicycleCreateForm
 from django.views import generic
 from django.shortcuts import redirect, get_object_or_404
+from django.core.exceptions import PermissionDenied
 
 
 class BicycleDetail(generic.DetailView):
     model = Bicycle
 
 
+def has_bike(user):
+    return user.is_authenticated() and Bicycle.objects.filter(owner=user.userprofile).count() > 0
+
+
 def index_view(request):
-    if Bicycle.objects.filter(owner=request.user.userprofile).count() > 0:
+    if not request.user.is_authenticated():
+        raise PermissionDenied
+    if has_bike(request.user):
         return redirect('bicycle:bicycle_my')
     return redirect('bicycle:bicycle_create')
 
@@ -25,7 +32,6 @@ class MyBicycleDetail(generic.DetailView):
         # return Bicycle.objects.get(owner=self.request.user.userprofile)
 
 
-# TODO unique file names
 # TODO bug when passing photo
 class BicycleCreate(generic.CreateView):
     model = Bicycle

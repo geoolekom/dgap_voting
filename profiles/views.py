@@ -68,6 +68,7 @@ def profile_view(request):
     user = request.user
     mipt = False
     phystech = False
+    vk = None
     if user.social_auth.exists():
         if user.social_auth.filter(provider='google-oauth2'):
             user_informations = UserInformation.objects.filter(phystech__iexact=user.email)
@@ -89,12 +90,14 @@ def profile_view(request):
             elif len(user_informations) < 1:
                 messages.error(request, 'Вы не прошли автоматическую верификацию, пишите организатору голосования"')
                 messages.error(request, 'В базе более одного студента с данным профилем VK. Вы можете попробовать авторизоваться через phystech.edu или напишите организатору голосования')
+            vk = user.social_auth.get(provider='vk-oauth2').uid
         else:
             messages.error(request, 'Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите организатору голосования')
 
     return render(request, 'profiles/profile.html', {
         'mipt': mipt,
         'phystech': phystech,
+        'vk' : vk,
     })
 
 
