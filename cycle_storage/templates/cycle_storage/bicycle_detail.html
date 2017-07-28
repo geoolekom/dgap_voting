@@ -4,7 +4,7 @@
     <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h2>{% if request.user == object.owner.user %}
+                <h2>{% if request.user.userprofile == object.owner %}
                         Мой велосипед
                     {% else %}
                         Велосипед, хозяин - {{ object.owner }}
@@ -17,8 +17,8 @@
                     <p>Модель: {{ object.model }}</p>
                     {% if object.place %}<p>Хранится: {{ object.place }}</p>{% endif %}
                     <p>Добавлен: {{ object.add_dttm }}</p>
-                    <p>Статус:{% if object.verified %} <span style="color: green">проверен</span>
-                                {% else %}<span style="color: red">не проверен</span>{% endif %}</p>
+                    <p>Статус заявки: {% if object.verified %} <span style="color: green">одобрена</span>
+                                {% else %}<span style="color: red">не проверена</span>{% endif %}</p>
                     <img src={{ object.photo.url }} width=100%>
                 {% else %}
                     <p>У вас нет зарегистрированных велосипедов.</p>

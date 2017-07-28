@@ -21,30 +21,36 @@ def index_view(request):
     return redirect('bicycle:bicycle_create')
 
 
-# TODO multiple bikes?
-# TODO error if no bike, should be redirect to bicycle_create
 class MyBicycleDetail(generic.DetailView):
     model = Bicycle
     template = "bicycle/bicycle_detail.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        # check if there is some video onsite
+        if not has_bike(request.user):
+            return redirect('bicycle:bicycle_create')
+        else:
+            return super(MyBicycleDetail, self).dispatch(request, *args, **kwargs)
 
     def get_object(self):
         return get_object_or_404(Bicycle, owner=self.request.user.userprofile)
         # return Bicycle.objects.get(owner=self.request.user.userprofile)
 
 
-# TODO bug when passing photo
 class BicycleCreate(generic.CreateView):
     model = Bicycle
     form_class = BicycleCreateForm
     success_url = '/bicycle'
 
-    """def get_initial(self):
-        initial = super(BicycleCreate, self).get_initial()
-        initial['owner'] = self.request.user.userprofile
-        return initial"""
+    def dispatch(self, request, *args, **kwargs):
+        if has_bike(request.user):
+            return redirect('bicycle:bicycle_my')
+        else:
+            return super(BicycleCreate, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
+        response = super(BicycleCreate, self).form_valid(form)
         self.object.owner = self.request.user.userprofile
         self.object.save()
-        response = super(BicycleCreate, self).form_valid(form)
         return response
+# TODO add ability to cancel storage request

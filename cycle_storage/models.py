@@ -4,7 +4,19 @@ from django.core.urlresolvers import reverse
 
 
 def bike_photo_path(instance, filename):
-    return "bicycles/user{}_{}".format(instance.user.id, filename)
+    return "bicycles/user{}_{}".format(instance.owner.id, filename)
+
+
+WAITING = 1  # 'WAITING'
+ACCEPTED = 2  # 'ACCEPTED'
+DECLINED = 3  # 'DECLINED'
+NO_PLACE = 4  # 'NO_PLACE'
+BIKE_STATUS = (
+    (WAITING, "Заявка рассматривается"),
+    (ACCEPTED, "Одобрено"),
+    (DECLINED, "Отказано"),
+    (NO_PLACE, "Нет мест"),
+)
 
 
 class Bicycle(models.Model):
@@ -12,8 +24,9 @@ class Bicycle(models.Model):
     manufacturer = models.CharField("Производитель", max_length=255, default="Неизвестно", blank=True, null=True)
     model = models.CharField("Модель", max_length=255, default="Неизвестно", blank=True, null=True)
     add_dttm = models.DateTimeField('Publish datetime', auto_now_add=True)
-    photo = models.ImageField("Фотография", upload_to=bike_photo_path)
-    verified = models.BooleanField(default=False)
+    photo = models.ImageField("Фотография", upload_to='bicycles/')  # in case of name collision suffix autocreated
+    verified = models.BooleanField(default=False)  # deprecated
+    request_status = models.IntegerField("Статус заявки", default=WAITING, choices=BIKE_STATUS)
 
     class Meta:
         verbose_name = "Велосипед"
@@ -41,6 +54,19 @@ class Storage(models.Model):
     # initialize storage with places named by natural numbers. 'num' - count of created places
     def create_places(self, num):
         Place.objects.bulk_create([Place(storage=self, name=str(i)) for i in range(1, num + 1)])
+
+    def randomly_fill(self):
+        accepted_bicycles_count = Bicycle.objects.filter(request_status=ACCEPTED).count()
+        if accepted_bicycles_count > self.free_places:
+            print("Too many bikes to place in this storage")
+            return False
+        accepted_bicycles = Bicycle.objects.filter(request_status=ACCEPTED)
+        free_places = Place.objects.filter(bicycle=None)
+        for bicycle, place in zip(accepted_bicycles, free_places[:accepted_bicycles_count]):
+            place.bicycle = bicycle
+            place.save()
+        print("Done")
+        return True
 
     @property
     def total_places(self):

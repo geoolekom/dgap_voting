@@ -5,4 +5,4 @@ __pycache__/
 *.swp
 *.sqlite*
 */local_settings.py
-*/migrations/
+migrations/
