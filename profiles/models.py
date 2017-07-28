@@ -59,6 +59,9 @@ class UserInformation(models.Model):
     phystech = models.CharField('phystech.edu', max_length=50, null=True, blank=True)
     vk = models.CharField('vk', max_length=50, null=True, blank=True)
 
+    def __str__(self):
+        return self.fio
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)

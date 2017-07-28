@@ -1,6 +1,6 @@
 from django.db import models
 from profiles.models import UserProfile
-
+from django.core.urlresolvers import reverse
 
 class Bicycle(models.Model):
     owner = models.ForeignKey(UserProfile, blank=True, null=True)
@@ -10,14 +10,15 @@ class Bicycle(models.Model):
     photo = models.ImageField("Фотография", upload_to='bicycles/')
     verified = models.BooleanField(default=False)
 
-
-
     class Meta:
         verbose_name = "Велосипед"
         verbose_name_plural = "Велосипеды"
 
     def __str__(self):
         return "Хозяин: {}, велосипед: {} {}".format(self.owner.__str__(), self.manufacturer, self.model)
+
+    def get_absolute_url(self):
+        return reverse('blog:article_detail', args=[self.id])
 
 
 # Storage room, contains several places for bicycles

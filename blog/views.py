@@ -2,30 +2,50 @@ from django.shortcuts import redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import permission_required
+from django.core.exceptions import PermissionDenied
 from django.views import generic
+from django.utils import timezone
 from .models import Article
 from .forms import ArticleCreateForm
 
 
+# may be not all stuff, but people with particular rights
+def can_view_hidden_post(user):
+    return user.is_superuser or user.is_stuff
+
+
 class ArticleList(generic.ListView):
     model = Article
-    template = "blog/article_list"
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticleList, self).get_context_data(**kwargs)
+        if can_view_hidden_post(self.request.user):
+            objects = Article.objects.all()
+        else:
+            objects = Article.objects.filter(publish_dttm__lte=timezone.now(), hidden=False)
+        context['object_list'] = objects.order_by('-publish_dttm')
+        return context
 
 
 class ArticleDetail(generic.DetailView):
     model = Article
-    template = "blog/article_detail"
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticleList, self).get_context_data(**kwargs)
+        if not context["object"].is_visible(self.request.user):
+            raise PermissionDenied
+        return context
 
 
-# Do we need to create posts NOT from admin panel?
-# @login_required()
+# TODO decorator doesn't work, fix
+# @permission_required('blog.add_article')
 class ArticleCreate(generic.edit.CreateView):
     model = Article
     form_class = ArticleCreateForm
 
     def form_valid(self, form):
         response = super(ArticleCreate, self).form_valid(form)
-        self.object.author = self.request.user.profile
+        self.object.author = self.request.user.userprofile
         self.object.save()
         return response
