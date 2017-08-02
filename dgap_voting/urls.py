@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url, static
 from django.conf import settings
+from django.views.generic import RedirectView
 
 from django.contrib import admin
 admin.autodiscover()
@@ -17,6 +18,8 @@ urlpatterns = patterns('',
     url(r'^polls/', include('polls.urls', namespace='polls')),
     url(r'^blog/', include('blog.urls', namespace='blog')),
     url(r'^bicycle/', include('cycle_storage.urls', namespace='bicycle')),
+    url(r'^laundry/', RedirectView.as_view(url="http://stiralka.mipt.ru"), name="laundry"),
+    url(r'^print/', RedirectView.as_view(url="http://print.mipt.ru"), name="print"),
     url(r'^servertime/', include('servertime.urls', namespace='servertime')),
     url(r'^profiles/', include('profiles.urls', namespace='profiles')),
     url(r'^admin/', include(admin.site.urls)),
