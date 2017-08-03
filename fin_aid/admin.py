@@ -14,7 +14,7 @@ class AidRequestAdmin(admin.ModelAdmin):
     #list_display_links = list_display
     list_filter = ('status', 'category', 'urgent', 'add_dttm', 'submitted_paper')
     inlines = [AidDocumentInline,]
-    # radio_fields = {"category": admin.VERTICAL}
+    search_fields = ["applicant__first_name", "applicant__last_name", "reason"]
 
     def save_model(self, request, obj, form, change):
         if obj.status == AidRequest.ACCEPTED:
