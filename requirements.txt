@@ -29,3 +29,5 @@ Unidecode==0.4.18
 urllib3==1.22
 user-agents==0.3.2
 webencodings==0.5.1
+docxtpl==0.3.9
+Petrovich==1.0.0

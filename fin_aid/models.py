@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from hashlib import md5
+
 
 class Category(models.Model):
     name = models.CharField("Название", max_length=100)
@@ -47,12 +49,21 @@ class AidRequest(models.Model):
         return "{}: заявление от {} по категории {} на сумму {}".format(self.applicant, self.add_dttm, self.category, self.req_sum)
 
 
+# separate function as it's used in create_paper
+def user_hash(user):
+    secret = md5(str(user.id).encode("utf-8")).hexdigest()
+    secret = md5((secret + user.username).encode("utf-8")).hexdigest()
+    return secret
+
+
 def document_path(instance, filename):
-    return "aid_docs/user_{}/{}".format(instance.request.applicant.id, filename)
+    return "aid_docs/user_{}/{}".format(user_hash(instance.request.applicant), filename)
 
 
+# TODO if user can harm us with custom filename we should replace user-given filename
 class AidDocument(models.Model):
     file = models.FileField("Документ", upload_to=document_path)
+    # filename = models.CharField("Имя файла", max_length=100)
     request = models.ForeignKey(AidRequest)
 
     def __str__(self):
