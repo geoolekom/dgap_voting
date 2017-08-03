@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'polls',
     'blog',
+    'fin_aid',
     'cycle_storage',
     'django_user_agents',
     'django_bleach',
