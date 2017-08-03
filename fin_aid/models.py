@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from hashlib import md5
+from datetime import date
 
 
 class Category(models.Model):
@@ -10,8 +11,23 @@ class Category(models.Model):
     max_sum = models.IntegerField("Макс. сумма", default=20000)
     max_quantity = models.IntegerField("Макс. раз за семестр", default=1)
 
+    class Meta:
+        verbose_name = "категория"
+        verbose_name_plural = "категории"
+
     def __str__(self):
         return self.name
+
+
+def get_next_payment_dttm():
+    pay_day = 28
+    edge_day = 12
+    dt = date.today()
+    if dt.day > edge_day:
+        month = dt.month + 1
+    else:
+        month = dt.month
+    return date(dt.year, month, pay_day)
 
 
 class AidRequest(models.Model):
@@ -46,7 +62,11 @@ class AidRequest(models.Model):
         return True
 
     def __str__(self):
-        return "{}: заявление от {} по категории {} на сумму {}".format(self.applicant, self.add_dttm, self.category, self.req_sum)
+        return "{}: заявление от {} по категории {} на сумму {}".format(self.applicant, self.add_dttm.date(), self.category, self.req_sum)
+
+    class Meta:
+        verbose_name = "заявление на матпомощь"
+        verbose_name_plural = "заявления на матпомощь"
 
 
 # separate function as it's used in create_paper
@@ -65,6 +85,10 @@ class AidDocument(models.Model):
     file = models.FileField("Документ", upload_to=document_path)
     # filename = models.CharField("Имя файла", max_length=100)
     request = models.ForeignKey(AidRequest)
+
+    class Meta:
+        verbose_name = "потверждающий документ"
+        verbose_name_plural = "подтверждающие документы"
 
     def __str__(self):
         return "Документ {} к заявлению {}".format(self.file.name, self.request)
