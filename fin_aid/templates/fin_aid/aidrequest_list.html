@@ -1,0 +1,32 @@
+{% extends "polls/base.html" %}
+
+    {% block content %}
+        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+            <div class="panel-group">
+                <table class="table table-hover">
+                    <caption>Мои заявления на матпомощь</caption>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Категория</th>
+                        <th>Сумма</th>
+                        <th>Срочное</th>
+                        <th>Статус</th>
+                        <th>Одобренная сумма</th>
+                        <th>Дата выплаты</th>
+                    </tr>
+                    {% for aid_request in object_list %}
+                        <tr>
+                            <td> {{ aid_request.add_dttm }} </td>
+                            <td> {{ aid_request.category }} </td>
+                            <td> {{ aid_request.req_sum }} </td>
+                            <td>{% if aid_request.urgent %} да {% else %} нет {% endif %}</td>
+                            <td> {{ aid_request.get_status_display }} </td>
+                            <td> {{ aid_request.accepted_sum }} </td>
+                            <td> {{ aid_request.payment_dttm }} </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+        <div>
+    {% endblock %}
