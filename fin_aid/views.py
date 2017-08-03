@@ -19,7 +19,7 @@ class AidRequestList(generic.ListView):
         return super(AidRequestList, self).dispatch(*args, **kwargs)
 
     def get_queryset(self):
-        return AidRequest.objects.filter(applicant=self.request.user)
+        return AidRequest.objects.filter(applicant=self.request.user).order_by("-add_dttm")
 
 
 # @method_decorator(login_required, name='dispatch')
