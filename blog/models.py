@@ -13,6 +13,10 @@ class Article(models.Model):
     content = models.TextField("Контент", max_length=10000) # текст поста
     hidden = models.BooleanField("Скрытый", default=False)
 
+    class Meta:
+        verbose_name = "пост"
+        verbose_name_plural = "посты"
+
     def get_absolute_url(self):
         return reverse('blog:article_detail', args=[self.id])
 
