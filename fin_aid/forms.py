@@ -3,7 +3,10 @@ from .models import AidRequest, AidDocument
 
 
 class AidRequestCreateForm(forms.ModelForm):
-    document = forms.FileField()
+    # TODO rewrite
+    document1 = forms.FileField(required=False)
+    document2 = forms.FileField(required=False)
+    document3 = forms.FileField(required=False)
 
     class Meta:
         model = AidRequest

@@ -23,11 +23,17 @@ def get_next_payment_dttm():
     pay_day = 28
     edge_day = 12
     dt = date.today()
-    if dt.day > edge_day:
-        month = dt.month + 1
-    else:
+    year = dt.year
+    if dt.day <= edge_day:
         month = dt.month
-    return date(dt.year, month, pay_day)
+    else:
+        if dt.month < 12:
+            month = dt.month + 1
+        else:
+            month = 1
+            year = dt.year + 1
+
+    return date(year, month, pay_day)
 
 
 class AidRequest(models.Model):
