@@ -13,7 +13,7 @@
         <ul class="nav navbar-nav">
             {# <li class="active"><a href="#">Home</a></li> #}
             <li><a> <div id="defaultTime"></div></a></li>
-            <li><a href="{% url "blog:article_list" %}">Новости</a></li>
+            {% comment %}<li><a href="{% url "blog:article_list" %}">Новости</a></li>{% endcomment %}
             <li class="dropdown">
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">Голосования <b class="caret"></b></a>
                 <ul role="menu" class="dropdown-menu">
@@ -24,14 +24,15 @@
                     {# жаль, пафосное "Вотированные" не подходит #}
                 </ul>
             </li>
-            <li><a href="{% url "bicycle:index" %}">Велокомната</a></li>
+            {% comment %}<li><a href="{% url "bicycle:index" %}">Велокомната</a></li>
             <li><a href="{% url "laundry" %}">Стиралка</a></li>
-            <li><a href="{% url "print" %}">Печать</a></li>
+            <li><a href="{% url "print" %}">Печать</a></li>{% endcomment %}
             <li class="dropdown">
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">Матпомощь <b class="caret"></b></a>
                 <ul role="menu" class="dropdown-menu">
                     <li><a href="{% url 'fin_aid:aid_request_list' %}">Мои заявления</a></li>
                     <li><a href="{% url 'fin_aid:aid_request_create' %}">Подать заявление</a></li>
+                    <li><a href="{% url 'fin_aid:aid_request_rules' %}">Правила</a></li>
                 </ul>
             </li>
             <li class="nav-divider"></li>

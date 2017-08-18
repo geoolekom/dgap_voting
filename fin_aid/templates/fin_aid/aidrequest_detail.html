@@ -4,23 +4,27 @@
     <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h2>Заявление от {{ object.add_dttm }} в категории "{{ object.category }}"</h2>
+                <h2>Заявление от {{ object.add_dttm|date:"d.m.Y" }} в категории "{{ object.category }}"</h2>
             </div>
             <div class="panel-body">
-                <p>Дата подачи: {{ object.add_dttm }}</p>
+                <p>Дата подачи: {{ object.add_dttm|date:"d.m.Y" }}</p>
                 <p>Категория: {{ object.category }}</p>
                 <p>Обоснование: {{ object.reason | safe }}</p>
-                <p>Запрошенная сумма: {{ object.req_sum }} руб.</p>
+                <p>Запрошенная сумма: {{ object.req_sum|floatformat }} руб.</p>
                 <p>Срочно: {% if object.urgent %} да {% else %} нет {% endif %}</p>
-                <p>Статус: {{ object.get_status_display }}</p>
+                <p>Статус: <span class="label {% if object.status == object.ACCEPTED %}label-success
+                                                {% elif object.status == object.DECLINED %}label-danger
+                                                {% elif object.status == object.INFO_NEEDED %}label-warning
+                                                {% else %}label-default{% endif %}
+                ">{{ object.get_status_display }}</span></p>
                 {% if object.examination_dttm %}
                     <p>Дата рассмотрения заявки: {{ object.examination_dttm }}</p>
                 {% endif %}
                 {% if object.accepted_sum %}
-                    <p>Одобренная сумма: {{ object.examination_dttm }} руб.</p>
+                    <p>Одобренная сумма: {{ object.accepted_sum|floatformat }} руб.</p>
                 {% endif %}
                 {% if object.payment_dttm %}
-                    <p>Ожидаемая дата выплаты: {{ object.payment_dttm }}</p>
+                    <p>Ожидаемая дата выплаты: {{ object.payment_dttm|date:"d.m.Y" }}</p>
                 {% endif %}
                 {% for document in object.aiddocument_set.all %}
                     <p><a href="{{ document.file.url }}">Подтверждающий документ</a></p>
