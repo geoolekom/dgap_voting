@@ -1,0 +1,32 @@
+{% if messages %}
+        <div class="messages">
+        {% for message in messages %}
+            <div style="padding-top:32px;" class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+                <div class="alert alert-dismiss alert-{% if 'error' in message.tags %}danger">
+                    {% else %}{{ message.tags }}">{% endif %}
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <p>{{ message }}</p>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+{% endif %}
+
+{% if user.is_authenticated and not user.userprofile.is_approved %}
+			<div style="padding-top:32px;" class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+				<div class="alert alert-info">
+					<a class="close" data-dismiss="alert" href="#">&times;</a>
+					<p style="text-align:center"> <a href="{% url 'profiles:profile_view' %}">Завершить процедуру регистрации, чтобы иметь возможность принять участие в голосованиях</a></p>
+				</div>
+			</div>
+		{% endif %}
+        {% if not user.is_authenticated %}
+			<div style="padding-top:32px;" class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+				<div class="alert alert-info">
+					<a class="close" data-dismiss="alert" href="#">&times;</a>
+					<p style="text-align:center"> <a href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'profiles:profile_view' %}">
+                        Создать аккаунт для участия в голосованиях, используя email на phystech.edu.
+                        Перед использованем этой ссылки убедитесь, что Вы вошли в свой аккаунт на phystech.edu</a></p>
+				</div>
+			</div>
+        {% endif %}

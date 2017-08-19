@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
+from django.contrib import messages
 
 from .create_paper import create_paper
 
@@ -41,6 +42,8 @@ class AidRequestCreate(generic.CreateView):
                 AidDocument.objects.create(file=document, request=self.object)
         self.object.save()
         create_paper(self.object)
+        messages.add_message(self.request, messages.SUCCESS, "Заявление на матпомощь принято. Результаты рассмотрения"
+                                                             " будут доступны в личном кабинете")
         return response
 
 
