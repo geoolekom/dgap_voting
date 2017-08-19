@@ -21,7 +21,7 @@ PyQRCode==1.1
 python-social-auth==0.2.12
 python3-memcached==1.51
 python3-openid==3.0.7
-requests==2.7.0
+requests==2.18.4
 requests-oauthlib==0.5.0
 six==1.9.0
 ua-parser==0.3.6
@@ -31,4 +31,5 @@ user-agents==0.3.2
 webencodings==0.5.1
 docxtpl==0.3.9
 Petrovich==1.0.0
-pytz
+pytz==2017.2
+vk==2.0.2
