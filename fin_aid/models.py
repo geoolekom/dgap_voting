@@ -19,10 +19,11 @@ class Category(models.Model):
         return self.name
 
 
-def get_next_payment_dttm():
+def get_next_payment_dttm(dt = None):
     pay_day = 28
-    edge_day = 12
-    dt = date.today()
+    edge_day = 14
+    if not dt:
+        dt = date.today()
     year = dt.year
     if dt.day <= edge_day:
         month = dt.month
