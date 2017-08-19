@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
+from django.contrib import messages
 
 from .create_paper import create_paper
 
@@ -35,9 +36,14 @@ class AidRequestCreate(generic.CreateView):
     def form_valid(self, form):
         response = super(AidRequestCreate, self).form_valid(form)
         self.object.applicant = self.request.user
-        AidDocument.objects.create(file=form.cleaned_data['document'], request=self.object)
+        for i in range(1,4):
+            document = form.cleaned_data['document' + str(i)]
+            if document:
+                AidDocument.objects.create(file=document, request=self.object)
         self.object.save()
         create_paper(self.object)
+        messages.add_message(self.request, messages.SUCCESS, "Заявление на матпомощь принято. Результаты рассмотрения"
+                                                             " будут доступны в личном кабинете")
         return response
 
 
