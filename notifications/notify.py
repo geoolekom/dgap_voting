@@ -1,6 +1,6 @@
 from .models import UserNotificationsSettings, Notification
 import vk
-from dgap_voting.local_settings import VK_MESSAGES_TOKEN
+from dgap_voting.local_settings import VK_MESSAGES_TOKEN, DEBUG
 from social.apps.django_app.default.models import UserSocialAuth
 
 # import python-telegram-bot
@@ -38,10 +38,13 @@ def _notify_telegram(user, text):
 
 
 def notify(user, text):
-    settings = user.UserUserNotificationsSettings
-    if settings.allow_vk:
+    if DEBUG:
         _notify_vk(user, text)
-    if settings.allow_email:
-        _notify_email(user, text)
-    if settings.allow_telegram:
-        _notify_telegram(user, text)
+    else:
+        settings = user.UserUserNotificationsSettings
+        if settings.allow_vk:
+            _notify_vk(user, text)
+        if settings.allow_email:
+            _notify_email(user, text)
+        if settings.allow_telegram:
+            _notify_telegram(user, text)

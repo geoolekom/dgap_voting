@@ -3,6 +3,7 @@ from django import forms
 from .models import AidRequest, Category, AidDocument, get_next_payment_dttm
 from django.contrib.admin.filters import DateFieldListFilter
 
+from notifications.notify import notify
 from datetime import datetime
 
 
@@ -53,6 +54,14 @@ class AidRequestAdmin(admin.ModelAdmin):
                     obj.payment_dttm = get_next_payment_dttm(get_next_payment_dttm(get_next_payment_dttm()))
         if obj.status != AidRequest.WAITING:
             obj.examination_dttm = datetime.now()
+            s = "Статус заявления на матпомощь от {} по категории {} изменен на '{}'\n".format(obj.add_dttm.date(),
+                                                                                               obj.category,
+                                                                                               obj.status)
+            if obj.status == obj.ACCEPTED:
+                s += "Одобренная сумма: {}\nОжидаемая дата выплаты: {}\n".format(obj.accepted_sum, obj.payment_dttm)
+            if obj.examination_comment:
+                s += "Комментарий стип. комиссии: {}\n".format(obj.examination_comment)
+            notify(obj.applicant, s)
 
         obj.save()
 

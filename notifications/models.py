@@ -19,7 +19,7 @@ class Notification(models.Model):
         (TELEGRAM, "telegram")
     ]
 
-    user = models.ForeignKey(User)
+    user = models.OneToOneField(User)
     send_dttm = models.DateTimeField("Отправлено", auto_now_add=True)
     method = models.IntegerField("Способ", choices=METHODS)
     text = models.TextField("Текст", max_length=1024)
