@@ -55,5 +55,3 @@ class AidRequestDetail(generic.DetailView):
         if not aid_request.can_view(request.user):
             raise PermissionDenied
         return super(AidRequestDetail, self).dispatch(request, *args, **kwargs)
-
-

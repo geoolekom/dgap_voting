@@ -4,6 +4,7 @@ from .models import AidRequest, Category, AidDocument, get_next_payment_dttm
 from django.contrib.admin.filters import DateFieldListFilter
 
 from notifications.notify import notify
+from notifications.templates import fin_aid_request_status_change
 from datetime import datetime
 
 
@@ -30,7 +31,7 @@ class AidRequestAdmin(admin.ModelAdmin):
     date_hierarchy = 'add_dttm'
     prepopulated_fields = {"accepted_sum": ("req_sum",)}
     list_display = ('applicant', 'add_dttm', 'category', 'req_sum', 'urgent', 'status', 'accepted_sum', 'payment_dttm', 'submitted_paper')
-    #list_display_links = list_display
+    list_display_links = ['applicant', 'category', 'req_sum']
     list_filter = ('status', 'category', 'urgent', 'add_dttm', 'submitted_paper')
     inlines = [AidDocumentInline,]
     search_fields = ["applicant__first_name", "applicant__last_name", "reason"]
@@ -41,10 +42,7 @@ class AidRequestAdmin(admin.ModelAdmin):
             if not obj.accepted_sum:
                 obj.accepted_sum = obj.req_sum
             if not obj.payment_dttm:
-                month = form.cleaned_data['month_of_payment']
-                print(get_next_payment_dttm())
-                print(month)
-                print(AidRequestAdminForm.THIS)
+                month = form.cleaned_data['month_of_payment'] if "month_of_payment" in form.cleaned_data else None
                 if not month or month == str(AidRequestAdminForm.THIS):
                     obj.payment_dttm = get_next_payment_dttm()
                     print("KEK")
@@ -54,16 +52,10 @@ class AidRequestAdmin(admin.ModelAdmin):
                     obj.payment_dttm = get_next_payment_dttm(get_next_payment_dttm(get_next_payment_dttm()))
         if obj.status != AidRequest.WAITING:
             obj.examination_dttm = datetime.now()
-            s = "Статус заявления на матпомощь от {} по категории {} изменен на '{}'\n".format(obj.add_dttm.date(),
-                                                                                               obj.category,
-                                                                                               obj.status)
-            if obj.status == obj.ACCEPTED:
-                s += "Одобренная сумма: {}\nОжидаемая дата выплаты: {}\n".format(obj.accepted_sum, obj.payment_dttm)
-            if obj.examination_comment:
-                s += "Комментарий стип. комиссии: {}\n".format(obj.examination_comment)
-            notify(obj.applicant, s)
-
         obj.save()
+
+        if obj.status != AidRequest.WAITING:
+            notify(obj.applicant, fin_aid_request_status_change(obj))
 
 
 class Categoryadmin(admin.ModelAdmin):

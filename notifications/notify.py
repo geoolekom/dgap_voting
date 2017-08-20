@@ -41,7 +41,7 @@ def notify(user, text):
     if DEBUG:
         _notify_vk(user, text)
     else:
-        settings = user.UserUserNotificationsSettings
+        settings = user.UserNotificationsSettings
         if settings.allow_vk:
             _notify_vk(user, text)
         if settings.allow_email:
