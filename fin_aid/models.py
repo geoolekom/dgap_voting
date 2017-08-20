@@ -1,9 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 
 from hashlib import md5
-from datetime import date
-
+from datetime import datetime
+from calendar import monthrange
 
 class Category(models.Model):
     name = models.CharField("Название", max_length=100)
@@ -19,23 +20,7 @@ class Category(models.Model):
         return self.name
 
 
-def get_next_payment_dttm():
-    pay_day = 28
-    edge_day = 12
-    dt = date.today()
-    year = dt.year
-    if dt.day <= edge_day:
-        month = dt.month
-    else:
-        if dt.month < 12:
-            month = dt.month + 1
-        else:
-            month = 1
-            year = dt.year + 1
-
-    return date(year, month, pay_day)
-
-
+# TODO add_dttm changes EVERY time when model is saved, so instead of setting it as auto_now_add=True it's better to set im manually
 class AidRequest(models.Model):
     WAITING = 1
     ACCEPTED = 2
@@ -98,3 +83,101 @@ class AidDocument(models.Model):
 
     def __str__(self):
         return "Документ {} к заявлению {}".format(self.file.name, self.request)
+
+
+def _get_next_date_naive(dt=None, t='payment'):
+    if not dt:
+        dt = datetime.now()
+    pay_day = 28
+    edge_day = 14
+    if t == 'payment':
+        day = pay_day
+    elif t == 'deadline':
+        day = edge_day
+    else:
+        raise ValueError
+
+    year = dt.year
+    if dt.day <= edge_day:
+        month = dt.month
+    else:
+        if dt.month < 12:
+            month = dt.month + 1
+        else:
+            month = 1
+            year = dt.year + 1
+    result_dttm = datetime(year, month, day)
+    return result_dttm
+
+
+def _get_default_year():
+    return datetime.now().year
+def _get_default_month():
+    return datetime.now().month
+def _get_default_payment_dttm():
+    return datetime(datetime.now().year, datetime.now().month, 28)
+def _get_default_deadline_dttm():
+    return datetime(datetime.now().year, datetime.now().month, 14)
+
+
+class MonthlyData(models.Model):
+    MONTH = [
+        (1, "Январь"), (2, "Февраль"), (3, "Март"), (4, "Апрель"), (5, "Май"), (6, "Июнь"),
+        (7, "Июль"), (8, "Август"), (9, "Сентябрь"), (10, "Октябрь"), (11, "Ноябрь"), (12, "Декабрь"),
+    ]
+    year = models.IntegerField("Год", default=_get_default_year)
+    month = models.IntegerField("Месяц", default=_get_default_month, choices=MONTH)
+    limit = models.FloatField("Лимит")
+    deadline_dttm = models.DateTimeField("Дэдлайн по заявлениям", default=_get_default_deadline_dttm)
+    payment_dttm = models.DateTimeField("Дата выплаты матпомощи", default=_get_default_payment_dttm)
+
+    def __str__(self):
+        return "{} {}".format(self.get_month_display(), self.year)
+
+    class Meta:
+        verbose_name = "Информация о месяце"
+        verbose_name_plural = "Лимиты по месяцам"
+
+    @classmethod
+    def current(cls):
+        dt = datetime.now()
+        return cls.objects.get(year=dt.year, month=dt.month)
+
+    @property
+    def sum_used(self):
+        requests = AidRequest.objects.filter(status=AidRequest.ACCEPTED, payment_dttm__year=self.year,
+                                             payment_dttm__month=self.month)
+        return requests.aggregate(sum=models.Sum('accepted_sum'))["sum"]
+
+
+def _get_next_date_db(dt=None, t='payment'):
+    if not dt:
+        dt = datetime.now()
+    next_month = MonthlyData.objects.filter(deadline_dttm__gte=dt).order_by('payment_dttm').first()
+    if next_month:
+        if t == 'payment':
+            return next_month.payment_dttm
+        elif t == 'deadline':
+            return next_month.deadline_dttm
+        else:
+            raise ValueError
+    else:
+        return None
+
+
+def get_next_date(dt=None, t='payment'):
+    payment_dttm = _get_next_date_db(dt, t)
+    if not payment_dttm:
+        payment_dttm = _get_next_date_naive(dt, t)
+    return payment_dttm
+
+
+def sum_by_month(year, month):
+    requests = AidRequest.objects.filter(status=AidRequest.ACCEPTED, payment_dttm__year=year, payment_dttm__month=month)
+    return requests.aggregate(sum=models.Sum('accepted_sum'))["sum"]
+
+"""# TODO now works only if all MonthlyData objects exist
+def get_applications(year, month):
+    end_dt = MonthlyData.objects.get(year=year, month=month).deadline_dttm
+    start_dt = MonthlyData.objects.get(year=year if month > 1 else year-1, month=month-1 if month > 1 else 12).deadline_dttm
+    return"""

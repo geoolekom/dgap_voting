@@ -47,7 +47,6 @@ INSTALLED_APPS = (
     'polls',
     'blog',
     'fin_aid',
-    'cycle_storage',
     'django_user_agents',
     'django_bleach',
     'social.apps.django_app.default',
