@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from .models import AidRequest, Category, AidDocument, get_next_payment_dttm
+from .models import AidRequest, Category, AidDocument, MonthlyData, get_next_date
 from django.contrib.admin.filters import DateFieldListFilter
 
 from notifications.notify import notify
@@ -44,12 +44,11 @@ class AidRequestAdmin(admin.ModelAdmin):
             if not obj.payment_dttm:
                 month = form.cleaned_data['month_of_payment'] if "month_of_payment" in form.cleaned_data else None
                 if not month or month == str(AidRequestAdminForm.THIS):
-                    obj.payment_dttm = get_next_payment_dttm()
-                    print("KEK")
+                    obj.payment_dttm = get_next_date(None, 'payment')
                 elif month == str(AidRequestAdminForm.NEXT):
-                    obj.payment_dttm = get_next_payment_dttm(get_next_payment_dttm())
+                    obj.payment_dttm = get_next_date(get_next_date(None, 'payment'), 'payment')
                 elif month == str(AidRequestAdminForm.FOLLOWING):
-                    obj.payment_dttm = get_next_payment_dttm(get_next_payment_dttm(get_next_payment_dttm()))
+                    obj.payment_dttm = get_next_date(get_next_date(get_next_date(None, 'payment'), 'payment'), 'payment')
         if obj.status != AidRequest.WAITING:
             obj.examination_dttm = datetime.now()
         obj.save()
@@ -62,6 +61,11 @@ class Categoryadmin(admin.ModelAdmin):
     list_display = ('name', 'reason', 'max_sum', 'max_quantity')
 
 
+class MonthlyDataAdmin(admin.ModelAdmin):
+    list_display = ('year', 'month', 'limit', 'deadline_dttm', 'payment_dttm')
+    list_display_links = list_display
+
 admin.site.register(Category, Categoryadmin)
 admin.site.register(AidRequest, AidRequestAdmin)
 admin.site.register(AidDocument)
+admin.site.register(MonthlyData, MonthlyDataAdmin)
