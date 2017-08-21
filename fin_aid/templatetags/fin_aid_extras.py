@@ -1,5 +1,5 @@
 from django import template
-from fin_aid.models import MonthlyData, sum_by_month
+from fin_aid.models import MonthlyData
 register = template.Library()
 
 
@@ -7,5 +7,4 @@ register = template.Library()
 def month_info():
     text = "<h3>Сейчас: {}, Лимит: {}, Использовано: {}, Профицит: {}</h3>"
     current = MonthlyData.current()
-    used = sum_by_month(current.year, current.month)
-    return text.format(current.get_month_display(), current.limit, used, current.limit - used)
+    return text.format(current.get_month_display(), current.limit, current.sum_used, current.limit - current.sum_used)

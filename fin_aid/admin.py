@@ -31,7 +31,7 @@ class AidRequestAdmin(admin.ModelAdmin):
     date_hierarchy = 'add_dttm'
     prepopulated_fields = {"accepted_sum": ("req_sum",)}
     list_display = ('applicant', 'add_dttm', 'category', 'req_sum', 'urgent', 'status', 'accepted_sum', 'payment_dttm', 'submitted_paper')
-    list_display_links = ['applicant', 'category', 'req_sum']
+    list_display_links = ['applicant', 'add_dttm', 'category', 'req_sum']
     list_filter = ('status', 'category', 'urgent', 'add_dttm', 'submitted_paper')
     inlines = [AidDocumentInline,]
     search_fields = ["applicant__first_name", "applicant__last_name", "reason"]
@@ -62,7 +62,7 @@ class Categoryadmin(admin.ModelAdmin):
 
 
 class MonthlyDataAdmin(admin.ModelAdmin):
-    list_display = ('year', 'month', 'limit', 'deadline_dttm', 'payment_dttm')
+    list_display = ('year', 'month', 'limit', 'deadline_dt', 'payment_dt')
     list_display_links = list_display
 
 admin.site.register(Category, Categoryadmin)

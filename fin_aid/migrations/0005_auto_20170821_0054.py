@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='monthlydata',
             name='deadline_dttm',
-            field=models.DateTimeField(verbose_name='Дэдлайн по заявлениям', default=fin_aid.models._get_default_deadline_dttm),
+            field=models.DateTimeField(verbose_name='Дэдлайн по заявлениям', default=fin_aid.models._get_default_deadline_dt),
         ),
         migrations.AlterField(
             model_name='monthlydata',
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='monthlydata',
             name='payment_dttm',
-            field=models.DateTimeField(verbose_name='Дата выплаты матпомощи', default=fin_aid.models._get_default_payment_dttm),
+            field=models.DateTimeField(verbose_name='Дата выплаты матпомощи', default=fin_aid.models._get_default_payment_dt),
         ),
         migrations.AlterField(
             model_name='monthlydata',
