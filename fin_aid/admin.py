@@ -23,32 +23,32 @@ class AidRequestAdminForm(forms.ModelForm):
 
     class Meta:
         model = AidRequest
-        exclude = ["payment_dttm", "examination_dttm"]
+        exclude = ["payment_dt", "examination_dttm"]
 
 
 class AidRequestAdmin(admin.ModelAdmin):
     form = AidRequestAdminForm#(initial={"month_of_payment":AidRequestAdminForm.THIS})
     date_hierarchy = 'add_dttm'
     prepopulated_fields = {"accepted_sum": ("req_sum",)}
-    list_display = ('applicant', 'add_dttm', 'category', 'req_sum', 'urgent', 'status', 'accepted_sum', 'payment_dttm', 'submitted_paper')
+    list_display = ('applicant', 'add_dttm', 'category', 'req_sum', 'urgent', 'status', 'accepted_sum', 'payment_dt', 'submitted_paper')
     list_display_links = ['applicant', 'add_dttm', 'category', 'req_sum']
     list_filter = ('status', 'category', 'urgent', 'add_dttm', 'submitted_paper')
     inlines = [AidDocumentInline,]
     search_fields = ["applicant__first_name", "applicant__last_name", "reason"]
-    list_editable = ["status", "accepted_sum", "payment_dttm", "submitted_paper"]
+    list_editable = ["status", "accepted_sum", "payment_dt", "submitted_paper"]
 
     def save_model(self, request, obj, form, change):
         if obj.status == AidRequest.ACCEPTED:
             if not obj.accepted_sum:
                 obj.accepted_sum = obj.req_sum
-            if not obj.payment_dttm:
+            if not obj.payment_dt:
                 month = form.cleaned_data['month_of_payment'] if "month_of_payment" in form.cleaned_data else None
                 if not month or month == str(AidRequestAdminForm.THIS):
-                    obj.payment_dttm = get_next_date(None, 'payment')
+                    obj.payment_dt = get_next_date(None, 'payment')
                 elif month == str(AidRequestAdminForm.NEXT):
-                    obj.payment_dttm = get_next_date(get_next_date(None, 'payment'), 'payment')
+                    obj.payment_dt = get_next_date(get_next_date(None, 'payment'), 'payment')
                 elif month == str(AidRequestAdminForm.FOLLOWING):
-                    obj.payment_dttm = get_next_date(get_next_date(get_next_date(None, 'payment'), 'payment'), 'payment')
+                    obj.payment_dt = get_next_date(get_next_date(get_next_date(None, 'payment'), 'payment'), 'payment')
         if obj.status != AidRequest.WAITING:
             obj.examination_dttm = datetime.now()
         obj.save()

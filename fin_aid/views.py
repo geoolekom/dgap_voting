@@ -1,4 +1,4 @@
-from .models import AidRequest, AidDocument
+from .models import AidRequest, AidDocument, get_next_date
 from .forms import AidRequestCreateForm
 from django.views import generic
 from django.contrib.auth.decorators import login_required
@@ -28,6 +28,14 @@ class AidRequestCreate(generic.CreateView):
     model = AidRequest
     form_class = AidRequestCreateForm
     success_url = '/aid'
+
+    def get_context_data(self, **kwargs):
+        context = super(AidRequestCreate, self).get_context_data(**kwargs)
+        context['deadline_dt'] = get_next_date(None, 'deadline')
+        context['payment_dt'] = get_next_date(None, 'payment')
+        print(self.context_object_name)
+        return context
+
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

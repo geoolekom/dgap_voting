@@ -11,7 +11,7 @@ def get_abs_url(loc_url):
 
 def fin_aid_request_status_change(aid_request):
     dt_add = dateformat.format(aid_request.add_dttm, settings.DATE_FORMAT)
-    dt_pay = dateformat.format(aid_request.payment_dttm, settings.DATE_FORMAT)
+    dt_pay = dateformat.format(aid_request.payment_dt, settings.DATE_FORMAT)
     s = "Статус заявления на матпомощь от {} по категории '{}' изменен на '{}'\n".format(dt_add,
                                                                                          aid_request.category,
                                                                                          aid_request.get_status_display())

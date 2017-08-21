@@ -42,7 +42,7 @@ class AidRequest(models.Model):
     status = models.IntegerField("Статус заявления", choices=AID_REQUEST_STATUS, default=WAITING)
     add_dttm = models.DateTimeField("Дата подачи", auto_now_add=True)
     examination_dttm = models.DateTimeField("Дата рассмотрения", blank=True, null=True)
-    payment_dttm = models.DateTimeField("Дата выплаты", blank=True, null=True)
+    payment_dt = models.DateField("Дата выплаты", blank=True, null=True)
     examination_comment = models.TextField("Комментарий комиссии", blank=True, null=True)
     submitted_paper = models.BooleanField("Принес заявление", default=False)
 
@@ -144,8 +144,8 @@ class MonthlyData(models.Model):
 
     @property
     def sum_used(self):
-        requests = AidRequest.objects.filter(status=AidRequest.ACCEPTED, payment_dttm__year=self.year,
-                                             payment_dttm__month=self.month)
+        requests = AidRequest.objects.filter(status=AidRequest.ACCEPTED, payment_dt__year=self.year,
+                                             payment_dt__month=self.month)
         return requests.aggregate(sum=models.Sum('accepted_sum'))["sum"]
 
 

@@ -38,13 +38,16 @@ def _notify_telegram(user, text):
 
 
 def notify(user, text):
-    if DEBUG:
-        _notify_vk(user, text)
-    else:
-        settings = user.UserNotificationsSettings
-        if settings.allow_vk:
+    try:
+        if DEBUG:
             _notify_vk(user, text)
-        if settings.allow_email:
-            _notify_email(user, text)
-        if settings.allow_telegram:
-            _notify_telegram(user, text)
+        else:
+            settings = user.UserNotificationsSettings
+            if settings.allow_vk:
+                _notify_vk(user, text)
+            if settings.allow_email:
+                _notify_email(user, text)
+            if settings.allow_telegram:
+                _notify_telegram(user, text)
+    except Exception:
+        pass
