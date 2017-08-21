@@ -3,8 +3,8 @@ from django import forms
 from .models import AidRequest, Category, AidDocument, MonthlyData, get_next_date
 from django.contrib.admin.filters import DateFieldListFilter
 
-from notifications.notify import notify
-from notifications.templates import fin_aid_request_status_change
+#from notifications.notify import notify
+#from notifications.templates import fin_aid_request_status_change
 from datetime import datetime
 
 
@@ -53,8 +53,8 @@ class AidRequestAdmin(admin.ModelAdmin):
             obj.examination_dttm = datetime.now()
         obj.save()
 
-        if obj.status != AidRequest.WAITING:
-            notify(obj.applicant, fin_aid_request_status_change(obj))
+        #if obj.status != AidRequest.WAITING:
+        #    notify(obj.applicant, fin_aid_request_status_change(obj))
 
 
 class Categoryadmin(admin.ModelAdmin):
