@@ -36,7 +36,6 @@ class AidRequestCreate(generic.CreateView):
         print(self.context_object_name)
         return context
 
-
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(AidRequestCreate, self).dispatch(*args, **kwargs)
@@ -44,12 +43,12 @@ class AidRequestCreate(generic.CreateView):
     def form_valid(self, form):
         response = super(AidRequestCreate, self).form_valid(form)
         self.object.applicant = self.request.user
-        for i in range(1,4):
+        for i in range(1, 4):
             document = form.cleaned_data['document' + str(i)]
             if document:
                 AidDocument.objects.create(file=document, request=self.object)
         self.object.save()
-        create_paper(self.object)
+        # create_paper(self.object)
         messages.add_message(self.request, messages.SUCCESS, "Заявление на матпомощь принято. Результаты рассмотрения"
                                                              " будут доступны в личном кабинете")
         return response

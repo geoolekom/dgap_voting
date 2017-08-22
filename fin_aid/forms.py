@@ -12,8 +12,5 @@ class AidRequestCreateForm(forms.ModelForm):
         model = AidRequest
         fields = ["category", "reason", "req_sum", "urgent"]
 
-    def save(self, commit=True):
-        #document = AidDocument(self.cleaned_data['document'])
-        #document.save()
-        #AidDocument.objects.create(self.cleaned_data['document'])
-        return super(AidRequestCreateForm, self).save(commit=commit)
+    #def save(self, commit=True):
+    #    return super(AidRequestCreateForm, self).save(commit=commit)
