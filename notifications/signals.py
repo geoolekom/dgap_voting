@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from fin_aid.models import AidRequest
 from .notify import notify
 from .templates import fin_aid_new_request, fin_aid_request_status_change
+from .models import UserNotificationsSettings
 
 
 @receiver(post_save, sender=AidRequest, dispatch_uid='notifications')
@@ -20,3 +21,9 @@ def aidrequest_save(sender, instance, created, **kwargs):
             if instance.status != AidRequest.WAITING:
                 text = fin_aid_request_status_change(instance)
                 notify(instance.applicant, text)
+
+
+@receiver(post_save, sender=User, dispatch_uid='notifications')
+def user_create(sender, instance, created, **kwargs):
+    if created:
+        UserNotificationsSettings.objects.create(user=instance)
