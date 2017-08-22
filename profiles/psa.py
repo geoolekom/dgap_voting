@@ -1,12 +1,18 @@
-"""
-Here are some functions I need working with python-social-auth
-"""
-from profiles.models import UserInformation
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from profiles.models import StudentInfo
+from social.apps.django_app.middleware import SocialAuthExceptionMiddleware
+from social.exceptions import AuthForbidden
+from social.exceptions import AuthAlreadyAssociated
+from social.backends.oauth import BaseOAuth2
 
 
 def set_middlename(backend, user, response, *args, **kwargs):
-    # print(response)
-    if backend.name == 'google-oauth2':
+    if user.userprofile.student_info:
+        name = user.userprofile.student_info.fio.split()
+        if len(name) == 3:
+            user.userprofile.middlename = name[2]
+            user.userprofile.save()
+    elif backend.name == 'google-oauth2':
         name = user.first_name.split()
         if len(name) == 2:
             user.first_name, user.userprofile.middlename = name
@@ -19,38 +25,22 @@ def set_middlename(backend, user, response, *args, **kwargs):
         user.userprofile.middlename = response['secondname']
         user.userprofile.save()
 
-    if backend.name == 'google-oauth2':
-        user_informations = UserInformation.objects.filter(phystech__iexact=user.email)
-        if len(user_informations) == 1:
-            user.userprofile.is_approved = True
-            user.userprofile.user_information = user_informations[0]
-            user.userprofile.group = user_informations[0].group
-            user.userprofile.save()
-        elif len(user_informations) < 1:
-            user.userprofile.is_approved = False
-            user.userprofile.save()
+
+def approve_student(backend, user, response, *args, **kwargs):
+    try:
+        if backend.name == 'google-oauth2':
+            student_info = StudentInfo.objects.get(phystech__iexact=user.email)
+        elif backend.name == 'vk-oauth2':
+            student_info = StudentInfo.objects.get(vk='https://vk.com/' + user.username)
         else:
-            user.userprofile.is_approved = False
-            user.userprofile.save()
-    elif backend.name == 'vk-oauth2':
-        user_informations = UserInformation.objects.filter(vk='https://vk.com/' + user.username)
-        if len(user_informations) == 1:
-            user.userprofile.is_approved = True
-            user.userprofile.user_information = user_informations[0]
-            user.userprofile.group = user_informations[0].group
-            user.userprofile.save()
-        elif len(user_informations) < 1:
-            user.userprofile.is_approved = False
-            user.userprofile.save()
-        else:
-            user.userprofile.is_approved = False
-            user.userprofile.save()
-
-
-
-from social.apps.django_app.middleware import SocialAuthExceptionMiddleware
-from social.exceptions import AuthForbidden
-from social.exceptions import AuthAlreadyAssociated
+            return
+        user.userprofile.is_approved = True
+        user.userprofile.student_info = student_info
+        user.userprofile.group = student_info.group
+        user.userprofile.save()
+    except (ObjectDoesNotExist, MultipleObjectsReturned):
+        user.userprofile.is_approved = False
+        user.userprofile.save()
 
 
 class SocialAuthExceptionMiddlewareExtended(SocialAuthExceptionMiddleware):
@@ -61,9 +51,6 @@ class SocialAuthExceptionMiddlewareExtended(SocialAuthExceptionMiddleware):
             return "Данный аккаунт phystech.edu уже привязан"
         else:
             return str(exception)
-
-
-from social.backends.oauth import BaseOAuth2
 
 
 class MiptOAuth2(BaseOAuth2):

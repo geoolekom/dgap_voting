@@ -2,9 +2,11 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 from fin_aid.models import AidRequest
+from profiles.models import UserProfile
 from .notify import notify
 from .templates import fin_aid_new_request, fin_aid_request_status_change
 from .models import UserNotificationsSettings
+
 
 @receiver(post_save, sender=AidRequest, dispatch_uid='notifications')
 def aidrequest_save_notify(sender, instance, created, **kwargs):
@@ -23,3 +25,10 @@ def aidrequest_save_notify(sender, instance, created, **kwargs):
                     notify(instance.applicant, text)
     except Exception:
         pass
+
+
+@receiver(post_save, sender=UserProfile, dispatch_uid='notifications')
+def user_create(sender, instance, created, **kwargs):
+    if instance.is_subscribed:
+        UserNotificationsSettings.objects.create(user=instance, allow_vk=True)
+

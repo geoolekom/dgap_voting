@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from .models import UserNotificationsSettings, Notification
 import vk
 from dgap_voting.local_settings import VK_MESSAGES_TOKEN, DEBUG
@@ -39,9 +40,6 @@ def _notify_telegram(user, text):
 
 def notify(user, text):
     try:
-        if DEBUG:
-            _notify_vk(user, text)
-        else:
             settings = user.UserNotificationsSettings
             if settings.allow_vk:
                 _notify_vk(user, text)

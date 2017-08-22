@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from profiles.models import UserProfile, UserInformation
+from profiles.models import UserProfile, StudentInfo
 
 
 class UserProfileInline(admin.StackedInline):
@@ -27,9 +27,9 @@ class UserAdmin(UserAdmin):
     list_display = ['username', 'email', 'first_name', 'last_name', 'is_staff', 'get_approved',]
 
 
-#TODO нормальное отображение профиля юзера в админке, разобраться, нужно ли показывать права доступа и группы 
+# TODO нормальное отображение профиля юзера в админке, разобраться, нужно ли показывать права доступа и группы
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(UserProfile)
-admin.site.register(UserInformation)
+admin.site.register(StudentInfo)

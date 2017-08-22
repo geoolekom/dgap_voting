@@ -10,6 +10,7 @@ class Category(models.Model):
     reason = models.CharField("Причина (для заявления)", max_length=100)
     max_sum = models.IntegerField("Макс. сумма", default=20000)
     max_quantity = models.IntegerField("Макс. раз за семестр", default=1)
+    notifications = models.BooleanField("Уведомления о новых заявлениях", default=True)
 
     class Meta:
         verbose_name = "категория"
