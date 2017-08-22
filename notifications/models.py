@@ -8,6 +8,10 @@ class UserNotificationsSettings(models.Model):
     allow_vk = models.BooleanField("Разрешить уведомления Вконтакте", default=True)
     allow_telegram = models.BooleanField("Разрешить уведомления в Telegram", default=False)
 
+    class Meta:
+        verbose_name = "настройки уведомлений пользователя"
+        verbose_name_plural = "настройки уведомлений пользователей"
+
 
 class Notification(models.Model):
     MAIL = 1
@@ -24,3 +28,7 @@ class Notification(models.Model):
     method = models.IntegerField("Способ", choices=METHODS)
     text = models.TextField("Текст", max_length=1024)
     result = models.CharField("Результат", max_length=256)
+
+    class Meta:
+        verbose_name = "уведомление"
+        verbose_name_plural = "уведомления"
