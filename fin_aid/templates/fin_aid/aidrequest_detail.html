@@ -26,7 +26,7 @@
                     <p>Ожидаемая дата выплаты: {{ object.payment_dt|date }}</p>
                 {% endif %}
                 {% if object.examination_comment %}
-                    <p>Комментарий стип. комиссии: </p>
+                    <p>Комментарий стип. комиссии: {{ object.examination_comment }}</p>
                 {% endif %}
                 {% for document in object.aiddocument_set.all %}
                     <p><a href="{{ document.file.url }}">Подтверждающий документ</a></p>

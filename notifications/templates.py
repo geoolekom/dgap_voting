@@ -22,9 +22,9 @@ def fin_aid_request_status_change(aid_request):
         raise ValueError("Неизвестный статус заявления на матпомощь")
 
     dt_add = dateformat.format(aid_request.add_dttm, settings.DATE_FORMAT)
-    dt_pay = dateformat.format(aid_request.payment_dt, settings.DATE_FORMAT)
     s += " от {} по категории '{}'\n".format(dt_add, aid_request.category)
     if aid_request.status == aid_request.ACCEPTED:
+        dt_pay = dateformat.format(aid_request.payment_dt, settings.DATE_FORMAT)
         s += "Одобренная сумма: {}\nОжидаемая дата выплаты: {}\n".format(aid_request.accepted_sum, dt_pay)
     if aid_request.examination_comment:
         s += "Комментарий стип. комиссии: {}\n".format(aid_request.examination_comment)
