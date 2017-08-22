@@ -27,6 +27,7 @@ def aidrequest_save_notify(sender, instance, created, **kwargs):
         pass
 
 
+<<<<<<< HEAD
 @receiver(post_save, sender=UserProfile, dispatch_uid='notifications')
 def user_create(sender, instance, created, **kwargs):
     if instance.is_subscribed:
