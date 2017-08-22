@@ -49,23 +49,23 @@ def profile_view(request):
     vk = None
     if user.social_auth.exists():
         if user.social_auth.filter(provider='google-oauth2'):
-            user_informations = StudentInfo.objects.filter(phystech__iexact=user.email)
-            if len(user_informations) == 1:
+            student_infos = StudentInfo.objects.filter(phystech__iexact=user.email)
+            if len(student_infos) == 1:
                 if not user.userprofile.is_approved:
                     messages.error(request, 'Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите организатору голосования')
-            elif len(user_informations) < 1:
+            elif len(student_infos) < 1:
                 messages.error(request, 'Вы не прошли автоматическую верификацию, пишите организатору голосования')
             else:
                 messages.error(request, 'В базе более одного студента с данной почтой. Вы можете попробовать авторизоваться через vk или напишите организатору голосования')
             phystech = user.social_auth.get(provider='google-oauth2').uid
         elif user.social_auth.filter(provider='vk-oauth2'):
-            user_informations = StudentInfo.objects.filter(vk='https://vk.com/' + user.username)
-            if len(user_informations) == 1:
+            student_infos = StudentInfo.objects.filter(vk='https://vk.com/' + user.username)
+            if len(student_infos) == 1:
                 if user.userprofile.is_approved:
-                    phystech = user.userprofile.user_information.phystech
+                    phystech = user.userprofile.student_info.phystech
                 else:
                     messages.error(request, 'Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите организатору голосования')
-            elif len(user_informations) < 1:
+            elif len(student_infos) < 1:
                 messages.error(request, 'Вы не прошли автоматическую верификацию, пишите организатору голосования"')
                 messages.error(request, 'В базе более одного студента с данным профилем VK. Вы можете попробовать авторизоваться через phystech.edu или напишите организатору голосования')
             vk = user.social_auth.get(provider='vk-oauth2').uid
