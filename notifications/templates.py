@@ -35,9 +35,8 @@ def fin_aid_request_status_change(aid_request):
 
 def fin_aid_new_request(aid_request):
     if aid_request.urgent:
-        s = "СРОЧНО\n"
-    else:
-        s = ""
+        s = "СРОЧНО: "
+    s += "Новое заявление на матпомощь\n"
     s += "[{}|{} {}]: {}\n".format(aid_request.applicant.username, aid_request.applicant.first_name,
                                    aid_request.applicant.last_name, aid_request.category)
     s += "Обоснование: {}\nЗапрошенная сумма: {}".format(aid_request.reason, aid_request.req_sum)
