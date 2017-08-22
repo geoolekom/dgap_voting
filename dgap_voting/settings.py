@@ -207,6 +207,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.load_extra_data',
     'social.pipeline.user.user_details',
     'profiles.psa.set_middlename',
+    'profiles.psa.approve_student',
 )
 
 import sys

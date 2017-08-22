@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.utils import timezone
 import re
 
-from profiles.models import UserInformation, UserProfile
+from profiles.models import StudentInfo, UserProfile
 
 
 class Poll(models.Model):
@@ -44,8 +44,8 @@ class Poll(models.Model):
     poll_type = models.CharField('Тип голосования', max_length=30, choices=POLL_TYPE,
                                  default=WITHOUT_TARGET_LIST)
     only_for_staff = models.BooleanField(default=False)
-    # target_list = models.ManyToManyField(UserInformation)
-    # voted_users_from_list = models.ManyToManyField(UserInformation)
+    # target_list = models.ManyToManyField(StudentInfo)
+    # voted_users_from_list = models.ManyToManyField(StudentInfo)
 
     def __str__(self):
         return self.name
@@ -111,7 +111,7 @@ class Poll(models.Model):
         for item in list(zip([group, room, course], ['group', 'room', 'course'])):
             if item[0] is not None:
                 if target_list is None:
-                    target_list = UserInformation.objects.filter(
+                    target_list = StudentInfo.objects.filter(
                         **{str(item[1])+'__iregex': item[0]}
                     ).all()
                 else:
@@ -123,7 +123,7 @@ class Poll(models.Model):
 
 
 class Participant(models.Model):
-    user_information = models.ForeignKey(UserInformation, default=None, null=True, blank=True)
+    user_information = models.ForeignKey(StudentInfo, default=None, null=True, blank=True)
     poll = models.ForeignKey(Poll, default=None, null=True, blank=True)
     voted = models.BooleanField(default=False)
 
