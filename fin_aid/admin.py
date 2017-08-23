@@ -51,7 +51,7 @@ class AidRequestAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'reason', 'max_sum', 'max_quantity')
+    list_display = ('name', 'reason', 'max_sum', 'max_quantity', 'notifications')
 
 
 class MonthlyDataAdmin(admin.ModelAdmin):

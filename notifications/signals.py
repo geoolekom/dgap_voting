@@ -14,7 +14,7 @@ def aidrequest_save_notify(sender, instance, created, **kwargs):
     # So when 'create' signal received, there is no aidrequest.applicant yet
     try:
         if not created:
-            if instance.status == AidRequest.WAITING:
+            if instance.status == AidRequest.WAITING and instance.category.notifications:
                 users = User.objects.filter(groups__name='finance')
                 text = fin_aid_new_request(instance)
                 for user in users:
@@ -27,9 +27,10 @@ def aidrequest_save_notify(sender, instance, created, **kwargs):
         pass
 
 
-<<<<<<< HEAD
 @receiver(post_save, sender=UserProfile, dispatch_uid='notifications')
 def user_create(sender, instance, created, **kwargs):
-    if instance.is_subscribed:
-        UserNotificationsSettings.objects.create(user=instance, allow_vk=True)
+    settings = UserNotificationsSettings.objects.get_or_create(user=instance.user)
+    settings.allow_vk = instance.is_subscribed
+    settings.save()
+
 
