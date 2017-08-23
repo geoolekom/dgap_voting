@@ -29,7 +29,7 @@ def aidrequest_save_notify(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=UserProfile, dispatch_uid='notifications')
 def user_create(sender, instance, created, **kwargs):
-    settings = UserNotificationsSettings.objects.get_or_create(user=instance.user)
+    settings, created = UserNotificationsSettings.objects.get_or_create(user=instance.user)
     settings.allow_vk = instance.is_subscribed
     settings.save()
 
