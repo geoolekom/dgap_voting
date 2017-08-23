@@ -1,10 +1,10 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from polls import views
 from polls import admaking
 from polls import mailing
 
-urlpatterns = patterns('',
+urlpatterns = [
     # polls
     url(r'^$', views.Index.as_view(), name='index'),
     url(r'^closed/$', views.Closed.as_view(), name='closed'),
@@ -23,4 +23,4 @@ urlpatterns = patterns('',
     # mailing
     url(r'^(?P<poll_id>\d+)/mail/$', mailing.mail_unvoted, name='mail'),
     url(r'^(?P<poll_id>\d+)/approve_mailing/$', mailing.approve_mailing, name='approve_mailing'),
-)
+]

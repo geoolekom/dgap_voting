@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url, static
+from django.conf.urls import include, url, static
 from django.conf import settings
 from django.views.generic import RedirectView
 
@@ -13,7 +13,7 @@ class MyRegistrationView(RegistrationView):
     def get_success_url(self, request, user):
         return "/profiles"
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', Index.as_view(), name='index'),
     url(r'^polls/', include('polls.urls', namespace='polls')),
     url(r'^blog/', include('blog.urls', namespace='blog')),
@@ -29,4 +29,4 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^faq/', include('faq.urls', namespace='faq')),
     url('', include('social_django.urls', namespace='social')),
-) + static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
