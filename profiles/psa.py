@@ -1,9 +1,9 @@
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from profiles.models import StudentInfo
-from social.apps.django_app.middleware import SocialAuthExceptionMiddleware
-from social.exceptions import AuthForbidden
-from social.exceptions import AuthAlreadyAssociated
-from social.backends.oauth import BaseOAuth2
+from social_django.middleware import SocialAuthExceptionMiddleware
+from social_core.exceptions import AuthForbidden
+from social_core.exceptions import AuthAlreadyAssociated
+from social_core.backends.oauth import BaseOAuth2
 
 
 def set_middlename(backend, user, response, *args, **kwargs):

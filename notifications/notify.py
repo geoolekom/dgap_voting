@@ -2,7 +2,7 @@ from django.core.mail import send_mail
 from .models import UserNotificationsSettings, Notification
 import vk
 from dgap_voting.local_settings import VK_MESSAGES_TOKEN, DEBUG
-from social.apps.django_app.default.models import UserSocialAuth
+from social_django.models import UserSocialAuth
 
 # import python-telegram-bot
 
