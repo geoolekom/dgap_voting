@@ -47,10 +47,12 @@
 							<td>{{ user.email }}  <a href="{% url 'profiles:profile_change_email' %}">(изменить)</a> </td>
 						</tr>{% endcomment %}
 						<tr>
-							<td>Аккаунт phystech.edu</td>{% if phystech %}<td>{{ phystech }}<td>{% else %}<td></td>{% endif %}
+							<td>Аккаунт phystech.edu</td>
+                            <td>{{ phystech|default_if_none:"" }}</td>
 						</tr>
                         <tr>
-							<td>Аккаунт VK</td>{% if vk %}<td>{{ vk }}<td>{% else %}<td></td>{% endif %}
+                            <td>Аккаунт VK</td>
+                            <td>{{ vk|default_if_none:"" }}</td>
 						</tr>
 						{% comment %}
 						<tr>

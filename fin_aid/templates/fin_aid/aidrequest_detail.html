@@ -29,11 +29,16 @@
                     <p>Комментарий стип. комиссии: {{ object.examination_comment }}</p>
                 {% endif %}
                 {% for document in object.aiddocument_set.all %}
-                    <p><a href="{{ document.file.url }}">Подтверждающий документ</a></p>
+                    {% if document.is_application_paper %}
+                        {% if not object.submitted_paper %}
+                            <p>Не забудьте распечатать заявление и опустить в ящик на 1 этаже общежития!</p>
+                        {% endif %}
+                        <p><a href="{{ document.file.url }}">Заявление на матпомощь</a></p>
+                    {% else %}
+                        <p><a href="{{ document.file.url }}">Подтверждающий документ</a></p>
+                    {% endif %}
                 {% endfor %}
-
             </div>
-
         </div>
     </div>
 {% endblock %}

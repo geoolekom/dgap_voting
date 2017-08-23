@@ -1,8 +1,9 @@
 # TODO check importancy of this feature. If essential, make create_paper method of AidRequest class
 # all further imports are needed only to make application paper!
+from django.core.files import File
 from dgap_voting.settings import MEDIA_ROOT, STATIC_ROOT
 from .models import user_hash
-from .models import AidRequest
+from .models import AidRequest, AidDocument
 from docxtpl import DocxTemplate  # create word document from template
 from petrovich.enums import Case, Gender  # склоняем фамилию (в заявлении нужен родительский падеж
 from petrovich.main import Petrovich
@@ -41,6 +42,7 @@ def create_paper(aid_request: AidRequest):
     date = "{} {} {} г.".format(today.day, MONTH_RU[today.month], today.year)
     user = aid_request.applicant
     userprofile = user.userprofile
+    student_info = userprofile.student_info
     sex = get_sex(user)
     if sex == 'female':
         student = "студентки"
@@ -68,4 +70,5 @@ def create_paper(aid_request: AidRequest):
     tpl.render(context)
     path = MEDIA_ROOT + "/aid_docs/user_{}/application-{}-{}-{}.docx".format(user_hash(user), today.year, today.month, today.day)
     tpl.save(path)
+    AidDocument.objects.create(file=File(path), request=aid_request, is_application_paper=True)
     return path

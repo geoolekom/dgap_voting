@@ -80,7 +80,7 @@ class Migration(migrations.Migration):
                 ('is_approved', models.BooleanField(verbose_name='Пользователь подтверждён', default=False)),
                 ('is_subscribed', models.BooleanField(verbose_name='Пользователь подписан на рассылку', default=True)),
                 ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
-                ('user_information', models.ForeignKey(to='profiles.StudentInfo', null=True, default=None, blank=True)),
+                ('student_info', models.ForeignKey(to='profiles.StudentInfo', null=True, default=None, blank=True)),
             ],
         ),
     ]

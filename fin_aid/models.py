@@ -76,6 +76,7 @@ class AidDocument(models.Model):
     file = models.FileField("Документ", upload_to=document_path)
     # filename = models.CharField("Имя файла", max_length=100)
     request = models.ForeignKey(AidRequest)
+    is_application_paper = models.BooleanField("Заявление на матпомощь", default=False)
 
     class Meta:
         verbose_name = "потверждающий документ"

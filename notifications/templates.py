@@ -29,6 +29,8 @@ def fin_aid_request_status_change(aid_request):
     if aid_request.examination_comment:
         s += "Комментарий стип. комиссии: {}\n".format(aid_request.examination_comment)
     url = get_abs_url(reverse("fin_aid:aid_request_detail", args=[aid_request.pk]))
+    if aid_request.status == aid_request.ACCEPTED and not aid_request.submitted_paper:
+        s += "Не забудьте сдать заявление!\n"
     s += "Подробнее на сайте: {}".format(url)
     return s
 

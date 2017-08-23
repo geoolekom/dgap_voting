@@ -27,20 +27,24 @@ def set_middlename(backend, user, response, *args, **kwargs):
 
 
 def approve_student(backend, user, response, *args, **kwargs):
-    try:
-        if backend.name == 'google-oauth2':
-            student_info = StudentInfo.objects.get(phystech__iexact=user.email)
-        elif backend.name == 'vk-oauth2':
-            student_info = StudentInfo.objects.get(vk='https://vk.com/' + user.username)
-        else:
-            return
-        user.userprofile.is_approved = True
-        user.userprofile.student_info = student_info
-        user.userprofile.group = student_info.group
-        user.userprofile.save()
-    except (ObjectDoesNotExist, MultipleObjectsReturned):
-        user.userprofile.is_approved = False
-        user.userprofile.save()
+    if not user.userprofile.student_info or not user.userprofile.is_approved:
+        try:
+            if backend.name == 'google-oauth2':
+                student_info = StudentInfo.objects.get(phystech__iexact=user.email)
+            elif backend.name == 'vk-oauth2':
+                student_info = StudentInfo.objects.get(vk='https://vk.com/' + user.username)
+            else:
+                return
+            user.userprofile.is_approved = True
+            user.userprofile.student_info = student_info
+            user.userprofile.group = student_info.group
+            user.userprofile.save()
+            user.first_name = student_info.first_name
+            user.last_name = student_info.last_name
+            user.save()
+        except (ObjectDoesNotExist, MultipleObjectsReturned):
+            user.userprofile.is_approved = False
+            user.userprofile.save()
 
 
 class SocialAuthExceptionMiddlewareExtended(SocialAuthExceptionMiddleware):

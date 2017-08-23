@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
+from django.core.urlresolvers import reverse
 from django.contrib import messages
 
 from .create_paper import create_paper
@@ -27,7 +28,9 @@ class AidRequestList(generic.ListView):
 class AidRequestCreate(generic.CreateView):
     model = AidRequest
     form_class = AidRequestCreateForm
-    success_url = '/aid'
+
+    def get_success_url(self):
+        return reverse('fin_aid:aid_request_detail', args=(self.object.id,))
 
     def get_context_data(self, **kwargs):
         context = super(AidRequestCreate, self).get_context_data(**kwargs)
@@ -48,7 +51,8 @@ class AidRequestCreate(generic.CreateView):
             if document:
                 AidDocument.objects.create(file=document, request=self.object)
         self.object.save()
-        # create_paper(self.object)
+        if self.object.applicant.userprofile.is_approved:
+            create_paper(self.object)
         messages.add_message(self.request, messages.SUCCESS, "Заявление на матпомощь принято. Результаты рассмотрения"
                                                              " будут доступны в личном кабинете")
         return response
