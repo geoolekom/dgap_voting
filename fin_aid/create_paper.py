@@ -68,7 +68,10 @@ def create_paper(aid_request: AidRequest):
 
     tpl = DocxTemplate(STATIC_ROOT + "/fin_aid/Obrazets_Zayavlenia_Na_Matpomosch.docx")
     tpl.render(context)
-    path = MEDIA_ROOT + "/aid_docs/user_{}/application-{}-{}-{}.docx".format(user_hash(user), today.year, today.month, today.day)
+    filename = "application-{}-{}-{}.docx".format(today.year, today.month, today.day)
+    path = MEDIA_ROOT + "/aid_docs/user_{}/{}".format(user_hash(user), filename)
     tpl.save(path)
-    AidDocument.objects.create(file=File(path), request=aid_request, is_application_paper=True)
+    application = AidDocument(request=aid_request, is_application_paper=True)
+    application.file.save(filename, File(open(path, "rb")), save=True)
+    #AidDocument.objects.create(file=path, request=aid_request, is_application_paper=True)
     return path
