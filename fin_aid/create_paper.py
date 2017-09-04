@@ -51,8 +51,8 @@ def create_paper(aid_request: AidRequest):
         student = "студента"
         gender = Gender.MALE
     p = Petrovich()
-    fst = p.firstname(user.first_name, Case.GENITIVE, gender)
-    lst = p.firstname(user.last_name, Case.GENITIVE, gender)
+    fst = p.firstname(student_info.first_name, Case.GENITIVE, gender)
+    lst = p.firstname(student_info.last_name, Case.GENITIVE, gender)
     if userprofile.middlename:
         mdl = p.firstname(userprofile.middlename, Case.GENITIVE, gender)
     else:
@@ -60,7 +60,7 @@ def create_paper(aid_request: AidRequest):
     name = "{} {} {}".format(lst, fst, mdl)
     context = {
         "student": student,
-        "group": str(userprofile.group),
+        "group": str(student_info.group),
         "date": date,
         "name": name,
         "reason": aid_request.category.reason,

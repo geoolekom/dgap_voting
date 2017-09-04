@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 class UserNotificationsSettings(models.Model):
-    user = models.ForeignKey(User)
+    user = models.OneToOneField(User)
     allow_email = models.BooleanField("Разрешить уведомления на эл. почту", default=False)
     allow_vk = models.BooleanField("Разрешить уведомления Вконтакте", default=True)
     allow_telegram = models.BooleanField("Разрешить уведомления в Telegram", default=False)

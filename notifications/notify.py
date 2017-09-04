@@ -40,7 +40,7 @@ def _notify_telegram(user, text):
 
 def notify(user, text):
     try:
-        settings = user.UserNotificationsSettings
+        settings = user.usernotificationssettings
         if settings.allow_vk:
             _notify_vk(user, text)
         if settings.allow_email:

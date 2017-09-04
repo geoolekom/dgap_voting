@@ -10,6 +10,7 @@
 				<h1 class="panel-title"><strong>Профиль</strong></h1> 
 			</div>
 			{% if user.userprofile.is_approved or user.social_auth.exists %}
+                {% with student_info=user.userprofile.student_info %}
 				<table class="table table-bordered">
 					<tbody>
 						<tr>
@@ -20,11 +21,11 @@
 					<tbody>
 						<tr>
 							<td>Фамилия</td>
-							<td>{{ user.last_name}}</td>
+							<td>{{ student_info.last_name}}</td>
 						</tr>
 						<tr>
 							<td>Имя</td>
-							<td>{{ user.first_name}}</td>
+							<td>{{ student_info.first_name}}</td>
 						</tr>
 						<tr>
 							<td>Отчество</td>
@@ -38,7 +39,7 @@
 						</tr>
 						<tr>
 							<td>Группа</td>
-							<td>{{ user.userprofile.group }}</td>
+							<td>{{ student_info.group }}</td>
 						</tr>
 					</tbody>
 					<tbody>
@@ -75,6 +76,7 @@
                     </a>
 				{% endbuttons %}
 			</div>
+                {% endwith %}
 			{% else %}
 			<div class="panel-body">
 				<table class="table table-bordered">
