@@ -125,8 +125,6 @@ WSGI_APPLICATION = 'dgap_voting.wsgi.application'
 
 # SECURITY WARNING: don't run with this passwords in production!
 
-DATABASE_ROUTERS = ['polls.routers.ModelDatabaseRouter']
-
 DATABASES = {
     'default': {
         'ENGINE':'django.db.backends.postgresql_psycopg2',
@@ -136,14 +134,6 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '5432',
     },
-    'legacy_users': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'wow',
-        'USER': 'root',
-        'PASSWORD': 'gsogso;;;',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
 }
 
 

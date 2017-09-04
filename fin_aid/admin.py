@@ -25,7 +25,6 @@ class AidRequestAdminForm(forms.ModelForm):
 class AidRequestAdmin(admin.ModelAdmin):
     form = AidRequestAdminForm  # (initial={"month_of_payment":AidRequestAdminForm.THIS})
     date_hierarchy = 'add_dttm'
-    prepopulated_fields = {"accepted_sum": ("req_sum",)}
     list_display = ('applicant', 'add_dttm', 'category', 'req_sum', 'urgent', 'status', 'accepted_sum', 'payment_dt', 'submitted_paper')
     list_display_links = ['applicant', 'add_dttm', 'category', 'req_sum']
     list_filter = ('status', 'category', 'urgent', 'add_dttm', 'submitted_paper')

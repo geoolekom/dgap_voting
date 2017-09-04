@@ -1,6 +1,6 @@
 bleach==2.0.0
 chardet==3.0.4
-Django==1.9.13
+Django==1.11.4
 django-bleach==0.3.0
 django-bootstrap3==9.0.0
 django-registration-redux==1.3
