@@ -29,6 +29,7 @@
 					<div class="pull-right">
 						{% comment %}	<a class=" btn btn-default" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'polls:index' %}">Войти через mipt.ru</a> {% endcomment %}
 					<a class="btn btn-default" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'polls:index' %}">Войти через phystech.edu</a>
+                    <a class="btn btn-default" href="{% url 'social:begin' 'vk-oauth2' %}?next={% url 'polls:index' %}">Войти через VK</a>
 					</div>
 				</form>
 			</div>

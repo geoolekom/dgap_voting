@@ -10,15 +10,7 @@
 				<h1 class="panel-title"><strong>Профиль</strong></h1> 
 			</div>
 			{% if user.userprofile.is_approved or user.social_auth.exists %}
-			<div class="panel-body">
-				{% if messages %}
-					{% for message in messages %}
-						<div class="alert alert-danger">
-							<a class="close" data-dismiss="alert" href="#">&times;</a>
-							{{ message }}
-						</div>
-					{% endfor %}
-				{% endif %}
+                {% with student_info=user.userprofile.student_info %}
 				<table class="table table-bordered">
 					<tbody>
 						<tr>
@@ -29,11 +21,11 @@
 					<tbody>
 						<tr>
 							<td>Фамилия</td>
-							<td>{{ user.last_name}}</td>
+							<td>{{ student_info.last_name}}</td>
 						</tr>
 						<tr>
 							<td>Имя</td>
-							<td>{{ user.first_name}}</td>
+							<td>{{ student_info.first_name}}</td>
 						</tr>
 						<tr>
 							<td>Отчество</td>
@@ -47,21 +39,21 @@
 						</tr>
 						<tr>
 							<td>Группа</td>
-							<td>{{ user.userprofile.group }}</td>
+							<td>{{ student_info.group }}</td>
 						</tr>
 					</tbody>
 					<tbody>
-						<tr>
+						{% comment %}<tr>
 							<td>Почтовый адрес</td>
-							<td>{{ user.email }} {% comment %} <a href="{% url 'profiles:profile_change_email' %}">(изменить)</a> {% endcomment %}</td>
-						</tr>
+							<td>{{ user.email }}  <a href="{% url 'profiles:profile_change_email' %}">(изменить)</a> </td>
+						</tr>{% endcomment %}
 						<tr>
 							<td>Аккаунт phystech.edu</td>
-                            {% if phystech %}
-							    <td>{{ phystech }}<td>
-                            {% else %}
-                                <td></td>
-                            {% endif %}
+                            <td>{{ phystech|default_if_none:"" }}</td>
+						</tr>
+                        <tr>
+                            <td>Аккаунт VK</td>
+                            <td>{{ student_info.vk|default_if_none:"" }}</td>
 						</tr>
 						{% comment %}
 						<tr>
@@ -78,29 +70,23 @@
 			</div>
 			<div class="panel-footer clearfix">
 				{% buttons %}
-					<a href="{% url 'password_change' %}" class="btn btn-default">Изменить пароль</a>
-					<a href="{% url 'profiles:change_subscribing' %}" class="btn btn-default pull-right">{% if user.userprofile.is_subscribed %}Отписаться от рассылки{% else %}Подписаться на рассылку{% endif %}</a>
-					{% comment %}
-						Судя по всему, реализация через форму изменения рассылки не даёт никакого выигрыша
-					{% endcomment %}
+					{% comment %}<a href="{% url 'password_change' %}" class="btn btn-default">Изменить пароль</a>{% endcomment %}
+					<a href="{% url 'profiles:change_subscribing' %}" class="btn btn-default pull-right">
+                        {% if user.userprofile.is_subscribed %}Отлючить уведомления{% else %}Включить уведомления{% endif %}
+                    </a>
 				{% endbuttons %}
 			</div>
+                {% endwith %}
 			{% else %}
 			<div class="panel-body">
-				{% if messages %}
-					{% for message in messages %}
-						<div class="alert alert-danger">
-							<a class="close" data-dismiss="alert" href="#">&times;</a>
-							{{ message }}
-						</div>
-					{% endfor %}
-				{% endif %}
 				<table class="table table-bordered">
 					<tbody>
 						<tr>
 							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт phystech.edu</a>
 						</tr>
-
+						<tr>
+							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'vk-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт VK</a>
+						</tr>
 					{% comment %}
 						<tr>
 							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт mipt.ru</a>
@@ -110,9 +96,9 @@
 				</table>
 			</div>
 			<div class="panel-footer clearfix">
-					{% buttons %}
+					{% comment %}{% buttons %}
 						<a class="pull-right btn btn-default" role="button" href="{% url 'password_change' %}" >Изменение пароля</a>
-					{% endbuttons %}
+					{% endbuttons %}{% endcomment %}
 			</div>
 			{% endif %}
 		</div>	

@@ -1,6 +1,6 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from faq import views
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', views.Faq.as_view(), name='faq'),
-)
+]

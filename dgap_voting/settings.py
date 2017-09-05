@@ -45,9 +45,12 @@ INSTALLED_APPS = (
     'registration',
     'bootstrap3',
     'polls',
+    'blog',
+    'fin_aid',
+    'notifications',
     'django_user_agents',
     'django_bleach',
-    'social.apps.django_app.default',
+    'social_django',
     'servertime',
     'profiles',
     'faq',
@@ -69,17 +72,17 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
-                'social.apps.django_app.context_processors.backends',
-                'social.apps.django_app.context_processors.login_redirect',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'social.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
-    'social.backends.vk.VKOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.vk.VKOAuth2',
     #'profiles.psa.MiptOAuth2',
 )
 
@@ -108,7 +111,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_user_agents.middleware.UserAgentMiddleware',
-    #'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    # 'social_django.middleware.SocialAuthExceptionMiddleware',
     'profiles.psa.SocialAuthExceptionMiddlewareExtended',
 )
 
@@ -122,8 +125,6 @@ WSGI_APPLICATION = 'dgap_voting.wsgi.application'
 
 # SECURITY WARNING: don't run with this passwords in production!
 
-DATABASE_ROUTERS = ['polls.routers.ModelDatabaseRouter']
-
 DATABASES = {
     'default': {
         'ENGINE':'django.db.backends.postgresql_psycopg2',
@@ -133,20 +134,12 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '5432',
     },
-    'legacy_users': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'wow',
-        'USER': 'root',
-        'PASSWORD': 'gsogso;;;',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
 }
 
 
 # Bleach default settings
 BLEACH_ALLOWED_TAGS = ['b', 'i', 'u', 's', 'a', 'p', 'div', 'ul', 'li', 'img',
-                       'h1', 'h2', 'h3', 'font', 'ol']
+                       'h1', 'h2', 'h3', 'font', 'ol', 'script']
 
 BLEACH_ALLOWED_ATTRIBUTES = ['href', 'title', 'style', 'src', 'align']
 
@@ -174,13 +167,15 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+DATE_FORMAT = "j E Y"
+DATETIME_FORMAT = DATE_FORMAT + " G:i"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 MEDIA_ROOT = (os.path.join(BASE_DIR, 'media'))
 SENDFILE_ROOT = MEDIA_ROOT
 STATIC_ROOT = (os.path.join(BASE_DIR, 'static'))
+MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/'
 
@@ -191,16 +186,17 @@ SOCIAL_AUTH_LOGIN_ERROR_URL = 'polls:done'
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = []
 
 SOCIAL_AUTH_PIPELINE = (
-    'social.pipeline.social_auth.social_details',
-    'social.pipeline.social_auth.social_uid',
-    'social.pipeline.social_auth.auth_allowed',
-    'social.pipeline.social_auth.social_user',
-    'social.pipeline.user.get_username',
-    'social.pipeline.social_auth.associate_by_email',
-    'social.pipeline.user.create_user',
-    'social.pipeline.social_auth.associate_user',
-    'social.pipeline.social_auth.load_extra_data',
-    'social.pipeline.user.user_details',
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+    'profiles.psa.approve_student',
     'profiles.psa.set_middlename',
 )
 
