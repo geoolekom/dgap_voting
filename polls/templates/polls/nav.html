@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a href="{% url 'index' %}" class="navbar-brand">DGAP voting</a>
+        <a href="{% url 'index' %}" class="navbar-brand">DGAP services</a>
     </div>
     <div id="navbarCollapse" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
@@ -39,7 +39,7 @@
             <li class="nav-divider"></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="{%  url 'faq:faq' %}">FAQ</a></li>
+            <li><a href="{%  url 'blog:article_list' %}">FAQ</a></li>
             <li class="nav-divider"></li>
             {% if user.is_authenticated %}
                 <li><a href="{% url 'profiles:profile_view' %}">Профиль</a></li>

@@ -139,7 +139,7 @@ DATABASES = {
 
 # Bleach default settings
 BLEACH_ALLOWED_TAGS = ['b', 'i', 'u', 's', 'a', 'p', 'div', 'ul', 'li', 'img',
-                       'h1', 'h2', 'h3', 'font', 'ol']
+                       'h1', 'h2', 'h3', 'font', 'ol', 'script']
 
 BLEACH_ALLOWED_ATTRIBUTES = ['href', 'title', 'style', 'src', 'align']
 

@@ -52,11 +52,11 @@ def profile_view(request):
             student_infos = StudentInfo.objects.filter(phystech__iexact=user.email)
             if len(student_infos) == 1:
                 if not user.userprofile.is_approved:
-                    messages.error(request, 'Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите организатору голосования')
+                    messages.error(request, 'Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите администраторам сайта')
             elif len(student_infos) < 1:
-                messages.error(request, 'Вы не прошли автоматическую верификацию, пишите организатору голосования')
+                messages.error(request, 'Вы не прошли автоматическую верификацию, пишите администраторам сайта')
             else:
-                messages.error(request, 'В базе более одного студента с данной почтой. Вы можете попробовать авторизоваться через vk или напишите организатору голосования')
+                messages.error(request, 'В базе более одного студента с данной почтой. Вы можете попробовать авторизоваться через vk или напишите администраторам сайта')
             phystech = user.social_auth.get(provider='google-oauth2').uid
         elif user.social_auth.filter(provider='vk-oauth2'):
             student_infos = StudentInfo.objects.filter(vk='https://vk.com/' + user.username)
@@ -64,13 +64,13 @@ def profile_view(request):
                 if user.userprofile.is_approved:
                     phystech = user.userprofile.student_info.phystech
                 else:
-                    messages.error(request, 'Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите организатору голосования')
+                    messages.error(request, 'Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите администраторам сайта')
             elif len(student_infos) < 1:
-                messages.error(request, 'Вы не прошли автоматическую верификацию, пишите организатору голосования"')
-                messages.error(request, 'В базе более одного студента с данным профилем VK. Вы можете попробовать авторизоваться через phystech.edu или напишите организатору голосования')
+                messages.error(request, 'Вы не прошли автоматическую верификацию, пишите администраторам сайта')
+                messages.error(request, 'В базе более одного студента с данным профилем VK. Вы можете попробовать авторизоваться через phystech.edu или напишите администраторам сайта')
             vk = user.social_auth.get(provider='vk-oauth2').uid
         else:
-            messages.error(request, 'Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите организатору голосования')
+            messages.error(request, 'Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите администраторам сайта')
 
     return render(request, 'profiles/profile.html', {
         'mipt': mipt,

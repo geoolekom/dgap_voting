@@ -6,6 +6,6 @@ urlpatterns = [
     url(r'^$', views.ArticleList.as_view(), name='article_list'),
     url(r'^post/(?P<slug>[\w-]+)$', views.ArticleDetail.as_view(), name='article_detail'),
     url(r'^post/(?P<pk>\d+)$', views.ArticleDetail.as_view(), name='article_detail'),
-    url(r'^new_post$', views.ArticleCreate.as_view(), name="new_post"),
+    #url(r'^new_post$', views.ArticleCreate.as_view(), name="new_post"),
 
 ]

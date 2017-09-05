@@ -6,4 +6,4 @@ class ProfilesConfig(AppConfig):
     verbose_name = "Пользовательские профили"
 
     def ready(self):
-        import notifications.signals
+        import profiles.signals

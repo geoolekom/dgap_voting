@@ -24,8 +24,8 @@ def upload_students_list(filename='~/spiski.csv'):
     for i, row in df.iterrows():
         StudentInfo.objects.get_or_create(fio=row["ФИО"],
                                           group=row["Группа"],
-                                          phystech=row["phystech"],
-                                          vk=row["vk"],
+                                          phystech=row["Email"],
+                                          vk='https://vk.com/' + str(row["screen_name"]),
                                           first_name=row["Имя"],
                                           last_name=row["Фамилия"])
 

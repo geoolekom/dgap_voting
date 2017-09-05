@@ -26,10 +26,12 @@ class UserAdmin(UserAdmin):
     
     list_display = ['username', 'email', 'first_name', 'last_name', 'is_staff', 'get_approved',]
 
-
+class StudentInfoAdmin(admin.ModelAdmin):
+    search_fields = ['first_name', 'last_name']
+    list_display = ['first_name', 'last_name', 'group', 'vk', 'phystech']
 # TODO нормальное отображение профиля юзера в админке, разобраться, нужно ли показывать права доступа и группы
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(UserProfile)
-admin.site.register(StudentInfo)
+admin.site.register(StudentInfo, StudentInfoAdmin)
