@@ -30,7 +30,7 @@
                 {% endif %}
                 {% for document in object.aiddocument_set.all %}
                     {% if document.is_application_paper %}
-                        {% if not object.submitted_paper %}
+                        {% if not object.submitted_paper and object.status == object.ACCEPTED %}
                             <p>Не забудьте распечатать заявление и опустить в ящик на 1 этаже общежития!</p>
                         {% endif %}
                         <p><a href="{{ document.file.url }}">Заявление на матпомощь</a></p>
@@ -38,6 +38,7 @@
                         <p><a href="{{ document.file.url }}">Подтверждающий документ</a></p>
                     {% endif %}
                 {% endfor %}
+                <a href={% url "fin_aid:aid_request_delete" object.id %} class="btn btn-danger">Удалить заявление</a>
             </div>
         </div>
     </div>

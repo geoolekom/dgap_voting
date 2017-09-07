@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib import messages
 
 from .create_paper import create_paper
@@ -21,6 +21,7 @@ class AidRequestList(generic.ListView):
         return super(AidRequestList, self).dispatch(*args, **kwargs)
 
     def get_queryset(self):
+        
         return AidRequest.objects.filter(applicant=self.request.user).order_by("-add_dttm")
 
 
@@ -56,6 +57,16 @@ class AidRequestCreate(generic.CreateView):
         messages.add_message(self.request, messages.SUCCESS, "Заявление на матпомощь принято. Результаты рассмотрения"
                                                              " будут доступны в личном кабинете")
         return response
+
+class AidRequestDelete(generic.DeleteView):
+    model = AidRequest
+    success_url = reverse_lazy('fin_aid:aid_request_list')
+
+    def dispatch(self, request, *args, **kwargs):
+        aid_request = get_object_or_404(AidRequest, pk=self.kwargs['pk'])
+        if not aid_request.can_view(request.user):
+            raise PermissionDenied
+        return super(AidRequestDelete, self).dispatch(request, *args, **kwargs)
 
 
 class AidRequestDetail(generic.DetailView):

@@ -1,0 +1,25 @@
+{% extends "polls/base.html" %}
+{% block content %}
+<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2>Удаление заявления от {{ object.add_dttm|date }} в категории "{{ object.category }}"</h2>
+        </div>
+        <div class="panel-body">
+            <p>Дата подачи: {{ object.add_dttm|date }}</p>
+            <p>Категория: {{ object.category }}</p>
+            <p>Обоснование: {{ object.reason | safe }}</p>
+            <p>Запрошенная сумма: {{ object.req_sum|floatformat }} руб.</p>
+            <p>Срочно: {% if object.urgent %} да {% else %} нет {% endif %}</p>
+            <form action="" method="post">
+                {% csrf_token %}
+                <p>Вы действительно хотите удалить заявление?</p>
+                <input type="submit" value="Удалить" class = "btn btn-danger"/>
+            </form>                
+        </div>
+    </div>
+</div>     
+{% endblock %}
+
+
+

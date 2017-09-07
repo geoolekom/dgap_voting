@@ -25,13 +25,20 @@ class UserAdmin(UserAdmin):
     get_approved.short_description = 'Подтверждён'
     
     list_display = ['username', 'email', 'first_name', 'last_name', 'is_staff', 'get_approved',]
+    list_filter = ['is_staff', 'is_superuser', 'groups', 'is_active', 'get_approved']
 
 class StudentInfoAdmin(admin.ModelAdmin):
     search_fields = ['first_name', 'last_name']
     list_display = ['first_name', 'last_name', 'group', 'vk', 'phystech']
 # TODO нормальное отображение профиля юзера в админке, разобраться, нужно ли показывать права доступа и группы
 
+
+class UserProfileAdmin(admin.ModelAdmin):
+    model = UserProfile
+    list_display = ['user', 'group', 'is_approved']
+    list_filter = ['is_subscribed', 'is_approved']
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
-admin.site.register(UserProfile)
+admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(StudentInfo, StudentInfoAdmin)

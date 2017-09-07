@@ -8,7 +8,7 @@ from docxtpl import DocxTemplate  # create word document from template
 from petrovich.enums import Case, Gender  # склоняем фамилию (в заявлении нужен родительский падеж
 from petrovich.main import Petrovich
 import datetime
-
+import os
 # russian, genitive
 MONTH_RU = {
     1: "января",
@@ -68,10 +68,11 @@ def create_paper(aid_request: AidRequest):
 
     tpl = DocxTemplate(STATIC_ROOT + "/fin_aid/Obrazets_Zayavlenia_Na_Matpomosch.docx")
     tpl.render(context)
+    path = MEDIA_ROOT + "/aid_docs/user_{}/".format(user_hash(user))
     filename = "application-{}-{}-{}.docx".format(today.year, today.month, today.day)
-    path = MEDIA_ROOT + "/aid_docs/user_{}/{}".format(user_hash(user), filename)
-    tpl.save(path)
+    os.makedirs(path, exist_ok=True)
+    tpl.save(path + filename)
     application = AidDocument(request=aid_request, is_application_paper=True)
-    application.file.save(filename, File(open(path, "rb")), save=True)
+    application.file.save(filename, File(open(path+filename, "rb")), save=True)	
     #AidDocument.objects.create(file=path, request=aid_request, is_application_paper=True)
-    return path
+    return filename

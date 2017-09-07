@@ -72,7 +72,7 @@
 				{% buttons %}
 					{% comment %}<a href="{% url 'password_change' %}" class="btn btn-default">Изменить пароль</a>{% endcomment %}
 					<a href="{% url 'profiles:change_subscribing' %}" class="btn btn-default pull-right">
-                        {% if user.userprofile.is_subscribed %}Отлючить уведомления{% else %}Включить уведомления{% endif %}
+                        {% if user.userprofile.is_subscribed %}Отключить уведомления{% else %}Включить уведомления{% endif %}
                     </a>
 				{% endbuttons %}
 			</div>

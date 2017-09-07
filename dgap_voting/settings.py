@@ -99,7 +99,7 @@ CACHES = {
 
 SENDFILE_BACKEND = 'sendfile.backends.development'
 
-SITE_ID = 1
+SITE_ID = 2
 
 ACCOUNT_ACTIVATION_DAYS = 7
 

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 from hashlib import md5
 from datetime import datetime, date
@@ -51,6 +52,9 @@ class AidRequest(models.Model):
         if not user.is_authenticated() or (self.applicant != user and not user.is_staff and not user.is_superuser):
             return False
         return True
+
+    def get_absolute_url(self):
+        return reverse('fin_aid:aid_request_detail', args=[self.id])
 
     def __str__(self):
         return "{}: заявление от {} по категории {} на сумму {}".format(self.applicant, self.add_dttm.date(), self.category, self.req_sum)

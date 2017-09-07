@@ -9,6 +9,7 @@ admin.autodiscover()
 from registration.backends.simple.views import RegistrationView
 
 from blog.views import ArticleList
+from .settings import DEBUG
 
 class MyRegistrationView(RegistrationView):
     def get_success_url(self, request, user):
@@ -30,4 +31,6 @@ urlpatterns = [
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^faq/', include('faq.urls', namespace='faq')),
     url('', include('social_django.urls', namespace='social')),
-] + static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
+if DEBUG:
+    urlpatterns += static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
