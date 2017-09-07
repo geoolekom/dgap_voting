@@ -25,7 +25,8 @@ class UserAdmin(UserAdmin):
     get_approved.short_description = 'Подтверждён'
     
     list_display = ['username', 'email', 'first_name', 'last_name', 'is_staff', 'get_approved',]
-    list_filter = ['is_staff', 'is_superuser', 'groups', 'is_active', 'get_approved']
+    # list_filter = ['is_staff', 'is_superuser', 'groups', 'is_active', 'get_approved']
+
 
 class StudentInfoAdmin(admin.ModelAdmin):
     search_fields = ['first_name', 'last_name']
