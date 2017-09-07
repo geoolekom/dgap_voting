@@ -21,8 +21,12 @@ class AidRequestList(generic.ListView):
         return super(AidRequestList, self).dispatch(*args, **kwargs)
 
     def get_queryset(self):
-        
-        return AidRequest.objects.filter(applicant=self.request.user).order_by("-add_dttm")
+        user = self.request.user
+        if user.userprofile.student_info:
+            users = [profile.user for profile in user.userprofile.student_info.userprofile_set.all()]
+        else:
+            users = user
+        return AidRequest.objects.filter(applicant__in=users).order_by("-add_dttm")
 
 
 # @method_decorator(login_required, name='dispatch')
