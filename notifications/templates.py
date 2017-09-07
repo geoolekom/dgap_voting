@@ -15,7 +15,8 @@ def fin_aid_request_status_change(aid_request):
     elif aid_request.status == aid_request.DECLINED:
         s = "Отклонено заявление на матпомощь"
     elif aid_request.status == aid_request.INFO_NEEDED:
-        s = "Необходимо уточнить информацию по заявлению на матпомощь"
+        url = get_abs_url(reverse("fin_aid:aid_request_update", args=[aid_request.pk]))
+        s = "Необходимо уточнить информацию по заявлению на матпомощь. Редактировать заявление : {}".format(url)
     elif aid_request.status == aid_request.WAITING:
         s = "Ожидает рассмотрения заявление на матпомощь"
     else:

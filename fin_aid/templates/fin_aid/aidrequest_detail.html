@@ -38,7 +38,10 @@
                         <p><a href="{{ document.file.url }}">Подтверждающий документ</a></p>
                     {% endif %}
                 {% endfor %}
-                <a href={% url "fin_aid:aid_request_delete" object.id %} class="btn btn-danger">Удалить заявление</a>
+                {% if object.status == object.WAITING or object.status == object.INFO_NEEDED%}
+                    <a href={% url "fin_aid:aid_request_update" object.id %} class="btn btn-primary">Редактировать заявление</a>
+                    <a href={% url "fin_aid:aid_request_delete" object.id %} class="btn btn-danger">Удалить заявление</a>
+                {% endif %}
             </div>
         </div>
     </div>
