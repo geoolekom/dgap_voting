@@ -49,9 +49,15 @@ class AidRequest(models.Model):
     submitted_paper = models.BooleanField("Принес заявление", default=False)
 
     def can_view(self, user):
-        if not user.is_authenticated() or (self.applicant != user and not user.is_staff and not user.is_superuser):
+        # login required
+        if not user.is_authenticated:
             return False
-        return True
+        # my applications
+        if self.applicant == user \
+            or user.userprofile.student_info and self.applicant.userprofile.student_info == user.userprofile.student_info \
+                or user.is_staff or user.is_superuser:
+            return True
+        return False
 
     def get_absolute_url(self):
         return reverse('fin_aid:aid_request_detail', args=[self.id])
