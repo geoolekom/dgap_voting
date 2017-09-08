@@ -1,3 +1,7 @@
 tr.clickable-row {
     cursor: pointer;
 }
+
+img.aiddocument {
+    max-width: 100%;
+}

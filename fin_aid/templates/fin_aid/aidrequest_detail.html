@@ -1,4 +1,5 @@
 {% extends "polls/base.html" %}
+{% load fin_aid_extras %}
 {% block content %}
     <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
         <div class="panel panel-default">
@@ -28,14 +29,18 @@
                 {% if object.examination_comment %}
                     <p>Комментарий стип. комиссии: {{ object.examination_comment }}</p>
                 {% endif %}
+                {% if object.aiddocument_set.all %}
+                    <p>Приложенные документы:</p>
+                {% endif %}
+                {{ object.images_tags | safe }}
                 {% for document in object.aiddocument_set.all %}
                     {% if document.is_application_paper %}
                         {% if not object.submitted_paper and object.status == object.ACCEPTED %}
                             <p>Не забудьте распечатать заявление и опустить в ящик на 1 этаже общежития!</p>
                         {% endif %}
                         <p><a href="{{ document.file.url }}">Заявление на матпомощь</a></p>
-                    {% else %}
-                        <p><a href="{{ document.file.url }}">Подтверждающий документ</a></p>
+                    {% elif not document.is_image %}
+                        <p><a href="{{ document.file.url }}"> {{ document.file|filename }} </a></p>
                     {% endif %}
                 {% endfor %}
                 {% if object.status == object.WAITING or object.status == object.INFO_NEEDED%}

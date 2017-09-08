@@ -1,4 +1,4 @@
-from .models import AidRequest, AidDocument, get_next_date
+from .models import AidRequest, AidDocument, get_next_date, is_image
 from .forms import AidRequestCreateForm
 from django.views import generic
 from django.contrib.auth.decorators import login_required
@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib import messages
+
 
 from .create_paper import create_paper
 
@@ -46,7 +47,7 @@ class AidRequestCreate(generic.CreateView):
         for i in range(1, 4):
             document = form.cleaned_data['document' + str(i)]
             if document:
-                AidDocument.objects.create(file=document, request=self.object)
+                AidDocument.objects.create(file=document, request=self.object, is_image=is_image(document))
         self.object.save()
         if self.object.applicant.userprofile.is_approved:
             create_paper(self.object)

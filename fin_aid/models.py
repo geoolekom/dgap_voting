@@ -4,6 +4,7 @@ from django.urls import reverse
 
 from hashlib import md5
 from datetime import datetime, date
+from PIL import Image
 
 
 class Category(models.Model):
@@ -19,6 +20,15 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+
+def is_image(file):
+    try:
+        trial_image = Image.open(file)
+        trial_image.verify()  # raises exception if there are errors
+        return True
+    except Exception:
+        return False
 
 
 # TODO add_dttm changes EVERY time when model is saved, so instead of setting it as auto_now_add=True it's better to set im manually
@@ -59,6 +69,18 @@ class AidRequest(models.Model):
             return True
         return False
 
+    # returns links to images, related to this aidrequest
+    # TODO rewrite using new AidDocument.is_image field?
+    def images_tags(self):
+        html = ""
+        files = self.aiddocument_set.all()
+        for file in files:
+            if is_image(file.file):
+                html += '<img class="aiddocument" style="max-width:100%;" src={}>'.format(file.file.url)
+        return html
+    images_tags.allow_tags = True
+    images_tags.short_description = "Приложенные изображения"
+
     def get_absolute_url(self):
         return reverse('fin_aid:aid_request_detail', args=[self.id])
 
@@ -87,6 +109,7 @@ class AidDocument(models.Model):
     # filename = models.CharField("Имя файла", max_length=100)
     request = models.ForeignKey(AidRequest)
     is_application_paper = models.BooleanField("Заявление на матпомощь", default=False)
+    is_image = models.BooleanField("Является изображением", default=False)
 
     class Meta:
         verbose_name = "потверждающий документ"

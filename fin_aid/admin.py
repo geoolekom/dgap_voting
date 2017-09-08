@@ -25,21 +25,21 @@ class AidRequestAdminForm(forms.ModelForm):
 class AidRequestAdmin(admin.ModelAdmin):
     form = AidRequestAdminForm  # (initial={"month_of_payment":AidRequestAdminForm.THIS})
     date_hierarchy = 'add_dttm'
-    list_display = ['get_applicant_first_name', 'get_applicant_last_name', 'add_dttm', 'category', 'req_sum', 'urgent',
+    list_display = ['get_applicant_name', 'add_dttm', 'category', 'req_sum', 'urgent',
                     'status', 'accepted_sum', 'payment_dt', 'submitted_paper']
-    list_display_links = ['get_applicant_first_name', 'get_applicant_last_name', 'add_dttm', 'category', 'req_sum']
+    list_display_links = ['get_applicant_name', 'add_dttm', 'category', 'req_sum']
     # list_filter = ('status', 'category', 'urgent', 'add_dttm', 'submitted_paper')
     inlines = [AidDocumentInline,]
     search_fields = ["applicant__first_name", "applicant__last_name", "reason"]
     list_editable = ["status", "accepted_sum", "payment_dt", "submitted_paper"]
+    readonly_fields = ['images_tags']
 
-    def get_applicant_first_name(self, obj):
-        return obj.applicant.first_name
-    get_applicant_first_name.short_description = 'Имя'
-
-    def get_applicant_last_name(self, obj):
-        return obj.applicant.last_name
-    get_applicant_last_name.short_description = 'Фамилия'
+    def get_applicant_name(self, obj):
+        s = "{} {}".format(obj.applicant.last_name, obj.applicant.first_name)
+        if not s or s == " ":
+            s = obj.applicant.username
+        return s
+    get_applicant_name.short_description = 'Пользователь'
 
     def save_model(self, request, obj, form, change):
         if obj.status == AidRequest.ACCEPTED:

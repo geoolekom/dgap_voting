@@ -52,7 +52,7 @@ class SocialAuthExceptionMiddlewareExtended(SocialAuthExceptionMiddleware):
         if type(exception) is AuthForbidden:
             return "Поддерживаются только аккаунты phystech.edu"
         elif type(exception) is AuthAlreadyAssociated:
-            return "Данный аккаунт phystech.edu уже привязан"
+            return "Данный аккаунт phystech.edu или Вконтакте уже привязан"
         else:
             return str(exception)
 
