@@ -82,14 +82,15 @@ class AidRequest(models.Model):
     images_tags.short_description = "Приложенные изображения"
 
     # creates csv with all accepted applications for this month
-    def to_csv(self, filename):
+    @staticmethod	
+    def to_csv(filename):
         df = pd.DataFrame(columns=["FIO", "group", "req_sum", "Исх. сумма", "Реал. сумма", "За что", "заявление",
                                 "Комментарии", "e-mail", "text"])
-        for request in AidRequest.objects.filter(status=AidRequest.ACCEPTED, payment_dt__month=date.today().month):
+        for request in AidRequest.objects.filter(status=AidRequest.ACCEPTED, payment_dt__month=date.today().month).order_by('category'):
             dct = {
                 "req_sum": request.req_sum,
-                "Исх. сумма": request.accepted_sum/0.86 if request.accepted_sum != 0 else 0,
-                "Реал. сумма": request.accepted_sum,
+                "Исх. сумма": int(request.accepted_sum/0.86) if request.accepted_sum != 0 else 0,
+                "Реал. сумма": int(request.accepted_sum),
                 "За что": request.category.name,
                 "Комментарии": request.examination_comment,
                 "text": "",
@@ -107,7 +108,7 @@ class AidRequest(models.Model):
                     dct.update({"FIO": fio})
                 else:
                     dct.update({"FIO": request.applicant.username})
-            df = df.append(dct)
+            df = df.append(dct, ignore_index=True)
         df.to_csv(filename)
 
     def get_absolute_url(self):

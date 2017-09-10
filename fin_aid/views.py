@@ -119,3 +119,11 @@ class AidRequestDetail(generic.DetailView):
         if not aid_request.can_view(request.user):
             raise PermissionDenied
         return super(AidRequestDetail, self).dispatch(request, *args, **kwargs)
+
+# TODO reqrite
+def export_aid_request(request):
+    if not request.user.is_authenticated or (not request.user.groups.filter(name="finance").exists() and not request.user.is_staff):
+        raise PermissionDenied
+    filename = "media/aid_docs/export.csv"
+    AidRequest.to_csv(filename)
+    return redirect("/media/aid_docs/export.csv")

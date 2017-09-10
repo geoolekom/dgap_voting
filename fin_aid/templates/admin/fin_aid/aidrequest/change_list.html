@@ -2,6 +2,7 @@
 {% load i18n admin_urls %}
 {% load fin_aid_extras %}
 {% block content %}
-    {% month_info %}
+    <h3>{% month_info %}</h3>
+    <a href={% url "fin_aid:aid_request_export" %}>Выгрузить одобренные на этот месяц</a>
     {{ block.super }}
 {% endblock %}
