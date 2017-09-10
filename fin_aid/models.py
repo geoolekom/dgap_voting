@@ -111,6 +111,8 @@ class AidRequest(models.Model):
                     dct.update({"FIO": fio})
                 else:
                     dct.update({"FIO": request.applicant.username})
+            if request.submitted_paper:
+                dct.update({"заявление":"+"})
             df = df.append(dct, ignore_index=True)
         df.to_csv(filename)
 
