@@ -5,7 +5,7 @@ from django.urls import reverse
 from hashlib import md5
 from datetime import datetime, date
 from PIL import Image
-
+import pandas as pd
 
 class Category(models.Model):
     name = models.CharField("Название", max_length=100)
@@ -80,6 +80,35 @@ class AidRequest(models.Model):
         return html
     images_tags.allow_tags = True
     images_tags.short_description = "Приложенные изображения"
+
+    # creates csv with all accepted applications for this month
+    def to_csv(self, filename):
+        df = pd.DataFrame(columns=["FIO", "group", "req_sum", "Исх. сумма", "Реал. сумма", "За что", "заявление",
+                                "Комментарии", "e-mail", "text"])
+        for request in AidRequest.objects.filter(status=AidRequest.ACCEPTED, payment_dt__month=date.today().month):
+            dct = {
+                "req_sum": request.req_sum,
+                "Исх. сумма": request.accepted_sum/0.86 if request.accepted_sum != 0 else 0,
+                "Реал. сумма": request.accepted_sum,
+                "За что": request.category.name,
+                "Комментарии": request.examination_comment,
+                "text": "",
+            }
+            student_info = request.applicant.userprofile.student_info
+            if student_info:
+                dct.update({
+                    "FIO": student_info.fio,
+                    "group": student_info.group,
+                    "e-mail": student_info.phystech,
+                })
+            else:
+                fio = request.applicant.last_name + request.applicant.first_name + request.applicant.userprofile.middlename
+                if fio:
+                    dct.update({"FIO": fio})
+                else:
+                    dct.update({"FIO": request.applicant.username})
+            df = df.append(dct)
+        df.to_csv(filename)
 
     def get_absolute_url(self):
         return reverse('fin_aid:aid_request_detail', args=[self.id])
