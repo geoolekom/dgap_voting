@@ -20,7 +20,7 @@ def get_vk_uid(user):
         student_info = user.userprofile.student_info
         if not student_info:
             return None
-        vk_userinfo = vk.users.get(user_ids=student_info.vk.split('/')[-1])
+        vk_userinfo = vk_api.users.get(user_ids=student_info.vk.split('/')[-1])
         return vk_userinfo[0]["id"]
 
 
