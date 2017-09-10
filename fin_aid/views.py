@@ -7,10 +7,12 @@ from django.shortcuts import get_object_or_404, redirect
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib import messages
-
+from django.http import HttpResponse
 
 from .create_paper import create_paper
+from dgap_voting.settings import MEDIA_ROOT
 
+import os
 
 @method_decorator(login_required, name='dispatch')
 class AidRequestList(generic.ListView):
@@ -123,10 +125,17 @@ class AidRequestDetail(generic.DetailView):
             raise PermissionDenied
         return super(AidRequestDetail, self).dispatch(request, *args, **kwargs)
 
-# TODO reqrite
+
+# TODO rewrite
 def export_aid_request(request):
     if not request.user.is_authenticated or (not request.user.groups.filter(name="finance").exists() and not request.user.is_staff):
         raise PermissionDenied
-    filename = "media/aid_docs/export.csv"
+    filename = "protected/export.csv"
     AidRequest.to_csv(filename)
-    return redirect("/media/aid_docs/export.csv")
+    response = HttpResponse()
+    url = "/protected/" + filename
+    response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
+    length = os.path.getsize(MEDIA_ROOT + "protected/" + filename)
+    response['Content-Length'] = str(length)
+    response['X-Accel-Redirect'] = url
+    return response
