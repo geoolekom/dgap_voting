@@ -26,7 +26,11 @@ def fin_aid_request_status_change(aid_request):
     s += " от {} по категории '{}'\n".format(dt_add, aid_request.category)
     if aid_request.status == aid_request.ACCEPTED:
         dt_pay = dateformat.format(aid_request.payment_dt, settings.DATE_FORMAT)
-        s += "Одобренная сумма: {}\nОжидаемая дата выплаты: {}\n".format(aid_request.accepted_sum, dt_pay)
+        s += "Одобренная сумма: {}\n"
+        if not aid_request.paid_with_cash:
+            s += "Ожидаемая дата выплаты: {}\n".format(aid_request.accepted_sum, dt_pay)
+        else:
+            s += "Выплата наличными. Для уточнения деталей обращайтесь к [fizikaislove|стипкомиссии]"
     if aid_request.examination_comment:
         s += "Комментарий стип. комиссии: {}\n".format(aid_request.examination_comment)
     url = get_abs_url(reverse("fin_aid:aid_request_detail", args=[aid_request.pk]))

@@ -24,7 +24,9 @@
                             <td>{% if aid_request.urgent %} да {% else %} нет {% endif %}</td>
                             <td> {{ aid_request.get_status_display }} </td>
                             <td> {% if aid_request.accepted_sum %}{{ aid_request.accepted_sum|floatformat }} {% endif %}</td>
-                            <td> {% if aid_request.payment_dttm %}{{ aid_request.payment_dttm|date:"d.m.Y" }} {% endif %}</td>
+                            <td> {% if aid_request.payment_dttm and not aid_request.paid_with_cash %}
+                                    {{ aid_request.payment_dttm|date:"d.m.Y" }}
+                                 {% elif aid_request.paid_with_cash %} Наличными {% endif %}</td>
                         </tr>
                     {% endfor %}
                 </table>

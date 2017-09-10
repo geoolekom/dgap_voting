@@ -57,6 +57,7 @@ class AidRequest(models.Model):
     payment_dt = models.DateField("Дата выплаты", blank=True, null=True)
     examination_comment = models.TextField("Комментарий комиссии", blank=True, null=True)
     submitted_paper = models.BooleanField("Принес заявление", default=False)
+    paid_with_cash = models.BooleanField("заплатили наличными", default=False)
 
     def can_view(self, user):
         # login required
@@ -86,7 +87,9 @@ class AidRequest(models.Model):
     def to_csv(filename):
         df = pd.DataFrame(columns=["FIO", "group", "req_sum", "Исх. сумма", "Реал. сумма", "За что", "заявление",
                                 "Комментарии", "e-mail", "text"])
-        for request in AidRequest.objects.filter(status=AidRequest.ACCEPTED, payment_dt__month=date.today().month).order_by('category'):
+        for request in AidRequest.objects.filter(status=AidRequest.ACCEPTED,
+                                                 payment_dt__month=date.today().month,
+                                                 paid_with_cash=False).order_by('category'):
             dct = {
                 "req_sum": request.req_sum,
                 "Исх. сумма": int(request.accepted_sum/0.86) if request.accepted_sum != 0 else 0,

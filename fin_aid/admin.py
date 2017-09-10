@@ -28,7 +28,7 @@ class AidRequestAdmin(admin.ModelAdmin):
     list_display = ['get_applicant_name', 'add_dttm', 'category', 'req_sum', 'urgent',
                     'status', 'accepted_sum', 'payment_dt', 'submitted_paper']
     list_display_links = ['get_applicant_name', 'add_dttm', 'category', 'req_sum']
-    list_filter = ('status', 'category', 'urgent', 'add_dttm', 'submitted_paper')
+    list_filter = ['status', 'category', 'urgent', 'add_dttm', 'submitted_paper', 'paid_with_cash']
     inlines = [AidDocumentInline,]
     search_fields = ["applicant__first_name", "applicant__last_name", "reason"]
     list_editable = ["status", "accepted_sum", "payment_dt", "submitted_paper"]
