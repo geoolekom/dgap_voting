@@ -89,8 +89,8 @@ class AidRequest(models.Model):
         for request in AidRequest.objects.filter(status=AidRequest.ACCEPTED, payment_dt__month=date.today().month).order_by('category'):
             dct = {
                 "req_sum": request.req_sum,
-                "Исх. сумма": request.accepted_sum/0.86 if request.accepted_sum != 0 else 0,
-                "Реал. сумма": request.accepted_sum,
+                "Исх. сумма": int(request.accepted_sum/0.86) if request.accepted_sum != 0 else 0,
+                "Реал. сумма": int(request.accepted_sum),
                 "За что": request.category.name,
                 "Комментарии": request.examination_comment,
                 "text": "",
