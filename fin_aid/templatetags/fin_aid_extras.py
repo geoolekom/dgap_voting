@@ -8,7 +8,7 @@ register = template.Library()
 
 @register.simple_tag
 def month_info():
-    text = "Сейчас: {}, Лимит: {}, Использовано: {}, Профицит: {}"
+    text = "Сейчас: {}, Лимит: {:.0f}, Использовано: {:.0f}, Профицит: {:.0f}"
     current = MonthlyData.current()
     used = current.sum_used
     if not used:
