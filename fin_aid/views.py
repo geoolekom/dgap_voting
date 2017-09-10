@@ -7,10 +7,12 @@ from django.shortcuts import get_object_or_404, redirect
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib import messages
-
+from django.http import HttpResponse
 
 from .create_paper import create_paper
+from dgap_voting.settings import MEDIA_ROOT
 
+import os
 
 @method_decorator(login_required, name='dispatch')
 class AidRequestList(generic.ListView):
@@ -56,6 +58,7 @@ class AidRequestCreate(generic.CreateView):
         return response
 
 
+@method_decorator(login_required, name='dispatch')
 class AidRequestUpdate(generic.UpdateView):
     model = AidRequest
     form_class = AidRequestCreateForm
@@ -96,6 +99,7 @@ class AidRequestUpdate(generic.UpdateView):
         return super(AidRequestUpdate, self).dispatch(request, *args, **kwargs)
 
 
+@method_decorator(login_required, name='dispatch')
 class AidRequestDelete(generic.DeleteView):
     model = AidRequest
     success_url = reverse_lazy('fin_aid:aid_request_list')
@@ -111,6 +115,7 @@ class AidRequestDelete(generic.DeleteView):
         return super(AidRequestDelete, self).dispatch(request, *args, **kwargs)
 
 
+@method_decorator(login_required, name='dispatch')
 class AidRequestDetail(generic.DetailView):
     model = AidRequest
 
@@ -119,3 +124,18 @@ class AidRequestDetail(generic.DetailView):
         if not aid_request.can_view(request.user):
             raise PermissionDenied
         return super(AidRequestDetail, self).dispatch(request, *args, **kwargs)
+
+
+# TODO rewrite
+def export_aid_request(request):
+    if not request.user.is_authenticated or (not request.user.groups.filter(name="finance").exists() and not request.user.is_staff):
+        raise PermissionDenied
+    filename = "protected/export.csv"
+    AidRequest.to_csv(filename)
+    response = HttpResponse()
+    url = "/protected/" + filename
+    response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
+    length = os.path.getsize(MEDIA_ROOT + "protected/" + filename)
+    response['Content-Length'] = str(length)
+    response['X-Accel-Redirect'] = url
+    return response

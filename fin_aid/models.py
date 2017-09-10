@@ -5,7 +5,7 @@ from django.urls import reverse
 from hashlib import md5
 from datetime import datetime, date
 from PIL import Image
-
+import pandas as pd
 
 class Category(models.Model):
     name = models.CharField("Название", max_length=100)
@@ -57,15 +57,14 @@ class AidRequest(models.Model):
     payment_dt = models.DateField("Дата выплаты", blank=True, null=True)
     examination_comment = models.TextField("Комментарий комиссии", blank=True, null=True)
     submitted_paper = models.BooleanField("Принес заявление", default=False)
+    paid_with_cash = models.BooleanField("заплатили наличными", default=False)
 
     def can_view(self, user):
-        # login required
         if not user.is_authenticated:
             return False
-        # my applications
         if self.applicant == user \
             or user.userprofile.student_info and self.applicant.userprofile.student_info == user.userprofile.student_info \
-                or user.is_staff or user.is_superuser:
+                or user.groups.filter(name="finance").exists() or user.is_superuser:
             return True
         return False
 
@@ -80,6 +79,40 @@ class AidRequest(models.Model):
         return html
     images_tags.allow_tags = True
     images_tags.short_description = "Приложенные изображения"
+
+    # creates csv with all accepted applications for this month
+    @staticmethod	
+    def to_csv(filename):
+        df = pd.DataFrame(columns=["FIO", "group", "req_sum", "Исх. сумма", "Реал. сумма", "За что", "заявление",
+                                "Комментарии", "e-mail", "text"])
+        for request in AidRequest.objects.filter(status=AidRequest.ACCEPTED,
+                                                 payment_dt__month=date.today().month,
+                                                 paid_with_cash=False).order_by('category'):
+            dct = {
+                "req_sum": request.req_sum,
+                "Исх. сумма": int(request.accepted_sum/0.86) if request.accepted_sum != 0 else 0,
+                "Реал. сумма": int(request.accepted_sum),
+                "За что": request.category.name,
+                "Комментарии": request.examination_comment,
+                "text": "",
+            }
+            student_info = request.applicant.userprofile.student_info
+            if student_info:
+                dct.update({
+                    "FIO": student_info.fio,
+                    "group": student_info.group,
+                    "e-mail": student_info.phystech,
+                })
+            else:
+                fio = request.applicant.last_name + request.applicant.first_name + request.applicant.userprofile.middlename
+                if fio:
+                    dct.update({"FIO": fio})
+                else:
+                    dct.update({"FIO": request.applicant.username})
+            if request.submitted_paper:
+                dct.update({"заявление":"+"})
+            df = df.append(dct, ignore_index=True)
+        df.to_csv(filename)
 
     def get_absolute_url(self):
         return reverse('fin_aid:aid_request_detail', args=[self.id])
