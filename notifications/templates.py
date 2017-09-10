@@ -3,6 +3,7 @@ from django.conf import settings
 from django.utils import dateformat
 from django.contrib.sites.models import Site
 
+from .notify import get_vk_uid
 
 def get_abs_url(loc_url):
     site = Site.objects.get_current().domain
@@ -43,7 +44,7 @@ def fin_aid_request_status_change(aid_request):
 def fin_aid_new_request(aid_request):
     s = "СРОЧНО: " if aid_request.urgent else ""
     s += "Новое заявление на матпомощь\n"
-    s += "[{}|{} {}]: {}\n".format(aid_request.applicant.username, aid_request.applicant.first_name,
+    s += "[{}|{} {}]: {}\n".format(get_vk_uid(aid_request.applicant), aid_request.applicant.first_name,
                                    aid_request.applicant.last_name, aid_request.category)
     s += "Обоснование: {}\nЗапрошенная сумма: {}".format(aid_request.reason, aid_request.req_sum)
     return s

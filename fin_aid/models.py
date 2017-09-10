@@ -60,13 +60,11 @@ class AidRequest(models.Model):
     paid_with_cash = models.BooleanField("заплатили наличными", default=False)
 
     def can_view(self, user):
-        # login required
         if not user.is_authenticated:
             return False
-        # my applications
         if self.applicant == user \
             or user.userprofile.student_info and self.applicant.userprofile.student_info == user.userprofile.student_info \
-                or user.is_staff or user.is_superuser:
+                or user.groups.filter(name="finance").exists() or user.is_superuser:
             return True
         return False
 

@@ -1,4 +1,5 @@
 from django.core.mail import send_mail
+from django.core.exceptions import ObjectDoesNotExist
 from .models import UserNotificationsSettings, Notification
 import vk
 from dgap_voting.local_settings import VK_MESSAGES_TOKEN, DEBUG
@@ -11,12 +12,19 @@ vk_session = vk.Session(access_token=VK_MESSAGES_TOKEN)
 vk_api = vk.API(vk_session)
 
 
-def _get_vk_uid(user):
-    social = UserSocialAuth.objects.get(user=user, provider="vk-oauth2")
-    return social.uid
+def get_vk_uid(user):
+    try:
+        social = UserSocialAuth.objects.get(user=user, provider="vk-oauth2")
+        return social.uid
+    except ObjectDoesNotExist:
+        student_info = user.userprofile.student_info
+        if not student_info:
+            return None
+        vk_userinfo = vk.users.get(user_ids=student_info.vk.split('/')[-1])
+        return vk_userinfo[0]["id"]
 
 
-def _get_email(user):
+def get_email(user):
     pass
 
 
@@ -25,7 +33,7 @@ def _get_telegram_uid(user):
 
 
 def _notify_vk(user, text):
-    response = vk_api.messages.send(user_id=_get_vk_uid(user), message=text)
+    response = vk_api.messages.send(user_id=get_vk_uid(user), message=text)
     Notification.objects.create(user=user, method=Notification.VK, text=text, result=response)
     return response
 
