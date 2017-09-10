@@ -56,6 +56,7 @@ class AidRequestCreate(generic.CreateView):
         return response
 
 
+@method_decorator(login_required, name='dispatch')
 class AidRequestUpdate(generic.UpdateView):
     model = AidRequest
     form_class = AidRequestCreateForm
@@ -96,6 +97,7 @@ class AidRequestUpdate(generic.UpdateView):
         return super(AidRequestUpdate, self).dispatch(request, *args, **kwargs)
 
 
+@method_decorator(login_required, name='dispatch')
 class AidRequestDelete(generic.DeleteView):
     model = AidRequest
     success_url = reverse_lazy('fin_aid:aid_request_list')
@@ -111,6 +113,7 @@ class AidRequestDelete(generic.DeleteView):
         return super(AidRequestDelete, self).dispatch(request, *args, **kwargs)
 
 
+@method_decorator(login_required, name='dispatch')
 class AidRequestDetail(generic.DetailView):
     model = AidRequest
 
