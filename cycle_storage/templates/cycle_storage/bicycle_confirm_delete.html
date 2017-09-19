@@ -1,0 +1,19 @@
+{% extends "polls/base.html" %}
+{% block content %}
+<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2>Удаление заявления на велокомнату от {{ object.add_dttm|date }}"</h2>
+        </div>
+        <div class="panel-body">
+            <p>Производитель велосипеда: {{ object.manufacturer }}</p>
+            <p>Модель: {{ object.model }}</p>
+            <form action="" method="post">
+                {% csrf_token %}
+                <p>Вы действительно хотите удалить заявление?</p>
+                <input type="submit" value="Удалить" class = "btn btn-danger"/>
+            </form>                
+        </div>
+    </div>
+</div>     
+{% endblock %}

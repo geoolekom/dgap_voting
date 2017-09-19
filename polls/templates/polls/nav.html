@@ -24,8 +24,7 @@
                     {# жаль, пафосное "Вотированные" не подходит #}
                 </ul>
             </li>
-            {% comment %}<li><a href="{% url "bicycle:index" %}">Велокомната</a></li>
-            <li><a href="{% url "laundry" %}">Стиралка</a></li>
+            {% comment %}<li><a href="{% url "laundry" %}">Стиралка</a></li>
             <li><a href="{% url "print" %}">Печать</a></li>{% endcomment %}
             <li class="dropdown{% if namespace == 'fin_aid' %} active"{% else %}"{% endif %}>
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">Матпомощь <b class="caret"></b></a>
@@ -36,6 +35,7 @@
                     <li><a href="{% url 'fin_aid:aid_request_rules' %}">Правила</a></li>
                 </ul>
             </li>
+            <li><a href="{% url "bicycle:index" %}">Велокомната</a></li>
             <li class="nav-divider"></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">

@@ -19,7 +19,7 @@ urlpatterns = [
     url(r'^$', ArticleList.as_view(), name='index'),
     url(r'^polls/', include('polls.urls', namespace='polls')),
     url(r'^blog/', include('blog.urls', namespace='blog')),
-    # url(r'^bicycle/', include('cycle_storage.urls', namespace='bicycle')),
+    url(r'^bicycle/', include('cycle_storage.urls', namespace='bicycle')),
     # url(r'^laundry/', RedirectView.as_view(url="http://stiralka.mipt.ru"), name="laundry"),
     # url(r'^print/', RedirectView.as_view(url="http://print.mipt.ru"), name="print"),
     url(r'^aid/', include('fin_aid.urls', namespace='fin_aid')),
