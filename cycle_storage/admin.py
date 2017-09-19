@@ -4,7 +4,7 @@ from cycle_storage.models import Bicycle, Storage, Place
 
 
 class PlaceFilter(SimpleListFilter):
-    title = 'Наличие места'
+    title = 'Присвоено место'
 
     # Parameter for the filter that will be used in the URL query.
     parameter_name = 'place'
@@ -35,6 +35,7 @@ class StorageAdmin(admin.ModelAdmin):
 
 class PlaceAdmin(admin.ModelAdmin):
     list_display = ("__str__", "bicycle")
+
 
 admin.site.register(Bicycle, BicycleAdmin)
 admin.site.register(Storage, StorageAdmin)

@@ -62,3 +62,22 @@ def poll_available(poll):
     begin_date = dateformat.format(poll.begin_date, settings.DATETIME_FORMAT)
     end_date = dateformat.format(poll.end_date, settings.DATETIME_FORMAT)
     return s.format(poll.name, begin_date, end_date, url)
+
+
+def bicycle_request_status_change(bicycle):
+    if bicycle.request_status == bicycle.ACCEPTED:
+        s = "Одобрено заявление на место в велокомнате. Ваше место: {}".format(bicycle.place)
+    elif bicycle.request_status == bicycle.DECLINED:
+        s = "Отказано в заявлении на место в велокомнате"
+    elif bicycle.request_status == bicycle.NO_PLACE:
+        s = "Отказано в заявлении на велокомнату из-за отсутствия мест."
+    elif bicycle.request_status == bicycle.WAITING:
+        s = "Ожидает рассмотрения заявление на велокомнату"
+    else:
+        raise ValueError("Неизвестный статус заявления на место в велокомнате")
+    return s
+
+
+def bicycle_new_request(bicycle):
+    s = "Новое заявление на велокомнату"
+    return s

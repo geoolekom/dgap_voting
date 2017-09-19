@@ -1,4 +1,5 @@
 {% extends "polls/base.html" %}
+{% load bootstrap3 %}
 
 {% block content %}
     <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
@@ -9,8 +10,12 @@
             <div class="panel-body">
                 <form action="" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    <input type="Submit" value="Отправить заявку" />
+                    {% bootstrap_form form%}
+                    {% buttons %}
+                    <button type="submit" class="btn btn-primary">
+                        Отправить заявку
+                    </button>
+                    {% endbuttons %}
                 </form>
             </div>
         </div>
