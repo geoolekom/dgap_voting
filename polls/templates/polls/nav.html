@@ -36,6 +36,16 @@
                     <li><a href="{% url 'fin_aid:aid_request_rules' %}">Правила</a></li>
                 </ul>
             </li>
+            <li class="dropdown{% if namespace == 'senate' %} active"{% else %}"{% endif %}>
+                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Сенат <b class="caret"></b></a>
+                <ul role="menu" class="dropdown-menu">
+                    <li><a href="{% url 'senate:issue_list' %}">Мои обращения</a></li>
+                    <li><a href="{% url 'senate:issue_create' %}">Подать обращение</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{% url 'senate:about' %}">О нас</a></li>
+                    <li><a href="{% url 'senate:contacts' %}">Контакты</a></li>
+                </ul>
+            </li>
             <li class="nav-divider"></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
