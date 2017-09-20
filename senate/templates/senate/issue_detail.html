@@ -13,7 +13,7 @@
             {% for event in events %}
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <p>{{ event.author }}, {{ event.add_dttm }}</p>
+                        <p><span class="post-info">{{ event.author.first_name }} {{ event.author.last_name }}, {{ event.add_dttm }}</span></p>
 
                         {% if event.cls == event.OPEN %}<p>Создано новое обращение в Сенат</p>
                         {% elif event.cls == event.UPDATE %}<p>Информация по обращению в Сенат обновлена</p>

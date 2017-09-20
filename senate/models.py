@@ -1,5 +1,26 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
+from django.urls import reverse_lazy
+
+
+class Department(models.Model):
+    group = models.OneToOneField(Group, verbose_name="Группа доступа")
+    name = models.CharField("Название", max_length=100, null=True, blank=True)
+    head = models.ForeignKey(User, verbose_name="Глава отдела", null=True, blank=True)
+
+    class Meta:
+        verbose_name = "отдел Сената"
+        verbose_name_plural = "отделы Сената"
+
+    def __str__(self):
+        return self.name
+
+    def add_member(self, user):
+        self.group.user_set.add(user)
+
+    @property
+    def members(self):
+        return self.group.user_set.all()
 
 
 class Category(models.Model):
@@ -45,6 +66,9 @@ class Issue(models.Model):
     def __str__(self):
         return "{}: {}".format(self.category, self.name)
 
+    def get_absolute_url(self):
+        return reverse_lazy("senate:issue_detail", args=[self.id])
+
 
 class Event(models.Model):
     UPDATE = 1
@@ -71,7 +95,7 @@ class Event(models.Model):
     new_dept = models.ForeignKey(Group, verbose_name="Новый отдел", blank=True, null=True, default=None)
     new_worker = models.ForeignKey(User, verbose_name="Новый сотрудник", blank=True, null=True,
                                    default=None, related_name='new_worker')
-    new_status = models.IntegerField("Новый статус", choices=Issue.STATUS, default=Issue.CLOSED)
+    new_status = models.IntegerField("Новый статус", choices=Issue.STATUS, null=True, blank=True, default=None)
 
     class Meta:
         verbose_name = "событие"
@@ -80,6 +104,14 @@ class Event(models.Model):
     def __str__(self):
         return "{}: обновление от {}".format(self.issue, self.author)
 
+    def images_tags(self):
+        html = ""
+        files = self.eventdocument_set.all()
+        for file in files:
+            html += '<img class="aiddocument" style="max-width:100%;" src={}>'.format(file.file.url)
+        return html
+    images_tags.allow_tags = True
+    images_tags.short_description = "Приложенные изображения"
 
 class EventDocument(models.Model):
     file = models.ImageField("Изображение", upload_to='feedback/')

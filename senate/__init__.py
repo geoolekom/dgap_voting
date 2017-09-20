@@ -1,1 +1,1 @@
-default_app_config = "senate.apps.SenateConfig"
+default_app_config = "senate.app.SenateConfig"
