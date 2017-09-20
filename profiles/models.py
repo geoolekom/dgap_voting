@@ -42,3 +42,16 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return "Профиль для %s" % self.user
+
+
+# checks if student1 and student2 are the same student (students can have multiple accounts)
+def is_same_student(student1, student2):
+    if not (student1.is_authenticated and student2.is_authenticated):
+        return False
+    return student1 == student2 \
+        or student1.userprofile.student_info and student2.userprofile.student_info == student1.userprofile.student_info
+
+
+# checks if student1 is the same student as student2 or student1 is admin with appropriate access rights
+def is_same_student_or_admin(student1, student2, group_name):
+    return is_same_student(student1, student2) or student1.groups.filter(name=group_name).exists() or student1.is_superuser

@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'fin_aid',
     'cycle_storage',
     'notifications',
+    'senate',
     'django_user_agents',
     'django_bleach',
     'social_django',
@@ -101,7 +102,7 @@ CACHES = {
 
 SENDFILE_BACKEND = 'sendfile.backends.development'
 
-SITE_ID = 2
+SITE_ID = 1
 
 ACCOUNT_ACTIVATION_DAYS = 7
 

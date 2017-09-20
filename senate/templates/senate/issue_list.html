@@ -1,0 +1,30 @@
+{% extends "polls/base.html" %}
+
+    {% block content %}
+        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+            <div class="panel-group">
+                <table class="table table-hover">
+                    <caption>Мои обращения в Сенат</caption>
+                    <tr>
+                        <th>Дата подачи</th>
+                        <th>Категория</th>
+                        <th>Ответственный</th>
+                        <th>Статус</th>
+                        <th>Последнее действие</th>
+                    </tr>
+                    {% for issue in object_list%}
+                        <tr class="clickable-row {% if issue.status == issue.CLOSED or issue.status == issue.ACCEPTED %} success
+                            {% elif issue.status == issue.DECLINED %} danger {% endif %}"
+                            data-href="{% url "senate:issue_detail" issue.id %}">
+                            <td> {{ issue.add_dttm|date }} </td>
+                            <td> {{ issue.category }} </td>
+                            <td> {{ issue.assigned_dept }} </td>
+                            <td> {{ issue.get_status_display }} </td>
+                            <td> {{ issue.last_event|date }} </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+        <div>
+    {% endblock %}
