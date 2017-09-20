@@ -1,0 +1,24 @@
+{% extends 'polls/base.html' %}
+{% load bootstrap3 %}
+
+{% block content %}
+    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2>Обращение в Сенат ФОПФ</h2>
+            </div>
+            <div class="panel-body">
+                <p>Бла бла бла мини инструкция</p>
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% bootstrap_form form%}
+                    {% buttons %}
+                    <button type="submit" class="btn btn-primary">
+                        Отправить обращение
+                    </button>
+                    {% endbuttons %}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

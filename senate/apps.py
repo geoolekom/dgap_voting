@@ -2,4 +2,6 @@ from django.apps import AppConfig
 
 
 class SenateConfig(AppConfig):
-    name = 'Сенат'
+    name = 'senate'
+    verbose_name = "Сенат"
+    import senate.signals

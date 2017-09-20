@@ -23,6 +23,7 @@ urlpatterns = [
     # url(r'^laundry/', RedirectView.as_view(url="http://stiralka.mipt.ru"), name="laundry"),
     # url(r'^print/', RedirectView.as_view(url="http://print.mipt.ru"), name="print"),
     url(r'^aid/', include('fin_aid.urls', namespace='fin_aid')),
+    url(r'^senate/', include('senate.urls', namespace='senate')),
     url(r'^servertime/', include('servertime.urls', namespace='servertime')),
     url(r'^profiles/', include('profiles.urls', namespace='profiles')),
     url(r'^admin/', include(admin.site.urls)),

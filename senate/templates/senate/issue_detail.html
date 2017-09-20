@@ -1,0 +1,36 @@
+{% extends 'polls/base.html' %}
+{% load bootstrap3 %}
+
+{% block content %}
+    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2>{{ object.category }}: {{ object.name }}</h2>
+                <p>Статус: {{ object.get_status_display }} * Назначено: {{ object.assigned_dept }} *
+                    Последнее действие: {{ object.last_event }}</p>
+            </div>
+        </div>
+            {% for event in events %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <p>{{ event.author }}, {{ event.add_dttm }}</p>
+
+                        {% if event.cls == event.OPEN %}<p>Создано новое обращение в Сенат</p>
+                        {% elif event.cls == event.UPDATE %}<p>Информация по обращению в Сенат обновлена</p>
+                        {% elif event.cls == event.STATUS_CHANGE %}<p>Статус обращения изменен на {{ object.get_status_display }}</p>
+                        {% elif event.cls == event.DETAILS_REQUEST%}<p>Запрошена дополнительная информация</p>
+                        {% endif %}
+
+                        {% if event.info %}<p>{{ event.info|safe }}</p>{% endif %}
+                        {% if event.new_dept %}<p>Обращение передано в {{ event.new_dept }}</p>{% endif %}
+                        {% if event.new_worker %}<p>Ответственный сотрудник теперь {{ event.new_worker }}</p>{% endif %}
+
+                        {% for photo in event.eventdocument_set.all %}
+                            <img class="aiddocument" src="{{ photo.file.url }}">
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
