@@ -9,7 +9,17 @@ from .models import Issue, Event
 
 
 @receiver(post_save, sender=Event, dispatch_uid='senate')
-def new_event(sender, instance: Event, created, **kwargs):
+def event_save(sender, instance: Event, created, **kwargs):
     if created:
         instance.issue.last_event = datetime.now()
         instance.issue.save()
+    if instance.new_status:
+        instance.issue.status = instance.new_status
+        instance.issue.save()
+    if instance.new_dept:
+        instance.issue.assigned_dept = instance.new_dept
+        instance.issue.save()
+    if instance.new_worker:
+        instance.issue.assigned_worker = instance.new_worker
+        instance.issue.save()
+

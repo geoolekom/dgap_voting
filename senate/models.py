@@ -48,13 +48,13 @@ class Issue(models.Model):
     )
 
     author = models.ForeignKey(User, verbose_name="Автор", null=True, blank=True)
-    name = models.CharField("Имя", max_length=256)
     category = models.ForeignKey(Category, verbose_name="Категория")
+    name = models.CharField("Тема", max_length=256)
     status = models.IntegerField("Статус", choices=STATUS, default=OPEN)
     add_dttm = models.DateTimeField("Дата создания", auto_now_add=True)
     last_event = models.DateTimeField("Последняя активность", default=None, blank=True, null=True)
     close_dttm = models.DateTimeField("Дата закрытия", blank=True, null=True, default=None)
-    want_to_help = models.BooleanField("Хочу помогать", default=False)
+    want_to_help = models.BooleanField("Готов участвовать в реализации", default=False)
     assigned_dept = models.ForeignKey(Group, verbose_name="Ответственный отдел", blank=True, null=True, default=None)
     assigned_worker = models.ForeignKey(User, verbose_name="Ответственный сотрудник", blank=True, null=True,
                                         default=None, related_name='assigned_worker')

@@ -18,4 +18,3 @@ class Migration(migrations.Migration):
             field=models.BooleanField(default=False, verbose_name='заплатили наличными'),
         ),
     ]
-git

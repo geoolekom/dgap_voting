@@ -6,7 +6,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h2>{{ object.category }}: {{ object.name }}</h2>
-                <p>Статус: {{ object.get_status_display }} * Назначено: {{ object.assigned_dept }} *
+                <p>Статус: {{ object.get_status_display }} * Назначено: {{ object.assigned_dept.department.name }} *
                     Последнее действие: {{ object.last_event }}</p>
             </div>
         </div>
@@ -22,8 +22,10 @@
                         {% endif %}
 
                         {% if event.info %}<p>{{ event.info|safe }}</p>{% endif %}
-                        {% if event.new_dept %}<p>Обращение передано в {{ event.new_dept }}</p>{% endif %}
-                        {% if event.new_worker %}<p>Ответственный сотрудник теперь {{ event.new_worker }}</p>{% endif %}
+                        {% if event.new_dept %}<p>Обращение передано в {{ event.new_dept.department.name }}</p>{% endif %}
+                        {% if event.new_worker %}
+                            <p>Ответственный сотрудник теперь {{ event.new_worker.first_name }} {{ event.new_worker.last_name }}</p>
+                        {% endif %}
 
                         {% for photo in event.eventdocument_set.all %}
                             <img class="aiddocument" src="{{ photo.file.url }}">
