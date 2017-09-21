@@ -22,7 +22,7 @@
                         {% elif event.cls == event.DETAILS_REQUEST%}<p>Запрошена дополнительная информация</p>
                         {% endif %}
 
-                        {% if event.info %}<p>{{ event.info|safe }}</p>{% endif %}
+                        {% if event.info %}<p><strong>{{ event.info|safe }}</strong></p>{% endif %}
                         {% if event.new_dept %}<p>Обращение передано в {{ event.new_dept.department.name }}</p>{% endif %}
                         {% if event.new_worker %}
                             <p>Ответственный сотрудник теперь {{ event.new_worker.first_name }} {{ event.new_worker.last_name }}</p>
