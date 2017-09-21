@@ -4,6 +4,8 @@ from polls import views
 from polls import admaking
 from polls import mailing
 
+from blog.views import ArticleDetail
+
 urlpatterns = [
     # polls
     url(r'^$', views.Index.as_view(), name='index'),
@@ -17,6 +19,9 @@ urlpatterns = [
     url(r'^(?P<poll_id>\d+)/voters/$', views.voters, name='people'), 
     # done
     url(r'^done/$', views.done, name='done'),
+    # rules
+    url(r'^head$', ArticleDetail.as_view(), {"slug": "elections-head"}, name="head_elections"),
+    url(r"^senator$", ArticleDetail.as_view(), {"slug": "elections-senator"}, name='senator_elections'),
     # ad making
     url(r'^(?P<poll_id>\d+)/pdf_advert/$', admaking.make_pdf, name='pdf_advert'),
     url(r'^(?P<poll_id>\d+)/create_advert/$', admaking.create_advert, name='create_advert'),

@@ -19,8 +19,10 @@
                 <ul role="menu" class="dropdown-menu">
                     <li><a href="{% url 'polls:available' %}">Доступные для участия</a></li>
                     <li><a href="{% url 'polls:voted' %}">Доступные для просмотра</a></li>
-                    <li class="divider"></li>
                     <li><a href="{% url 'polls:closed' %}">Завершённые</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{% url 'polls:head_elections' %}">Выборы Председателя</a></li>
+                    <li><a href="{% url 'polls:senator_elections' %}">Выборы Сенаторов</a></li>
                     {# жаль, пафосное "Вотированные" не подходит #}
                 </ul>
             </li>
