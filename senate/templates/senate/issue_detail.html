@@ -6,8 +6,9 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h2>{{ object.category }}: {{ object.name }}</h2>
-                <p>Статус: {{ object.get_status_display }} * Назначено: {{ object.assigned_dept.department.name }} *
-                    Последнее действие: {{ object.last_event }}</p>
+                <p><strong>Статус:</strong> {{ object.get_status_display }}</p>
+                <p><strong>Назначено:</strong> {{ object.assigned_dept.department.name }}</p>
+                <p><strong>Последнее действие:</strong> {{ object.last_event }}</p>
             </div>
         </div>
             {% for event in events %}
