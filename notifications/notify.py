@@ -1,5 +1,6 @@
 from django.core.mail import send_mail
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.models import User, Group
 from .models import UserNotificationsSettings, Notification
 import vk
 from dgap_voting.local_settings import VK_MESSAGES_TOKEN, DEBUG
@@ -12,7 +13,7 @@ vk_session = vk.Session(access_token=VK_MESSAGES_TOKEN)
 vk_api = vk.API(vk_session)
 
 
-def get_vk_uid(user):
+def get_vk_uid(user: User):
     try:
         social = UserSocialAuth.objects.get(user=user, provider="vk-oauth2")
         return social.uid
@@ -24,36 +25,46 @@ def get_vk_uid(user):
         return vk_userinfo[0]["uid"]
 
 
-def get_email(user):
+def get_email(user: User):
     pass
 
 
-def _get_telegram_uid(user):
+def get_telegram_uid(user: User):
     pass
 
 
-def _notify_vk(user, text):
+def _notify_vk(user: User, text, title=None):
     response = vk_api.messages.send(user_id=get_vk_uid(user), message=text)
     Notification.objects.create(user=user, method=Notification.VK, text=text, result=response)
     return response
 
 
-def _notify_email(user, text):
+def _notify_email(user: User, text, title=None):
     pass
 
 
-def _notify_telegram(user, text):
+def _notify_telegram(user: User, text, title=None):
     pass
 
 
-def notify(user, text):
+def vk_message_user_link(user):
+    return "[id{}|{} {}]".format(get_vk_uid(user), user.first_name, user.last_name)
+
+
+def notify(user: User, text, title=None):
     try:
         settings = user.usernotificationssettings
         if settings.allow_vk:
-            _notify_vk(user, text)
+            _notify_vk(user, text, title)
         if settings.allow_email:
-            _notify_email(user, text)
+            _notify_email(user, text, title)
         if settings.allow_telegram:
-            _notify_telegram(user, text)
+            _notify_telegram(user, text, title)
     except Exception:
         pass
+
+
+def notify_group(group: Group, text, title=None):
+    users = group.user_set.all()
+    for user in users:
+        notify(user, text, title)

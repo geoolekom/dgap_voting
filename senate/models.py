@@ -113,6 +113,7 @@ class Event(models.Model):
     images_tags.allow_tags = True
     images_tags.short_description = "Приложенные изображения"
 
+
 class EventDocument(models.Model):
     file = models.ImageField("Изображение", upload_to='feedback/')
     event = models.ForeignKey(Event, verbose_name="Событие")
