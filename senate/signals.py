@@ -14,9 +14,9 @@ def new_issue_text(issue: Issue):
     if issue.want_to_help:
         s += 'Студент готов помочь с реализацией'
     if issue.assigned_dept:
-        s += "Ответственный отдел: {}\n".format(issue.assigned_dept)
+        s += "Ответственный отдел: {}\n".format(issue.assigned_dept.department.name)
     if issue.assigned_worker:
-        s += "Ответственный сотрудник: {}\n".format(issue.assigned_worker)
+        s += "Ответственный сотрудник: {}\n".format(vk_message_user_link(issue.assigned_worker))
 
     return s
 
