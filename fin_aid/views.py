@@ -52,6 +52,7 @@ class AidRequestCreate(generic.CreateView):
                 AidDocument.objects.create(file=document, request=self.object, is_image=is_image(document))
         self.object.save()
         if self.object.applicant.userprofile.is_approved:
+            AidDocument.objects.filter(request=self.object, is_application_paper=True).delete()
             create_paper(self.object)
         messages.add_message(self.request, messages.SUCCESS, "Заявление на матпомощь принято. Результаты рассмотрения"
                                                              " будут доступны в личном кабинете")
