@@ -12,7 +12,7 @@ def new_issue_text(issue: Issue):
     if event.info:
         s += event.info + "\n"
     if issue.want_to_help:
-        s += 'Студент готов помочь с реализацией'
+        s += 'Студент готов помочь с реализацией\n'
     if issue.assigned_dept:
         s += "Ответственный отдел: {}\n".format(issue.assigned_dept.department.name)
     if issue.assigned_worker:
@@ -29,7 +29,7 @@ def issue_update_text(event: Event):
     if event.new_dept:
         s += "Обращение передано в {}\n".format(event.new_dept)
     if event.new_worker:
-        s += "Теперь с обращением работает {}".format(vk_message_user_link(event.new_worker))
+        s += "Теперь с обращением работает {}\n".format(vk_message_user_link(event.new_worker))
     if event.info:
         s += event.info + "\n"
 
