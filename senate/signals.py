@@ -25,7 +25,7 @@ def issue_update_text(event: Event):
     issue = event.issue
     s = '{} обновил информация по обращению "{}" от {:%d %B %Y}\n'.format(vk_message_user_link(event.author), str(issue), issue.add_dttm)
     if event.new_status:
-        s += "Новый статус: {}\n".format(event.new_status)
+        s += "Новый статус: {}\n".format(event.get_new_status_display())
     if event.new_dept:
         s += "Обращение передано в {}\n".format(event.new_dept)
     if event.new_worker:
