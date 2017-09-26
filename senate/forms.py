@@ -22,6 +22,7 @@ class DeptEventCreateForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ["cls", "info", "new_status", "new_dept"]
+        widgets = {"info": forms.Textarea}
 
 class UserEventCreateForm(forms.ModelForm):
     photo1 = forms.ImageField(required=False, label="Фотография")
@@ -31,3 +32,4 @@ class UserEventCreateForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ["info"]
+        widgets = {"info": forms.Textarea}
