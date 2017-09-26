@@ -9,6 +9,7 @@
                 <p><strong>Статус:</strong> {{ object.get_status_display }}</p>
                 <p><strong>Назначено:</strong> {{ object.assigned_dept.department.name }}</p>
                 <p><strong>Последнее действие:</strong> {{ object.last_event }}</p>
+                {% if object.want_to_help %}<p>Студент готов помогать с реализацией</p>{% endif %}
             </div>
         </div>
             {% for event in events %}
@@ -34,6 +35,21 @@
                     </div>
                 </div>
             {% endfor %}
+            {% if form %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% bootstrap_form form%}
+                            {% buttons %}
+                            <button type="submit" class="btn btn-primary">
+                                Обновить обращение
+                            </button>
+                    {% endbuttons %}
+                </form>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

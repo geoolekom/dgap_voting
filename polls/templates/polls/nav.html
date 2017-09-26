@@ -41,6 +41,9 @@
                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">Сенат <b class="caret"></b></a>
                 <ul role="menu" class="dropdown-menu">
                     <li><a href="{% url 'senate:issue_list' %}">Мои обращения</a></li>
+                    {% if user.is_superuser or user.is_staff %}
+                        <li><a href="{% url 'senate:dept_issue_list' %}">Обращения в отдел</a></li>
+                    {% endif %}
                     <li><a href="{% url 'senate:issue_create' %}">Подать обращение</a></li>
                     <li class="divider"></li>
                     <li><a href="{% url 'senate:about' %}">О нас</a></li>
