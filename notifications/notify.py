@@ -1,10 +1,13 @@
 from django.core.mail import send_mail
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User, Group
-from .models import UserNotificationsSettings, Notification
-import vk
-from dgap_voting.local_settings import VK_MESSAGES_TOKEN, VK_GROUP_ID, DEBUG
 from social_django.models import UserSocialAuth
+from hashlib import md5
+import vk
+
+from .models import UserNotificationsSettings, Notification
+from dgap_voting.local_settings import VK_MESSAGES_TOKEN, VK_GROUP_ID, DEBUG
+
 
 # import python-telegram-bot
 
@@ -34,7 +37,8 @@ def get_telegram_uid(user: User):
 
 
 def _notify_vk(user: User, text, title=None):
-    response = vk_api.messages.send(user_id=get_vk_uid(user), message=text)
+    hash = message_int_hash(text)
+    response = vk_api.messages.send(user_id=get_vk_uid(user), message=text, random_id=hash)
     Notification.objects.create(user=user, method=Notification.VK, text=text, result=response)
     return response
 
@@ -53,6 +57,12 @@ def vk_message_user_link(user):
 
 def vk_html_user_link(user):
     return '<a href="https://vk.com/{}" class="vk-link">{} {}</a>'.format(get_vk_uid(user), user.first_name, user.last_name)
+
+
+def message_int_hash(text):
+    hash = int(md5(text.encode("utf-8")).hexdigest(), 16)
+    return abs(hash % 10**6)
+
 
 def notify(user: User, text, title=None):
     try:
