@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User, Group
 from .models import UserNotificationsSettings, Notification
 import vk
-from dgap_voting.local_settings import VK_MESSAGES_TOKEN, DEBUG
+from dgap_voting.local_settings import VK_MESSAGES_TOKEN, VK_GROUP_ID, DEBUG
 from social_django.models import UserSocialAuth
 
 # import python-telegram-bot
@@ -71,3 +71,17 @@ def notify_group(group: Group, text, title=None):
     users = group.user_set.all()
     for user in users:
         notify(user, text, title)
+
+
+# TODO if user has no VK? Currently returns True to avoid stupid messages
+# TODO error handling?
+def vk_messages_allowed(user):
+    user_id = get_vk_uid(user)
+    if user_id:
+        try:
+            request = vk_api.messages.isMessagesFromGroupAllowed(group_id=VK_GROUP_ID, user_id=user_id)
+            if not request["is_allowed"]:
+                return False
+        except Exception:
+            pass
+    return True
