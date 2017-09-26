@@ -14,14 +14,14 @@
         {% bootstrap_javascript %}
 
     {# bootstrap_messages #}
-    <link href="{% static 'polls/sidebar.css' %}" rel="stylesheet">
-    <link href="{% static 'polls/style.css' %}" rel="stylesheet">
-    <link rel="shortcut icon" type="image/png" href="{% static 'polls/favicon.png' %}"/>
+    <link href="{% static 'polls/sidebar.css' %}?{{ TAG }}" rel="stylesheet">
+    <link href="{% static 'polls/style.css' %}?{{ TAG }}" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="{% static 'polls/favicon.png' %}?{{ TAG }}"/>
     {# <link href="{% static 'polls/js/countdown/jquery.countdown.css' %}" rel="stylesheet" > #} 
 
-    <script src="{% static 'polls/js/countdown/jquery.plugin.min.js' %}"></script> 
-    <script src="{% static 'polls/js/countdown/jquery.countdown.min.js' %}"></script>
-    <script src="{% static 'polls/js/script.js' %}"></script>
+    <script src="{% static 'polls/js/countdown/jquery.plugin.min.js' %}?{{ TAG }}"></script>
+    <script src="{% static 'polls/js/countdown/jquery.countdown.min.js' %}?{{ TAG }}"></script>
+    <script src="{% static 'polls/js/script.js' %}?{{ TAG }}"></script>
     <script>
         function serverTime() { 
             var time = null; 
