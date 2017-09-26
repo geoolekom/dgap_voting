@@ -7,6 +7,7 @@ class UserNotificationsSettings(models.Model):
     allow_email = models.BooleanField("Разрешить уведомления на эл. почту", default=False)
     allow_vk = models.BooleanField("Разрешить уведомления Вконтакте", default=True)
     allow_telegram = models.BooleanField("Разрешить уведомления в Telegram", default=False)
+    last_allow_vk_reminder = models.DateTimeField("Просили включить уведомления ВК", default=None, blank=True, null=True)
 
     class Meta:
         verbose_name = "настройки уведомлений пользователя"
