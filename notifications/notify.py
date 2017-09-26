@@ -51,6 +51,9 @@ def vk_message_user_link(user):
     return "[id{}|{} {}]".format(get_vk_uid(user), user.first_name, user.last_name)
 
 
+def vk_html_user_link(user):
+    return '<a href="https://vk.com/{}" class="vk-link">{} {}</a>'.format(get_vk_uid(user), user.first_name, user.last_name)
+
 def notify(user: User, text, title=None):
     try:
         settings = user.usernotificationssettings

@@ -15,7 +15,15 @@
             {% for event in events %}
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <p><span class="post-info">{{ event.author.first_name }} {{ event.author.last_name }}, {{ event.add_dttm }}</span></p>
+                        <p><span class="post-info">
+                            {% if event.author.userprofile.student_info.vk %}
+                                <a class="vk-link" href="{{ event.author.userprofile.student_info.vk }}">
+                                {{ event.author.first_name }} {{ event.author.last_name }},
+                                </a>
+                            {% else %}
+                                {{ event.author.first_name }} {{ event.author.last_name }},
+                            {% endif %} {{ event.add_dttm }}
+                        </span></p>
 
                         {% if event.cls == event.OPEN %}<p>Создано новое обращение в Сенат</p>
                         {% elif event.cls == event.UPDATE %}<p>Информация по обращению в Сенат обновлена</p>

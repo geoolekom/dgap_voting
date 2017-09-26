@@ -9,7 +9,7 @@
                         <h2><a href="{% url "blog:article_detail" article.slug %}">{{ article.title }}</a></h2>
                     </div>
                     <div class="panel-body">
-                        <p>{{ article.publish_dttm }}</p>
+                        <p><span class="post-info">{{ article.publish_dttm }}</span></p>
                         <div>{{ article.content | safe}}</div>
                     </div>
                 </div>
