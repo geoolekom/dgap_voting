@@ -207,8 +207,8 @@ class MonthlyData(models.Model):
 
     @classmethod
     def current(cls):
-        dt = date.today()
-        return cls.objects.get(year=dt.year, month=dt.month)
+        deadline = get_next_date(date.today(), 'deadline')
+        return cls.objects.get(year=deadline.year, month=deadline.month)
 
     @property
     def sum_used(self):
