@@ -128,11 +128,11 @@ class DeptIssueList(UserPassesTestMixin, generic.ListView):
 
     def get_queryset(self):
         user = self.request.user
-        groups = user.group_set.all()
+        groups = user.groups.all()
         return Issue.objects.filter(assigned_dept__in=groups).order_by("-add_dttm")
 
     def test_func(self):
-        # return self.request.user.group_set.filter(name="senate_employee").count >= 1
+        # return self.request.user.groups.filter(name="senate_employee").count >= 1
         return self.request.user.is_superuser or self.request.user.is_staff
 
 
