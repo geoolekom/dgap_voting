@@ -11,7 +11,7 @@ class Article(models.Model):
     title = models.CharField("Заголовок", max_length=255, default=None, blank=True, null=True)  # заголовок поста
     author = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, blank=True, null=True)
     publish_dttm = models.DateTimeField('Дата публикации', auto_now_add=True)  # дата публикации
-    content = models.TextField("Контент", max_length=10000) # текст поста
+    content = models.TextField("Контент", max_length=20000) # текст поста
     hidden = models.BooleanField("Скрытый", default=False)
     show_in_feed = models.BooleanField("ПОказывать в ленте", default=True)
 
