@@ -1,3 +1,5 @@
+{% load sitetree %}
+
 <nav role="navigation" class="navbar navbar-default">
     <div class="container-fluid">
     <div class="navbar-header">
@@ -11,63 +13,10 @@
     </div>
     <div id="navbarCollapse" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-            {# <li class="active"><a href="#">Home</a></li> #}
-            <li><a> <div id="defaultTime"></div></a></li>
-            {% comment %}<li><a href="{% url "blog:article_list" %}">Новости</a></li>{% endcomment %}
-            <li class="dropdown{% if namespace == 'polls' %} active"{% else %}"{% endif %}>
-                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Голосования <b class="caret"></b></a>
-                <ul role="menu" class="dropdown-menu">
-                    <li><a href="{% url 'polls:available' %}">Доступные для участия</a></li>
-                    <li><a href="{% url 'polls:voted' %}">Доступные для просмотра</a></li>
-                    <li><a href="{% url 'polls:closed' %}">Завершённые</a></li>
-                    <li class="divider"></li>
-                    <li><a href="{% url 'polls:head_elections' %}">Выборы Председателя</a></li>
-                    <li><a href="{% url 'polls:senator_elections' %}">Выборы Сенаторов</a></li>
-                    {# жаль, пафосное "Вотированные" не подходит #}
-                </ul>
-            </li>
-            <li class="dropdown{% if namespace == 'fin_aid' %} active"{% else %}"{% endif %}>
-                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Матпомощь <b class="caret"></b></a>
-                <ul role="menu" class="dropdown-menu">
-                    <li><a href="{% url 'fin_aid:aid_request_list' %}">Мои заявления</a></li>
-                    <li><a href="{% url 'fin_aid:aid_request_create' %}">Подать заявление</a></li>
-                    <li class="divider"></li>
-                    <li><a href="{% url 'fin_aid:aid_request_rules' %}">Правила</a></li>
-                </ul>
-            </li>
-            <li class="dropdown{% if namespace == 'senate' %} active"{% else %}"{% endif %}>
-                <a data-toggle="dropdown" class="dropdown-toggle" href="#">Сенат <b class="caret"></b></a>
-                <ul role="menu" class="dropdown-menu">
-                    <li><a href="{% url 'senate:issue_list' %}">Мои обращения</a></li>
-                    {% if user.is_superuser or user.is_staff %}
-                        <li><a href="{% url 'senate:dept_issue_list' %}">Обращения в отдел</a></li>
-                    {% endif %}
-                    <li><a href="{% url 'senate:issue_create' %}">Подать обращение</a></li>
-                    <li class="divider"></li>
-                    <li><a href="{% url 'senate:about' %}">О нас</a></li>
-                    <li><a href="{% url 'senate:contacts' %}">Контакты</a></li>
-                </ul>
-            </li>
-            <li {% if namespace == 'bicycle' %} class="active"{% endif %}><a href="{%  url 'bicycle:index' %}">Велокомната</a></li>
-            <li class="nav-divider"></li>
+            {% sitetree_menu from 'mainmenu' include 'trunk,1,level3' template "sitetree/menu_bootstrap3.html" %}
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li {% if namespace == 'blog' %} class="active"{% endif %}><a href="{%  url 'blog:article_list' %}">FAQ</a></li>
-            <li class="nav-divider"></li>
-            {% if user.is_authenticated %}
-                <li {% if namespace == 'profiles' %} class="active"{% endif %}><a href="{% url 'profiles:profile_view' %}">Профиль</a></li>
-                {% if user.is_superuser or user.is_staff %}
-                    <li><a href="{% url "admin:index" %}">Админка</a></li>
-                {% endif %}
-                <li><a href="{% url 'logout' %}">Выход</a></li>
-            {% else %}
-                {% comment %}
-                <li><a href="{% url 'registration_register' %}">Регистрация</a></li>
-                <li><a href="{% url 'login' %}">Вход</a></li>
-                {% endcomment %}
-                <li><a href="{% url 'social:begin' 'vk-oauth2' %}?next={% url 'profiles:profile_view' %}">Войти через vk</a></li>
-                <li><a href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'profiles:profile_view' %}">Войти через phystech.edu</a></li>
-            {% endif %}
+            {% sitetree_menu from 'rightmenu' include 'trunk,1,level3' template "sitetree/menu_bootstrap3.html" %}
         </ul>
     </div>
     </div>
