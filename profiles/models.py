@@ -7,6 +7,12 @@ options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',) # добавлени�
 
 # received from MIPT administration
 class StudentInfo(models.Model):
+    MALE = 1
+    FEMALE = 2
+    SEX = [
+        (MALE, "male"),
+        (FEMALE, "female"),
+    ]
     fio = models.CharField('ФИО', max_length=100, null=True, blank=True)
     group = models.CharField('Группа', max_length=10, null=True, blank=True)
     course = models.IntegerField(default=0)
@@ -14,6 +20,7 @@ class StudentInfo(models.Model):
     vk = models.CharField('vk', max_length=50, null=True, blank=True)
     first_name = models.CharField("Имя", max_length=100, null=True, blank=True)
     last_name = models.CharField("Фамилия", max_length=100, null=True, blank=True)
+    sex = models.IntegerField("Пол", choices=SEX, default=MALE)
 
     def __str__(self):
         return self.fio
