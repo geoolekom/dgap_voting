@@ -15,7 +15,7 @@ def resolver_context_processor(request):
 
 def remind_to_allow_messages(request):
     user = request.user
-    if user.is_authenticated:
+    try:
         settings = user.usernotificationssettings
         if user.userprofile.is_subscribed and not vk_messages_allowed(user) and not settings.last_allow_vk_reminder:
             messages.add_message(request, messages.INFO, '<a class="alert-link" href={}>Настроить получение уведомлений ВКонтакте</a> '
@@ -23,4 +23,6 @@ def remind_to_allow_messages(request):
                                  .format(reverse("blog:article_detail", args=["notifications"])))
         settings.last_allow_vk_reminder = datetime.now()
         settings.save()
+    except Exception:
+        pass
     return {}
