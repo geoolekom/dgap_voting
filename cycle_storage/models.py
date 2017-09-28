@@ -23,6 +23,7 @@ class Bicycle(models.Model):
     owner = models.ForeignKey(User, blank=True, null=True, verbose_name="Владелец")
     manufacturer = models.CharField("Производитель", max_length=255, default="Неизвестно", blank=True, null=True)
     model = models.CharField("Модель", max_length=255, default="Неизвестно", blank=True, null=True)
+    info = models.TextField("Доп. описание", max_length=1024, blank=True, null=True)
     add_dttm = models.DateTimeField('Publish datetime', auto_now_add=True)
     photo = models.ImageField("Фотография", upload_to='bicycles/')  # in case of name collision suffix autocreated
     verified = models.BooleanField("Данные верифицированы", default=False)  # deprecated

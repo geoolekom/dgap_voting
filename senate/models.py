@@ -85,7 +85,7 @@ class Event(models.Model):
         (OPEN, "Создание обращения")
     )
 
-    MAX_INFO_LEN = 1024
+    MAX_INFO_LEN = 2048
 
     issue = models.ForeignKey(Issue, verbose_name="Обращение")
     author = models.ForeignKey(User, verbose_name="Автор", null=True, blank=True)

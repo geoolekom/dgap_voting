@@ -47,7 +47,7 @@ class AidRequest(models.Model):
 
     applicant = models.ForeignKey(User, blank=True, null=True)  # find out how to add applicant to form before validation
     category = models.ForeignKey(Category)
-    reason = models.TextField("Причина", max_length=1024)
+    reason = models.TextField("Причина", max_length=2048)
     req_sum = models.FloatField("Запрошенная сумма", blank=True, null=True)
     urgent = models.BooleanField("Срочно", default=False)
     accepted_sum = models.FloatField("Одобренная сумма", blank=True, null=True)
