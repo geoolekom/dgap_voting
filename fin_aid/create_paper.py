@@ -28,6 +28,8 @@ MONTH_RU = {
 
 #  high error rate on non-russians (peoples without middlename)
 def get_sex(user):
+    if user.userprofile.studentinfo:
+        return user.userprofile.studentinfo.get_sex_display()
     if user.userprofile.middlename:
         if user.userprofile.middlename[-1] == "ч":
             return 'male'
