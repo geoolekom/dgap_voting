@@ -30,22 +30,26 @@ class StudentInfo(models.Model):
         df = DataFrame.from_csv(filename, index_col=None)
         for i, row in df.iterrows():
             try:
-                studentinfo, created = StudentInfo.objects.get_or_create(fio=row["ФИО"],
-                                                                         group=row["Группа"],
-                                                                         first_name=row["Имя"],
-                                                                         last_name=row["Фамилия"])
+                studentinfo, created = StudentInfo.objects.get_or_create(fio=row["ФИО"])
+                studentinfo.group = row["Группа"]
+                studentinfo.first_name = row["Имя"]
+                studentinfo.last_name = row["Фамилия"]
+                studentinfo.course = int(row["Курс"])
                 if row["Email"]:
                     studentinfo.phystech = row["Email"]
-                if not studentinfo.vk and row["screen_name"]:
-                    studentinfo.vk = row["screen_name"]
+                if row["screen_name"]:
+                    studentinfo.vk = "https://vk.com/" + row["screen_name"]
                 if row["Пол"] == "Мужской":
                     studentinfo.sex = StudentInfo.MALE
                 else:
                     studentinfo.sex = StudentInfo.FEMALE
-                studentinfo.course = int(row["Курс"])
+
                 studentinfo.save()
-            except Exception:
+            except StudentInfo.MultipleObjectsReturned:
                 print(row["ФИО"], row["Группа"])
+            else:
+                pass
+
 
 
 class UserProfile(models.Model):
