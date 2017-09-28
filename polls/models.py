@@ -58,9 +58,9 @@ class Poll(models.Model):
 
     def is_user_voted(self, user):
         if self.poll_type == Poll.TARGET_LIST:
-            if not hasattr(user.userprofile.user_information, 'participant_set'):
+            if not hasattr(user.userprofile.student_info, 'participant_set'):
                 return True
-            participants = user.userprofile.user_information.participant_set.all()
+            participants = user.userprofile.student_info.participant_set.all()
             if not participants:
                 return True
             for item in participants:
@@ -72,9 +72,9 @@ class Poll(models.Model):
 
     def is_user_target(self, user):
         if self.poll_type == Poll.TARGET_LIST:
-            if not hasattr(user.userprofile.user_information, 'participant_set'):
+            if not hasattr(user.userprofile.student_info, 'participant_set'):
                 return False
-            participants = user.userprofile.user_information.participant_set.all()
+            participants = user.userprofile.student_info.participant_set.all()
             if not participants:
                 return False
             for item in participants:
@@ -99,9 +99,9 @@ class Poll(models.Model):
         if only_staff:
             users = UserProfile.objects.filter(user__is_staff=True).all()
             for user in users:
-                if user.user_information:
-                    if not self.participant_set.filter(user_information=user.user_information):
-                        Participant.objects.create(user_information=user.user_information,
+                if user.student_info:
+                    if not self.participant_set.filter(user_information=user.student_info):
+                        Participant.objects.create(user_information=user.student_info,
                                                    poll=self, voted=False)
             self.only_for_staff = True
             self.save()
