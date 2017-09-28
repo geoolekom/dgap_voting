@@ -31,8 +31,8 @@ class StudentInfo(models.Model):
         for i, row in df.iterrows():
             try:
                 studentinfo, created = StudentInfo.objects.get_or_create(fio=row["ФИО"])
-                studentinfo.group = group=row["Группа"]
-                studentinfo.first_name = first_name=row["Имя"]
+                studentinfo.group = row["Группа"]
+                studentinfo.first_name = row["Имя"]
                 studentinfo.last_name = row["Фамилия"]
                 studentinfo.course = int(row["Курс"])
                 if row["Email"]:
@@ -45,8 +45,11 @@ class StudentInfo(models.Model):
                     studentinfo.sex = StudentInfo.FEMALE
 
                 studentinfo.save()
-            except Exception:
+            except StudentInfo.MultipleObjectsReturned:
                 print(row["ФИО"], row["Группа"])
+            else:
+                pass
+
 
 
 class UserProfile(models.Model):
