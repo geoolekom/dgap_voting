@@ -47,7 +47,7 @@ class StudentInfo(models.Model):
                 studentinfo.save()
             except StudentInfo.MultipleObjectsReturned:
                 print(row["ФИО"], row["Группа"])
-            else:
+            except TypeError:
                 pass
 
 
