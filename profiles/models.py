@@ -15,7 +15,7 @@ class StudentInfo(models.Model):
     ]
     fio = models.CharField('ФИО', max_length=100, null=True, blank=True)
     group = models.CharField('Группа', max_length=10, null=True, blank=True)
-    course = models.IntegerField(default=0)
+    course = models.IntegerField("Курс", default=0)
     phystech = models.CharField('phystech.edu', max_length=50, null=True, blank=True)
     vk = models.CharField('vk', max_length=50, null=True, blank=True)
     first_name = models.CharField("Имя", max_length=100, null=True, blank=True)
