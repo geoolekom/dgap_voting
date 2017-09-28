@@ -38,7 +38,7 @@ class StudentInfo(models.Model):
                 if row["Email"]:
                     studentinfo.phystech = row["Email"]
                 if row["screen_name"]:
-                    studentinfo.vk = row["screen_name"]
+                    studentinfo.vk = "https://vk.com/" + row["screen_name"]
                 if row["Пол"] == "Мужской":
                     studentinfo.sex = StudentInfo.MALE
                 else:
