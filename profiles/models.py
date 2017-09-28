@@ -18,16 +18,23 @@ class StudentInfo(models.Model):
     def __str__(self):
         return self.fio
 
-
-def upload_students_list(filename='~/spiski.csv'):
-    df = DataFrame.from_csv(filename, index_col=None)
-    for i, row in df.iterrows():
-        StudentInfo.objects.get_or_create(fio=row["ФИО"],
-                                          group=row["Группа"],
-                                          phystech=row["Email"],
-                                          vk='https://vk.com/' + str(row["screen_name"]),
-                                          first_name=row["Имя"],
-                                          last_name=row["Фамилия"])
+    def upload_csv(filename='~/spiski.csv'):
+        df = DataFrame.from_csv(filename, index_col=None)
+        for i, row in df.iterrows():
+            studentinfo, created = StudentInfo.objects.get_or_create(fio=row["ФИО"],
+                                                                     group=row["Группа"],
+                                                                     first_name=row["Имя"],
+                                                                     last_name=row["Фамилия"])
+            if not studentinfo.phystech and row["Email"]:
+                studentinfo.phystech = row["Email"]
+            if not studentinfo.vk and row["screen_name"]:
+                studentinfo.vk = row["screen_name"]
+            if not studentinfo.sex:
+                if row["Пол"] == "Мужской":
+                    studentinfo.sex = 'male'
+                else:
+                    studentinfo.sex = 'female'
+            studentinfo.save()
 
 
 class UserProfile(models.Model):
