@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models import Q
 from django.utils import timezone
 import re
 
@@ -14,6 +13,7 @@ class Poll(models.Model):
     end_date = models.DateTimeField('Конец голосования')
     target_room = models.CharField('Целевая комната', max_length=200, default=r'^')  # предполагается использование регулярных выражений
     target_group = models.CharField('Целевая группа', max_length=200, default=r'^')
+    target_course = models.CharField('Курсы, которые голосуют', max_length=200, default=r'^')
     public = models.BooleanField('Открытое голосование', default = True)
     ONE = 'ONE'
     MANY = 'MANY'
@@ -115,7 +115,7 @@ class Poll(models.Model):
                         **{str(item[1])+'__iregex': item[0]}
                     ).all()
                 else:
-                    target_list = self.target_list.objects.filter(
+                    target_list = target_list.filter(
                         **{str(item[1])+'__iregex': item[0]}
                     )
         for user in target_list:
