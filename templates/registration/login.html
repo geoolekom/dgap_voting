@@ -32,8 +32,8 @@
                         <button type="submit" value="login" class="btn btn-default">Войти</button>
                         <div class="pull-right">
                             {% comment %}	<a class=" btn btn-default" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'polls:index' %}">Войти через mipt.ru</a> {% endcomment %}
-                        <a class="btn btn-default" href="{% url 'social:begin' 'google-oauth2' %}">Войти через phystech.edu</a>
-                        <a class="btn btn-default" href="{% url 'social:begin' 'vk-oauth2' %}">Войти через VK</a>
+                        <a class="btn btn-default" href="{% url 'social:begin' 'google-oauth2' %}{% if next %}?next={{ next }}{% endif %}">Войти через phystech.edu</a>
+                        <a class="btn btn-default" href="{% url 'social:begin' 'vk-oauth2' %}{% if next %}?next={{ next }}{% endif %}">Войти через VK</a>
                         </div>
                     </form>
 			</div>
