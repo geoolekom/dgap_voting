@@ -13,7 +13,7 @@ from dgap_voting.local_settings import VK_MESSAGES_TOKEN, VK_GROUP_ID, DEBUG
 
 
 vk_session = vk.Session(access_token=VK_MESSAGES_TOKEN)
-vk_api = vk.API(vk_session)
+vk_api = vk.API(vk_session, v='5.46')
 
 
 def get_vk_uid(user: User):
@@ -80,7 +80,10 @@ def notify(user: User, text, title=None):
 def notify_group(group: Group, text, title=None):
     users = group.user_set.all()
     for user in users:
-        notify(user, text, title)
+        try:
+            notify(user, text, title)
+        except Exception:
+            pass
 
 
 # TODO if user has no VK? Currently returns True to avoid stupid messages
