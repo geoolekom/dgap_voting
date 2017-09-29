@@ -256,5 +256,5 @@ def vote(request, poll_id):
             userHashes[i].user = user
         userHashes[i].save()
     messages.success(request, message)
-    return redirect('polls:done')
+    return redirect('polls:voted')
 

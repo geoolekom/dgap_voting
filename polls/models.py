@@ -47,6 +47,10 @@ class Poll(models.Model):
     # target_list = models.ManyToManyField(StudentInfo)
     # voted_users_from_list = models.ManyToManyField(StudentInfo)
 
+    class Meta:
+        verbose_name = "голосование"
+        verbose_name_plural = "голосования"
+
     def __str__(self):
         return self.name
 
@@ -123,9 +127,13 @@ class Poll(models.Model):
 
 
 class Participant(models.Model):
-    user_information = models.ForeignKey(StudentInfo, default=None, null=True, blank=True)
-    poll = models.ForeignKey(Poll, default=None, null=True, blank=True)
-    voted = models.BooleanField(default=False)
+    user_information = models.ForeignKey(StudentInfo, verbose_name="Инфо о студенте", default=None, null=True, blank=True)
+    poll = models.ForeignKey(Poll, verbose_name="Голосование", default=None, null=True, blank=True)
+    voted = models.BooleanField("Проголосовал", default=False)
+
+    class Meta:
+        verbose_name = "участник голосования"
+        verbose_name_plural = "участники голосования"
 
     def __str__(self):
         return "%s" % self.user_information.fio

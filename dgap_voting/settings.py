@@ -80,8 +80,6 @@ TEMPLATES = [
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
                 'dgap_voting.context_processors.resolver_context_processor',
-                'dgap_voting.context_processors.remind_to_allow_messages',
-                'dgap_voting.context_processors.remind_to_vote',
                 'django.contrib.messages.context_processors.messages',
                 'dealer.contrib.django.context_processor',
             ],

@@ -63,4 +63,13 @@ class PollAdmin(admin.ModelAdmin):
     inlines = [ChoiceInline, ParticipantInline, ]
     list_display=['name', 'pdf_button', 'audit_button', 'mailing_button',]
 
+
+class ParticipantAdmin(admin.ModelAdmin):
+    list_display = ["user_information", "poll", "voted"]
+    search_fields = ["user_information__fio"]
+    list_editable = ["voted"]
+    list_filter = ["voted", "poll"]
+
+
 admin.site.register(Poll, PollAdmin)
+admin.site.register(Participant, ParticipantAdmin)
