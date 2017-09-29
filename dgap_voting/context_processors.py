@@ -1,8 +1,10 @@
 from django.contrib import messages
 from django.urls import reverse
-from notifications.notify import vk_messages_allowed
+
 from datetime import datetime
-from notifications.models import UserNotificationsSettings
+
+from notifications.notify import vk_messages_allowed
+from polls.models import Poll
 
 
 def resolver_context_processor(request):
@@ -25,4 +27,17 @@ def remind_to_allow_messages(request):
         settings.save()
     except Exception:
         pass
+    return {}
+
+
+def remind_to_vote(request):
+    user = request.user
+    if user.is_authenticated:
+        polls = [poll for poll in Poll.objects.filter(begin_date__lte=datetime.now(),
+                                                      end_date__gte=datetime.now()).order_by('-begin_date') if
+                 poll.is_user_target(user) and not poll.is_user_voted(user)]
+
+        for poll in polls:
+            messages.add_message(request, messages.INFO, 'Вам доступно голосование: <a class="alert-link" href="{}">{}</a>'
+                                 .format(reverse("polls:available"), poll.name))
     return {}
