@@ -7,8 +7,13 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib import messages
 
-from .models import Issue, Event, EventDocument
+from .models import Issue, Event, EventDocument, Employee
 from .forms import IssueCreateForm, DeptEventCreateForm, UserEventCreateForm
+
+
+class EmployeeList(generic.ListView):
+    model = Employee
+    ordering = ['-importance', 'department', 'position']
 
 
 @method_decorator(login_required, name='dispatch')

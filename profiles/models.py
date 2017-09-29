@@ -21,6 +21,7 @@ class StudentInfo(models.Model):
     first_name = models.CharField("Имя", max_length=100, null=True, blank=True)
     last_name = models.CharField("Фамилия", max_length=100, null=True, blank=True)
     sex = models.IntegerField("Пол", choices=SEX, default=MALE)
+    room = models.CharField('Номер комнаты', max_length=32, blank=True)
 
     def __str__(self):
         return self.fio

@@ -1,9 +1,10 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
+from django.contrib.auth.models import Group
 from datetime import datetime
 
-from .models import Issue, Event
+from .models import Issue, Event, Employee
 from notifications.notify import get_vk_uid, vk_message_user_link, notify, notify_group
 from notifications.templates import get_abs_url
 
@@ -59,3 +60,10 @@ def event_save(sender, instance: Event, created, **kwargs):
     if instance.new_worker:
         instance.issue.assigned_worker = instance.new_worker
         instance.issue.save()
+
+
+@receiver(post_save, sender=Employee, dispatch_uid='senate')
+def employee_create(sender, instance: Employee, created, **kwargs):
+        instance.person.groups.add(instance.department.group)
+        instance.person.groups.add(Group.objects.get(name="senate_employee"))
+        instance.person.save()
