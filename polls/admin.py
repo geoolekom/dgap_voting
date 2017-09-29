@@ -49,8 +49,8 @@ class PollAdmin(admin.ModelAdmin):
     mailing_button.short_description = 'Уведомление о голосовании'
 
     def save_model(self, request, obj, form, change):
-        if obj.poll_type == Poll.TARGET_LIST:
-            obj.participant_set.all().delete()
+        obj.save()
+        if obj.poll_type == Poll.TARGET_LIST and not change:
             obj.create_target_list_from_group_room_course(
                 group=obj.target_group,
                 room=obj.target_room,
