@@ -30,7 +30,6 @@ urlpatterns = [
     url(r'^accounts/register/$', MyRegistrationView.as_view(), name='registration_register'),
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^accounts/', include('django.contrib.auth.urls')),
-    url(r'^faq/', include('faq.urls', namespace='faq')),
     url('', include('social_django.urls', namespace='social')),
 ] 
 if DEBUG:
