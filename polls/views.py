@@ -157,7 +157,7 @@ def make_csv(p, filename):
                 if p.poll_type == Poll.TARGET_LIST:
                     for participate in p.participant_set.all():
                         if participate.voted:
-                            writer.writerow([participate.student_info.fio])
+                            writer.writerow([participate.user_info.fio])
                 else:
                     for user in p.voted_users.order_by('last_name', 'first_name'):
                         writer.writerow(["{} {} {}".format(user.last_name, user.first_name, user.userprofile.middlename )])
