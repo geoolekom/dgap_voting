@@ -87,7 +87,9 @@ class IssueCreate(generic.CreateView):
     model = Issue
 
     def get_form(self, form_class=None):
-        return IssueCreateForm(self.request.GET)
+        if self.request.GET:
+            return IssueCreateForm(self.request.GET)
+        return IssueCreateForm()
 
     def get_success_url(self):
         return reverse('senate:issue_detail', args=(self.object.id,))
