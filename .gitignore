@@ -2,6 +2,7 @@ venv/
 media/
 .idea/
 __pycache__/
+/static/
 *.swp
 *.sqlite*
 */local_settings.py
@@ -9,3 +10,5 @@ __pycache__/
 *.sql
 *.sqlite3
 *.csv
+.ipynb_checkpoints/
+*.ipynb

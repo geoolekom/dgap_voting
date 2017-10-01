@@ -1,6 +1,6 @@
 
 """
-Django settings for dgap_voting project.
+Django settings for core project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
@@ -65,6 +65,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'core', 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -78,7 +79,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
-                'dgap_voting.context_processors.resolver_context_processor',
+                'core.context_processors.resolver_context_processor',
                 'django.contrib.messages.context_processors.messages',
                 'dealer.contrib.django.context_processor',
             ],
@@ -122,9 +123,9 @@ MIDDLEWARE_CLASSES = (
     'profiles.psa.SocialAuthExceptionMiddlewareExtended',
 )
 
-ROOT_URLCONF = 'dgap_voting.urls'
+ROOT_URLCONF = 'core.urls'
 
-WSGI_APPLICATION = 'dgap_voting.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
@@ -240,4 +241,4 @@ LOGGING = {
     }
 }
 
-from dgap_voting.local_settings import *
+from core.local_settings import *

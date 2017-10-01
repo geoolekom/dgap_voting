@@ -6,7 +6,7 @@ from hashlib import md5
 import vk
 
 from .models import UserNotificationsSettings, Notification
-from dgap_voting.local_settings import VK_MESSAGES_TOKEN, VK_GROUP_ID, DEBUG
+from core.local_settings import VK_MESSAGES_TOKEN, VK_GROUP_ID, DEBUG
 
 
 # import python-telegram-bot

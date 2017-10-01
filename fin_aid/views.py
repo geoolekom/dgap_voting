@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 
 from .create_paper import create_paper
-from dgap_voting.settings import MEDIA_ROOT
+from core.settings import MEDIA_ROOT
 
 import os
 
