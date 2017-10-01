@@ -24,6 +24,7 @@ class DeptEventCreateForm(forms.ModelForm):
         fields = ["cls", "info", "new_status", "new_dept"]
         widgets = {"info": forms.Textarea}
 
+
 class UserEventCreateForm(forms.ModelForm):
     photo1 = forms.ImageField(required=False, label="Фотография")
     photo2 = forms.ImageField(required=False, label="Фотография")

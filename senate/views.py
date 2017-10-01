@@ -85,11 +85,10 @@ class IssueDetail(View):
 @method_decorator(login_required, name='dispatch')
 class IssueCreate(generic.CreateView):
     model = Issue
+    form_class = IssueCreateForm
 
-    def get_form(self, form_class=None):
-        if self.request.GET:
-            return IssueCreateForm(self.request.GET)
-        return IssueCreateForm()
+    def get_initial(self):
+        return self.request.GET
 
     def get_success_url(self):
         return reverse('senate:issue_detail', args=(self.object.id,))
