@@ -88,7 +88,10 @@ class IssueCreate(generic.CreateView):
     form_class = IssueCreateForm
 
     def get_initial(self):
-        return self.request.GET
+        initial = super(IssueCreate, self).get_initial()
+        for param in self.request.GET:
+            initial[param] = self.request.GET[param]
+        return initial
 
     def get_success_url(self):
         return reverse('senate:issue_detail', args=(self.object.id,))
