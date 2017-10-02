@@ -10,7 +10,11 @@ from notifications.templates import get_abs_url
 
 
 def new_issue_text(issue: Issue):
-    s = "Новое обращение от {}\n{}\n".format(vk_message_user_link(issue.author), str(issue))
+    try:
+        author = vk_message_user_link(issue.author)
+    except Exception:
+        author = "{} {}".format(issue.author.first_name, issue.author.last_name)
+    s = "Новое обращение от {}\n{}\n".format(author, str(issue))
     event = issue.event_set.get(cls=Event.OPEN)
     if event.info:
         s += event.info + "\n"
