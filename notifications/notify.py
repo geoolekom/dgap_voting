@@ -37,7 +37,7 @@ def get_telegram_uid(user: User):
 
 
 def _notify_vk(user: User, text, title=None):
-    hash = message_int_hash(text)
+    hash = message_int_hash(user.username + text)
     response = vk_api.messages.send(user_id=get_vk_uid(user), message=text, random_id=hash)
     Notification.objects.create(user=user, method=Notification.VK, text=text, result=response)
     return response
