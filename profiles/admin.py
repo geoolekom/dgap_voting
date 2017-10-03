@@ -31,6 +31,7 @@ class UserAdmin(UserAdmin):
 class StudentInfoAdmin(admin.ModelAdmin):
     search_fields = ['first_name', 'last_name']
     list_display = ['first_name', 'last_name', 'group', 'vk', 'phystech']
+    list_filter = ['course']
 # TODO нормальное отображение профиля юзера в админке, разобраться, нужно ли показывать права доступа и группы
 
 

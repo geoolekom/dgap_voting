@@ -48,8 +48,28 @@ class PollAdmin(admin.ModelAdmin):
         return mark_safe('<a href=\'' + os.path.join(site_url, reverse('polls:approve_mailing', args=[obj.pk,])) +'\'">Сделать рассылку</a> [{times_mailed}]'.format(times_mailed=times_mailed))
     mailing_button.short_description = 'Уведомление о голосовании'
 
+    def save_model(self, request, obj, form, change):
+        obj.save()
+        if obj.poll_type == Poll.TARGET_LIST and not change:
+            obj.create_target_list_from_group_room_course(
+                group=obj.target_group,
+                room=obj.target_room,
+                course=obj.target_course,
+                only_staff=obj.only_for_staff
+            )
+        obj.save()
+
     exclude = ('voted_users', 'times_mailed', 'last_mailing',)
     inlines = [ChoiceInline, ParticipantInline, ]
     list_display=['name', 'pdf_button', 'audit_button', 'mailing_button',]
 
+
+class ParticipantAdmin(admin.ModelAdmin):
+    list_display = ["user_information", "poll", "voted"]
+    search_fields = ["user_information__fio"]
+    list_editable = ["voted"]
+    list_filter = ["voted", "poll"]
+
+
 admin.site.register(Poll, PollAdmin)
+admin.site.register(Participant, ParticipantAdmin)

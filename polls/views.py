@@ -105,7 +105,7 @@ def voters(request, poll_id):
     poll_obj = get_object_or_404(Poll, pk=poll_id)
 
     if poll_obj.poll_type == Poll.TARGET_LIST:
-        raw_people = [voter.user_information for voter in poll_obj.participant_set.all() if voter.user_information]
+        raw_people = [voter.student_info for voter in poll_obj.participant_set.all() if voter.student_info]
         people = []
         for item in raw_people:
             if hasattr(item, 'userprofile_set'):
@@ -157,7 +157,7 @@ def make_csv(p, filename):
                 if p.poll_type == Poll.TARGET_LIST:
                     for participate in p.participant_set.all():
                         if participate.voted:
-                            writer.writerow([participate.user_information.fio])
+                            writer.writerow([participate.user_info.fio])
                 else:
                     for user in p.voted_users.order_by('last_name', 'first_name'):
                         writer.writerow(["{} {} {}".format(user.last_name, user.first_name, user.userprofile.middlename )])
@@ -226,7 +226,7 @@ def vote(request, poll_id):
     choices = list(set(choices))
 
     if p.poll_type == Poll.TARGET_LIST:
-        participate = user.userprofile.user_information.participant_set.all()
+        participate = user.userprofile.student_info.participant_set.all()
         for item in participate:
             if item.poll.id == p.id:
                 item.voted = True
@@ -256,5 +256,5 @@ def vote(request, poll_id):
             userHashes[i].user = user
         userHashes[i].save()
     messages.success(request, message)
-    return redirect('polls:done')
+    return redirect('polls:voted')
 

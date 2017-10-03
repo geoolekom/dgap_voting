@@ -10,5 +10,5 @@ urlpatterns = [
     url(r'^issue/(?P<pk>\d+)$', views.IssueDetail.as_view(), name='issue_detail'),
     url(r'^new_issue$', views.IssueCreate.as_view(), name='issue_create'),
     url(r'^about$', ArticleDetail.as_view(), {"slug": "about_senate"}, name='about', ),
-    url(r'^contacts$', ArticleDetail.as_view(), {"slug": "contacts"}, name='contacts', ),
+    url(r'^contacts$', views.EmployeeList.as_view(), name='contacts', ),
 ]

@@ -1,7 +1,7 @@
 # TODO check importancy of this feature. If essential, make create_paper method of AidRequest class
 # all further imports are needed only to make application paper!
 from django.core.files import File
-from dgap_voting.settings import MEDIA_ROOT, STATIC_ROOT
+from core.settings import MEDIA_ROOT, STATIC_ROOT
 from .models import user_hash
 from .models import AidRequest, AidDocument
 from docxtpl import DocxTemplate  # create word document from template
@@ -28,6 +28,8 @@ MONTH_RU = {
 
 #  high error rate on non-russians (peoples without middlename)
 def get_sex(user):
+    if user.userprofile.studentinfo:
+        return user.userprofile.studentinfo.get_sex_display()
     if user.userprofile.middlename:
         if user.userprofile.middlename[-1] == "ч":
             return 'male'

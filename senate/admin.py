@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User, Group
-from .models import Department, Category, Issue, Event, EventDocument
+from .models import Department, Employee, Category, Issue, Event, EventDocument
 
 
 """class UserInline(admin.StackedInline):
@@ -13,6 +13,13 @@ class DepartmentAdmin(admin.ModelAdmin):
     list_display = ['name', 'group', 'head']
     readonly_fields = ['members']
     # inlines = [UserInline]
+
+
+class EmployeeAdmin(admin.ModelAdmin):
+    list_display = ["person", 'department', 'position', 'phone', 'public', 'importance']
+    list_editable = ['public', 'importance']
+    list_filter = ['department', 'public']
+    search_fields = ["person__first_name", "person__last_name"]
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -34,6 +41,7 @@ class IssueAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Department, DepartmentAdmin)
+admin.site.register(Employee, EmployeeAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Issue, IssueAdmin)
 admin.site.register(Event)

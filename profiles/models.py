@@ -7,27 +7,50 @@ options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',) # добавлени�
 
 # received from MIPT administration
 class StudentInfo(models.Model):
+    MALE = 1
+    FEMALE = 2
+    SEX = [
+        (MALE, "male"),
+        (FEMALE, "female"),
+    ]
     fio = models.CharField('ФИО', max_length=100, null=True, blank=True)
     group = models.CharField('Группа', max_length=10, null=True, blank=True)
-    course = models.IntegerField(default=0)
+    course = models.IntegerField("Курс", default=0)
     phystech = models.CharField('phystech.edu', max_length=50, null=True, blank=True)
     vk = models.CharField('vk', max_length=50, null=True, blank=True)
     first_name = models.CharField("Имя", max_length=100, null=True, blank=True)
     last_name = models.CharField("Фамилия", max_length=100, null=True, blank=True)
+    sex = models.IntegerField("Пол", choices=SEX, default=MALE)
+    room = models.CharField('Номер комнаты', max_length=32, blank=True)
 
     def __str__(self):
         return self.fio
 
+    @staticmethod
+    def upload_csv(filename='~/spiski.csv'):
+        df = DataFrame.from_csv(filename, index_col=None)
+        for i, row in df.iterrows():
+            try:
+                studentinfo, created = StudentInfo.objects.get_or_create(fio=row["ФИО"])
+                studentinfo.group = row["Группа"]
+                studentinfo.first_name = row["Имя"]
+                studentinfo.last_name = row["Фамилия"]
+                studentinfo.course = int(row["Курс"])
+                if row["Email"]:
+                    studentinfo.phystech = row["Email"]
+                if row["screen_name"]:
+                    studentinfo.vk = "https://vk.com/" + row["screen_name"]
+                if row["Пол"] == "Мужской":
+                    studentinfo.sex = StudentInfo.MALE
+                else:
+                    studentinfo.sex = StudentInfo.FEMALE
 
-def upload_students_list(filename='~/spiski.csv'):
-    df = DataFrame.from_csv(filename, index_col=None)
-    for i, row in df.iterrows():
-        StudentInfo.objects.get_or_create(fio=row["ФИО"],
-                                          group=row["Группа"],
-                                          phystech=row["Email"],
-                                          vk='https://vk.com/' + str(row["screen_name"]),
-                                          first_name=row["Имя"],
-                                          last_name=row["Фамилия"])
+                studentinfo.save()
+            except StudentInfo.MultipleObjectsReturned:
+                print(row["ФИО"], row["Группа"])
+            except TypeError:
+                pass
+
 
 
 class UserProfile(models.Model):

@@ -7,8 +7,13 @@ from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib import messages
 
-from .models import Issue, Event, EventDocument
+from .models import Issue, Event, EventDocument, Employee
 from .forms import IssueCreateForm, DeptEventCreateForm, UserEventCreateForm
+
+
+class EmployeeList(generic.ListView):
+    model = Employee
+    ordering = ['-importance', 'department', 'position']
 
 
 @method_decorator(login_required, name='dispatch')
@@ -80,7 +85,9 @@ class IssueDetail(View):
 @method_decorator(login_required, name='dispatch')
 class IssueCreate(generic.CreateView):
     model = Issue
-    form_class = IssueCreateForm
+
+    def get_form(self, form_class=None):
+        return IssueCreateForm(self.request.GET)
 
     def get_success_url(self):
         return reverse('senate:issue_detail', args=(self.object.id,))

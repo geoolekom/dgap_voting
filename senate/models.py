@@ -2,9 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User, Group
 from django.urls import reverse_lazy
 
+from profiles.models import StudentInfo
+
 
 class Department(models.Model):
-    group = models.OneToOneField(Group, verbose_name="Группа доступа")
+    group = models.OneToOneField(Group, verbose_name="Группа доступа", blank=True, null=True) # TODO if department needs several groups?
     name = models.CharField("Название", max_length=100, null=True, blank=True)
     head = models.ForeignKey(User, verbose_name="Глава отдела", null=True, blank=True)
 
@@ -21,6 +23,22 @@ class Department(models.Model):
     @property
     def members(self):
         return self.group.user_set.all()
+
+
+class Employee(models.Model):
+    person = models.ForeignKey(User)
+    position = models.CharField("Должность", max_length=100)
+    department = models.ForeignKey(Department, verbose_name="Отдел", blank=True, null=True, default=None)
+    public = models.BooleanField("Публичный", default=True)
+    phone = models.CharField("Телефон", max_length=100)
+    importance = models.IntegerField("Значимость", default=1) # for sorting employee lists
+
+    def __str__(self):
+        return self.position
+
+    class Meta:
+        verbose_name = "сотрудник"
+        verbose_name_plural = "сотрудники"
 
 
 class Category(models.Model):

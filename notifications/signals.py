@@ -1,10 +1,15 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
+from django.contrib.auth.signals import user_logged_in
+from django.contrib import messages
+from django.utils import timezone
+from django.urls import reverse
+
 from fin_aid.models import AidRequest
 from profiles.models import UserProfile
 from cycle_storage.models import Bicycle
-from .notify import notify
+from .notify import notify, vk_messages_allowed
 from .templates import fin_aid_new_request, fin_aid_request_status_change, bicycle_request_status_change, bicycle_new_request
 from .models import UserNotificationsSettings
 
@@ -33,6 +38,21 @@ def user_create(sender, instance, created, **kwargs):
     settings, created = UserNotificationsSettings.objects.get_or_create(user=instance.user)
     settings.allow_vk = instance.is_subscribed
     settings.save()
+
+
+@receiver(user_logged_in, dispatch_uid='notifications')
+def remind_to_allow_messages(sender, request, **kwargs):
+    user = request.user
+    try:
+        settings = user.usernotificationssettings
+        if user.userprofile.is_subscribed and not vk_messages_allowed(user) and not settings.last_allow_vk_reminder:
+            messages.add_message(request, messages.INFO, '<a class="alert-link" href={}>Настроить получение уведомлений ВКонтакте</a> '
+            'для оперативного информарования о рассмотрении заявлений на матпомощь, обращений в Сенат и т.д.'
+                                 .format(reverse("blog:article_detail", args=["notifications"])))
+        settings.last_allow_vk_reminder = timezone.now()
+        settings.save()
+    except Exception:
+        pass
 
 
 @receiver(post_save, sender=Bicycle, dispatch_uid='notifications')

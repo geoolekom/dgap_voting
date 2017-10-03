@@ -1,6 +1,6 @@
 
 """
-Django settings for dgap_voting project.
+Django settings for core project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'sitetree',
     'dealer',
     'raven.contrib.django.raven_compat',
+    'core',
     'polls',
     'blog',
     'fin_aid',
@@ -59,7 +60,6 @@ INSTALLED_APPS = (
     'social_django',
     'servertime',
     'profiles',
-    'faq',
 )
 
 TEMPLATES = [
@@ -80,8 +80,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
-                'dgap_voting.context_processors.resolver_context_processor',
-                'dgap_voting.context_processors.remind_to_allow_messages',
+                'core.context_processors.resolver_context_processor',
                 'django.contrib.messages.context_processors.messages',
                 'dealer.contrib.django.context_processor',
             ],
@@ -125,9 +124,9 @@ MIDDLEWARE_CLASSES = (
     'profiles.psa.SocialAuthExceptionMiddlewareExtended',
 )
 
-ROOT_URLCONF = 'dgap_voting.urls'
+ROOT_URLCONF = 'core.urls'
 
-WSGI_APPLICATION = 'dgap_voting.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
@@ -258,6 +257,7 @@ LOGGING = {
     }
 }
 
+
 import raven
 
 RAVEN_CONFIG = {
@@ -267,4 +267,5 @@ RAVEN_CONFIG = {
     'release': raven.fetch_git_sha(os.path.dirname(os.pardir)),
 }
 
-from dgap_voting.local_settings import *
+
+from core.local_settings import *

@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models import Q
 from django.utils import timezone
 import re
 
@@ -14,6 +13,7 @@ class Poll(models.Model):
     end_date = models.DateTimeField('Конец голосования')
     target_room = models.CharField('Целевая комната', max_length=200, default=r'^')  # предполагается использование регулярных выражений
     target_group = models.CharField('Целевая группа', max_length=200, default=r'^')
+    target_course = models.CharField('Курсы, которые голосуют', max_length=200, default=r'^')
     public = models.BooleanField('Открытое голосование', default = True)
     ONE = 'ONE'
     MANY = 'MANY'
@@ -47,6 +47,10 @@ class Poll(models.Model):
     # target_list = models.ManyToManyField(StudentInfo)
     # voted_users_from_list = models.ManyToManyField(StudentInfo)
 
+    class Meta:
+        verbose_name = "голосование"
+        verbose_name_plural = "голосования"
+
     def __str__(self):
         return self.name
 
@@ -58,9 +62,9 @@ class Poll(models.Model):
 
     def is_user_voted(self, user):
         if self.poll_type == Poll.TARGET_LIST:
-            if not hasattr(user.userprofile.user_information, 'participant_set'):
+            if not hasattr(user.userprofile.student_info, 'participant_set'):
                 return True
-            participants = user.userprofile.user_information.participant_set.all()
+            participants = user.userprofile.student_info.participant_set.all()
             if not participants:
                 return True
             for item in participants:
@@ -72,9 +76,9 @@ class Poll(models.Model):
 
     def is_user_target(self, user):
         if self.poll_type == Poll.TARGET_LIST:
-            if not hasattr(user.userprofile.user_information, 'participant_set'):
+            if not hasattr(user.userprofile.student_info, 'participant_set'):
                 return False
-            participants = user.userprofile.user_information.participant_set.all()
+            participants = user.userprofile.student_info.participant_set.all()
             if not participants:
                 return False
             for item in participants:
@@ -99,9 +103,9 @@ class Poll(models.Model):
         if only_staff:
             users = UserProfile.objects.filter(user__is_staff=True).all()
             for user in users:
-                if user.user_information:
-                    if not self.participant_set.filter(user_information=user.user_information):
-                        Participant.objects.create(user_information=user.user_information,
+                if user.student_info:
+                    if not self.participant_set.filter(user_information=user.student_info):
+                        Participant.objects.create(user_information=user.student_info,
                                                    poll=self, voted=False)
             self.only_for_staff = True
             self.save()
@@ -115,7 +119,7 @@ class Poll(models.Model):
                         **{str(item[1])+'__iregex': item[0]}
                     ).all()
                 else:
-                    target_list = self.target_list.objects.filter(
+                    target_list = target_list.filter(
                         **{str(item[1])+'__iregex': item[0]}
                     )
         for user in target_list:
@@ -123,9 +127,13 @@ class Poll(models.Model):
 
 
 class Participant(models.Model):
-    user_information = models.ForeignKey(StudentInfo, default=None, null=True, blank=True)
-    poll = models.ForeignKey(Poll, default=None, null=True, blank=True)
-    voted = models.BooleanField(default=False)
+    user_information = models.ForeignKey(StudentInfo, verbose_name="Инфо о студенте", default=None, null=True, blank=True)
+    poll = models.ForeignKey(Poll, verbose_name="Голосование", default=None, null=True, blank=True)
+    voted = models.BooleanField("Проголосовал", default=False)
+
+    class Meta:
+        verbose_name = "участник голосования"
+        verbose_name_plural = "участники голосования"
 
     def __str__(self):
         return "%s" % self.user_information.fio
