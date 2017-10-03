@@ -52,18 +52,16 @@ def event_save(sender, instance: Event, created, **kwargs):
             except Exception:
                 text = "Новое обращение в отдел"
             notify_group(issue.assigned_dept, text)
-        elif issue.author == instance.author:
-            try:
-                text = issue_update_text(instance)
-            except Exception:
-                text = "Информация по обращению в Сенат обновлена"
-            notify_group(issue.assigned_dept, text)
         else:
             try:
                 text = issue_update_text(instance)
             except Exception:
                 text = "Информация по обращению в Сенат обновлена"
-            notify(instance.author, text)
+            if issue.author == instance.author:
+                notify_group(issue.assigned_dept, text)
+            else:
+                notify(issue.author, text)
+
     if instance.new_status:
         instance.issue.status = instance.new_status
         instance.issue.save()
