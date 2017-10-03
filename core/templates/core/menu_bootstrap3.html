@@ -10,7 +10,7 @@ Based on https://github.com/idlesign/django-sitetree/blob/master/sitetree/templa
             {% if item.has_children %}<b class="caret"></b>{% endif %}
         </a>
         {% if item.has_children %}
-            {% sitetree_children of item for menu template "polls/menu_bootstrap3_dropdown.html" %}
+            {% sitetree_children of item for menu template "core/menu_bootstrap3_dropdown.html" %}
         {% endif %}
     </li>
 {% endfor %}
