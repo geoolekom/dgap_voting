@@ -39,6 +39,10 @@ class Bicycle(models.Model):
     def get_absolute_url(self):
         return reverse('bicycle:bicycle_detail', args=[self.id])
 
+    @property
+    def image_tag(self):
+        return'<img src={} class="aiddocument">'.format(self.photo.url)
+
 
 # Storage room, contains several places for bicycles
 class Storage(models.Model):
@@ -57,11 +61,11 @@ class Storage(models.Model):
         Place.objects.bulk_create([Place(storage=self, name=str(i)) for i in range(1, num + 1)])
 
     def randomly_fill(self):
-        accepted_bicycles_count = Bicycle.objects.filter(request_status=ACCEPTED, place=None).count()
+        accepted_bicycles_count = Bicycle.objects.filter(request_status=Bicycle.ACCEPTED, place=None).count()
         if accepted_bicycles_count > self.free_places:
             print("Too many bikes to place in this storage")
             return False
-        accepted_bicycles = Bicycle.objects.filter(request_status=ACCEPTED)
+        accepted_bicycles = Bicycle.objects.filter(request_status=Bicycle.ACCEPTED)
         free_places = Place.objects.filter(bicycle=None)
         for bicycle, place in zip(accepted_bicycles, free_places[:accepted_bicycles_count]):
             place.bicycle = bicycle

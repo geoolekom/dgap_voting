@@ -21,8 +21,10 @@
                                 {% else %}<span style="color: red">не проверена</span>{% endif %}</p>
                     <img src={{ object.photo.url }} class="aiddocument">
                     {% if object.request_status == object.WAITING %}
-                        <a href={% url "bicycle:bicycle_update" object.id %} class="btn btn-primary">Редактировать заявку</a>
-                        <a href={% url "bicycle:bicycle_delete" object.id %} class="btn btn-danger">Отозвать заявку</a>
+                        <p>
+                            <a href={% url "bicycle:bicycle_update" object.id %} class="btn btn-primary">Редактировать заявку</a>
+                            <a href={% url "bicycle:bicycle_delete" object.id %} class="btn btn-danger">Отозвать заявку</a>
+                        </p>
                     {% endif %}
                 {% else %}
                     <p>У вас нет зарегистрированных велосипедов.</p>

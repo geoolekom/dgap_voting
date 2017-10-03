@@ -27,6 +27,7 @@ class PlaceFilter(SimpleListFilter):
 class BicycleAdmin(admin.ModelAdmin):
     list_display = ("owner", "manufacturer", "model", "place", "verified", "request_status")
     list_filter = ("verified", "request_status", PlaceFilter)
+    readonly_fields = ["image_tag"]
 
 
 class StorageAdmin(admin.ModelAdmin):
