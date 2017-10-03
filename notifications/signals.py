@@ -9,7 +9,7 @@ from django.urls import reverse
 from fin_aid.models import AidRequest
 from profiles.models import UserProfile
 from cycle_storage.models import Bicycle
-from .notify import notify, vk_messages_allowed
+from .notify import notify, notify_group, vk_messages_allowed
 from .templates import fin_aid_new_request, fin_aid_request_status_change, bicycle_request_status_change, bicycle_new_request
 from .models import UserNotificationsSettings
 
@@ -21,13 +21,17 @@ def aidrequest_save_notify(sender, instance, created, **kwargs):
     try:
         if not created:
             if instance.status == AidRequest.WAITING and instance.category.notifications:
-                users = User.objects.filter(groups__name='finance')
-                text = fin_aid_new_request(instance)
-                for user in users:
-                    notify(user, text)
+                try:
+                    text = fin_aid_new_request(instance)
+                except Exception:
+                    text = "Новое заявление на матпомощь"
+                notify_group('finance', text)
             else:
                 if instance.status != AidRequest.WAITING:
-                    text = fin_aid_request_status_change(instance)
+                    try:
+                        text = fin_aid_request_status_change(instance)
+                    except Exception:
+                        text = "Изменен статус заявления на матпомощь"
                     notify(instance.applicant, text)
     except Exception:
         pass

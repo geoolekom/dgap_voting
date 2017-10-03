@@ -10,10 +10,7 @@ from notifications.templates import get_abs_url
 
 
 def new_issue_text(issue: Issue):
-    try:
-        author = vk_message_user_link(issue.author)
-    except Exception:
-        author = "{} {}".format(issue.author.first_name, issue.author.last_name)
+    author = vk_message_user_link(issue.author)
     s = "Новое обращение от {}\n{}\n".format(author, str(issue))
     event = issue.event_set.get(cls=Event.OPEN)
     if event.info:
@@ -50,11 +47,23 @@ def event_save(sender, instance: Event, created, **kwargs):
         issue.last_event = datetime.now()
         issue.save()
         if instance.cls == Event.OPEN:
-            notify_group(issue.assigned_dept, new_issue_text(issue))
+            try:
+                text =  new_issue_text(issue)
+            except Exception:
+                text = "Новое обращение в отдел"
+            notify_group(issue.assigned_dept, text)
         elif issue.author == instance.author:
-            notify_group(issue.assigned_dept, issue_update_text(instance))
+            try:
+                text = issue_update_text(instance)
+            except Exception:
+                text = "Информация по обращению в Сенат обновлена"
+            notify_group(issue.assigned_dept, text)
         else:
-            notify(instance.author, issue_update_text(instance))
+            try:
+                text = issue_update_text(instance)
+            except Exception:
+                text = "Информация по обращению в Сенат обновлена"
+            notify(instance.author, text)
     if instance.new_status:
         instance.issue.status = instance.new_status
         instance.issue.save()

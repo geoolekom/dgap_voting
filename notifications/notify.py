@@ -17,15 +17,40 @@ vk_api = vk.API(vk_session, v='5.46')
 
 
 def get_vk_uid(user: User):
-    try:
-        social = UserSocialAuth.objects.get(user=user, provider="vk-oauth2")
-        return social.uid
-    except ObjectDoesNotExist:
-        student_info = user.userprofile.student_info
-        if not student_info:
-            return None
-        vk_userinfo = vk_api.users.get(user_ids=student_info.vk.split('/')[-1])
-        return vk_userinfo[0]["uid"]
+    if user.is_authenticated:
+        try:
+            social = UserSocialAuth.objects.get(user=user, provider="vk-oauth2")
+            return social.uid
+        except ObjectDoesNotExist:
+            student_info = user.userprofile.student_info
+            if not student_info or not student_info.vk:
+                return None
+            vk_userinfo = vk_api.users.get(user_ids=student_info.vk.split('/')[-1])
+            return vk_userinfo[0]["uid"]
+    else:
+        return None
+
+
+def vk_message_user_link(user):
+    if user.is_authenticated:
+        vk_uid = get_vk_uid(user)
+        if vk_uid:
+            return "[id{}|{} {}]".format(vk_uid, user.first_name, user.last_name)
+        else:
+            return "{} {}".format(user.first_name, user.last_name)
+    else:
+        return "Анонимный пользователь"
+
+
+def vk_html_user_link(user):
+    if user.is_authenticated:
+        vk_uid = get_vk_uid(user)
+        if vk_uid:
+            return '<a href="https://vk.com/{}" class="vk-link">{} {}</a>'.format(vk_uid, user.first_name, user.last_name)
+        else:
+            return "{} {}".format(user.first_name, user.last_name)
+    else:
+        return "Анонимный пользователь"
 
 
 def get_email(user: User):
@@ -51,14 +76,6 @@ def _notify_telegram(user: User, text, title=None):
     pass
 
 
-def vk_message_user_link(user):
-    return "[id{}|{} {}]".format(get_vk_uid(user), user.first_name, user.last_name)
-
-
-def vk_html_user_link(user):
-    return '<a href="https://vk.com/{}" class="vk-link">{} {}</a>'.format(get_vk_uid(user), user.first_name, user.last_name)
-
-
 def message_int_hash(text):
     hash = int(md5(text.encode("utf-8")).hexdigest(), 16)
     return abs(hash % 10**6)
@@ -77,8 +94,12 @@ def notify(user: User, text, title=None):
         pass
 
 
-def notify_group(group: Group, text, title=None):
-    users = group.user_set.all()
+def notify_group(group, text, title=None):
+    if type(group) == str:
+        group_object = Group.objects.get(name=group)
+    else:
+        group_object = group
+    users = group_object.user_set.all()
     for user in users:
         try:
             notify(user, text, title)
