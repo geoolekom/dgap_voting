@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'sitetree',
     'dealer',
+    'raven.contrib.django.raven_compat',
     'polls',
     'blog',
     'fin_aid',
@@ -231,7 +232,12 @@ LOGGING = {
             'level': 'WARNING',
             'class': 'logging.StreamHandler',
             'stream': sys.stderr
-        }
+        },
+        'sentry': {
+            'level': 'ERROR',  # To capture more than ERROR, change to WARNING, INFO, etc.
+            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+            'tags': {'custom-tag': 'x'},
+        },
     },
     'loggers': {
         'django.request': {
@@ -239,7 +245,26 @@ LOGGING = {
             'level': 'WARNING',
             'propagate': True,
         },
+        'raven': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'sentry.errors': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
     }
+}
+
+import raven
+
+RAVEN_CONFIG = {
+    'dsn': 'https://af8512c3bfe6466e92610a28d10584af:232450226e59481fb4f1020cdaad9d3e@sentry.io/225398',
+    # If you are using git, you can also automatically configure the
+    # release based on the git info.
+    'release': raven.fetch_git_sha(os.path.dirname(os.pardir)),
 }
 
 from dgap_voting.local_settings import *
