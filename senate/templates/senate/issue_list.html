@@ -9,6 +9,7 @@
                         <tr>
                             <th>Дата подачи</th>
                             <th>Категория</th>
+                            <th>Тема</th>
                             <th>Ответственный</th>
                             <th>Статус</th>
                             <th>Последнее действие</th>
@@ -21,6 +22,7 @@
                                 data-href="{% url "senate:issue_detail" issue.id %}">
                                 <td> {{ issue.add_dttm|date }} </td>
                                 <td> {{ issue.category }} </td>
+                                <td> {{ issue.name }} </td>
                                 <td> {{ issue.assigned_dept.department.name }} </td>
                                 <td> {{ issue.get_status_display }} </td>
                                 <td> {{ issue.last_event }} </td>
