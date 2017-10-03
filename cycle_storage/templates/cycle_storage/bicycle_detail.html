@@ -17,13 +17,14 @@
                     <p>Модель: {{ object.model }}</p>
                     {% if object.place %}<p>Хранится: {{ object.place }}</p>{% endif %}
                     <p>Добавлен: {{ object.add_dttm }}</p>
-                    <p>Статус заявки: {% if object.verified %} <span style="color: green">одобрена</span>
-                                {% else %}<span style="color: red">не проверена</span>{% endif %}</p>
+                    <p>Статус заявки: <span class="label {% if object.request_status == object.ACCEPTED %}label-success
+                                {% elif object.request_status == object.DECLINED or object.request_status == object.NO_PLACE %}label-danger
+                                {% else %}label-default{% endif %}">{{ object.get_request_status_display }}</p>
                     <img src={{ object.photo.url }} class="aiddocument">
                     {% if object.request_status == object.WAITING %}
                         <p>
-                            <a href={% url "bicycle:bicycle_update" object.id %} class="btn btn-primary">Редактировать заявку</a>
-                            <a href={% url "bicycle:bicycle_delete" object.id %} class="btn btn-danger">Отозвать заявку</a>
+                            <a href='{% url "bicycle:bicycle_update" object.id %}' class="btn btn-primary">Редактировать заявку</a>
+                            <a href='{% url "bicycle:bicycle_delete" object.id %}' class="btn btn-danger">Отозвать заявку</a>
                         </p>
                     {% endif %}
                 {% else %}
