@@ -1,14 +1,18 @@
 # TODO check importancy of this feature. If essential, make create_paper method of AidRequest class
 # all further imports are needed only to make application paper!
 from django.core.files import File
-from core.settings import MEDIA_ROOT, STATIC_ROOT
-from .models import user_hash
-from .models import AidRequest, AidDocument
+from django.contrib.auth.models import User
+from django.utils import timezone
 from docxtpl import DocxTemplate  # create word document from template
 from petrovich.enums import Case, Gender  # склоняем фамилию (в заявлении нужен родительский падеж
 from petrovich.main import Petrovich
 import datetime
 import os
+
+from core.settings import MEDIA_ROOT, STATIC_ROOT
+from .models import user_hash
+from .models import AidRequest, AidDocument
+
 # russian, genitive
 MONTH_RU = {
     1: "января",
@@ -27,9 +31,9 @@ MONTH_RU = {
 
 
 #  high error rate on non-russians (peoples without middlename)
-def get_sex(user):
-    if user.userprofile.studentinfo:
-        return user.userprofile.studentinfo.get_sex_display()
+def get_sex(user: User):
+    if user.userprofile.student_info:
+        return user.userprofile.student_info.get_sex_display()
     if user.userprofile.middlename:
         if user.userprofile.middlename[-1] == "ч":
             return 'male'
