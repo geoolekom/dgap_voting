@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'sitetree',
     'dealer',
+    'core',
     'polls',
     'blog',
     'fin_aid',
@@ -65,7 +66,6 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
-            os.path.join(BASE_DIR, 'core', 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
