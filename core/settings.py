@@ -80,7 +80,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
-                'core.context_processors.resolver_context_processor',
                 'django.contrib.messages.context_processors.messages',
                 'dealer.contrib.django.context_processor',
             ],

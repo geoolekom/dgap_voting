@@ -1,12 +1,14 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse
+from django.utils import dateformat
 from django.contrib.auth.models import Group
 from datetime import datetime
 
 from .models import Issue, Event, Employee
 from notifications.notify import get_vk_uid, vk_message_user_link, notify, notify_group
 from notifications.templates import get_abs_url
+from core import settings
 
 
 def new_issue_text(issue: Issue):
@@ -27,7 +29,8 @@ def new_issue_text(issue: Issue):
 
 def issue_update_text(event: Event):
     issue = event.issue
-    s = '{} обновил информация по обращению "{}" от {:%d %B %Y}\n'.format(vk_message_user_link(event.author), str(issue), issue.add_dttm)
+    dt_add = dateformat.format(issue.add_dttm, settings.DATE_FORMAT)
+    s = '{} обновил информация по обращению "{}" от {}\n'.format(vk_message_user_link(event.author), str(issue), dt_add)
     if event.new_status:
         s += "Новый статус: {}\n".format(event.get_new_status_display())
     if event.new_dept:
@@ -48,7 +51,7 @@ def event_save(sender, instance: Event, created, **kwargs):
         issue.save()
         if instance.cls == Event.OPEN:
             try:
-                text =  new_issue_text(issue)
+                text = new_issue_text(issue)
             except Exception:
                 text = "Новое обращение в отдел"
             notify_group(issue.assigned_dept, text)
