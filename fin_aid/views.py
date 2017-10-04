@@ -1,6 +1,11 @@
 from .models import AidRequest, AidDocument, get_next_date, is_image
 from .forms import AidRequestCreateForm
 from django.views import generic
+from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
+from django.views.generic.edit import FormMixin, ModelFormMixin, BaseCreateView, BaseUpdateView, ProcessFormView
+from django.views.generic.base import TemplateResponseMixin, View
+from django.views.generic.detail import SingleObjectTemplateResponseMixin
+
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404, redirect
@@ -14,8 +19,9 @@ from core.settings import MEDIA_ROOT
 
 import os
 
+
 @method_decorator(login_required, name='dispatch')
-class AidRequestList(generic.ListView):
+class AidRequestList(ListView):
     # template_name = 'fin_aid/aidrequest_list.html'
     model = AidRequest
 
@@ -29,7 +35,7 @@ class AidRequestList(generic.ListView):
 
 
 @method_decorator(login_required, name='dispatch')
-class AidRequestCreate(generic.CreateView):
+class AidRequestCreate(CreateView):
     model = AidRequest
     form_class = AidRequestCreateForm
 
@@ -40,7 +46,6 @@ class AidRequestCreate(generic.CreateView):
         context = super(AidRequestCreate, self).get_context_data(**kwargs)
         context['deadline_dt'] = get_next_date(None, 'deadline')
         context['payment_dt'] = get_next_date(None, 'payment')
-        print(self.context_object_name)
         return context
 
     def form_valid(self, form):
@@ -60,7 +65,7 @@ class AidRequestCreate(generic.CreateView):
 
 
 @method_decorator(login_required, name='dispatch')
-class AidRequestUpdate(generic.UpdateView):
+class AidRequestUpdate(UpdateView):
     model = AidRequest
     form_class = AidRequestCreateForm
 
@@ -71,7 +76,6 @@ class AidRequestUpdate(generic.UpdateView):
         context = super(AidRequestUpdate, self).get_context_data(**kwargs)
         context['deadline_dt'] = get_next_date(None, 'deadline')
         context['payment_dt'] = get_next_date(None, 'payment')
-        print(self.context_object_name)
         return context
 
     def form_valid(self, form):
@@ -83,6 +87,7 @@ class AidRequestUpdate(generic.UpdateView):
                 AidDocument.objects.create(file=document, request=self.object)
         self.object.save()
         if self.object.applicant.userprofile.is_approved:
+            AidDocument.objects.filter(request=self.object, is_application_paper=True).delete()
             create_paper(self.object)
         messages.add_message(self.request, messages.SUCCESS,
                              "Заявление на матпомощь изменено. Результаты рассмотрения"
@@ -101,7 +106,7 @@ class AidRequestUpdate(generic.UpdateView):
 
 
 @method_decorator(login_required, name='dispatch')
-class AidRequestDelete(generic.DeleteView):
+class AidRequestDelete(DeleteView):
     model = AidRequest
     success_url = reverse_lazy('fin_aid:aid_request_list')
 
@@ -117,7 +122,7 @@ class AidRequestDelete(generic.DeleteView):
 
 
 @method_decorator(login_required, name='dispatch')
-class AidRequestDetail(generic.DetailView):
+class AidRequestDetail(DetailView):
     model = AidRequest
 
     def dispatch(self, request, *args, **kwargs):

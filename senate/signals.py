@@ -4,11 +4,13 @@ from django.urls import reverse
 from django.utils import dateformat
 from django.contrib.auth.models import Group
 from datetime import datetime
-
+import logging
 from .models import Issue, Event, Employee
 from notifications.notify import get_vk_uid, vk_message_user_link, notify, notify_group
 from notifications.templates import get_abs_url
 from core import settings
+
+logger = logging.getLogger(__name__)
 
 
 def new_issue_text(issue: Issue):
@@ -52,14 +54,16 @@ def event_save(sender, instance: Event, created, **kwargs):
         if instance.cls == Event.OPEN:
             try:
                 text = new_issue_text(issue)
-            except Exception:
+            except Exception as e:
                 text = "Новое обращение в отдел"
+                logger.exception(e)
             notify_group(issue.assigned_dept, text)
         else:
             try:
                 text = issue_update_text(instance)
-            except Exception:
+            except Exception as e:
                 text = "Информация по обращению в Сенат обновлена"
+                logger.exception(e)
             if issue.author == instance.author:
                 notify_group(issue.assigned_dept, text)
             else:

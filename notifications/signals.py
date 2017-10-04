@@ -6,12 +6,16 @@ from django.contrib import messages
 from django.utils import timezone
 from django.urls import reverse
 
+import logging
+
 from fin_aid.models import AidRequest
 from profiles.models import UserProfile
 from cycle_storage.models import Bicycle
 from .notify import notify, notify_group, vk_messages_allowed
 from .templates import fin_aid_new_request, fin_aid_request_status_change, bicycle_request_status_change, bicycle_new_request
 from .models import UserNotificationsSettings
+
+logger = logging.getLogger(__name__)
 
 
 @receiver(post_save, sender=AidRequest, dispatch_uid='notifications')
@@ -23,18 +27,20 @@ def aidrequest_save_notify(sender, instance, created, **kwargs):
             if instance.status == AidRequest.WAITING and instance.category.notifications:
                 try:
                     text = fin_aid_new_request(instance)
-                except Exception:
+                except Exception as e:
                     text = "Новое заявление на матпомощь"
+                    logger.exception(e)
                 notify_group('finance', text)
             else:
                 if instance.status != AidRequest.WAITING:
                     try:
                         text = fin_aid_request_status_change(instance)
-                    except Exception:
+                    except Exception as e:
                         text = "Изменен статус заявления на матпомощь"
+                        logger.exception(e)
                     notify(instance.applicant, text)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.exception(e)
 
 
 @receiver(post_save, sender=UserProfile, dispatch_uid='notifications')
@@ -68,11 +74,10 @@ def bicycle_save_notify(sender, instance, created, **kwargs):
             if instance.status == AidRequest.WAITING:
                 users = User.objects.filter(groups__name='bicycle')
                 text = bicycle_new_request(instance)
-                for user in users:
-                    notify(user, text)
+                notify_group('bicycle', text)
             else:
                 if instance.status != AidRequest.WAITING:
                     text = bicycle_request_status_change(instance)
                     notify(instance.applicant, text)
-    except Exception:
-        pass
+    except Exception as e:
+        logger.exception(e)
