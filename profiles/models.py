@@ -23,6 +23,9 @@ class StudentInfo(models.Model):
     sex = models.IntegerField("Пол", choices=SEX, default=MALE)
     room = models.CharField('Номер комнаты', max_length=32, blank=True)
 
+    class Meta:
+        ordering = ['fio']
+
     def __str__(self):
         return self.fio
 

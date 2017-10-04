@@ -35,10 +35,17 @@ class StudentInfoAdmin(admin.ModelAdmin):
 # TODO нормальное отображение профиля юзера в админке, разобраться, нужно ли показывать права доступа и группы
 
 
+# class StudentInfoInline(admin.StackedInline):
+#    model = StudentInfo
+#    can_delete = False
+
+
 class UserProfileAdmin(admin.ModelAdmin):
     model = UserProfile
     list_display = ['user', 'group', 'is_approved']
     list_filter = ['is_subscribed', 'is_approved']
+    # inlines = [StudentInfoInline,]
+
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
