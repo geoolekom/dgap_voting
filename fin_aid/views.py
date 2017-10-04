@@ -1,11 +1,8 @@
-from .models import AidRequest, AidDocument, get_next_date, is_image
-from .forms import AidRequestCreateForm
-from django.views import generic
-from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import DetailView, ListView, DeleteView
 from django.views.generic.edit import FormMixin, ModelFormMixin, BaseCreateView, BaseUpdateView, ProcessFormView
 from django.views.generic.base import TemplateResponseMixin, View
-from django.views.generic.detail import SingleObjectTemplateResponseMixin
-
+from django.views.generic.detail import SingleObjectTemplateResponseMixin, SingleObjectMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404, redirect
@@ -14,10 +11,15 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib import messages
 from django.http import HttpResponse
 
-from .create_paper import create_paper
-from core.settings import MEDIA_ROOT
-
 import os
+import logging
+
+from core.settings import MEDIA_ROOT
+from .models import AidRequest, AidDocument, get_next_date, is_image
+from .forms import AidRequestCreateForm
+from .create_paper import create_paper
+
+logger = logging.getLogger(__name__)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -35,21 +37,23 @@ class AidRequestList(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
-class AidRequestCreate(CreateView):
+class AidRequestCreateUpdate(SuccessMessageMixin, SingleObjectTemplateResponseMixin, TemplateResponseMixin,
+                             ModelFormMixin, FormMixin, SingleObjectMixin, ProcessFormView, View):
     model = AidRequest
     form_class = AidRequestCreateForm
+    template_name = 'fin_aid/aidrequest_form.html'
 
     def get_success_url(self):
         return reverse('fin_aid:aid_request_detail', args=(self.object.id,))
 
     def get_context_data(self, **kwargs):
-        context = super(AidRequestCreate, self).get_context_data(**kwargs)
+        context = super(AidRequestCreateUpdate, self).get_context_data(**kwargs)
         context['deadline_dt'] = get_next_date(None, 'deadline')
         context['payment_dt'] = get_next_date(None, 'payment')
         return context
 
     def form_valid(self, form):
-        response = super(AidRequestCreate, self).form_valid(form)
+        response = super(AidRequestCreateUpdate, self).form_valid(form)
         self.object.applicant = self.request.user
         for i in range(1, 4):
             document = form.cleaned_data['document' + str(i)]
@@ -57,50 +61,28 @@ class AidRequestCreate(CreateView):
                 AidDocument.objects.create(file=document, request=self.object, is_image=is_image(document))
         self.object.save()
         if self.object.applicant.userprofile.is_approved:
-            AidDocument.objects.filter(request=self.object, is_application_paper=True).delete()
-            create_paper(self.object)
-        messages.add_message(self.request, messages.SUCCESS, "Заявление на матпомощь принято. Результаты рассмотрения"
-                                                             " будут доступны в личном кабинете")
+            try:
+                AidDocument.objects.filter(request=self.object, is_application_paper=True).delete()
+                create_paper(self.object)
+            except Exception as e:
+                logger.exception(e)
+
         return response
 
 
-@method_decorator(login_required, name='dispatch')
-class AidRequestUpdate(UpdateView):
-    model = AidRequest
-    form_class = AidRequestCreateForm
+class AidRequestCreate(AidRequestCreateUpdate, BaseCreateView):
+    success_message = "Заявление на матпомощь принято. Результаты рассмотрения будут доступны в личном кабинете"
 
-    def get_success_url(self):
-        return reverse('fin_aid:aid_request_detail', args=(self.object.id,))
 
-    def get_context_data(self, **kwargs):
-        context = super(AidRequestUpdate, self).get_context_data(**kwargs)
-        context['deadline_dt'] = get_next_date(None, 'deadline')
-        context['payment_dt'] = get_next_date(None, 'payment')
-        return context
-
-    def form_valid(self, form):
-        response = super(AidRequestUpdate, self).form_valid(form)
-        self.object.applicant = self.request.user
-        for i in range(1, 4):
-            document = form.cleaned_data['document' + str(i)]
-            if document:
-                AidDocument.objects.create(file=document, request=self.object)
-        self.object.save()
-        if self.object.applicant.userprofile.is_approved:
-            AidDocument.objects.filter(request=self.object, is_application_paper=True).delete()
-            create_paper(self.object)
-        messages.add_message(self.request, messages.SUCCESS,
-                             "Заявление на матпомощь изменено. Результаты рассмотрения"
-                             " будут доступны в личном кабинете")
-        return response
+class AidRequestUpdate(AidRequestCreateUpdate, BaseUpdateView):
+    success_message = "Заявление на матпомощь изменено. Результаты рассмотрения будут доступны в личном кабинете"
 
     def dispatch(self, request, *args, **kwargs):
         aid_request = get_object_or_404(AidRequest, pk=self.kwargs['pk'])
         if not aid_request.can_view(request.user):
             raise PermissionDenied
         if aid_request.status not in [AidRequest.WAITING, AidRequest.INFO_NEEDED]:
-            messages.add_message(self.request, messages.ERROR,
-                                 "Заявление уже рассмотрено, Вы не можете изменить его")
+            messages.error(self.request, "Заявление уже рассмотрено, Вы не можете изменить его")
             return redirect(reverse_lazy('fin_aid:index'))
         return super(AidRequestUpdate, self).dispatch(request, *args, **kwargs)
 
