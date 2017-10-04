@@ -1,21 +1,25 @@
 {% extends 'core/base.html' %}
 
-    {% block content %}
-        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-            <div class="panel-group">
-            {% for article in object_list %}
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h2><a href="{% url "blog:article_detail" article.slug %}">{{ article.title }}</a></h2>
-                    </div>
-                    <div class="panel-body">
-                        <p><span class="post-info">{{ article.publish_dttm }}</span></p>
-                        <div>{{ article.content | safe}}</div>
-                    </div>
+{% block title %}
+    FAQ
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+        <div class="panel-group">
+        {% for article in object_list %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2><a href="{% url "blog:article_detail" article.slug %}">{{ article.title }}</a></h2>
                 </div>
-            {% empty %}
-            <p>Нет постов</p>
-            {% endfor %}
+                <div class="panel-body">
+                    <p><span class="post-info">{{ article.publish_dttm }}</span></p>
+                    <div>{{ article.content | safe}}</div>
+                </div>
             </div>
-        <div>
-    {% endblock %}
+        {% empty %}
+        <p>Нет постов</p>
+        {% endfor %}
+        </div>
+    <div>
+{% endblock %}

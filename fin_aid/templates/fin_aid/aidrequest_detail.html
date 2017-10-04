@@ -1,5 +1,10 @@
 {% extends "core/base.html" %}
 {% load fin_aid_extras %}
+
+{% block title %}
+    Заявление от {{ object.add_dttm|date }} в категории "{{ object.category }}"
+{% endblock %}
+
 {% block content %}
     <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
         <div class="panel panel-default">
