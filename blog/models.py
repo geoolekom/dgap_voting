@@ -20,7 +20,7 @@ class Article(models.Model):
         verbose_name_plural = "посты"
 
     def get_absolute_url(self):
-        return reverse('blog:article_detail', args=[self.id])
+        return reverse('blog:article_detail', args=[self.slug])
 
     def is_visible(self, user):
         return self.publish_dttm <= timezone.now() and not self.hidden \
@@ -28,3 +28,4 @@ class Article(models.Model):
 
     def __str__(self):
         return "{} posted: {} on {}".format(self.author.__str__(), self.title, self.publish_dttm.__str__())
+
