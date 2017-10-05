@@ -57,7 +57,7 @@ def remind_to_allow_messages(sender, request, **kwargs):
         settings = user.usernotificationssettings
         if user.userprofile.is_subscribed and not vk_messages_allowed(user) and not settings.last_allow_vk_reminder:
             messages.add_message(request, messages.INFO, '<a class="alert-link" href={}>Настроить получение уведомлений ВКонтакте</a> '
-            'для оперативного информарования о рассмотрении заявлений на матпомощь, обращений в Сенат и т.д.'
+            'для оперативного информирования о рассмотрении заявлений на матпомощь, обращений в Сенат и т.д.'
                                  .format(reverse("blog:article_detail", args=["notifications"])))
         settings.last_allow_vk_reminder = timezone.now()
         settings.save()
