@@ -29,7 +29,7 @@ def aidrequest_save_notify(sender, instance, created, **kwargs):
                     text = fin_aid_new_request(instance)
                 except Exception as e:
                     text = "Новое заявление на матпомощь"
-                    logger.exception(e)
+                    logger.exception(e, exc_info=True, extra={'aid_request': instance, 'created': created})
                 notify_group('finance', text)
             else:
                 if instance.status != AidRequest.WAITING:
@@ -37,10 +37,10 @@ def aidrequest_save_notify(sender, instance, created, **kwargs):
                         text = fin_aid_request_status_change(instance)
                     except Exception as e:
                         text = "Изменен статус заявления на матпомощь"
-                        logger.exception(e)
+                        logger.exception(e, exc_info=True, extra={'aid_request': instance, 'created': created})
                     notify(instance.applicant, text)
     except Exception as e:
-        logger.exception(e)
+        logger.exception(e, exc_info=True, extra={'aid_request': instance, 'created': created})
 
 
 @receiver(post_save, sender=UserProfile, dispatch_uid='notifications')
@@ -71,13 +71,13 @@ def bicycle_save_notify(sender, instance, created, **kwargs):
     # So when 'create' signal received, there is no aidrequest.applicant yet
     try:
         if not created:
-            if instance.status == AidRequest.WAITING:
+            if instance.request_status == Bicycle.WAITING:
                 users = User.objects.filter(groups__name='bicycle')
                 text = bicycle_new_request(instance)
                 notify_group('bicycle', text)
             else:
-                if instance.status != AidRequest.WAITING:
+                if instance.request_status != Bicycle.WAITING:
                     text = bicycle_request_status_change(instance)
                     notify(instance.applicant, text)
     except Exception as e:
-        logger.exception(e)
+        logger.exception(e, exc_info=True, extra={'bicycle': instance, 'created': created})

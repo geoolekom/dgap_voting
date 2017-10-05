@@ -6,6 +6,7 @@ from datetime import datetime
 from notifications.notify import vk_messages_allowed
 
 
+# TODO fails sometimes (eg when no app)
 def resolver_context_processor(request):
     return {
         'app_name': request.resolver_match.app_name,

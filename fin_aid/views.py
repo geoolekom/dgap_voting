@@ -65,7 +65,7 @@ class AidRequestCreateUpdate(SuccessMessageMixin, SingleObjectTemplateResponseMi
                 AidDocument.objects.filter(request=self.object, is_application_paper=True).delete()
                 create_paper(self.object)
             except Exception as e:
-                logger.exception(e)
+                logger.exception(e, exc_info=True, extra={'request': self.request})
 
         return response
 
