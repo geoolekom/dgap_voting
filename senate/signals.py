@@ -56,14 +56,14 @@ def event_save(sender, instance: Event, created, **kwargs):
                 text = new_issue_text(issue)
             except Exception as e:
                 text = "Новое обращение в отдел"
-                logger.exception(e, exc_info=True, extra={'event': instance, 'created': created})
+                logger.exception(e, exc_info=True, extra={'event': instance})
             notify_group(issue.assigned_dept, text)
         else:
             try:
                 text = issue_update_text(instance)
             except Exception as e:
                 text = "Информация по обращению в Сенат обновлена"
-                logger.exception(e, exc_info=True, extra={'event': instance, 'created': created})
+                logger.exception(e, exc_info=True, extra={'event': instance})
             if issue.author == instance.author:
                 notify_group(issue.assigned_dept, text)
             else:
