@@ -17,34 +17,34 @@
     <link href="{% static 'core/sidebar.css' %}?{{ TAG }}" rel="stylesheet">
     <link href="{% static 'core/style.css' %}?{{ TAG }}" rel="stylesheet">
     <link rel="shortcut icon" type="image/png" href="{% static 'core/favicon.png' %}?{{ TAG }}"/>
-    {# <link href="{% static 'polls/js/countdown/jquery.countdown.css' %}" rel="stylesheet" > #} 
+    {# <link href="{% static 'polls/js/countdown/jquery.countdown.css' %}" rel="stylesheet" > #}
 
     <script src="{% static 'core/js/countdown/jquery.plugin.min.js' %}?{{ TAG }}"></script>
     <script src="{% static 'core/js/countdown/jquery.countdown.min.js' %}?{{ TAG }}"></script>
     <script src="{% static 'core/js/script.js' %}?{{ TAG }}"></script>
     <script>
-        function serverTime() { 
-            var time = null; 
-            $.ajax({url: "{% url 'servertime:server_time' %}", 
-                async: false, dataType: 'text', 
-                success: function(text) { 
-                    time = new Date(text); 
-                }, error: function(http, message, exc) { 
-                    time = new Date(); 
-            }}); 
-            return time; 
+        function serverTime() {
+            var time = null;
+            $.ajax({url: "{% url 'servertime:server_time' %}",
+                async: false, dataType: 'text',
+                success: function(text) {
+                    time = new Date(text);
+                }, error: function(http, message, exc) {
+                    time = new Date();
+            }});
+            return time;
         };
-        function serverDate() { 
-            var time = null; 
-            $.ajax({url: "{% url 'servertime:server_date' %}", 
-                async: false, dataType: 'text', 
-                success: function(text) { 
-                    time = new Date(text); 
-                }, error: function(http, message, exc) { 
-                    time = new Date(); 
-            }}); 
-            return time; 
-        }; 
+        function serverDate() {
+            var time = null;
+            $.ajax({url: "{% url 'servertime:server_date' %}",
+                async: false, dataType: 'text',
+                success: function(text) {
+                    time = new Date(text);
+                }, error: function(http, message, exc) {
+                    time = new Date();
+            }});
+            return time;
+        };
 
         $(function () {
                 var startDay = serverDate();
@@ -54,6 +54,7 @@
 </head>
 
 <body>
+{% include 'core/metrics.html' %}
 {% include 'core/nav.html' %}
 {% include 'core/messages.html' %}
     <div class="container-fluid">
