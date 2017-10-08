@@ -99,8 +99,14 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1:11211',
+    },
+    'select2': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
     }
 }
+SELECT2_CACHE_BACKEND = 'select2'
+
 
 #BOOTSTRAP3 = {
 #    'include_jquery': True,

@@ -82,6 +82,7 @@ class AidRequestUserCreate(AidRequestCreateUpdate, BaseCreateView):
 class SalaryCreate(CreateView):
     model = AidRequest
     form_class = SalaryCreateForm
+    template_name = 'fin_aid/salary_form.html'
 
 
 class AidRequestUpdate(AidRequestCreateUpdate, BaseUpdateView):

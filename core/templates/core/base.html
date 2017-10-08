@@ -26,7 +26,7 @@
         function serverTime() {
             var time = null;
             $.ajax({url: "{% url 'servertime:server_time' %}",
-                async: false, dataType: 'text',
+                async: true, dataType: 'text',
                 success: function(text) {
                     time = new Date(text);
                 }, error: function(http, message, exc) {
@@ -37,7 +37,7 @@
         function serverDate() {
             var time = null;
             $.ajax({url: "{% url 'servertime:server_date' %}",
-                async: false, dataType: 'text',
+                async: true, dataType: 'text',
                 success: function(text) {
                     time = new Date(text);
                 }, error: function(http, message, exc) {

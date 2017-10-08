@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django_select2.forms import ModelSelect2Widget
 
 from .models import AidRequest, AidDocument
-
+from profiles.models import UserProfile
 
 class AidRequestCreateForm(forms.ModelForm):
     # TODO rewrite
@@ -22,8 +22,8 @@ class AidRequestCreateForm(forms.ModelForm):
 class SalaryCreateForm(forms.ModelForm):
     applicant = forms.ChoiceField(
         widget=ModelSelect2Widget(
-            model=User,
-            search_fields=['userprofile__student_info__fio']
+            model=UserProfile,
+            search_fields=['group__icontains']
         )
     )
 

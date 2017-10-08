@@ -59,12 +59,13 @@ class AidRequestAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'reason', 'max_sum', 'max_quantity', 'notifications')
+    list_display = ('name', 'reason', 'max_sum', 'max_quantity', 'notifications', 'show_to_students', 'activists_only')
 
 
 class MonthlyDataAdmin(admin.ModelAdmin):
     list_display = ('year', 'month', 'limit', 'deadline_dt', 'payment_dt')
     list_display_links = list_display
+
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(AidRequest, AidRequestAdmin)
