@@ -1,4 +1,7 @@
 from django import forms
+from django.contrib.auth.models import User
+from django_select2.forms import ModelSelect2Widget
+
 from .models import AidRequest, AidDocument
 
 
@@ -14,3 +17,16 @@ class AidRequestCreateForm(forms.ModelForm):
 
     #def save(self, commit=True):
     #    return super(AidRequestCreateForm, self).save(commit=commit)
+
+
+class SalaryCreateForm(forms.ModelForm):
+    applicant = forms.ChoiceField(
+        widget=ModelSelect2Widget(
+            model=User,
+            search_fields=['userprofile__student_info__fio']
+        )
+    )
+
+    class Meta:
+        model = AidRequest
+        fields = ('category', 'reason', 'req_sum', 'urgent')

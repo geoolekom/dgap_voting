@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'sitetree',
     'dealer',
+    'django_select2',
     'raven.contrib.django.raven_compat',
     'core',
     'polls',
