@@ -16,7 +16,7 @@ import logging
 
 from core.settings import MEDIA_ROOT
 from .models import AidRequest, AidDocument, get_next_date, is_image, Category
-from .forms import AidRequestCreateForm, SalaryCreateForm
+from .forms import AidRequestCreateForm, SalaryCreateForm, AidRequestFormset
 from .create_paper import create_paper
 
 logger = logging.getLogger(__name__)
@@ -85,6 +85,21 @@ class SalaryCreate(CreateView):
     model = AidRequest
     form_class = SalaryCreateForm
     template_name = 'fin_aid/salary_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SalaryCreate, self).get_context_data(**kwargs)
+        context['formset'] = AidRequestFormset(queryset=AidRequest.objects.none())
+        return context
+
+    def form_valid(self, formset):
+        print(self.object)
+        print(self)
+        return super(SalaryCreate, self).form_valid(formset)
+
+    def form_valid(self, formset):
+        print(self.object)
+        print(self)
+        return super(SalaryCreate, self).form_invalid(formset)
 
 
 class AidRequestUpdate(AidRequestCreateUpdate, BaseUpdateView):

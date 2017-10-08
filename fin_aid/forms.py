@@ -25,14 +25,22 @@ class SalaryCreateForm(forms.ModelForm):
     applicant = forms.ChoiceField(
         widget=ModelSelect2Widget(
             model=User,
-            search_fields=['userprofile__student_info__fio__icontains']
+            search_fields=['userprofile__student_info__fio__icontains'],
+            attrs={'class': 'student-select'}
         ), label="Студент"
     )
 
     class Meta:
         model = AidRequest
-        fields = ('category', 'reason', 'req_sum', 'urgent')
+        fields = ('applicant', 'req_sum', 'category', 'reason',)
+        widgets = {
+            'reason': forms.Textarea(attrs={'rows': 2}),
+            'req_sum': forms.NumberInput(attrs={'class': 'sum_select'})
+        }
 
     def __init__(self, *args, **kwargs):
         super(SalaryCreateForm, self).__init__(*args, **kwargs)
         self.fields['category'].queryset = Category.objects.filter(is_senate=True)
+
+
+AidRequestFormset = forms.modelformset_factory(AidRequest, form=SalaryCreateForm, extra=5)
