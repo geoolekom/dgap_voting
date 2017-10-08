@@ -8,6 +8,19 @@ from PIL import Image
 import pandas as pd
 
 
+def get_name(self: User):
+    try:
+        name = self.userprofile.student_info.fio
+    except Exception:
+        name = "{} {}".format(self.last_name, self.first_name)
+    if self.social_auth.exists():
+        name += " | " + self.social_auth.all()[0].provider.split('-oauth')[0]
+    return name
+
+
+User.add_to_class("__str__", get_name)
+
+
 class Category(models.Model):
     name = models.CharField("Название", max_length=100)
     reason = models.CharField("Причина (для заявления)", max_length=100)

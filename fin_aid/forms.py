@@ -22,8 +22,8 @@ class AidRequestCreateForm(forms.ModelForm):
 class SalaryCreateForm(forms.ModelForm):
     applicant = forms.ChoiceField(
         widget=ModelSelect2Widget(
-            model=UserProfile,
-            search_fields=['group__icontains']
+            model=User,
+            search_fields=['userprofile__student_info__fio__icontains']
         )
     )
 
