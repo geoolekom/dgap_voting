@@ -24,7 +24,7 @@ class SalaryCreateForm(forms.ModelForm):
         widget=ModelSelect2Widget(
             model=User,
             search_fields=['userprofile__student_info__fio__icontains']
-        )
+        ), label="Студент"
     )
 
     class Meta:

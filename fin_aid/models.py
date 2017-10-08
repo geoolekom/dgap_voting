@@ -28,7 +28,7 @@ class Category(models.Model):
     max_quantity = models.IntegerField("Макс. раз за семестр", default=1)
     notifications = models.BooleanField("Уведомления о новых заявлениях", default=True)
     show_to_students = models.BooleanField('Показывать студентам', default=True)
-    activists_only = models.BooleanField("Только для активистов", default=False)
+    is_senate = models.BooleanField("Сенатская", default=False)
 
     class Meta:
         verbose_name = "категория"

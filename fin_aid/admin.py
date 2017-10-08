@@ -59,7 +59,7 @@ class AidRequestAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'reason', 'max_sum', 'max_quantity', 'notifications', 'show_to_students', 'activists_only')
+    list_display = ('name', 'reason', 'max_sum', 'max_quantity', 'notifications', 'show_to_students', 'is_senate')
 
 
 class MonthlyDataAdmin(admin.ModelAdmin):

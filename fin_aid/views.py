@@ -15,7 +15,7 @@ import os
 import logging
 
 from core.settings import MEDIA_ROOT
-from .models import AidRequest, AidDocument, get_next_date, is_image
+from .models import AidRequest, AidDocument, get_next_date, is_image, Category
 from .forms import AidRequestCreateForm, SalaryCreateForm
 from .create_paper import create_paper
 
@@ -40,8 +40,13 @@ class AidRequestList(ListView):
 class AidRequestCreateUpdate(SuccessMessageMixin, SingleObjectTemplateResponseMixin, TemplateResponseMixin,
                              ModelFormMixin, FormMixin, SingleObjectMixin, ProcessFormView, View):
     model = AidRequest
-    form_class = AidRequestCreateForm
+    # form_class = AidRequestCreateForm
     template_name = 'fin_aid/aidrequest_form.html'
+
+    def get_form(self, form_class=None):
+        form = AidRequestCreateForm()
+        form.fields["category"] = Category.objects.filter(show_to_students=True)
+        return form
 
     def get_success_url(self):
         return reverse('fin_aid:aid_request_detail', args=(self.object.id,))
@@ -54,6 +59,8 @@ class AidRequestCreateUpdate(SuccessMessageMixin, SingleObjectTemplateResponseMi
 
     def form_valid(self, form):
         response = super(AidRequestCreateUpdate, self).form_valid(form)
+        if form.cleaned_data['category'] not in Category.objects.filter(show_to_students=True):
+            raise PermissionDenied
         for i in range(1, 4):
             document = form.cleaned_data['document' + str(i)]
             if document:
@@ -81,8 +88,13 @@ class AidRequestUserCreate(AidRequestCreateUpdate, BaseCreateView):
 
 class SalaryCreate(CreateView):
     model = AidRequest
-    form_class = SalaryCreateForm
+    # form_class = SalaryCreateForm
     template_name = 'fin_aid/salary_form.html'
+
+    def get_form(self, form_class=None):
+        form = SalaryCreateForm()
+        form.fields["category"] = Category.objects.filter(is_senate=True)
+        return form
 
 
 class AidRequestUpdate(AidRequestCreateUpdate, BaseUpdateView):
