@@ -40,13 +40,8 @@ class AidRequestList(ListView):
 class AidRequestCreateUpdate(SuccessMessageMixin, SingleObjectTemplateResponseMixin, TemplateResponseMixin,
                              ModelFormMixin, FormMixin, SingleObjectMixin, ProcessFormView, View):
     model = AidRequest
-    # form_class = AidRequestCreateForm
+    form_class = AidRequestCreateForm
     template_name = 'fin_aid/aidrequest_form.html'
-
-    def get_form(self, form_class=None):
-        form = AidRequestCreateForm()
-        form.fields["category"] = Category.objects.filter(show_to_students=True)
-        return form
 
     def get_success_url(self):
         return reverse('fin_aid:aid_request_detail', args=(self.object.id,))
@@ -88,13 +83,8 @@ class AidRequestUserCreate(AidRequestCreateUpdate, BaseCreateView):
 
 class SalaryCreate(CreateView):
     model = AidRequest
-    # form_class = SalaryCreateForm
+    form_class = SalaryCreateForm
     template_name = 'fin_aid/salary_form.html'
-
-    def get_form(self, form_class=None):
-        form = SalaryCreateForm()
-        form.fields["category"] = Category.objects.filter(is_senate=True)
-        return form
 
 
 class AidRequestUpdate(AidRequestCreateUpdate, BaseUpdateView):
