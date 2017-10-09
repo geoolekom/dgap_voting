@@ -1,19 +1,20 @@
 from django.conf.urls import include, url, static
 from django.conf import settings
 from django.views.generic import RedirectView
-from django.urls import reverse
-
+from django.urls import reverse_lazy
 from django.contrib import admin
-admin.autodiscover()
 
 from registration.backends.simple.views import RegistrationView
 
-from blog.views import ArticleList
+from blog.views import ArticleList, ArticleDetail
 from .settings import DEBUG
 
+admin.autodiscover()
+
+
 class MyRegistrationView(RegistrationView):
-    def get_success_url(self, request, user):
-        return "/profiles"
+    success_url = '/profiles'
+
 
 urlpatterns = [
     url(r'^$', ArticleList.as_view(), name='index'),
@@ -31,6 +32,7 @@ urlpatterns = [
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url('', include('social_django.urls', namespace='social')),
+    url(r'^(?P<slug>[\w-]+)/$', ArticleDetail.as_view(), name='article_detail_short'),  # TODO think thrice
 ] 
 if DEBUG:
     urlpatterns += static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
