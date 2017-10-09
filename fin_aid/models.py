@@ -7,12 +7,28 @@ from datetime import datetime, date
 from PIL import Image
 import pandas as pd
 
+
+def get_name(self: User):
+    try:
+        name = self.userprofile.student_info.fio
+    except Exception:
+        name = "{} {}".format(self.last_name, self.first_name)
+    if self.social_auth.exists():
+        name += " | " + self.social_auth.all()[0].provider.split('-oauth')[0]
+    return name
+
+
+User.add_to_class("__str__", get_name)
+
+
 class Category(models.Model):
     name = models.CharField("Название", max_length=100)
     reason = models.CharField("Причина (для заявления)", max_length=100)
     max_sum = models.IntegerField("Макс. сумма", default=20000)
     max_quantity = models.IntegerField("Макс. раз за семестр", default=1)
     notifications = models.BooleanField("Уведомления о новых заявлениях", default=True)
+    show_to_students = models.BooleanField('Показывать студентам', default=True)
+    is_senate = models.BooleanField("Сенатская", default=False)
 
     class Meta:
         verbose_name = "категория"
@@ -44,9 +60,9 @@ class AidRequest(models.Model):
         (DECLINED, "В заявлении отказано"),
         (INFO_NEEDED, "Необходимо уточнить данные"),
     )
-
-    applicant = models.ForeignKey(User, blank=True, null=True)  # find out how to add applicant to form before validation
-    category = models.ForeignKey(Category)
+    author = models.ForeignKey(User, blank=True, null=True, verbose_name="Автор", related_name='author')
+    applicant = models.ForeignKey(User, blank=True, null=True, verbose_name='Получатель')  # find out how to add applicant to form before validation
+    category = models.ForeignKey(Category, verbose_name="Категория")
     reason = models.TextField("Причина", max_length=2048)
     req_sum = models.FloatField("Запрошенная сумма", blank=True, null=True)
     urgent = models.BooleanField("Срочно", default=False)
@@ -57,7 +73,8 @@ class AidRequest(models.Model):
     payment_dt = models.DateField("Дата выплаты", blank=True, null=True)
     examination_comment = models.TextField("Комментарий комиссии", blank=True, null=True)
     submitted_paper = models.BooleanField("Принес заявление", default=False)
-    paid_with_cash = models.BooleanField("заплатили наличными", default=False)
+    paid_with_cash = models.BooleanField("Заплатили наличными", default=False)
+    verified = models.BooleanField("Заявление проверено", default=False)
 
     def can_view(self, user):
         if not user.is_authenticated:
@@ -81,7 +98,7 @@ class AidRequest(models.Model):
     images_tags.short_description = "Приложенные изображения"
 
     # creates csv with all accepted applications for this month
-    @staticmethod	
+    @staticmethod
     def to_csv(filename):
         df = pd.DataFrame(columns=["FIO", "group", "req_sum", "Исх. сумма", "Реал. сумма", "За что", "заявление",
                                 "Комментарии", "e-mail", "text"])
@@ -212,7 +229,7 @@ class MonthlyData(models.Model):
 
     @property
     def sum_used(self):
-        requests = AidRequest.objects.filter(status=AidRequest.ACCEPTED, payment_dt__year=self.year,
+        requests = AidRequest.objects.filter(status=AidRequest.ACCEPTED, paid_with_cash=False, payment_dt__year=self.year,
                                              payment_dt__month=self.month)
         return requests.aggregate(sum=models.Sum('accepted_sum'))["sum"]
 
