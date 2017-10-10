@@ -10,15 +10,29 @@
 
     {% bootstrap_css %}
 
-    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
-        {% bootstrap_javascript %}
-
-    {# bootstrap_messages #}
     <link href="{% static 'core/sidebar.css' %}?{{ TAG }}" rel="stylesheet">
     <link href="{% static 'core/style.css' %}?{{ TAG }}" rel="stylesheet">
     <link rel="shortcut icon" type="image/png" href="{% static 'core/favicon.png' %}?{{ TAG }}"/>
-    {# <link href="{% static 'polls/js/countdown/jquery.countdown.css' %}" rel="stylesheet" > #}
 
+</head>
+
+<body>
+{% include 'core/nav.html' %}
+{% include 'core/messages.html' %}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12" style="padding-top:16px;"{# class="container" #}>
+            {% block content %}
+            {% endblock %}
+        </div>
+      {% include "core/footer.html" %}
+        
+    </div><!--/.row-->
+  </div><!--/.container-->
+    {# <link href="{% static 'polls/js/countdown/jquery.countdown.css' %}" rel="stylesheet" > #}
+    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+        {% bootstrap_javascript %}
+    <script src="{% static 'polls/collapse.js' %}"></script>
     <script src="{% static 'core/js/countdown/jquery.plugin.min.js' %}?{{ TAG }}"></script>
     <script src="{% static 'core/js/countdown/jquery.countdown.min.js' %}?{{ TAG }}"></script>
     <script src="{% static 'core/js/script.js' %}?{{ TAG }}"></script>
@@ -51,24 +65,7 @@
                 $('#defaultTime').countdown({since: startDay, compact: true, format: 'HMS', description: '', serverSync: serverTime});
         });
     </script>
-</head>
-
-<body>
-{% include 'core/metrics.html' %}
-{% include 'core/nav.html' %}
-{% include 'core/messages.html' %}
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-xs-12" style="padding-top:16px;"{# class="container" #}>
-            {% block content %}
-            {% endblock %}
-            <script src="{% static 'polls/collapse.js' %}"></script>
-        </div>
-      {% include "core/footer.html" %}
-        
-    </div><!--/.row-->
-  </div><!--/.container-->
-
+    {% include 'core/metrics.html' %}
 </body>
 
 
