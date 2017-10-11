@@ -1,9 +1,9 @@
 from django.conf.urls import url
+from django.views.generic import TemplateView
 
-from servertime import views
 
 urlpatterns = [
-    url(r'^servertime/$', views.server_time, name='server_time'),
-    url(r'^serverdate/$', views.server_date, name='server_date'),
-    url(r'^servertimezone/$', views.server_timezone, name='server_timezone'),
+    url(r'^servertime/$', TemplateView.as_view(template_name='servertime/servertime.html'), name='server_time'),
+    url(r'^serverdate/$', TemplateView.as_view(template_name='servertime/serverdate.html'), name='server_date'),
+    url(r'^servertimezone/$', TemplateView.as_view(template_name='servertime/servertimezone.html'), name='server_timezone'),
 ]
