@@ -9,6 +9,7 @@ from django.contrib import messages
 
 from .models import Issue, Event, EventDocument, Employee
 from .forms import IssueCreateForm, DeptEventCreateForm, UserEventCreateForm
+from notifications.notify import vk_messages_allowed
 
 
 class EmployeeList(generic.ListView):
@@ -23,9 +24,12 @@ class IssueDisplay(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(IssueDisplay, self).get_context_data(**kwargs)
         context['events'] = context["object"].event_set.order_by("add_dttm")
-        if self.request.user.is_staff or self.request.user.is_superuser:
+        user = self.request.user
+        if user.is_staff or user.is_superuser:
             context["form"] = DeptEventCreateForm()
-        elif self.request.user == context['object'].author:
+            context["department_form"] = True
+            context["notifications_allowed"] = vk_messages_allowed(user)
+        elif user == context['object'].author:
             context["form"] = UserEventCreateForm()
         return context
 
@@ -113,8 +117,11 @@ class IssueCreate(generic.CreateView):
             photo = form.cleaned_data['photo' + str(i)]
             if photo:
                 EventDocument.objects.create(file=photo, event=opening_event)
-        messages.add_message(self.request, messages.SUCCESS, "Ваше обращение принято. За результатами рассмотрения "
-                                                             "следите на сайте")
+        messages.success(self.request, "Ваше обращение принято. За результатами рассмотрения следите на сайте")
+        if not vk_messages_allowed(self.request.user):
+            messages.info(self.request, 'Для оперативного получения информации о рассмотрении Вашего обрашения '
+                                        '<a class="alert-link" href={}>настройте уведомления</a>'
+                          .format(reverse_lazy("blog:article_detail", args=["notifications"])))
         return response
 
 

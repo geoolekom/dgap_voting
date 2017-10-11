@@ -50,6 +50,13 @@
             {% if form %}
                 <div class="panel panel-default">
                     <div class="panel-body">
+                        {% if department_form %}
+                            {% if not notifications_allowed %}
+                                <p>Пользователь не разрешил уведомления от сервиса. Необходимо лично сообщить ему обо всех
+                                    действиях с обращением и <a href={% url "blog:article_detail" 'notifications'%}>
+                                        предложить включить уведомления.</a></p>
+                            {% endif %}
+                        {% endif %}
                         <form action="" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             {% bootstrap_form form%}
