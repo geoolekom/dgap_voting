@@ -10,6 +10,8 @@ from blog.views import ArticleList, ArticleDetail
 from .settings import DEBUG
 
 admin.autodiscover()
+admin.site.site_header = 'Сенат ФОПФ'
+admin.site.index_title = "Администрирование DGAP services"
 
 
 class MyRegistrationView(RegistrationView):
