@@ -14,7 +14,7 @@ from django.http import HttpResponse
 import os
 import logging
 
-from core.settings import MEDIA_ROOT
+from core.settings import MEDIA_ROOT, BASE_DIR
 from .models import AidRequest, AidDocument, get_next_date, is_image
 from .forms import AidRequestCreateForm
 from .create_paper import create_paper
@@ -122,8 +122,8 @@ def export_aid_request(request):
     AidRequest.to_csv(filename)
     response = HttpResponse()
     url = filename
-    response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
-    length = os.path.getsize(filename)
+    response['Content-Disposition'] = 'attachment; filename={}'.format(BASE_DIR + filename)
+    length = os.path.getsize(BASE_DIR + filename)
     response['Content-Length'] = str(length)
     response['X-Accel-Redirect'] = url
     return response
