@@ -3,6 +3,8 @@ from django import forms
 from .models import AidRequest, Category, AidDocument, MonthlyData, get_next_date
 from datetime import datetime
 
+from notifications.notify import vk_html_user_link
+
 
 class AidDocumentInline(admin.TabularInline):
     model = AidDocument
@@ -32,7 +34,7 @@ class AidRequestAdmin(admin.ModelAdmin):
     inlines = [AidDocumentInline,]
     search_fields = ["applicant__first_name", "applicant__last_name", "reason"]
     list_editable = ["status", "accepted_sum", "payment_dt", "submitted_paper"]
-    readonly_fields = ['images_tags']
+    readonly_fields = ['images_tags', 'vk_link']
 
     def get_applicant_name(self, obj):
         s = "{} {}".format(obj.applicant.last_name, obj.applicant.first_name)
@@ -56,6 +58,11 @@ class AidRequestAdmin(admin.ModelAdmin):
         if obj.status != AidRequest.WAITING:
             obj.examination_dttm = datetime.now()
         obj.save()
+
+    def vk_link(self, obj):
+        return vk_html_user_link(obj.applicant)
+    vk_link.allow_tags = True
+    vk_link.short_description = "Страница ВК"
 
 
 class CategoryAdmin(admin.ModelAdmin):
