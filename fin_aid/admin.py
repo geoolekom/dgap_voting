@@ -21,7 +21,7 @@ class AidRequestAdminForm(forms.ModelForm):
 
     class Meta:
         model = AidRequest
-        exclude = ["payment_dt", "examination_dttm"]
+        exclude = ["examination_dttm"]
 
 
 class AidRequestAdmin(admin.ModelAdmin):
