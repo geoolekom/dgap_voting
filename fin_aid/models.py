@@ -231,7 +231,7 @@ class MonthlyData(models.Model):
     def sum_used(self):
         requests = AidRequest.objects.filter(status=AidRequest.ACCEPTED, paid_with_cash=False, payment_dt__year=self.year,
                                              payment_dt__month=self.month)
-        return requests.aggregate(sum=models.Sum('accepted_sum'))["sum"]
+        return requests.aggregate(sum=models.Sum('accepted_sum'))["sum"]/0.86
 
 
 def _get_next_date_db(dt=None, t='payment'):

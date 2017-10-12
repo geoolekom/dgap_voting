@@ -12,7 +12,7 @@ def month_info():
     text = "Сейчас: {}, Лимит: {:.0f}, Использовано: {:.0f}, Профицит: {:.0f}, Рассмаатривается: {:.0f}"
     current = MonthlyData.current()
     used = current.sum_used
-    waiting = AidRequest.objects.filter(status=AidRequest.WAITING).aggregate(Sum('req_sum'))['req_sum__sum']
+    waiting = AidRequest.objects.filter(status=AidRequest.WAITING).aggregate(Sum('req_sum'))['req_sum__sum']/0.86
     if not used:
         used = 0
     return text.format(current.get_month_display(), current.limit, used, current.limit - used, waiting)
