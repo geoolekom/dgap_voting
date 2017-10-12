@@ -46,7 +46,7 @@ def vk_html_user_link(user):
     if user.is_authenticated:
         vk_uid = get_vk_uid(user)
         if vk_uid:
-            return '<a href="https://vk.com/{}" class="vk-link">{} {}</a>'.format(vk_uid, user.first_name, user.last_name)
+            return '<a href="https://vk.com/id{}" class="vk-link">{} {}</a>'.format(vk_uid, user.first_name, user.last_name)
         else:
             return "{} {}".format(user.first_name, user.last_name)
     else:
