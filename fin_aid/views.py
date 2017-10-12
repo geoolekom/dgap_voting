@@ -123,7 +123,7 @@ def export_aid_request(request):
     response = HttpResponse()
     url = "/protected/" + filename
     response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
-    length = os.path.getsize(MEDIA_ROOT + "protected/" + filename)
+    length = os.path.getsize("protected/" + filename)
     response['Content-Length'] = str(length)
     response['X-Accel-Redirect'] = url
     return response
