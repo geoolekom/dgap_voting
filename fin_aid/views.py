@@ -121,9 +121,9 @@ def export_aid_request(request):
     filename = "protected/export.csv"
     AidRequest.to_csv(filename)
     response = HttpResponse()
-    url = "/protected/" + filename
+    url = filename
     response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
-    length = os.path.getsize("protected/" + filename)
+    length = os.path.getsize(filename)
     response['Content-Length'] = str(length)
     response['X-Accel-Redirect'] = url
     return response
