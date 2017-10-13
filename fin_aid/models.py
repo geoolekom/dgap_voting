@@ -139,7 +139,10 @@ class AidRequest(models.Model):
         return reverse('fin_aid:aid_request_detail', args=[self.id])
 
     def __str__(self):
-        return "{}: заявление от {} по категории {} на сумму {}".format(self.applicant, self.add_dttm.date(), self.category, self.req_sum)
+        try:
+            return "{}: заявление от {} по категории {} на сумму {}".format(self.applicant, self.add_dttm.date(), self.category, self.req_sum)
+        except Exception:
+            return "Зявление на матпомощь"
 
     class Meta:
         verbose_name = "заявление на матпомощь"
