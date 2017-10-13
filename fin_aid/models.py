@@ -99,11 +99,13 @@ class AidRequest(models.Model):
 
     # creates csv with all accepted applications for this month
     @staticmethod
-    def to_csv(filename):
+    def to_csv(filename, month=None):
         df = pd.DataFrame(columns=["FIO", "group", "req_sum", "Исх. сумма", "Реал. сумма", "За что", "заявление",
                                 "Комментарии", "e-mail", "text"])
+        if month is None:
+            month = date.today().month
         for request in AidRequest.objects.filter(status=AidRequest.ACCEPTED,
-                                                 payment_dt__month=date.today().month,
+                                                 payment_dt__month=month,
                                                  paid_with_cash=False).order_by('category'):
             dct = {
                 "req_sum": request.req_sum,
