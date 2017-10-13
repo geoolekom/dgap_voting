@@ -3,7 +3,7 @@ from .models import Issue, Event
 
 
 class IssueCreateForm(forms.ModelForm):
-    issue_descr = forms.CharField(label="Описание", max_length=Event.MAX_INFO_LEN, widget=forms.Textarea)
+    issue_descr = forms.CharField(label="Описание", max_length=Event.MAX_INFO_LEN, widget=forms.Textarea(attrs={'rows': 5}))
     # TODO rewrite
     photo1 = forms.ImageField(required=False, label="Фотография")
     photo2 = forms.ImageField(required=False, label="Фотография")
