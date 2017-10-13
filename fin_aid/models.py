@@ -178,10 +178,13 @@ def _get_next_date_naive(dt=None, t='payment'):
         dt = date.today()
     pay_day = 28
     edge_day = 14
+    application_deadline = 11
     if t == 'payment':
         day = pay_day
     elif t == 'deadline':
         day = edge_day
+    elif t == 'student_deadline':
+        day = application_deadline
     else:
         raise ValueError
 
@@ -216,7 +219,8 @@ class MonthlyData(models.Model):
     year = models.IntegerField("Год", default=_get_default_year)
     month = models.IntegerField("Месяц", default=_get_default_month, choices=MONTH)
     limit = models.FloatField("Лимит")
-    deadline_dt = models.DateField("Дэдлайн по заявлениям", default=_get_default_deadline_dt)
+    deadline_dt = models.DateField("Дэдлайн по приказу", default=_get_default_deadline_dt)
+    student_deadline_dt = models.DateField("Дэдлайн по заявлениям", default=_get_default_deadline_dt)
     payment_dt = models.DateField("Дата выплаты матпомощи", default=_get_default_payment_dt)
 
     def __str__(self):
@@ -242,12 +246,18 @@ class MonthlyData(models.Model):
 def _get_next_date_db(dt=None, t='payment'):
     if not dt:
         dt = date.today()
-    next_month = MonthlyData.objects.filter(deadline_dt__gte=dt).order_by('payment_dt').first()
+    if t == 'deadline':
+        qs = MonthlyData.objects.filter(deadline_dt__gte=dt)
+    else:
+        qs = MonthlyData.objects.filter(student_deadline_dt__gte=dt)
+    next_month = qs.order_by('payment_dt').first()
     if next_month:
         if t == 'payment':
             return next_month.payment_dt
         elif t == 'deadline':
             return next_month.deadline_dt
+        elif t == 'student_deadline':
+            return next_month.student_deadline_dt
         else:
             raise ValueError
     else:
@@ -255,10 +265,10 @@ def _get_next_date_db(dt=None, t='payment'):
 
 
 def get_next_date(dt=None, t='payment'):
-    payment_dt = _get_next_date_db(dt, t)
-    if not payment_dt:
-        payment_dt = _get_next_date_naive(dt, t)
-    return payment_dt
+    next_date = _get_next_date_db(dt, t)
+    if not next_date:
+        next_date = _get_next_date_naive(dt, t)
+    return next_date
 
 
 """def sum_by_month(year, month):

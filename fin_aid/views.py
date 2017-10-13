@@ -48,8 +48,8 @@ class AidRequestCreateUpdate(SuccessMessageMixin, SingleObjectTemplateResponseMi
 
     def get_context_data(self, **kwargs):
         context = super(AidRequestCreateUpdate, self).get_context_data(**kwargs)
-        context['deadline_dt'] = get_next_date(None, 'deadline')
-        context['payment_dt'] = get_next_date(None, 'payment')
+        context['student_deadline_dt'] = get_next_date(None, 'student_deadline')
+        context['payment_dt'] = get_next_date(get_next_date(None, 'student_deadline'), 'payment')
         return context
 
     def form_valid(self, form):

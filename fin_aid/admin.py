@@ -88,8 +88,9 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class MonthlyDataAdmin(admin.ModelAdmin):
-    list_display = ('year', 'month', 'limit', 'deadline_dt', 'payment_dt')
+    list_display = ('year', 'month', 'limit', 'deadline_dt', 'student_deadline_dt', 'payment_dt')
     list_display_links = list_display
+
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(AidRequest, AidRequestAdmin)
