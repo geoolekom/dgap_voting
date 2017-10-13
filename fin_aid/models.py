@@ -7,6 +7,8 @@ from datetime import datetime, date
 from PIL import Image
 import pandas as pd
 
+TOTAL_TAX = 0.86
+
 
 def get_name(self: User):
     try:
@@ -109,7 +111,7 @@ class AidRequest(models.Model):
                                                  paid_with_cash=False).order_by('category'):
             dct = {
                 "req_sum": request.req_sum,
-                "Исх. сумма": int(request.accepted_sum/0.86) if request.accepted_sum != 0 else 0,
+                "Исх. сумма": int(request.accepted_sum/TOTAL_TAX) if request.accepted_sum != 0 else 0,
                 "Реал. сумма": int(request.accepted_sum),
                 "За что": request.category.name,
                 "Комментарии": request.examination_comment,
@@ -233,7 +235,8 @@ class MonthlyData(models.Model):
     def sum_used(self):
         requests = AidRequest.objects.filter(status=AidRequest.ACCEPTED, paid_with_cash=False, payment_dt__year=self.year,
                                              payment_dt__month=self.month)
-        return requests.aggregate(sum=models.Sum('accepted_sum'))["sum"]/0.86
+        used = requests.aggregate(sum=models.Sum('accepted_sum'))["sum"]
+        return used/TOTAL_TAX if used else 0
 
 
 def _get_next_date_db(dt=None, t='payment'):

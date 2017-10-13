@@ -1,6 +1,9 @@
 from django.contrib import admin
+from django.contrib.admin.views.main import ChangeList
 from django import forms
-from .models import AidRequest, Category, AidDocument, MonthlyData, get_next_date
+from django.db.models import Sum
+
+from .models import AidRequest, Category, AidDocument, MonthlyData, get_next_date, TOTAL_TAX
 from datetime import datetime
 
 from notifications.notify import vk_html_user_link
@@ -59,10 +62,25 @@ class AidRequestAdmin(admin.ModelAdmin):
             obj.examination_dttm = datetime.now()
         obj.save()
 
+    def get_changelist(self, request, **kwargs):
+        return AidRequestChangeList
+
     def vk_link(self, obj):
         return vk_html_user_link(obj.applicant)
     vk_link.allow_tags = True
     vk_link.short_description = "Страница ВК"
+
+
+class AidRequestChangeList(ChangeList):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        used = self.queryset.aggregate(Sum('accepted_sum'))['accepted_sum__sum']
+        self.sum_used = used/TOTAL_TAX if used else 0
+        waiting = self.queryset.exclude(status=AidRequest.ACCEPTED).aggregate(Sum('req_sum'))['req_sum__sum']
+        self.sum_waiting = waiting/TOTAL_TAX if waiting else 0
+        self.current_month = MonthlyData.current()
+        self.sum_max = MonthlyData.current().limit
+        self.proficit = MonthlyData.current().limit - MonthlyData.current().sum_used
 
 
 class CategoryAdmin(admin.ModelAdmin):

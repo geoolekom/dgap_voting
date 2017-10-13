@@ -1,8 +1,8 @@
 {% extends "admin/change_list.html" %}
 {% load i18n admin_urls %}
-{% load fin_aid_extras %}
 {% block content %}
-    <h3>{% month_info %}</h3>
+    <h3>Сейчас: {{ cl.current_month }}, Лимит: {{ cl.sum_max|floatformat:"0" }}, Одобрено: {{ cl.sum_used|floatformat:"0" }},
+        Глобальный профицит: {{ cl.proficit|floatformat:"0" }}, Рассмаатривается: {{ cl.sum_waiting|floatformat:"0" }}</h3>
     <a href={% url "fin_aid:aid_request_export" %}>Выгрузить одобренные на этот месяц</a>
     {{ block.super }}
 {% endblock %}
