@@ -4,17 +4,21 @@ from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.detail import SingleObjectTemplateResponseMixin, SingleObjectMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.contrib import messages
-from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect
+from django.utils import timezone
+from django.utils.decorators import method_decorator
+
+from sendfile import sendfile
 
 import os
 import logging
 
-from core.settings import MEDIA_ROOT, BASE_DIR
+from polls.views import make_win_csv
+
+from core.settings import MEDIA_ROOT, BASE_DIR, SENDFILE_ROOT
 from .models import AidRequest, AidDocument, get_next_date, is_image
 from .forms import AidRequestCreateForm
 from .create_paper import create_paper
@@ -115,15 +119,17 @@ class AidRequestDetail(DetailView):
 
 
 # TODO rewrite
-def export_aid_request(request):
-    if not request.user.is_authenticated or (not request.user.groups.filter(name="finance").exists() and not request.user.is_staff):
+def export_aid_request(request, month=None):
+    if not request.user.is_authenticated or (not request.user.groups.filter(name="finance").exists() and not request.user.is_superuser):
         raise PermissionDenied
-    filename = "protected/export.csv"
-    AidRequest.to_csv(filename)
-    response = HttpResponse()
-    url = filename
-    response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
-    length = os.path.getsize(BASE_DIR + '/' + filename)
-    response['Content-Length'] = str(length)
-    response['X-Accel-Redirect'] = url
-    return response
+    if not month:
+        month = timezone.now().month
+    filename = os.path.join(SENDFILE_ROOT, "export_{}.csv".format(month))
+    AidRequest.to_csv(filename, month)
+    if 'Windows' in request.user_agent.os.family or 'windows' in request.user_agent.os.family:
+        oldfilename, filename = filename, os.path.join(SENDFILE_ROOT, "export_{}_win.csv".format(month))
+        if not make_win_csv(oldfilename, filename):
+            filename = oldfilename
+            logger.warning("Can't change file encoding for Windows")
+
+    return sendfile(request, filename, attachment=True, attachment_filename="export_{}.csv".format(month))

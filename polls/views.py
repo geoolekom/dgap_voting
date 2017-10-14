@@ -168,6 +168,7 @@ def make_csv(p, filename):
         return True
 
 
+# Convert file to WIN-1251 for windows users
 def make_win_csv(oldfilename, filename):
     error = subprocess.call(["iconv", "-t", "WINDOWS-1251", oldfilename, "-o", filename])
     if error:
