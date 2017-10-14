@@ -2,7 +2,7 @@
 {% load i18n admin_urls %}
 {% block content %}
     <h3>Сейчас: {{ cl.current_month }}, Лимит: {{ cl.sum_max|floatformat:"0" }}, Одобрено: {{ cl.sum_used|floatformat:"0" }},
-        Глобальный профицит: {{ cl.proficit|floatformat:"0" }}, Рассмаатривается: {{ cl.sum_waiting|floatformat:"0" }}</h3>
+        Глобальный профицит: {{ cl.proficit|floatformat:"0" }}, Рассматривается: {{ cl.sum_waiting|floatformat:"0" }}</h3>
     <h3><form action="{% url "fin_aid:aid_request_export" %}" method="post">
         {% csrf_token %}
         Создать выгрузку

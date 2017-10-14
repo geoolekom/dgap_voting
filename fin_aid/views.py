@@ -41,6 +41,7 @@ class AidRequestList(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
+# Inherits all ancestors shared by CreateView and UpdateView + SuccessMessageMixin
 class AidRequestCreateUpdate(SuccessMessageMixin, SingleObjectTemplateResponseMixin, TemplateResponseMixin,
                              ModelFormMixin, FormMixin, SingleObjectMixin, ProcessFormView, View):
     model = AidRequest

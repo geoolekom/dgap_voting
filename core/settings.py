@@ -266,7 +266,6 @@ LOGGING = {
     }
 }
 
-
 import raven
 
 RAVEN_CONFIG = {

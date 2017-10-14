@@ -3,7 +3,7 @@ from blog.views import ArticleDetail
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.MyIssueList.as_view(), name='index'),
+    url(r'^$', views.IssueCreate.as_view(), name='index'),
     url(r'^issues$', views.MyIssueList.as_view(), name='issue_list'),
     url(r'^issues/dept$', views.DeptIssueList.as_view(), name='dept_issue_list'),
     url(r'^issues/all$', views.FullIssueList.as_view(), name='all_issue_list'),
