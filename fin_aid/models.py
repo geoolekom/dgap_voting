@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.utils import timezone
 
 from hashlib import md5
 from datetime import datetime, date
@@ -101,12 +102,15 @@ class AidRequest(models.Model):
 
     # creates csv with all accepted applications for this month
     @staticmethod
-    def to_csv(filename, month=None):
+    def to_csv(filename, year=None, month=None):
         df = pd.DataFrame(columns=["FIO", "group", "req_sum", "Исх. сумма", "Реал. сумма", "За что", "заявление",
                                 "Комментарии", "e-mail", "text"])
+        if year is None:
+            year = timezone.now().year
         if month is None:
-            month = date.today().month
+            month = timezone.now().month
         for request in AidRequest.objects.filter(status=AidRequest.ACCEPTED,
+                                                 payment_dt__year=year,
                                                  payment_dt__month=month,
                                                  paid_with_cash=False).order_by('category'):
             dct = {

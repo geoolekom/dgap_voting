@@ -3,6 +3,11 @@
 {% block content %}
     <h3>Сейчас: {{ cl.current_month }}, Лимит: {{ cl.sum_max|floatformat:"0" }}, Одобрено: {{ cl.sum_used|floatformat:"0" }},
         Глобальный профицит: {{ cl.proficit|floatformat:"0" }}, Рассмаатривается: {{ cl.sum_waiting|floatformat:"0" }}</h3>
-    <a href={% url "fin_aid:aid_request_export" %}>Выгрузить одобренные на этот месяц</a>
+    <h3><form action="{% url "fin_aid:aid_request_export" %}" method="post">
+        {% csrf_token %}
+        Создать выгрузку
+        {{ cl.export_form }}
+        <input type="submit" class="tiny" value="Выгрузить заявления">
+    </form></h3>
     {{ block.super }}
 {% endblock %}

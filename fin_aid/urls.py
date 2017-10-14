@@ -10,5 +10,5 @@ urlpatterns = [
     url(r'^delete/(?P<pk>\d+)$', views.AidRequestDelete.as_view(), name='aid_request_delete'),
     url(r'^update/(?P<pk>\d+)$', views.AidRequestUpdate.as_view(), name='aid_request_update'),
     url(r'^rules$', ArticleDetail.as_view(), {"slug": "fin_aid_rules"}, name='aid_request_rules', ),
-    url(r'^export$', views.export_aid_request, name='aid_request_export'),
+    url(r'^export$', views.ExportAidRequest.as_view(), name='aid_request_export'),
 ]

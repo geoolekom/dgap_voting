@@ -1,5 +1,5 @@
 from django.views.generic import DetailView, ListView, DeleteView
-from django.views.generic.edit import FormMixin, ModelFormMixin, BaseCreateView, BaseUpdateView, ProcessFormView
+from django.views.generic.edit import FormMixin, ModelFormMixin, BaseCreateView, BaseUpdateView, ProcessFormView, BaseFormView
 from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.detail import SingleObjectTemplateResponseMixin, SingleObjectMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -20,7 +20,7 @@ from polls.views import make_win_csv
 
 from core.settings import MEDIA_ROOT, BASE_DIR, SENDFILE_ROOT
 from .models import AidRequest, AidDocument, get_next_date, is_image
-from .forms import AidRequestCreateForm
+from .forms import AidRequestCreateForm, SelectExportMonthForm
 from .create_paper import create_paper
 
 logger = logging.getLogger(__name__)
@@ -118,18 +118,28 @@ class AidRequestDetail(DetailView):
         return super(AidRequestDetail, self).dispatch(request, *args, **kwargs)
 
 
-# TODO rewrite
-def export_aid_request(request, month=None):
-    if not request.user.is_authenticated or (not request.user.groups.filter(name="finance").exists() and not request.user.is_superuser):
-        raise PermissionDenied
-    if not month:
-        month = timezone.now().month
-    filename = os.path.join(SENDFILE_ROOT, "export_{}.csv".format(month))
-    AidRequest.to_csv(filename, month)
-    if 'Windows' in request.user_agent.os.family or 'windows' in request.user_agent.os.family:
-        oldfilename, filename = filename, os.path.join(SENDFILE_ROOT, "export_{}_win.csv".format(month))
-        if not make_win_csv(oldfilename, filename):
-            filename = oldfilename
-            logger.warning("Can't change file encoding for Windows")
+class ExportAidRequest(BaseFormView, FormMixin, ProcessFormView, View):
+    form_class = SelectExportMonthForm
+    success_url = reverse_lazy("admin:fin_aid_aidrequest_changelist")
 
-    return sendfile(request, filename, attachment=True, attachment_filename="export_{}.csv".format(month))
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated or \
+                (not request.user.groups.filter(name="finance").exists() and not request.user.is_superuser):
+            raise PermissionDenied
+        return super(ExportAidRequest, self).dispatch(request, *args, **kwargs)
+
+    def form_invalid(self, form):
+        messages.error("Выберите допустимый год и месяц для создания выгрузки")
+        return redirect(reverse_lazy("admin:fin_aid_aidrequest_changelist"))
+
+    def form_valid(self, form):
+        year, month = form.cleaned_data["year"], form.cleaned_data["month"]
+        filename = os.path.join(SENDFILE_ROOT, "export_{}_{}.csv".format(year, month))
+        AidRequest.to_csv(filename, year, month)
+        if 'Windows' in self.request.user_agent.os.family or 'windows' in self.request.user_agent.os.family:
+            oldfilename, filename = filename, os.path.join(SENDFILE_ROOT, "export_{}_{}win.csv".format(year, month))
+            if not make_win_csv(oldfilename, filename):
+                filename = oldfilename
+                logger.warning("Can't change file encoding for Windows")
+
+        return sendfile(self.request, filename, attachment=True, attachment_filename="export_{}_{}.csv".format(year, month))

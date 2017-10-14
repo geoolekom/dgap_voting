@@ -1,5 +1,6 @@
 from django import forms
-from .models import AidRequest, AidDocument
+from django.utils import timezone
+from .models import AidRequest, MonthlyData
 
 
 class AidRequestCreateForm(forms.ModelForm):
@@ -12,5 +13,7 @@ class AidRequestCreateForm(forms.ModelForm):
         model = AidRequest
         fields = ["category", "reason", "req_sum", "urgent"]
 
-    #def save(self, commit=True):
-    #    return super(AidRequestCreateForm, self).save(commit=commit)
+
+class SelectExportMonthForm(forms.Form):
+    year = forms.IntegerField(label="Год", initial=timezone.now().year, min_value=2000, max_value=3000)
+    month = forms.ChoiceField(label="Месяц", initial=timezone.now().month, choices=MonthlyData.MONTH)

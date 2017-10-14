@@ -4,6 +4,7 @@ from django import forms
 from django.db.models import Sum
 
 from .models import AidRequest, Category, AidDocument, MonthlyData, get_next_date, TOTAL_TAX
+from .forms import SelectExportMonthForm
 from datetime import datetime
 
 from notifications.notify import vk_html_user_link
@@ -81,6 +82,7 @@ class AidRequestChangeList(ChangeList):
         self.current_month = MonthlyData.current()
         self.sum_max = MonthlyData.current().limit
         self.proficit = MonthlyData.current().limit - MonthlyData.current().sum_used
+        self.export_form = SelectExportMonthForm()
 
 
 class CategoryAdmin(admin.ModelAdmin):
