@@ -31,3 +31,4 @@ raven==6.2.1
 social-auth-core==1.4.0
 social-auth-app-django==1.2.0
 vk==2.0.2
+psycopg2==2.6.1

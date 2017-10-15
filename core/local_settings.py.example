@@ -6,3 +6,7 @@ DATABASES = {
         'PASSWORD': '',
     }
 }
+
+VK_MESSAGES_TOKEN = ''
+VK_GROUP_ID = ''
+DEBUG = True
