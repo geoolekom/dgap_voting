@@ -1,17 +1,24 @@
-from django import template
+from django.template import Library, Context
+
+import logging
 
 from blog.models import Article
 
 
-register = template.Library()
+logger = logging.getLogger(__name__)
+register = Library()
 
 
-@register.simple_tag(takes_context=True)
-def article_content(context, slug):
-    post = Article.objects.get(slug=slug)
-    if post.is_django_template:
-        return post.rendered_content(context)
-    return post.content
+@register.simple_tag
+def article_content(slug):
+    try:
+        post = Article.objects.get(slug=slug)
+        if post.is_django_template:
+            return post.rendered_content
+        return post.content
+    except Article.DoesNotExist as e:
+        logger.exception(s)
+        return ""
 article_content.allow_tags = True
 
 

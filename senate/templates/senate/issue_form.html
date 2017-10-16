@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load bootstrap3 %}
+{% load blog_extras %}
 
 {% block title %}
     Создание обращения
@@ -12,10 +13,7 @@
                 <h2>Обращение в Сенат ФОПФ</h2>
             </div>
             <div class="panel-body">
-                <p>Наиболее полно опишите возникшую проблему или предлагаемую к реализации идею. При желании
-                    помогать с реализацией описанного проекта или устранением возникшей неисправности поставьте соответствующую галочку.</p>
-                <p>Гарантируем ответ в течение <b>24 часов</b> с момента подачи обащения или кофе от <a href="https://vk.com/coffeemipt">Кофейни 6ки</a>
-                    за счет Сената;). Подробности у <a href="https://vk.com/smnnk">Председателя Сената.</a></p>
+                {% article_content "embedded-senateissue-form" %}
                 <form action="" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {% bootstrap_form form%}
