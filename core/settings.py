@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'sitetree',
     'dealer',
     'raven.contrib.django.raven_compat',
+    'ckeditor',
     'core',
     'polls',
     'blog',
