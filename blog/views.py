@@ -7,7 +7,7 @@ from .forms import ArticleCreateForm
 
 
 # may be not all stuff, but people with particular rights
-def can_view_hidden_post(user):
+def can_view_hidden_post(user): # TODO move to models
     return user.is_authenticated() and (user.is_superuser or user.is_staff)
 
 

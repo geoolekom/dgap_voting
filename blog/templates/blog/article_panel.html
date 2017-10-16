@@ -1,0 +1,16 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2>
+            {% if header_link %}<a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+            {% else %}{{ article.title }}{% endif %}
+        </h2>
+    </div>
+    <div class="panel-body">
+        {% if show_creation_time %}<p><span class="post-info">{{ article.publish_dttm }}</span></p>{% endif %}
+        {% if article.is_django_template %}
+            {{ article.rendered_content|safe }}
+        {% else %}
+            {{ article.content|safe }}
+        {% endif %}
+    </div>
+</div>
