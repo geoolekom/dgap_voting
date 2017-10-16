@@ -32,6 +32,7 @@ class Bicycle(models.Model):
     class Meta:
         verbose_name = "велосипед"
         verbose_name_plural = "велосипеды"
+        ordering = ['owner']
 
     def __str__(self):
         return "Хозяин: {}, велосипед: {} {}".format(self.owner.__str__(), self.manufacturer, self.model)
@@ -39,9 +40,10 @@ class Bicycle(models.Model):
     def get_absolute_url(self):
         return reverse('bicycle:bicycle_detail', args=[self.id])
 
-    @property
     def image_tag(self):
-        return'<img src={} class="aiddocument">'.format(self.photo.url)
+        return'<img src={} style="max-width: 100%;">'.format(self.photo.url)
+    image_tag.allow_tags=True
+    image_tag.short_description = "Фотография"
 
 
 # Storage room, contains several places for bicycles

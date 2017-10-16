@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.contrib.admin.filters import SimpleListFilter
 from cycle_storage.models import Bicycle, Storage, Place
 
+from .forms import BicycleAdminForm
+
 
 class PlaceFilter(SimpleListFilter):
     title = 'Присвоено место'
@@ -28,6 +30,14 @@ class BicycleAdmin(admin.ModelAdmin):
     list_display = ("owner", "manufacturer", "model", "place", "verified", "request_status")
     list_filter = ("verified", "request_status", PlaceFilter)
     readonly_fields = ["image_tag"]
+    form = BicycleAdminForm
+
+    def save_model(self, request, obj, form, change):
+        if "place" in form.cleaned_data:
+            place = form.cleaned_data["place"]
+            place.bicycle = obj
+            place.save()
+        super(BicycleAdmin, self).save_model(request, obj, form, change)
 
 
 class StorageAdmin(admin.ModelAdmin):
