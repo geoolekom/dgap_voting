@@ -7,6 +7,10 @@
     </div>
     <div class="panel-body">
         {% if show_creation_time %}<p><span class="post-info">{{ article.publish_dttm }}</span></p>{% endif %}
-        <p>{{ article.content|safe }}</p>
+        {% if article.is_django_template %}
+            {{ article.rendered_content|safe }}
+        {% else %}
+            {{ article.content|safe }}
+        {% endif %}
     </div>
 </div>

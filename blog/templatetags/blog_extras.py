@@ -6,9 +6,11 @@ from blog.models import Article
 register = template.Library()
 
 
-@register.simple_tag
-def article_content(slug):
+@register.simple_tag(takes_context=True)
+def article_content(context, slug):
     post = Article.objects.get(slug=slug)
+    if post.is_django_template:
+        return post.rendered_content(context)
     return post.content
 article_content.allow_tags = True
 

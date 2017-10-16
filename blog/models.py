@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.utils import timezone
+from django.template import Context, Template
 
 from profiles.models import UserProfile
 
@@ -14,10 +15,16 @@ class Article(models.Model):
     content = models.TextField("Контент", max_length=20000) # текст поста
     hidden = models.BooleanField("Скрытый", default=False)
     show_in_feed = models.BooleanField("ПОказывать в ленте", default=True)
+    is_django_template = models.BooleanField("Шаблон Django", default=False)
 
     class Meta:
         verbose_name = "пост"
         verbose_name_plural = "посты"
+
+    @property
+    def rendered_content(self, context=Context()):
+        template = Template(self.content)
+        return template.render(context)
 
     def get_absolute_url(self):
         return reverse('blog:article_detail', args=[self.slug])
