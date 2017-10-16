@@ -6,15 +6,6 @@
 
 {% block content %}
     <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h2>{{ object.title }}</h2>
-            </div>
-            <div class="panel-body">
-                <p><span class="post-info">{{ object.publish_dttm }}</span></p>
-                <p>{{ object.content | safe}}</p>
-            </div>
-
-        </div>
+        {% include "blog/article_panel.html" with article=object header_link=False show_creation_time=True %}
     </div>
 {% endblock %}
