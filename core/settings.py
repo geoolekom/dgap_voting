@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     'social_django',
     'servertime',
     'profiles',
+    'nested_inline',
 )
 
 TEMPLATES = [
@@ -185,7 +186,7 @@ SENDFILE_ROOT = MEDIA_ROOT
 STATIC_ROOT = (os.path.join(BASE_DIR, 'static'))
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
-FILE_UPLOAD_PERMISSIONS = 0o644 
+FILE_UPLOAD_PERMISSIONS = 0o644
 
 LOGIN_REDIRECT_URL = '/'
 
