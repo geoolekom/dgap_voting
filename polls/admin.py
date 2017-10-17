@@ -4,10 +4,11 @@ from django.contrib.sites.models import Site
 from django.utils.safestring import mark_safe
 import os
 from django.core.urlresolvers import reverse
-from polls.models import Participant
+from polls.models import Participant, Question
+from nested_inline.admin import NestedTabularInline, NestedModelAdmin
 
 
-class ParticipantInline(admin.TabularInline):
+class ParticipantInline(NestedTabularInline):
     model = Participant
     exclude = ('user_information', )
     fields = ('voted', )
@@ -15,13 +16,20 @@ class ParticipantInline(admin.TabularInline):
 
     list_dispay = ['userprofile']
 
-class ChoiceInline(admin.TabularInline):
+
+class ChoiceInline(NestedTabularInline):
     model = Choice
     exclude = ('votes',)
     extra = 1
 
 
-class PollAdmin(admin.ModelAdmin):
+class QuestionInline(NestedTabularInline):
+    model = Question
+    extra = 1
+    inlines = [ChoiceInline]
+
+
+class PollAdmin(NestedModelAdmin):
     # link for generating pdf
     def pdf_button(self, obj):
         site_url = Site.objects.get_current().domain
@@ -60,11 +68,11 @@ class PollAdmin(admin.ModelAdmin):
         obj.save()
 
     exclude = ('voted_users', 'times_mailed', 'last_mailing',)
-    inlines = [ChoiceInline, ParticipantInline, ]
+    inlines = [ParticipantInline, QuestionInline]
     list_display=['name', 'pdf_button', 'audit_button', 'mailing_button',]
 
 
-class ParticipantAdmin(admin.ModelAdmin):
+class ParticipantAdmin(NestedModelAdmin):
     list_display = ["user_information", "poll", "voted"]
     search_fields = ["user_information__fio"]
     list_editable = ["voted"]
