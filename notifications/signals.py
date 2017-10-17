@@ -78,6 +78,6 @@ def bicycle_save_notify(sender, instance, created, **kwargs):
             else:
                 if instance.request_status != Bicycle.WAITING:
                     text = bicycle_request_status_change(instance)
-                    notify(instance.applicant, text)
+                    notify(instance.owner, text)
     except Exception as e:
         logger.exception(e, exc_info=True, extra={'bicycle': instance})
