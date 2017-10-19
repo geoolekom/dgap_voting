@@ -8,33 +8,15 @@ from profiles.models import StudentInfo, UserProfile
 
 class Poll(models.Model):
     name = models.CharField('Название опроса', max_length=200)
-    question = models.CharField('Вопрос', max_length=200)
     begin_date = models.DateTimeField('Начало голосования')
     end_date = models.DateTimeField('Конец голосования')
     target_room = models.CharField('Целевая комната', max_length=200, default=r'^')  # предполагается использование регулярных выражений
     target_group = models.CharField('Целевая группа', max_length=200, default=r'^')
     target_course = models.CharField('Курсы, которые голосуют', max_length=200, default=r'^')
-    public = models.BooleanField('Открытое голосование', default = True)
-    ONE = 'ONE'
-    MANY = 'MANY'
-    OWN = 'OWN'
-    ANSWER_TYPE_CHOICES = (
-        (ONE, 'Выбор одного варианта'),
-        (MANY, 'Выбор нескольких вариантов'),
-        (OWN, 'Свой вариант'),
-    )
-    answer_type = models.CharField('Тип ответа', max_length=10, choices = ANSWER_TYPE_CHOICES, default = ONE)
-    CREATION = 'created'
-    RANDOM = '?'
-    ORDER_TYPES = (
-        (CREATION, 'В порядке добавления'),
-        (RANDOM, 'В случайном порядке'),
-    )
-    choices_order = models.CharField('Порядок вариантов ответа', max_length=10, choices=ORDER_TYPES, default=CREATION)
-    voted_users = models.ManyToManyField(User)
+    public = models.BooleanField('Открытое голосование', default=True)
     times_mailed = models.IntegerField(default=0, blank=True)  # how many times the mailing was made
     last_mailing = models.DateTimeField('Последняя рассылка', null=True)  # when was the last informational mailing made
-
+    voted_users = models.ManyToManyField(User)
     WITHOUT_TARGET_LIST = 'WITHOUT_TARGET_LIST'
     TARGET_LIST = 'TARGET_LIST'
     POLL_TYPE = (
@@ -89,12 +71,6 @@ class Poll(models.Model):
             return ((re.compile(self.target_room, re.IGNORECASE)).match(user.userprofile.room) and
             (re.compile(self.target_group, re.IGNORECASE)).match(user.userprofile.group))
 
-    def get_ordered_choices(self):
-        if self.is_closed():
-            return self.choice_set.all().order_by('-votes')
-        else:
-            return self.choice_set.all().order_by(self.choices_order)
-
     def create_target_list_from_group_room_course(self, group=None, room=None, course=None,
                                                   only_staff=False):
         if self.poll_type != self.TARGET_LIST:
@@ -126,6 +102,34 @@ class Poll(models.Model):
             Participant.objects.create(user_information=user, poll=self, voted=False)
 
 
+class Question(models.Model):
+    poll = models.ForeignKey(Poll)
+    question = models.CharField('Вопрос', max_length=200)
+    ONE = 'ONE'
+    MANY = 'MANY'
+    OWN = 'OWN'
+    ANSWER_TYPE_CHOICES = (
+        (ONE, 'Выбор одного варианта'),
+        (MANY, 'Выбор нескольких вариантов'),
+        (OWN, 'Свой вариант'),
+    )
+    answer_type = models.CharField('Тип ответа', max_length=10, choices=ANSWER_TYPE_CHOICES, default=ONE)
+    CREATION = 'created'
+    RANDOM = '?'
+    ORDER_TYPES = (
+        (CREATION, 'В порядке добавления'),
+        (RANDOM, 'В случайном порядке'),
+    )
+    choices_order = models.CharField('Порядок вариантов ответа', max_length=10, choices=ORDER_TYPES, default=CREATION)
+    required = models.BooleanField("Обязательный вопрос", default=True)
+
+    def get_ordered_choices(self):
+        if self.poll.is_closed():
+            return self.choice_set.all().order_by('-votes')
+        else:
+            return self.choice_set.all().order_by(self.choices_order)
+
+
 class Participant(models.Model):
     user_information = models.ForeignKey(StudentInfo, verbose_name="Инфо о студенте", default=None, null=True, blank=True)
     poll = models.ForeignKey(Poll, verbose_name="Голосование", default=None, null=True, blank=True)
@@ -140,7 +144,7 @@ class Participant(models.Model):
 
 
 class Choice(models.Model):
-    poll = models.ForeignKey(Poll)
+    question = models.ForeignKey(Question, default=None)
     choice_text = models.CharField("Текст ответа", max_length=800)
     votes = models.IntegerField(default=0)
     created = models.DateTimeField(editable=False, null=True)

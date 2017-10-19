@@ -33,3 +33,4 @@ social-auth-core==1.4.0
 social-auth-app-django==1.2.0
 vk==2.0.2
 psycopg2==2.6.1
+django-nested-inline==0.3.7
