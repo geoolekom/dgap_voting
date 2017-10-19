@@ -92,6 +92,15 @@ class Detail(generic.DetailView):
     model = Poll
     template_name = 'polls/detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(Detail, self).get_context_data(**kwargs)
+        poll = self.object
+        if poll.is_user_voted(self.request.user):
+            target = 'voted'
+        elif poll.is_user_target(self.request.user) and poll.is_started() and not poll.is_closed():
+            target = 'available'
+        else:
+            target = 'not available'
     #def get_queryset(self):
     #    return Poll.objects.filter(begin_date__lte=timezone.now(), end_date__gte=timezone.now())
 
