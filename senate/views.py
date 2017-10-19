@@ -160,3 +160,4 @@ class FullIssueList(generic.ListView):
 
     def get_queryset(self):
         return Issue.objects.all().order_by("-add_dttm")
+

@@ -17,7 +17,7 @@ def article_content(slug):
             return post.rendered_content
         return post.content
     except Article.DoesNotExist as e:
-        logger.exception(s)
+        logger.exception(e)
         return ""
 article_content.allow_tags = True
 

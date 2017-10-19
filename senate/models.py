@@ -44,6 +44,7 @@ class Employee(models.Model):
 class Category(models.Model):
     name = models.CharField("Название", max_length=100)
     department = models.ForeignKey(Group, verbose_name="Отдел")
+    parent = models.ForeignKey('self', blank=True, null=True)
 
     class Meta:
         verbose_name = "категория"

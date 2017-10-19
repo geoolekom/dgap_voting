@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url('', include('social_django.urls', namespace='social')),
+    url(r'^select2/', include('django_select2.urls')),
     url(r'^(?P<slug>[\w-]+)/$', ArticleDetail.as_view(), name='article_detail_short'),  # TODO think thrice
 ] 
 if DEBUG:

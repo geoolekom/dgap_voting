@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django_select2',
     'registration',
     'bootstrap3',
     'sitetree',
@@ -99,8 +100,16 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1:11211',
-    }
+    },
+    'select2': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+        'TIMEOUT': 2000,
+    },
 }
+
+#Set the cache backend to select2
+SELECT2_CACHE_BACKEND = 'select2'
 
 #BOOTSTRAP3 = {
 #    'include_jquery': True,

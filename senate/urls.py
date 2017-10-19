@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from blog.views import ArticleDetail
 from . import views
 
@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^new_issue$', views.IssueCreate.as_view(), name='issue_create'),
     url(r'^about$', ArticleDetail.as_view(), {"slug": "about_senate"}, name='about', ),
     url(r'^contacts$', views.EmployeeList.as_view(), name='contacts', ),
+    url(r'^select2/', include('django_select2.urls')),
 ]
