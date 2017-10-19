@@ -29,6 +29,11 @@ class QuestionInline(NestedTabularInline):
     inlines = [ChoiceInline]
 
 
+class QuestionAdmin(admin.ModelAdmin):
+    models = Question
+    inlines = [ChoiceInline]
+
+
 class PollAdmin(NestedModelAdmin):
     # link for generating pdf
     def pdf_button(self, obj):
@@ -81,3 +86,4 @@ class ParticipantAdmin(NestedModelAdmin):
 
 admin.site.register(Poll, PollAdmin)
 admin.site.register(Participant, ParticipantAdmin)
+admin.site.register(Question, QuestionAdmin)
