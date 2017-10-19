@@ -12,9 +12,20 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='question',
-            name='required',
-            field=models.BooleanField(default=True, verbose_name='Обязательный вопрос'),
+        migrations.RemoveField(
+            model_name='choice',
+            name='poll',
+        ),
+        migrations.RemoveField(
+            model_name='poll',
+            name='answer_type',
+        ),
+        migrations.RemoveField(
+            model_name='poll',
+            name='choices_order',
+        ),
+        migrations.RemoveField(
+            model_name='poll',
+            name='question',
         ),
     ]

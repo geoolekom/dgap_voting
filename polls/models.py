@@ -129,6 +129,9 @@ class Question(models.Model):
         else:
             return self.choice_set.all().order_by(self.choices_order)
 
+    def __str__(self):
+        return self.question
+
 
 class Participant(models.Model):
     user_information = models.ForeignKey(StudentInfo, verbose_name="Инфо о студенте", default=None, null=True, blank=True)
@@ -144,7 +147,7 @@ class Participant(models.Model):
 
 
 class Choice(models.Model):
-    question = models.ForeignKey(Question, default=None)
+    question = models.ForeignKey(Question, default=None, null=True, blank=True)
     choice_text = models.CharField("Текст ответа", max_length=800)
     votes = models.IntegerField(default=0)
     created = models.DateTimeField(editable=False, null=True)

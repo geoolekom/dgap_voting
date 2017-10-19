@@ -87,3 +87,4 @@ class ParticipantAdmin(NestedModelAdmin):
 admin.site.register(Poll, PollAdmin)
 admin.site.register(Participant, ParticipantAdmin)
 admin.site.register(Question, QuestionAdmin)
+admin.site.register(Choice)
