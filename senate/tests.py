@@ -13,19 +13,4 @@ import pytest
         assert cache.get('key') == 'value'''''
 
 
-class WidgetTestCase(TestCase):
-    def setUp(self):
-        for i in range(10):
-            Category.objects.create(parent=None, name='parent%i'.format(i))
-    def test_get_queryset(self):
-        widget = CascadeWidget()
-        #with pytest.raises(NotImplementedError):
-        #    widget.get_queryset()
-        widget.model = Category
-        assert isinstance(widget.get_queryset(), QuerySet)
-        widget.model = None
-        widget.queryset = Category.objects.all()
-        assert isinstance(widget.get_queryset(), QuerySet)
 
-    def test_form(self):
-        form = IssueCreateForm()
