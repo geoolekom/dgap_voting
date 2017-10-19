@@ -4,108 +4,46 @@
 		<div class="panel panel-{% if not poll.is_closed %}primary{% else %}info{% endif %}">
 			<div class="panel-heading clearfix">
 				<h1 class="panel-title pull-left">{{ poll.name }} </h1> 
-				<h1 class="panel-title pull-right">{% if not poll.is_closed %}{% else %}Завершено{% endif %}</h1> 
+				<h1 class="panel-title pull-right">{% if poll.is_closed %}Завершено{% endif %}</h1>
 			</div>
-			<div class="panel-body" style="padding-left:4px; padding-right:4px">
-				<div class="col-xs-9" style="padding-right:4px">
-					{% if not poll.is_closed %}
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h1 class="panel-title">{{ poll.question }}</h1> 
-						</div>
-						<form action="{% url 'polls:vote' poll.id %}" method="post">
-                        <ul class="list-group">
-							{% csrf_token %}
-							{% if poll.answer_type == 'OWN' %}
-									<div class="form-group" style="margin-bottom:0px">
-										<textarea class="form-control" rows="5" name="choice"></textarea>
-									</div>
-							{% endif %}
-							{% for choice in poll.get_ordered_choices %}
-								{% if poll.answer_type == 'MANY' %}
-									<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">
-										<div class="checkbox clearfix">
-											<label>
-												<input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-												{{ choice.choice_text }}
-											</label>
-										</div>
-									</li>
-								{% endif %}
-								{% if poll.answer_type == 'ONE' %}
-									<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">
-										<div class="radio clearfix">
-											<label>
-												<input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-												{{ choice.choice_text }}
-											</label>
-										</div>
-									</li>
-								{% endif %}
-							{% endfor %}
-						</ul>
-						<div class="panel-footer clearfix">
-							{% if target == "voted" %}
-							<div>Вы уже приняли участие в этом голосовании</div>
-							{% else %}
-							<button type="submit" value="vote" class="btn btn-default">Голосовать</button>
-							{% endif %}
-						</form>
-						</div>
-					</div>
-				{% else %}
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h1 class="panel-title">{{ poll.question }}</h1> 
-						</div>
-						<ul class="list-group">
-							{% for choice in poll.get_ordered_choices %}
-								<li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">
-									<div class="radio clearfix">
-										<div class="pull-left">
-											{{ choice.choice_text }}
-										</div>
-										<div class="pull-right">
-											{{ choice.votes }}
-										</div>
-									</div>
-								</li>
-							{% endfor %}
-						</ul>
-						<div class="panel-footer clearfix">
-							<a href="{% url 'polls:detailed' poll.id %}" class="btn btn-default">Детализированные результаты</a>
-						</div>
-					</div>
-
-				{% endif %}
-				</div>
-			<div class="col-xs-3">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h1 class="panel-title">Тип</h1> 
-						</div>
-						<div class="panel-body">
-							{% if poll.public %}
-								Открытое	
-							{% else %}
-								Тайное
-							{% endif %}
-						</div>
-					</div>
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h1 class="panel-title">Конец</h1>
-						</div>
-						<div class="panel-body">
-							{{ poll.end_date |date:"d M" }}
-							{{ poll.end_date |time:"H:i" }}	
-						</div>
-					</div>
-				</div>
-
-			</div>
-
-		</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Тип голосования</div>
+                            <div class="panel-body">{% if poll.public %}Открытое{% else %}Тайное{% endif %}</div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Конец голосования</div>
+                            <div class="panel-body">{{ poll.end_date|date:"d M" }} {{ poll.end_date|time:"H:i" }}	</div>
+                        </div>
+                    </div>
+                </div>
+                {% if target == 'available'%}
+                    <form action="{% url 'polls:vote' poll.id %}" method="post">
+                    {% csrf_token %}
+                {% endif %}
+                {% for question in poll.question_set.all %}
+                    {% include 'polls/question.html' %}
+                {% endfor %}
+            </div>
+            <div class="panel-footer clearfix">
+                {% if poll.is_closed %}
+                    <a href="{% url 'polls:detailed' poll.id %}" class="btn btn-default">Детализированные результаты</a>
+                {% else %}
+                    {% if target == "voted" %}
+                        <div>Вы уже приняли участие в этом голосовании</div>
+                    {% elif target == "available" %}
+                        <button type="submit" value="vote" class="btn btn-default">Голосовать</button>
+                        </form>
+                    {% else %}
+                        <div>Вы не авторизовались или не имеете права принимать участие в данном голосовании</div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
 	</div>
 
 {% endblock content %}
