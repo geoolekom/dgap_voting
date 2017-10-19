@@ -1,0 +1,42 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h1 class="panel-title">{{ question.question }} {% if question.required %}*{% endif %}</h1>
+    </div>
+    <ul class="list-group">
+        {% with poll=question.poll %}
+            {% if question.answer_type == 'OWN' %}
+                {% if poll.is_closed %}
+                    <li class="list-group-item">Опрос завершен</li>
+                {% else %}
+                    <div class="form-group" style="margin-bottom:0px">
+                        <textarea class="form-control" rows="5" name="question{{ question.id }}-choice" {% if target != "available" %}disabled{% endif %}>
+                        </textarea>
+                    </div>
+                {% endif %}
+            {% else %}
+                {% for choice in question.get_ordered_choices %}
+                    <li class="list-group-item" style="padding-top:0px; padding-bottom:0px;">
+                        {% if poll.is_closed %}
+                            <div class="radio clearfix">
+                                <div class="pull-left">{{ choice.choice_text }}</div>
+                                <div class="pull-right">{{ choice.votes }}</div>
+                            </div>
+                        {% else %}
+                        <div class="{% if question.answer_type == 'MANY' %}checkbox{% else %}radio{% endif %} clearfix">
+                            <label>
+                                <input type="{% if question.answer_type == 'MANY' %}checkbox{% else %}radio{% endif %}"
+                                       name="question{{ question.id }}-choice"
+                                       id="question{{ question.id }}-choice{{ forloop.counter }}"
+                                       value="{{ choice.id }}"
+                                       {% if target != 'available'%}disabled{% endif %}
+                                >
+                                {{ choice.choice_text }}
+                            </label>
+                        </div>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </ul>
+</div>

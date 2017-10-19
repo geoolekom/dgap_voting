@@ -71,12 +71,6 @@ class Poll(models.Model):
             return ((re.compile(self.target_room, re.IGNORECASE)).match(user.userprofile.room) and
             (re.compile(self.target_group, re.IGNORECASE)).match(user.userprofile.group))
 
-    def get_ordered_choices(self):
-        if self.is_closed():
-            return self.choice_set.all().order_by('-votes')
-        else:
-            return self.choice_set.all().order_by(self.choices_order)
-
     def create_target_list_from_group_room_course(self, group=None, room=None, course=None,
                                                   only_staff=False):
         if self.poll_type != self.TARGET_LIST:
@@ -127,6 +121,13 @@ class Question(models.Model):
         (RANDOM, 'В случайном порядке'),
     )
     choices_order = models.CharField('Порядок вариантов ответа', max_length=10, choices=ORDER_TYPES, default=CREATION)
+    required = models.BooleanField("Обязательный вопрос", default=True)
+
+    def get_ordered_choices(self):
+        if self.poll.is_closed():
+            return self.choice_set.all().order_by('-votes')
+        else:
+            return self.choice_set.all().order_by(self.choices_order)
 
 
 class Participant(models.Model):
