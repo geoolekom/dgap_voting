@@ -13,7 +13,7 @@
     </div>
     <div id="navbarCollapse" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-            <li><a> <div id="defaultTime"></div></a></li>
+            <li><a> <div id="defaultTime" url_serverdate="{% url 'servertime:server_date' %}" url_servertime="{% url 'servertime:server_time' %}"></div></a></li>
             {% sitetree_menu from 'mainmenu' include 'trunk' template "core/menu_bootstrap3.html" %}
         </ul>
         <ul class="nav navbar-nav navbar-right">

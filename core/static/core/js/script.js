@@ -6,7 +6,7 @@ jQuery(document).ready(function($) {
 
 function serverTime() {
     var time = null;
-    $.ajax({url: "{% url 'servertime:server_time' %}",
+    $.ajax({url: $('#defaultTime').attr("url_servertime"),
         async: false, dataType: 'text',
         success: function(text) {
             time = new Date(text);
@@ -17,7 +17,7 @@ function serverTime() {
 };
 function serverDate() {
     var time = null;
-    $.ajax({url: "{% url 'servertime:server_date' %}",
+    $.ajax({url: $('#defaultTime').attr("url_serverdate"),
         async: false, dataType: 'text',
         success: function(text) {
             time = new Date(text);
