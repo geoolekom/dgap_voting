@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib import messages
+from django.db.models import Q
 
 from .models import Issue, Event, EventDocument, Employee
 from .forms import IssueCreateForm, DeptEventCreateForm, UserEventCreateForm
@@ -159,4 +160,7 @@ class FullIssueList(generic.ListView):
     template_name = 'senate/issue_list.html'
 
     def get_queryset(self):
-        return Issue.objects.all().order_by("-add_dttm")
+        queryset = Issue.objects.all().order_by("-add_dttm")
+        if self.request.user.is_superuser or self.request.user.is_staff:
+            return queryset
+        return queryset.filter(Q(category__public=True)|Q(author=self.request.user))
