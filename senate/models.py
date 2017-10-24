@@ -44,7 +44,7 @@ class Employee(models.Model):
 class Category(models.Model):
     name = models.CharField("Название", max_length=100)
     department = models.ForeignKey(Group, verbose_name="Отдел")
-    public = models.BooleanField("Показывать всем", default=False)
+    public = models.BooleanField("Показывать всем", default=True)
 
     class Meta:
         verbose_name = "категория"
