@@ -32,7 +32,7 @@ def aidrequest_save_notify(sender, instance, created, **kwargs):
                     logger.exception(e, exc_info=True, extra={'aid_request': instance})
                 notify_group('finance', text)
             else:
-                if instance.status != AidRequest.WAITING:
+                if instance.status not in [AidRequest.WAITING, AidRequest.PRE_ACCEPTED]:
                     try:
                         text = fin_aid_request_status_change(instance)
                     except Exception as e:

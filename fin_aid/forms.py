@@ -17,3 +17,17 @@ class AidRequestCreateForm(forms.ModelForm):
 class SelectExportMonthForm(forms.Form):
     year = forms.IntegerField(label="Год", initial=timezone.now().year, min_value=2000, max_value=3000)
     month = forms.ChoiceField(label="Месяц", initial=timezone.now().month, choices=MonthlyData.MONTH)
+
+
+class AidRequestAdminForm(forms.ModelForm):
+    THIS = 1
+    NEXT = 2
+    FOLLOWING = 3
+    MONTHS = [(THIS, "Ближайший месяц"),
+              (NEXT, "Следующий месяц"),
+              (FOLLOWING, "Через месяц"),]
+    month_of_payment = forms.ChoiceField(choices=MONTHS, label="Месяц выплаты")
+
+    class Meta:
+        model = AidRequest
+        exclude = ["examination_dttm"]
