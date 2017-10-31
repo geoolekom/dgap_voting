@@ -75,11 +75,11 @@ class AidRequestAdmin(admin.ModelAdmin):
 class AidRequestChangeList(ChangeList):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        used = self.queryset.aggregate(Sum('accepted_sum'))['accepted_sum__sum']
+        self.current_month = MonthlyData.current()
+        used = self.queryset.filter(payment_dt=self.current_month.payment_dt).aggregate(Sum('accepted_sum'))['accepted_sum__sum']
         self.sum_used = used/TOTAL_TAX if used else 0
         waiting = self.queryset.exclude(status=AidRequest.ACCEPTED).aggregate(Sum('req_sum'))['req_sum__sum']
         self.sum_waiting = waiting/TOTAL_TAX if waiting else 0
-        self.current_month = MonthlyData.current()
         self.sum_max = MonthlyData.current().limit
         self.proficit = MonthlyData.current().limit - MonthlyData.current().sum_used
         self.export_form = SelectExportMonthForm()
