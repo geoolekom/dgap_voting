@@ -21,14 +21,14 @@
                                                 {% elif object.status == object.DECLINED %}label-danger
                                                 {% elif object.status == object.INFO_NEEDED %}label-warning
                                                 {% else %}label-default{% endif %}
-                ">{{ object.get_status_display }}</span></p>
-                {% if object.examination_dttm %}
+                ">{{ object.status_text }}</span></p>
+                {% if object.examination_dttm and object.status != object.PRE_ACCEPTED%}
                     <p>Дата рассмотрения заявки: {{ object.examination_dttm|date }}</p>
                 {% endif %}
-                {% if object.accepted_sum %}
+                {% if object.accepted_sum and object.status != object.PRE_ACCEPTED %}
                     <p>Одобренная сумма: {{ object.accepted_sum|floatformat }} руб.</p>
                 {% endif %}
-                {% if object.payment_dt and not object.paid_with_cash %}
+                {% if object.payment_dt and not object.paid_with_cash and object.status != object.PRE_ACCEPTED %}
                     <p>Ожидаемая дата выплаты: {{ object.payment_dt|date }}</p>
                 {% endif %}
                 {% if object.paid_with_cash %}

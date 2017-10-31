@@ -56,12 +56,14 @@ class AidRequest(models.Model):
     ACCEPTED = 2
     DECLINED = 3
     INFO_NEEDED = 4
+    PRE_ACCEPTED = 5
 
     AID_REQUEST_STATUS = (
         (WAITING, "Заявление рассматривается"),
         (ACCEPTED, "Заявление одобрено"),
         (DECLINED, "В заявлении отказано"),
         (INFO_NEEDED, "Необходимо уточнить данные"),
+        (PRE_ACCEPTED, "Предварительно одобрено"),
     )
     author = models.ForeignKey(User, blank=True, null=True, verbose_name="Автор", related_name='author')
     applicant = models.ForeignKey(User, blank=True, null=True, verbose_name='Получатель')  # find out how to add applicant to form before validation
@@ -141,6 +143,17 @@ class AidRequest(models.Model):
 
     def get_absolute_url(self):
         return reverse('fin_aid:aid_request_detail', args=[self.id])
+
+    @property
+    def status_text(self):
+        if self.status == AidRequest.PRE_ACCEPTED:
+            display_status = AidRequest.WAITING
+        else:
+            display_status = self.status
+        for status, text in AidRequest.AID_REQUEST_STATUS:
+            if status == display_status:
+                return text
+        return None
 
     def __str__(self):
         try:
