@@ -8,6 +8,7 @@ from django.utils.encoding import force_text
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
+# Admin for LogEntry, maaybe move to standalone app? based on https://github.com/yprez/django-logentry-admin
 
 action_names = {
     ADDITION: _('Addition'),
