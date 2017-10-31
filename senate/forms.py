@@ -14,7 +14,8 @@ class IssueCreateForm(forms.ModelForm):
     class Meta:
         model = Issue
         fields = ["name", "category", "want_to_help"]
-        widgets = {'category': ModelSelect2Widget(model=Category, queryset=Category.objects.all())}
+        widgets = {'category': ModelSelect2Widget(model=Category, 
+                                                  search_fields=['name__icontains'],)}
 
 
 class DeptEventCreateForm(forms.ModelForm):
