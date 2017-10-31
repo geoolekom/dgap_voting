@@ -3,8 +3,6 @@ from .models import Issue, Event, Category
 
 from django_select2.forms import ModelSelect2Widget
 
-class CascadeWidget(ModelSelect2Widget):
-    model = Category
 
 class IssueCreateForm(forms.ModelForm):
     issue_descr = forms.CharField(label="Описание", max_length=Event.MAX_INFO_LEN, widget=forms.Textarea(attrs={'rows': 5}))
@@ -16,7 +14,7 @@ class IssueCreateForm(forms.ModelForm):
     class Meta:
         model = Issue
         fields = ["name", "category", "want_to_help"]
-        widgets = {'category': CascadeWidget}
+        widgets = {'category': ModelSelect2Widget(model=Category, queryset=Category.objects.all())}
 
 
 class DeptEventCreateForm(forms.ModelForm):
