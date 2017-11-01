@@ -8,6 +8,8 @@ from datetime import datetime, date
 from PIL import Image
 import pandas as pd
 
+from profiles.models import StudentInfo
+
 TOTAL_TAX = 0.86
 
 
@@ -295,3 +297,35 @@ def get_next_date(dt=None, t='payment'):
     requests = AidRequest.objects.filter(status=AidRequest.ACCEPTED, payment_dt__year=year, payment_dt__month=month)
     return requests.aggregate(sum=models.Sum('accepted_sum'))["sum"]"""
 
+
+class Scholarship(models.Model):
+    name = models.CharField("Название", max_length=100)
+    sum = models.FloatField("Сумма")
+    MONTH = 1
+    SEMESTER = 2
+    YEAR = 3
+    PAYMENT_FREQUENCY = (
+        (MONTH, "Раз в месяц"),
+        (SEMESTER, "Раз в семестр"),
+        (YEAR, "Раз в год"),
+    )
+    frequency = models.IntegerField("Частота выплат", choices=PAYMENT_FREQUENCY, default=MONTH)
+
+    class Meta:
+        verbose_name = "стипендия"
+        verbose_name_plural = "стипендии"
+
+    def __str__(self):
+        return self.name
+
+
+class Scholar(models.Model):
+    student = models.ForeignKey(StudentInfo, verbose_name="Студент")
+    scholarship = models.ForeignKey(Scholarship, verbose_name="Стипендия")
+
+    class Meta:
+        verbose_name = "стипендиат"
+        verbose_name_plural = "стипендиаты"
+
+    def __str__(self):
+        return "{} ({})".format(self.scholarship, self.student)

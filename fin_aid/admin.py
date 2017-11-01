@@ -3,7 +3,7 @@ from django.contrib.admin.views.main import ChangeList
 from django import forms
 from django.db.models import Sum
 
-from .models import AidRequest, Category, AidDocument, MonthlyData, get_next_date, TOTAL_TAX
+from .models import AidRequest, Category, AidDocument, MonthlyData, Scholarship, Scholar, get_next_date, TOTAL_TAX
 from .forms import SelectExportMonthForm, AidRequestAdminForm
 from datetime import datetime
 
@@ -25,6 +25,13 @@ class AidRequestAdmin(admin.ModelAdmin):
     search_fields = ["applicant__first_name", "applicant__last_name", "reason"]
     list_editable = ["status", "accepted_sum", "payment_dt", "submitted_paper"]
     readonly_fields = ['images_tags', 'vk_link']
+    fields = [('applicant', 'author'),
+              ('category', 'urgent'),
+              'reason',
+              ('req_sum', 'accepted_sum'),
+              'status',
+              ('month_of_payment', 'payment_dt'),
+              ('submitted_paper', 'paid_with_cash', 'verified'),]
 
     def get_applicant_name(self, obj):
         s = "{} {}".format(obj.applicant.last_name, obj.applicant.first_name)
@@ -80,7 +87,19 @@ class MonthlyDataAdmin(admin.ModelAdmin):
     list_display_links = list_display
 
 
+class ScholarshipAdmin(admin.ModelAdmin):
+    list_display = ['name', 'sum', 'frequency']
+    list_filter = ['frequency']
+
+
+class ScholarAdmin(admin.ModelAdmin):
+    list_display = ['student', 'scholarship']
+    list_filter = ['scholarship']
+
+
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(AidRequest, AidRequestAdmin)
 admin.site.register(AidDocument)
 admin.site.register(MonthlyData, MonthlyDataAdmin)
+admin.site.register(Scholarship, ScholarshipAdmin)
+admin.site.register(Scholar, ScholarAdmin)
