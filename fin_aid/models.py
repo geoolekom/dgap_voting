@@ -259,7 +259,7 @@ class MonthlyData(models.Model):
 
     @property
     def sum_used(self):
-        requests = AidRequest.objects.filter(status=AidRequest.ACCEPTED, paid_with_cash=False, payment_dt__year=self.year,
+        requests = AidRequest.objects.filter(status__in=[AidRequest.ACCEPTED, AidRequest.PRE_ACCEPTED], paid_with_cash=False, payment_dt__year=self.year,
                                              payment_dt__month=self.month)
         used = requests.aggregate(sum=models.Sum('accepted_sum'))["sum"]
         return used/TOTAL_TAX if used else 0

@@ -71,7 +71,7 @@ class AidRequestChangeList(ChangeList):
         self.current_month = MonthlyData.current()
         used = self.queryset.filter(payment_dt=self.current_month.payment_dt).aggregate(Sum('accepted_sum'))['accepted_sum__sum']
         self.sum_used = used/TOTAL_TAX if used else 0
-        waiting = self.queryset.exclude(status=AidRequest.ACCEPTED).aggregate(Sum('req_sum'))['req_sum__sum']
+        waiting = self.queryset.filter(status=AidRequest.WAITING).aggregate(Sum('req_sum'))['req_sum__sum']
         self.sum_waiting = waiting/TOTAL_TAX if waiting else 0
         self.sum_max = MonthlyData.current().limit
         self.proficit = MonthlyData.current().limit - MonthlyData.current().sum_used
