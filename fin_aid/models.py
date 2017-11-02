@@ -257,6 +257,11 @@ class MonthlyData(models.Model):
         deadline = get_next_date(date.today(), 'deadline')
         return cls.objects.get(year=deadline.year, month=deadline.month)
 
+    @classmethod
+    def next(cls):
+        deadline = get_next_date(get_next_date(date.today(), 'payment'), 'deadline')
+        return cls.objects.get(year=deadline.year, month=deadline.month)
+
     @property
     def sum_used(self):
         requests = AidRequest.objects.filter(status__in=[AidRequest.ACCEPTED, AidRequest.PRE_ACCEPTED], paid_with_cash=False, payment_dt__year=self.year,

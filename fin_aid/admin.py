@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django import forms
 from django.db.models import Sum
+from django.contrib.admin.filters import SimpleListFilter
 
 from .models import AidRequest, Category, AidDocument, MonthlyData, Scholarship, Scholar, get_next_date, TOTAL_TAX
 from .forms import SelectExportMonthForm, AidRequestAdminForm
@@ -14,13 +15,38 @@ class AidDocumentInline(admin.TabularInline):
     model = AidDocument
 
 
+class PaymentMonthFilter(SimpleListFilter):
+    title = 'Месяц выплаты'
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = 'payment_dt'
+
+    def lookups(self, request, model_admin):
+        return (
+            (1, str(MonthlyData.current())),
+            (2, str(MonthlyData.next())),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() is None:
+            return queryset
+        elif int(self.value()) == 1:
+            current_month = MonthlyData.current()
+            return queryset.filter(payment_dt=current_month.payment_dt)
+        elif int(self.value()) == 2:
+            next_month = MonthlyData.next()
+            return queryset.filter(payment_dt=next_month.payment_dt)
+        else:
+            return queryset
+
+
 class AidRequestAdmin(admin.ModelAdmin):
     form = AidRequestAdminForm  # (initial={"month_of_payment":AidRequestAdminForm.THIS})
     date_hierarchy = 'add_dttm'
     list_display = ['get_applicant_name', 'add_dttm', 'category', 'req_sum', 'urgent',
                     'status', 'accepted_sum', 'payment_dt', 'submitted_paper']
     list_display_links = ['get_applicant_name', 'add_dttm', 'category', 'req_sum']
-    list_filter = ['status', 'category', 'urgent', 'submitted_paper', 'paid_with_cash', 'verified']
+    list_filter = [PaymentMonthFilter, 'status', 'category', 'urgent', 'submitted_paper', 'paid_with_cash', 'verified']
     inlines = [AidDocumentInline,]
     search_fields = ["applicant__first_name", "applicant__last_name", "reason"]
     list_editable = ["status", "accepted_sum", "payment_dt", "submitted_paper"]
@@ -76,6 +102,7 @@ class AidRequestChangeList(ChangeList):
         self.sum_max = MonthlyData.current().limit
         self.proficit = MonthlyData.current().limit - MonthlyData.current().sum_used
         self.export_form = SelectExportMonthForm()
+        self.title = 'При редактировании заявлений указывайте "ЧИСТЫЕ" суммы, в статистике ниже НАЛОГ УЧТЕН'
 
 
 class CategoryAdmin(admin.ModelAdmin):
