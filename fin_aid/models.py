@@ -144,7 +144,8 @@ class AidRequest(models.Model):
     def get_absolute_url(self):
         return reverse('fin_aid:aid_request_detail', args=[self.id])
 
-    def get_status_display(self):
+    @property
+    def status_text(self):
         if self.status == AidRequest.PRE_ACCEPTED:
             display_status = AidRequest.WAITING
         else:
