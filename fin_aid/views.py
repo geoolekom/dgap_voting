@@ -17,6 +17,7 @@ import logging
 
 from polls.views import make_win_csv
 from core.settings import MEDIA_ROOT, BASE_DIR, SENDFILE_ROOT
+from notifications.notify import vk_messages_allowed
 
 from .models import AidRequest, AidDocument, get_next_date, is_image
 from .forms import AidRequestCreateForm, SelectExportMonthForm
@@ -70,7 +71,12 @@ class AidRequestCreateUpdate(SuccessMessageMixin, SingleObjectTemplateResponseMi
 
 
 class AidRequestCreate(AidRequestCreateUpdate, BaseCreateView):
-    success_message = "Заявление на матпомощь принято. Результаты рассмотрения будут доступны в личном кабинете"
+    def get_success_message(self, cleaned_data):
+        success_message = "Заявление на матпомощь принято. Результаты рассмотрения будут доступны в личном кабинете."
+        if not vk_messages_allowed(self.request.user):
+            success_message += ' <a class="alert-link" href={}>Разрешите получение уведомлений ВКонтакте,</a> и мы ' \
+                               'оповестим Вас о рассмотрении заявления!'.format(reverse("blog:article_detail", args=['notifications']))
+        return success_message
 
 
 class AidRequestUpdate(AidRequestCreateUpdate, BaseUpdateView):
