@@ -57,6 +57,7 @@ class AidRequestAdmin(admin.ModelAdmin):
                    ('req_sum', 'accepted_sum'),
                    'status',
                    ('month_of_payment', 'payment_dt'),
+                   'examination_comment',
                    ('submitted_paper', 'paid_with_cash', 'verified'),
                    'vk_link')
     }),
@@ -116,10 +117,13 @@ class AidRequestAdmin(admin.ModelAdmin):
         return AidRequestChangeList
 
     def get_applicant_name(self, obj):
-        s = "{} {}".format(obj.applicant.last_name, obj.applicant.first_name)
-        if not s or s == " ":
-            s = obj.applicant.username
-        return s
+        try:
+            s = "{} {}".format(obj.applicant.last_name, obj.applicant.first_name)
+            if not s or s == " ":
+                s = obj.applicant.username
+            return s
+        except Exception:
+            return "Anonimous user"
     get_applicant_name.short_description = 'Пользователь'
 
     def vk_link(self, obj):
