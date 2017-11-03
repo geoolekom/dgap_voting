@@ -57,7 +57,9 @@ class AidRequestAdmin(admin.ModelAdmin):
               ('req_sum', 'accepted_sum'),
               'status',
               ('month_of_payment', 'payment_dt'),
-              ('submitted_paper', 'paid_with_cash', 'verified'),]
+              ('submitted_paper', 'paid_with_cash', 'verified'),
+              'vk_link',
+              'images_tags']
 
     def get_applicant_name(self, obj):
         s = "{} {}".format(obj.applicant.last_name, obj.applicant.first_name)

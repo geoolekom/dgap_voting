@@ -96,10 +96,9 @@ class AidRequest(models.Model):
     # TODO rewrite using new AidDocument.is_image field?
     def images_tags(self):
         html = ""
-        files = self.aiddocument_set.all()
-        for file in files:
-            if is_image(file.file):
-                html += '<img class="aiddocument" style="max-width:100%;" src={}>'.format(file.file.url)
+        images = self.aiddocument_set.filter(is_image=True)
+        for image in images:
+            html += '<img class="aiddocument" style="max-width:100%;" src={}>'.format(image.file.url)
         return html
     images_tags.allow_tags = True
     images_tags.short_description = "Приложенные изображения"
