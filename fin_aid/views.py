@@ -53,7 +53,7 @@ class AidRequestCreateUpdate(SuccessMessageMixin, SingleObjectTemplateResponseMi
 
     def form_valid(self, form):
         response = super(AidRequestCreateUpdate, self).form_valid(form)
-        self.object.applicant = self.request.user
+        self.object.applicant = self.object.applicant or self.request.user
         for i in range(1, 4):
             document = form.cleaned_data['document' + str(i)]
             if document:
