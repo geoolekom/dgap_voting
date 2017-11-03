@@ -50,7 +50,6 @@ class AidRequestAdmin(admin.ModelAdmin):
     inlines = [AidDocumentInline,]
     search_fields = ["applicant__first_name", "applicant__last_name", "reason"]
     list_editable = ["status", "accepted_sum", "payment_dt", "submitted_paper"]
-    readonly_fields = ['images_tags', 'vk_link']
     fieldsets = [(None, {
         'fields': (('applicant', 'author'),
                    ('category', 'urgent'),
@@ -67,13 +66,6 @@ class AidRequestAdmin(admin.ModelAdmin):
                  })
     ]
 
-    def get_applicant_name(self, obj):
-        s = "{} {}".format(obj.applicant.last_name, obj.applicant.first_name)
-        if not s or s == " ":
-            s = obj.applicant.username
-        return s
-    get_applicant_name.short_description = 'Пользователь'
-
     # TODO check if there is a better way. form.media.caa and form.media.js may be included in template instead of this
     class Media:
         js = (
@@ -83,6 +75,13 @@ class AidRequestAdmin(admin.ModelAdmin):
         css = {
             'all': ('//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css',)
         }
+
+    def get_readonly_fields(self, request, obj=None):
+        """Can change applicant only if request is created by another person"""
+        readonly_fields = ['images_tags', 'vk_link']
+        if obj and not obj.author:
+            readonly_fields.append('applicant')
+        return readonly_fields
 
     def save_model(self, request, obj, form, change):
         if obj.status in [AidRequest.ACCEPTED, AidRequest.PRE_ACCEPTED]:
@@ -107,6 +106,13 @@ class AidRequestAdmin(admin.ModelAdmin):
             extra_context = extra_context or {}
             extra_context["previous_requests"] = previous_requests
             return super(AidRequestAdmin, self).change_view(request, object_id, form_url, extra_context)
+
+    def get_applicant_name(self, obj):
+        s = "{} {}".format(obj.applicant.last_name, obj.applicant.first_name)
+        if not s or s == " ":
+            s = obj.applicant.username
+        return s
+    get_applicant_name.short_description = 'Пользователь'
 
     def vk_link(self, obj):
         return vk_html_user_link(obj.applicant)
