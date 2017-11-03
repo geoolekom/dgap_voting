@@ -81,6 +81,8 @@ class AidRequestAdmin(admin.ModelAdmin):
         readonly_fields = ['images_tags', 'vk_link']
         if obj and not obj.author:
             readonly_fields.append('applicant')
+        if not obj:
+            readonly_fields.append('author')
         return readonly_fields
 
     def save_model(self, request, obj, form, change):
@@ -97,6 +99,9 @@ class AidRequestAdmin(admin.ModelAdmin):
                     obj.payment_dt = get_next_date(get_next_date(get_next_date(None, 'payment'), 'payment'), 'payment')
         if obj.status != AidRequest.WAITING:
             obj.examination_dttm = datetime.now()
+        # When AidRequest created via admin, set author field
+        if not change and obj and not obj.author:
+            obj.author = request.user
         obj.save()
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
