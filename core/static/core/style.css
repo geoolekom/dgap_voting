@@ -9,3 +9,7 @@ img.aiddocument {
 span.post-info {
     font-style: italic;
 }
+
+.student-select {
+    min-width: 250px;
+}

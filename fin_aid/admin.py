@@ -51,15 +51,21 @@ class AidRequestAdmin(admin.ModelAdmin):
     search_fields = ["applicant__first_name", "applicant__last_name", "reason"]
     list_editable = ["status", "accepted_sum", "payment_dt", "submitted_paper"]
     readonly_fields = ['images_tags', 'vk_link']
-    fields = [('applicant', 'author'),
-              ('category', 'urgent'),
-              'reason',
-              ('req_sum', 'accepted_sum'),
-              'status',
-              ('month_of_payment', 'payment_dt'),
-              ('submitted_paper', 'paid_with_cash', 'verified'),
-              'vk_link',
-              'images_tags']
+    fieldsets = [(None, {
+        'fields': (('applicant', 'author'),
+                   ('category', 'urgent'),
+                   'reason',
+                   ('req_sum', 'accepted_sum'),
+                   'status',
+                   ('month_of_payment', 'payment_dt'),
+                   ('submitted_paper', 'paid_with_cash', 'verified'),
+                   'vk_link')
+    }),
+                 ('Изображения', {
+                     'fields': ('images_tags',),
+                     'classes': ('collapse',)
+                 })
+    ]
 
     def get_applicant_name(self, obj):
         s = "{} {}".format(obj.applicant.last_name, obj.applicant.first_name)
@@ -67,6 +73,16 @@ class AidRequestAdmin(admin.ModelAdmin):
             s = obj.applicant.username
         return s
     get_applicant_name.short_description = 'Пользователь'
+
+    # TODO check if there is a better way. form.media.caa and form.media.js may be included in template instead of this
+    class Media:
+        js = (
+            '//code.jquery.com/jquery-2.1.1.min.js',
+            '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js',
+        )
+        css = {
+            'all': ('//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css',)
+        }
 
     def save_model(self, request, obj, form, change):
         if obj.status in [AidRequest.ACCEPTED, AidRequest.PRE_ACCEPTED]:

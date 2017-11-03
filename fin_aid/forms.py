@@ -1,5 +1,8 @@
 from django import forms
 from django.utils import timezone
+from django.contrib.auth.models import User
+from django_select2.forms import ModelSelect2Widget
+
 from .models import AidRequest, MonthlyData
 
 
@@ -31,3 +34,13 @@ class AidRequestAdminForm(forms.ModelForm):
     class Meta:
         model = AidRequest
         exclude = ["examination_dttm"]
+        widgets = {
+            'applicant': ModelSelect2Widget(model=User,
+                                            search_fields=['userprofile__student_info__fio__icontains', 'first_name', 'last_name'],
+                                            attrs={'data-width': '30em'}
+                                            ),
+            'author': ModelSelect2Widget(model=User,
+                                         search_fields=['userprofile__student_info__fio__icontains', 'first_name', 'last_name'],
+                                         attrs={'data-width': '30em'}
+                                         )
+        }
