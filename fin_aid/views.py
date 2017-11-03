@@ -12,13 +12,12 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 
 from sendfile import sendfile
-
 import os
 import logging
 
 from polls.views import make_win_csv
-
 from core.settings import MEDIA_ROOT, BASE_DIR, SENDFILE_ROOT
+
 from .models import AidRequest, AidDocument, get_next_date, is_image
 from .forms import AidRequestCreateForm, SelectExportMonthForm
 from .create_paper import create_paper
@@ -32,12 +31,7 @@ class AidRequestList(ListView):
     model = AidRequest
 
     def get_queryset(self):
-        user = self.request.user
-        if user.userprofile.student_info:
-            users = [profile.user for profile in user.userprofile.student_info.userprofile_set.all()]
-        else:
-            users = [user]
-        return AidRequest.objects.filter(applicant__in=users).order_by("-add_dttm")
+        return AidRequest.user_requests(self.request.user)
 
 
 @method_decorator(login_required, name='dispatch')

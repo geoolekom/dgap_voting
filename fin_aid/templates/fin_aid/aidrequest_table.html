@@ -1,0 +1,30 @@
+<table class="table table-hover table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Категория</th>
+                            <th>Сумма</th>
+                            <th>Срочное</th>
+                            <th>Статус</th>
+                            <th>Одобренная сумма</th>
+                            <th>Дата выплаты</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for aid_request in object_list%}
+                            <tr class="clickable-row {% if aid_request.status == aid_request.ACCEPTED %} success
+                                {% elif aid_request.status == aid_request.DECLINED %} danger {% endif %}"
+                                data-href="{% url "fin_aid:aid_request_detail" aid_request.id %}">
+                                <td> {{ aid_request.add_dttm|date:"d.m.Y" }} </td>
+                                <td> {{ aid_request.category }} </td>
+                                <td> {{ aid_request.req_sum|floatformat }} </td>
+                                <td>{% if aid_request.urgent %} да {% else %} нет {% endif %}</td>
+                                <td> {{ aid_request.status_text }} </td>
+                                <td> {% if aid_request.accepted_sum %}{{ aid_request.accepted_sum|floatformat }} {% endif %}</td>
+                                <td> {% if aid_request.payment_dt and not aid_request.paid_with_cash %}
+                                        {{ aid_request.payment_dt|date:"d.m.Y" }}
+                                     {% elif aid_request.paid_with_cash %} Наличными {% endif %}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>

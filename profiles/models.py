@@ -55,7 +55,6 @@ class StudentInfo(models.Model):
                 pass
 
 
-
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     dorm = models.IntegerField(default=0)
@@ -71,7 +70,7 @@ class UserProfile(models.Model):
 
 
 # checks if student1 and student2 are the same student (students can have multiple accounts)
-def is_same_student(student1, student2):
+def is_same_student(student1: User, student2: User):
     if not (student1.is_authenticated and student2.is_authenticated):
         return False
     return student1 == student2 \
@@ -79,5 +78,13 @@ def is_same_student(student1, student2):
 
 
 # checks if student1 is the same student as student2 or student1 is admin with appropriate access rights
-def is_same_student_or_admin(student1, student2, group_name):
+def is_same_student_or_admin(student1: User, student2: User, group_name):
     return is_same_student(student1, student2) or student1.groups.filter(name=group_name).exists() or student1.is_superuser
+
+
+def same_users_list(user: User):
+    if user.userprofile.student_info:
+        users = [profile.user for profile in user.userprofile.student_info.userprofile_set.all()]
+    else:
+        users = [user]
+    return users

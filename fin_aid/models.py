@@ -8,7 +8,7 @@ from datetime import datetime, date
 from PIL import Image
 import pandas as pd
 
-from profiles.models import StudentInfo
+from profiles.models import StudentInfo, same_users_list
 
 TOTAL_TAX = 0.86
 
@@ -92,6 +92,19 @@ class AidRequest(models.Model):
             return True
         return False
 
+    def get_absolute_url(self):
+        return reverse('fin_aid:aid_request_detail', args=[self.id])
+
+    def __str__(self):
+        try:
+            return "{}: заявление от {} по категории {} на сумму {}".format(self.applicant, self.add_dttm.date(), self.category, self.req_sum)
+        except Exception:
+            return "Зявление на матпомощь"
+
+    class Meta:
+        verbose_name = "заявление на матпомощь"
+        verbose_name_plural = "заявления на матпомощь"
+
     # returns links to images, related to this aidrequest
     # TODO rewrite using new AidDocument.is_image field?
     def images_tags(self):
@@ -142,9 +155,6 @@ class AidRequest(models.Model):
             df = df.append(dct, ignore_index=True)
         df.to_csv(filename)
 
-    def get_absolute_url(self):
-        return reverse('fin_aid:aid_request_detail', args=[self.id])
-
     @property
     def status_text(self):
         if self.status == AidRequest.PRE_ACCEPTED:
@@ -156,15 +166,10 @@ class AidRequest(models.Model):
                 return text
         return None
 
-    def __str__(self):
-        try:
-            return "{}: заявление от {} по категории {} на сумму {}".format(self.applicant, self.add_dttm.date(), self.category, self.req_sum)
-        except Exception:
-            return "Зявление на матпомощь"
-
-    class Meta:
-        verbose_name = "заявление на матпомощь"
-        verbose_name_plural = "заявления на матпомощь"
+    @classmethod
+    def user_requests(cls, user: User):
+        users = same_users_list(user)
+        return cls.objects.filter(applicant__in=users).order_by("-add_dttm")
 
 
 # separate function as it's used in create_paper

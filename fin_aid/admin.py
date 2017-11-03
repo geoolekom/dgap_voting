@@ -84,8 +84,13 @@ class AidRequestAdmin(admin.ModelAdmin):
             obj.examination_dttm = datetime.now()
         obj.save()
 
-    def get_changelist(self, request, **kwargs):
-        return AidRequestChangeList
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        if object_id:
+            applicant = AidRequest.objects.get(id=object_id).applicant
+            previous_requests = AidRequest.user_requests(applicant).exclude(id=object_id)
+            extra_context = extra_context or {}
+            extra_context["previous_requests"] = previous_requests
+            return super(AidRequestAdmin, self).change_view(request, object_id, form_url, extra_context)
 
     def vk_link(self, obj):
         return vk_html_user_link(obj.applicant)
@@ -105,6 +110,7 @@ class AidRequestChangeList(ChangeList):
         self.proficit = MonthlyData.current().limit - MonthlyData.current().sum_used
         self.export_form = SelectExportMonthForm()
         self.title = 'При редактировании заявлений указывайте "ЧИСТЫЕ" суммы, в статистике ниже НАЛОГ УЧТЕН'
+
 
 
 class CategoryAdmin(admin.ModelAdmin):

@@ -1,0 +1,10 @@
+{% extends "admin/change_form.html" %}
+{% load staticfiles %}
+{% load i18n admin_urls %}
+{% block content %}
+    {{ block.super }}
+    <h3>Другие заявления на матпомощь</h3>
+    {% include 'fin_aid/aidrequest_table.html' with object_list=previous_requests %}
+    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="{% static 'core/js/script.js' %}?{{ TAG }}"></script>
+{% endblock %}
