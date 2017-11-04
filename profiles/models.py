@@ -88,3 +88,10 @@ def same_users_list(user: User):
     else:
         users = [user]
     return users
+
+def get_profiles(user):
+    if user.userprofile.student_info:
+        users = [profile.user for profile in user.userprofile.student_info.userprofile_set.all()]
+    else:
+        users = [user]
+    return users
