@@ -7,7 +7,7 @@
 
     {% load staticfiles %}
     {% load bootstrap3 %}
-
+    {% load blog_extras %}
     {% bootstrap_css %}
 
     <link href="{% static 'core/sidebar.css' %}?{{ TAG }}" rel="stylesheet">
@@ -21,14 +21,18 @@
 {% include 'core/messages.html' %}
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xs-12" style="padding-top:16px;"{# class="container" #}>
+        {# <div class="col-xs-12" style="padding-top:16px;"{# class="container">#}
+            <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-1">
             {% block content %}
             {% endblock %}
-        </div>
+            </div>
+            <div class="col-lg-2">
+                {% article_panel "welcome" True True %}
+            </div>
       {% include "core/footer.html" %}
         
-    </div><!--/.row-->
-  </div><!--/.container-->
+      </div><!--/.row-->
+    </div><!--/.container-->
     {# <link href="{% static 'polls/js/countdown/jquery.countdown.css' %}" rel="stylesheet" > #}
         {% bootstrap_javascript %}
     <script src="{% static 'polls/collapse.js' %}"></script>

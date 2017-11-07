@@ -6,7 +6,6 @@
 {% endblock %}
 
 {% block content %}
-    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h2>Заявление от {{ object.add_dttm|date }} в категории "{{ object.category }}"</h2>
@@ -57,5 +56,4 @@
                 {% endif %}
             </div>
         </div>
-    </div>
 {% endblock %}

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 from django.template import Context, Template
 
 from profiles.models import UserProfile
@@ -22,6 +23,7 @@ class Article(models.Model):
         verbose_name_plural = "посты"
 
     @property
+    @mark_safe
     def rendered_content(self, context=Context()):
         template = Template(self.content)
         return template.render(context)

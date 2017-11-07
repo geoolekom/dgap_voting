@@ -8,7 +8,7 @@ from .models import AidRequest, MonthlyData
 
 class AidRequestCreateForm(forms.ModelForm):
     # TODO rewrite
-    document1 = forms.FileField(required=False, label="Документ")
+    document1 = forms.FileField(required=False, label="Документ", )
     document2 = forms.FileField(required=False, label="Документ")
     document3 = forms.FileField(required=False, label="Документ")
 

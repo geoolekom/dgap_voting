@@ -13,6 +13,7 @@ from notifications.notify import vk_html_user_link
 
 class AidDocumentInline(admin.TabularInline):
     model = AidDocument
+    readonly_fields = ['is_image', 'is_application_paper']
 
 
 class PaymentMonthFilter(SimpleListFilter):

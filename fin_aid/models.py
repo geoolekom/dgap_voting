@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 
 from hashlib import md5
 from datetime import datetime, date
@@ -106,14 +107,14 @@ class AidRequest(models.Model):
         verbose_name_plural = "заявления на матпомощь"
 
     # returns links to images, related to this aidrequest
-    # TODO rewrite using new AidDocument.is_image field?
+
+    @mark_safe
     def images_tags(self):
         html = ""
         images = self.aiddocument_set.filter(is_image=True)
         for image in images:
             html += '<img class="aiddocument" style="max-width:100%;" src={}>'.format(image.file.url)
         return html
-    images_tags.allow_tags = True
     images_tags.short_description = "Приложенные изображения"
 
     # creates csv with all accepted applications for this month
@@ -295,6 +296,7 @@ def _get_next_date_db(dt=None, t='payment'):
         return None
 
 
+# TODO may be force admin to create monthly data and don't worry about not finding it in db?
 def get_next_date(dt=None, t='payment'):
     next_date = _get_next_date_db(dt, t)
     if not next_date:

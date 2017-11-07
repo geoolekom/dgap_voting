@@ -1,4 +1,5 @@
 from django.template import Library, Context
+from django.utils.safestring import mark_safe
 
 import logging
 
@@ -10,6 +11,7 @@ register = Library()
 
 
 @register.simple_tag
+@mark_safe
 def article_content(slug):
     try:
         post = Article.objects.get(slug=slug)
@@ -19,14 +21,13 @@ def article_content(slug):
     except Article.DoesNotExist as e:
         logger.exception(e)
         return ""
-article_content.allow_tags = True
 
 
 @register.simple_tag
+@mark_safe
 def article_title(slug):
     post = Article.objects.get(slug=slug)
     return post.title
-article_title.allow_tags = True
 
 
 @register.simple_tag
@@ -35,6 +36,7 @@ def get_article(slug):
 
 
 # If header_link => title is a link to post detailer view
+@mark_safe
 @register.inclusion_tag("blog/article_panel.html")
 def article_panel(slug, header_link=False, show_creation_time=False):
     post = Article.objects.get(slug=slug)
