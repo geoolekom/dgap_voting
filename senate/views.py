@@ -10,6 +10,7 @@ from django.db.models import Q
 
 from .models import Issue, Event, EventDocument, Employee
 from .forms import IssueCreateForm, DeptEventCreateForm, UserEventCreateForm
+from profiles.models import get_profiles
 from notifications.notify import vk_messages_allowed
 
 
@@ -30,6 +31,8 @@ class IssueDisplay(generic.DetailView):
             context["form"] = DeptEventCreateForm()
             context["department_form"] = True
             context["notifications_allowed"] = vk_messages_allowed(user)
+        elif user != context['object'].author and context['object'].category.public == False:
+            raise PermissionDenied()
         elif user == context['object'].author:
             context["form"] = UserEventCreateForm()
         return context
@@ -132,12 +135,7 @@ class MyIssueList(generic.ListView):
     template_name = 'senate/issue_list.html'
 
     def get_queryset(self):
-        user = self.request.user
-        if user.userprofile.student_info:
-            users = [profile.user for profile in user.userprofile.student_info.userprofile_set.all()]
-        else:
-            users = [user]
-        return Issue.objects.filter(author__in=users).order_by("-add_dttm")
+        return Issue.objects.filter(author__in=get_profiles(self.request.user)).order_by("-add_dttm")
 
 
 @method_decorator(login_required, name='dispatch')
@@ -161,6 +159,7 @@ class FullIssueList(generic.ListView):
 
     def get_queryset(self):
         queryset = Issue.objects.all().order_by("-add_dttm")
-        if self.request.user.is_superuser or self.request.user.is_staff:
+        user = self.request.user
+        if user.is_superuser or user.is_staff:
             return queryset
-        return queryset.filter(Q(category__public=True)|Q(author=self.request.user))
+        return queryset.filter(Q(category__public=True)|Q(author__in=get_profiles(user)))
