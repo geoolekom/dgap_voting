@@ -1,5 +1,7 @@
 blog package
 ============
+Provides simple blog functionality. Article data is stored in :class:`blog.models.Article` and can be rendered as django template.
+
 
 Subpackages
 -----------
@@ -15,13 +17,6 @@ blog\.admin module
 ------------------
 
 .. automodule:: blog.admin
-    :members:
-    :show-inheritance:
-
-blog\.app module
-----------------
-
-.. automodule:: blog.app
     :members:
     :show-inheritance:
 

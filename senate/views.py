@@ -10,7 +10,7 @@ from django.db.models import Q
 
 from .models import Issue, Event, EventDocument, Employee
 from .forms import IssueCreateForm, DeptEventCreateForm, UserEventCreateForm
-from profiles.models import get_profiles
+from profiles.models import same_users_list
 from notifications.notify import vk_messages_allowed
 
 
@@ -135,7 +135,7 @@ class MyIssueList(generic.ListView):
     template_name = 'senate/issue_list.html'
 
     def get_queryset(self):
-        return Issue.objects.filter(author__in=get_profiles(self.request.user)).order_by("-add_dttm")
+        return Issue.objects.filter(author__in=same_users_list(self.request.user)).order_by("-add_dttm")
 
 
 @method_decorator(login_required, name='dispatch')
@@ -162,4 +162,4 @@ class FullIssueList(generic.ListView):
         user = self.request.user
         if user.is_superuser or user.is_staff:
             return queryset
-        return queryset.filter(Q(category__public=True)|Q(author__in=get_profiles(user)))
+        return queryset.filter(Q(category__public=True)|Q(author__in=same_users_list(user)))

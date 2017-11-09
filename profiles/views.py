@@ -12,6 +12,7 @@ from profiles.models import StudentInfo
 
 
 class UserChangeEmail(UpdateView):
+    """Legacy function for changing user email."""
     model = User
     fields = ['email']
     template_name = 'profiles/user_change_email.html'
@@ -31,6 +32,10 @@ class UserChangeEmail(UpdateView):
 
 @login_required
 def change_subscribing_status(request):
+    """Subscribe/unsubscrube from notifications.
+
+    ``request.user.userprofile.is_subscribed = not request.user.userprofile.is_subscribed``
+    """
     profile = request.user.userprofile
     profile.is_subscribed = not profile.is_subscribed
     profile.save()
@@ -43,6 +48,12 @@ def change_subscribing_status(request):
 
 @login_required
 def profile_view(request):
+    """Super old and super shitty view displaying info about current user.
+
+    * Adds error messages if user is not approved & so on.
+    * Sets context variables with user's social services logins
+    * Renders template ``profiles/profile.html``
+    """
     user = request.user
     mipt = False
     phystech = False

@@ -1,3 +1,7 @@
+"""Admin classes for models in :mod:`profiles.models`.
+
+Quite obvious, only custom admin for :class:`django.contrib.auth.models.User` may raise some interest. See source code."""
+
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
