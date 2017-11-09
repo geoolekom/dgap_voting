@@ -19,7 +19,7 @@ class ArticleList(generic.ListView):
     def get_context_data(self, **kwargs):
         """Returns list of articles to be shown in feed. See :class:`Article` params for details"""
         context = super(ArticleList, self).get_context_data(**kwargs)
-        if can_view_hidden_post(self.request.user): # TODO use Article.is_visible() instead
+        if can_view_hidden_post(self.request.user):
             objects = Article.objects.filter(show_in_feed=True)
         else:
             objects = Article.objects.filter(publish_dttm__lte=timezone.now(), hidden=False, show_in_feed=True)
@@ -40,7 +40,7 @@ class ArticleDetail(generic.DetailView):
 
 
 # TODO legacy, articles are created through admin interface
-@method_decorator(permission_required('blog.add_article'), name=dispatch)
+@method_decorator(permission_required('blog.add_article'), name='dispatch')
 class ArticleCreate(generic.edit.CreateView):
     model = Article
     form_class = ArticleCreateForm

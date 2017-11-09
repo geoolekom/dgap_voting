@@ -1,0 +1,38 @@
+blog\.migrations package
+========================
+
+Submodules
+----------
+
+blog\.migrations\.0001\_initial module
+--------------------------------------
+
+.. automodule:: blog.migrations.0001_initial
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+blog\.migrations\.0002\_auto\_20170927\_1818 module
+---------------------------------------------------
+
+.. automodule:: blog.migrations.0002_auto_20170927_1818
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+blog\.migrations\.0003\_article\_is\_django\_template module
+------------------------------------------------------------
+
+.. automodule:: blog.migrations.0003_article_is_django_template
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: blog.migrations
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,134 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>senate.admin &#8212; DGAP Services 0.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for senate.admin</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="k">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="k">import</span> <span class="n">User</span><span class="p">,</span> <span class="n">Group</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="k">import</span> <span class="n">Department</span><span class="p">,</span> <span class="n">Employee</span><span class="p">,</span> <span class="n">Category</span><span class="p">,</span> <span class="n">Issue</span><span class="p">,</span> <span class="n">Event</span><span class="p">,</span> <span class="n">EventDocument</span>
+
+
+<span class="sd">&quot;&quot;&quot;class UserInline(admin.StackedInline):</span>
+<span class="sd">    model = User</span>
+<span class="sd">    can_delete = False</span>
+<span class="sd">    fields = [&#39;groups&#39;]&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="DepartmentAdmin"><a class="viewcode-back" href="../../senate.html#senate.admin.DepartmentAdmin">[docs]</a><span class="k">class</span> <span class="nc">DepartmentAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;group&#39;</span><span class="p">,</span> <span class="s1">&#39;head&#39;</span><span class="p">]</span>
+    <span class="n">readonly_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">]</span></div>
+    <span class="c1"># inlines = [UserInline]</span>
+
+
+<div class="viewcode-block" id="EmployeeAdmin"><a class="viewcode-back" href="../../senate.html#senate.admin.EmployeeAdmin">[docs]</a><span class="k">class</span> <span class="nc">EmployeeAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">,</span> <span class="s1">&#39;department&#39;</span><span class="p">,</span> <span class="s1">&#39;position&#39;</span><span class="p">,</span> <span class="s1">&#39;phone&#39;</span><span class="p">,</span> <span class="s1">&#39;public&#39;</span><span class="p">,</span> <span class="s1">&#39;importance&#39;</span><span class="p">]</span>
+    <span class="n">list_editable</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;public&#39;</span><span class="p">,</span> <span class="s1">&#39;importance&#39;</span><span class="p">]</span>
+    <span class="n">list_filter</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;department&#39;</span><span class="p">,</span> <span class="s1">&#39;public&#39;</span><span class="p">]</span>
+    <span class="n">search_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;person__first_name&quot;</span><span class="p">,</span> <span class="s2">&quot;person__last_name&quot;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="CategoryAdmin"><a class="viewcode-back" href="../../senate.html#senate.admin.CategoryAdmin">[docs]</a><span class="k">class</span> <span class="nc">CategoryAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;department&#39;</span><span class="p">]</span>
+    <span class="n">list_filter</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;department&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="EventInline"><a class="viewcode-back" href="../../senate.html#senate.admin.EventInline">[docs]</a><span class="k">class</span> <span class="nc">EventInline</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">StackedInline</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Event</span>
+    <span class="n">can_delete</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">readonly_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;images_tags&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="IssueAdmin"><a class="viewcode-back" href="../../senate.html#senate.admin.IssueAdmin">[docs]</a><span class="k">class</span> <span class="nc">IssueAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;author&#39;</span><span class="p">,</span> <span class="s1">&#39;status&#39;</span><span class="p">,</span> <span class="s1">&#39;add_dttm&#39;</span><span class="p">,</span> <span class="s1">&#39;last_event&#39;</span><span class="p">,</span> <span class="s1">&#39;want_to_help&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;assigned_dept&#39;</span><span class="p">]</span>
+    <span class="n">list_filter</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;category&#39;</span><span class="p">,</span> <span class="s1">&#39;status&#39;</span><span class="p">,</span> <span class="s1">&#39;want_to_help&#39;</span><span class="p">,</span> <span class="s1">&#39;assigned_dept&#39;</span><span class="p">]</span>
+    <span class="n">inlines</span> <span class="o">=</span> <span class="p">[</span><span class="n">EventInline</span><span class="p">]</span></div>
+
+
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Department</span><span class="p">,</span> <span class="n">DepartmentAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Employee</span><span class="p">,</span> <span class="n">EmployeeAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Category</span><span class="p">,</span> <span class="n">CategoryAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Issue</span><span class="p">,</span> <span class="n">IssueAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Event</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">EventDocument</span><span class="p">)</span>
+
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Pavel Semenenko.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

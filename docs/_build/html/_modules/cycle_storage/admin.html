@@ -1,0 +1,137 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>cycle_storage.admin &#8212; DGAP Services 0.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for cycle_storage.admin</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="k">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">django.contrib.admin.filters</span> <span class="k">import</span> <span class="n">SimpleListFilter</span>
+<span class="kn">from</span> <span class="nn">cycle_storage.models</span> <span class="k">import</span> <span class="n">Bicycle</span><span class="p">,</span> <span class="n">Storage</span><span class="p">,</span> <span class="n">Place</span>
+
+<span class="kn">from</span> <span class="nn">.forms</span> <span class="k">import</span> <span class="n">BicycleAdminForm</span>
+
+
+<div class="viewcode-block" id="PlaceFilter"><a class="viewcode-back" href="../../cycle_storage.html#cycle_storage.admin.PlaceFilter">[docs]</a><span class="k">class</span> <span class="nc">PlaceFilter</span><span class="p">(</span><span class="n">SimpleListFilter</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Присвоено место&#39;</span>
+
+    <span class="c1"># Parameter for the filter that will be used in the URL query.</span>
+    <span class="n">parameter_name</span> <span class="o">=</span> <span class="s1">&#39;place&#39;</span>
+
+<div class="viewcode-block" id="PlaceFilter.lookups"><a class="viewcode-back" href="../../cycle_storage.html#cycle_storage.admin.PlaceFilter.lookups">[docs]</a>    <span class="k">def</span> <span class="nf">lookups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">model_admin</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Есть место&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Нет места&#39;</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="PlaceFilter.queryset"><a class="viewcode-back" href="../../cycle_storage.html#cycle_storage.admin.PlaceFilter.queryset">[docs]</a>    <span class="k">def</span> <span class="nf">queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">queryset</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">queryset</span>
+        <span class="k">elif</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">())</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">queryset</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">place</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">place</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="BicycleAdmin"><a class="viewcode-back" href="../../cycle_storage.html#cycle_storage.admin.BicycleAdmin">[docs]</a><span class="k">class</span> <span class="nc">BicycleAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;owner&quot;</span><span class="p">,</span> <span class="s2">&quot;manufacturer&quot;</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="s2">&quot;place&quot;</span><span class="p">,</span> <span class="s2">&quot;verified&quot;</span><span class="p">,</span> <span class="s2">&quot;request_status&quot;</span><span class="p">)</span>
+    <span class="n">list_filter</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;verified&quot;</span><span class="p">,</span> <span class="s2">&quot;request_status&quot;</span><span class="p">,</span> <span class="n">PlaceFilter</span><span class="p">)</span>
+    <span class="n">readonly_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;image_tag&quot;</span><span class="p">]</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">BicycleAdminForm</span>
+
+<div class="viewcode-block" id="BicycleAdmin.save_model"><a class="viewcode-back" href="../../cycle_storage.html#cycle_storage.admin.BicycleAdmin.save_model">[docs]</a>    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;place&quot;</span> <span class="ow">in</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">:</span>
+            <span class="n">place</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;place&quot;</span><span class="p">]</span>
+            <span class="n">place</span><span class="o">.</span><span class="n">bicycle</span> <span class="o">=</span> <span class="n">obj</span>
+            <span class="n">place</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BicycleAdmin</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">change</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="StorageAdmin"><a class="viewcode-back" href="../../cycle_storage.html#cycle_storage.admin.StorageAdmin">[docs]</a><span class="k">class</span> <span class="nc">StorageAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;dorm&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;total_places&quot;</span><span class="p">,</span> <span class="s2">&quot;free_places&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlaceAdmin"><a class="viewcode-back" href="../../cycle_storage.html#cycle_storage.admin.PlaceAdmin">[docs]</a><span class="k">class</span> <span class="nc">PlaceAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;__str__&quot;</span><span class="p">,</span> <span class="s2">&quot;bicycle&quot;</span><span class="p">)</span></div>
+
+
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Bicycle</span><span class="p">,</span> <span class="n">BicycleAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Storage</span><span class="p">,</span> <span class="n">StorageAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">PlaceAdmin</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Pavel Semenenko.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

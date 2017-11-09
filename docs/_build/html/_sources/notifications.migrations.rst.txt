@@ -1,0 +1,62 @@
+notifications\.migrations package
+=================================
+
+Submodules
+----------
+
+notifications\.migrations\.0001\_initial module
+-----------------------------------------------
+
+.. automodule:: notifications.migrations.0001_initial
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+notifications\.migrations\.0002\_auto\_20170819\_1657 module
+------------------------------------------------------------
+
+.. automodule:: notifications.migrations.0002_auto_20170819_1657
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+notifications\.migrations\.0003\_auto\_20170822\_2002 module
+------------------------------------------------------------
+
+.. automodule:: notifications.migrations.0003_auto_20170822_2002
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+notifications\.migrations\.0004\_auto\_20170822\_2222 module
+------------------------------------------------------------
+
+.. automodule:: notifications.migrations.0004_auto_20170822_2222
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+notifications\.migrations\.0005\_auto\_20170904\_2105 module
+------------------------------------------------------------
+
+.. automodule:: notifications.migrations.0005_auto_20170904_2105
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+notifications\.migrations\.0006\_usernotificationssettings\_last\_allow\_vk\_reminder module
+--------------------------------------------------------------------------------------------
+
+.. automodule:: notifications.migrations.0006_usernotificationssettings_last_allow_vk_reminder
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: notifications.migrations
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,424 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>fin_aid.models &#8212; DGAP Services 0.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for fin_aid.models</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.db</span> <span class="k">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="k">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="k">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="k">import</span> <span class="n">timezone</span>
+
+<span class="kn">from</span> <span class="nn">hashlib</span> <span class="k">import</span> <span class="n">md5</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">date</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="k">import</span> <span class="n">Image</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">profiles.models</span> <span class="k">import</span> <span class="n">StudentInfo</span><span class="p">,</span> <span class="n">same_users_list</span>
+
+<span class="n">TOTAL_TAX</span> <span class="o">=</span> <span class="mf">0.86</span>
+
+
+<div class="viewcode-block" id="get_name"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.get_name">[docs]</a><span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">User</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">student_info</span><span class="o">.</span><span class="n">fio</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">first_name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">social_auth</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">name</span> <span class="o">+=</span> <span class="s2">&quot; | &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">social_auth</span><span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-oauth&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">name</span></div>
+
+
+<span class="n">User</span><span class="o">.</span><span class="n">add_to_class</span><span class="p">(</span><span class="s2">&quot;__str__&quot;</span><span class="p">,</span> <span class="n">get_name</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Category"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.Category">[docs]</a><span class="k">class</span> <span class="nc">Category</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="s2">&quot;Название&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">reason</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="s2">&quot;Причина (для заявления)&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">max_sum</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="s2">&quot;Макс. сумма&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">20000</span><span class="p">)</span>
+    <span class="n">max_quantity</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="s2">&quot;Макс. раз за семестр&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">notifications</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="s2">&quot;Уведомления о новых заявлениях&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">show_to_students</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="s1">&#39;Показывать студентам&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">is_senate</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="s2">&quot;Сенатская&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;категория&quot;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;категории&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span></div>
+
+
+<div class="viewcode-block" id="is_image"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.is_image">[docs]</a><span class="k">def</span> <span class="nf">is_image</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">trial_image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">trial_image</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>  <span class="c1"># raises exception if there are errors</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<span class="c1"># TODO add_dttm changes EVERY time when model is saved, so instead of setting it as auto_now_add=True it&#39;s better to set im manually</span>
+<div class="viewcode-block" id="AidRequest"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.AidRequest">[docs]</a><span class="k">class</span> <span class="nc">AidRequest</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">WAITING</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">ACCEPTED</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">DECLINED</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">INFO_NEEDED</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">PRE_ACCEPTED</span> <span class="o">=</span> <span class="mi">5</span>
+
+    <span class="n">AID_REQUEST_STATUS</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">WAITING</span><span class="p">,</span> <span class="s2">&quot;Заявление рассматривается&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">ACCEPTED</span><span class="p">,</span> <span class="s2">&quot;Заявление одобрено&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">DECLINED</span><span class="p">,</span> <span class="s2">&quot;В заявлении отказано&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">INFO_NEEDED</span><span class="p">,</span> <span class="s2">&quot;Необходимо уточнить данные&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">PRE_ACCEPTED</span><span class="p">,</span> <span class="s2">&quot;Предварительно одобрено&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Автор&quot;</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;author&#39;</span><span class="p">)</span>
+    <span class="n">applicant</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;Получатель&#39;</span><span class="p">)</span>  <span class="c1"># find out how to add applicant to form before validation</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Category</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Категория&quot;</span><span class="p">)</span>
+    <span class="n">reason</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="s2">&quot;Причина&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">2048</span><span class="p">)</span>
+    <span class="n">req_sum</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="s2">&quot;Запрошенная сумма&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">urgent</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="s2">&quot;Срочно&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">accepted_sum</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="s2">&quot;Одобренная сумма&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="s2">&quot;Статус заявления&quot;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">AID_REQUEST_STATUS</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">WAITING</span><span class="p">)</span>
+    <span class="n">add_dttm</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="s2">&quot;Дата подачи&quot;</span><span class="p">,</span> <span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">examination_dttm</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="s2">&quot;Дата рассмотрения&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">payment_dt</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="s2">&quot;Дата выплаты&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">examination_comment</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="s2">&quot;Комментарий комиссии&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">submitted_paper</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="s2">&quot;Принес заявление&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">paid_with_cash</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="s2">&quot;Заплатили наличными&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">verified</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="s2">&quot;Заявление проверено&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AidRequest.can_view"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.AidRequest.can_view">[docs]</a>    <span class="k">def</span> <span class="nf">can_view</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">applicant</span> <span class="o">==</span> <span class="n">user</span> \
+            <span class="ow">or</span> <span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">student_info</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">applicant</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">student_info</span> <span class="o">==</span> <span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">student_info</span> \
+                <span class="ow">or</span> <span class="n">user</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;finance&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">or</span> <span class="n">user</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="AidRequest.get_absolute_url"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.AidRequest.get_absolute_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_absolute_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;fin_aid:aid_request_detail&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">])</span></div>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">: заявление от </span><span class="si">{}</span><span class="s2"> по категории </span><span class="si">{}</span><span class="s2"> на сумму </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">applicant</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_dttm</span><span class="o">.</span><span class="n">date</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">category</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">req_sum</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Зявление на матпомощь&quot;</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;заявление на матпомощь&quot;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;заявления на матпомощь&quot;</span>
+
+    <span class="c1"># returns links to images, related to this aidrequest</span>
+    <span class="c1"># TODO rewrite using new AidDocument.is_image field?</span>
+<div class="viewcode-block" id="AidRequest.images_tags"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.AidRequest.images_tags">[docs]</a>    <span class="k">def</span> <span class="nf">images_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aiddocument_set</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">is_image</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
+            <span class="n">html</span> <span class="o">+=</span> <span class="s1">&#39;&lt;img class=&quot;aiddocument&quot; style=&quot;max-width:100%;&quot; src=</span><span class="si">{}</span><span class="s1">&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">html</span></div>
+    <span class="n">images_tags</span><span class="o">.</span><span class="n">allow_tags</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">images_tags</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="s2">&quot;Приложенные изображения&quot;</span>
+
+    <span class="c1"># creates csv with all accepted applications for this month</span>
+<div class="viewcode-block" id="AidRequest.to_csv"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.AidRequest.to_csv">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">to_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;FIO&quot;</span><span class="p">,</span> <span class="s2">&quot;group&quot;</span><span class="p">,</span> <span class="s2">&quot;req_sum&quot;</span><span class="p">,</span> <span class="s2">&quot;Исх. сумма&quot;</span><span class="p">,</span> <span class="s2">&quot;Реал. сумма&quot;</span><span class="p">,</span> <span class="s2">&quot;За что&quot;</span><span class="p">,</span> <span class="s2">&quot;заявление&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;Комментарии&quot;</span><span class="p">,</span> <span class="s2">&quot;e-mail&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">year</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">year</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">year</span>
+        <span class="k">if</span> <span class="n">month</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">month</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">month</span>
+        <span class="k">for</span> <span class="n">request</span> <span class="ow">in</span> <span class="n">AidRequest</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">AidRequest</span><span class="o">.</span><span class="n">ACCEPTED</span><span class="p">,</span>
+                                                 <span class="n">payment_dt__year</span><span class="o">=</span><span class="n">year</span><span class="p">,</span>
+                                                 <span class="n">payment_dt__month</span><span class="o">=</span><span class="n">month</span><span class="p">,</span>
+                                                 <span class="n">paid_with_cash</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">):</span>
+            <span class="n">dct</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;req_sum&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">req_sum</span><span class="p">,</span>
+                <span class="s2">&quot;Исх. сумма&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">accepted_sum</span><span class="o">/</span><span class="n">TOTAL_TAX</span><span class="p">)</span> <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">accepted_sum</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;Реал. сумма&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">accepted_sum</span><span class="p">),</span>
+                <span class="s2">&quot;За что&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">category</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">&quot;Комментарии&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">examination_comment</span><span class="p">,</span>
+                <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">student_info</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">applicant</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">student_info</span>
+            <span class="k">if</span> <span class="n">student_info</span><span class="p">:</span>
+                <span class="n">dct</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                    <span class="s2">&quot;FIO&quot;</span><span class="p">:</span> <span class="n">student_info</span><span class="o">.</span><span class="n">fio</span><span class="p">,</span>
+                    <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="n">student_info</span><span class="o">.</span><span class="n">group</span><span class="p">,</span>
+                    <span class="s2">&quot;e-mail&quot;</span><span class="p">:</span> <span class="n">student_info</span><span class="o">.</span><span class="n">phystech</span><span class="p">,</span>
+                <span class="p">})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fio</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">applicant</span><span class="o">.</span><span class="n">last_name</span> <span class="o">+</span> <span class="n">request</span><span class="o">.</span><span class="n">applicant</span><span class="o">.</span><span class="n">first_name</span> <span class="o">+</span> <span class="n">request</span><span class="o">.</span><span class="n">applicant</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">middlename</span>
+                <span class="k">if</span> <span class="n">fio</span><span class="p">:</span>
+                    <span class="n">dct</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;FIO&quot;</span><span class="p">:</span> <span class="n">fio</span><span class="p">})</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">dct</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;FIO&quot;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">applicant</span><span class="o">.</span><span class="n">username</span><span class="p">})</span>
+            <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">submitted_paper</span><span class="p">:</span>
+                <span class="n">dct</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;заявление&quot;</span><span class="p">:</span><span class="s2">&quot;+&quot;</span><span class="p">})</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dct</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">status_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">AidRequest</span><span class="o">.</span><span class="n">PRE_ACCEPTED</span><span class="p">:</span>
+            <span class="n">display_status</span> <span class="o">=</span> <span class="n">AidRequest</span><span class="o">.</span><span class="n">WAITING</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">display_status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">status</span>
+        <span class="k">for</span> <span class="n">status</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">AidRequest</span><span class="o">.</span><span class="n">AID_REQUEST_STATUS</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="n">display_status</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">text</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="AidRequest.user_requests"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.AidRequest.user_requests">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">user_requests</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">):</span>
+        <span class="n">users</span> <span class="o">=</span> <span class="n">same_users_list</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">applicant__in</span><span class="o">=</span><span class="n">users</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-add_dttm&quot;</span><span class="p">)</span></div></div>
+
+
+<span class="c1"># separate function as it&#39;s used in create_paper</span>
+<div class="viewcode-block" id="user_hash"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.user_hash">[docs]</a><span class="k">def</span> <span class="nf">user_hash</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+    <span class="n">secret</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+    <span class="n">secret</span> <span class="o">=</span> <span class="n">md5</span><span class="p">((</span><span class="n">secret</span> <span class="o">+</span> <span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">secret</span></div>
+
+
+<div class="viewcode-block" id="document_path"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.document_path">[docs]</a><span class="k">def</span> <span class="nf">document_path</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s2">&quot;aid_docs/user_</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user_hash</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">applicant</span><span class="p">),</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<span class="c1"># TODO if user can harm us with custom filename we should replace user-given filename</span>
+<div class="viewcode-block" id="AidDocument"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.AidDocument">[docs]</a><span class="k">class</span> <span class="nc">AidDocument</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">file</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FileField</span><span class="p">(</span><span class="s2">&quot;Документ&quot;</span><span class="p">,</span> <span class="n">upload_to</span><span class="o">=</span><span class="n">document_path</span><span class="p">)</span>
+    <span class="c1"># filename = models.CharField(&quot;Имя файла&quot;, max_length=100)</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">AidRequest</span><span class="p">)</span>
+    <span class="n">is_application_paper</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="s2">&quot;Заявление на матпомощь&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">is_image</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="s2">&quot;Является изображением&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;потверждающий документ&quot;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;подтверждающие документы&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Документ </span><span class="si">{}</span><span class="s2"> к заявлению </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_get_next_date_naive</span><span class="p">(</span><span class="n">dt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="s1">&#39;payment&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dt</span><span class="p">:</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+    <span class="n">pay_day</span> <span class="o">=</span> <span class="mi">28</span>
+    <span class="n">edge_day</span> <span class="o">=</span> <span class="mi">14</span>
+    <span class="n">application_deadline</span> <span class="o">=</span> <span class="mi">11</span>
+    <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="s1">&#39;payment&#39;</span><span class="p">:</span>
+        <span class="n">day</span> <span class="o">=</span> <span class="n">pay_day</span>
+    <span class="k">elif</span> <span class="n">t</span> <span class="o">==</span> <span class="s1">&#39;deadline&#39;</span><span class="p">:</span>
+        <span class="n">day</span> <span class="o">=</span> <span class="n">edge_day</span>
+    <span class="k">elif</span> <span class="n">t</span> <span class="o">==</span> <span class="s1">&#39;student_deadline&#39;</span><span class="p">:</span>
+        <span class="n">day</span> <span class="o">=</span> <span class="n">application_deadline</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span>
+
+    <span class="n">year</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">year</span>
+    <span class="k">if</span> <span class="n">dt</span><span class="o">.</span><span class="n">day</span> <span class="o">&lt;=</span> <span class="n">edge_day</span><span class="p">:</span>
+        <span class="n">month</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">month</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">dt</span><span class="o">.</span><span class="n">month</span> <span class="o">&lt;</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="n">month</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">month</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">month</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">year</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">result_dt</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result_dt</span>
+
+
+<span class="k">def</span> <span class="nf">_get_default_year</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">year</span>
+<span class="k">def</span> <span class="nf">_get_default_month</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">month</span>
+<span class="k">def</span> <span class="nf">_get_default_payment_dt</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">date</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="mi">28</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_get_default_deadline_dt</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">date</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="mi">14</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="MonthlyData"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.MonthlyData">[docs]</a><span class="k">class</span> <span class="nc">MonthlyData</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">MONTH</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Январь&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Февраль&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Март&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;Апрель&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;Май&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;Июнь&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="s2">&quot;Июль&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;Август&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="s2">&quot;Сентябрь&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;Октябрь&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="s2">&quot;Ноябрь&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="s2">&quot;Декабрь&quot;</span><span class="p">),</span>
+    <span class="p">]</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="s2">&quot;Год&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_get_default_year</span><span class="p">)</span>
+    <span class="n">month</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="s2">&quot;Месяц&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_get_default_month</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">MONTH</span><span class="p">)</span>
+    <span class="n">limit</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="s2">&quot;Лимит&quot;</span><span class="p">)</span>
+    <span class="n">deadline_dt</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="s2">&quot;Дэдлайн по приказу&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_get_default_deadline_dt</span><span class="p">)</span>
+    <span class="n">student_deadline_dt</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="s2">&quot;Дэдлайн по заявлениям&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_get_default_deadline_dt</span><span class="p">)</span>
+    <span class="n">payment_dt</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="s2">&quot;Дата выплаты матпомощи&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">_get_default_payment_dt</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_month_display</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;Информация о месяце&quot;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;Лимиты по месяцам&quot;</span>
+
+<div class="viewcode-block" id="MonthlyData.current"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.MonthlyData.current">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">current</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">deadline</span> <span class="o">=</span> <span class="n">get_next_date</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">(),</span> <span class="s1">&#39;deadline&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">deadline</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="n">deadline</span><span class="o">.</span><span class="n">month</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MonthlyData.next"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.MonthlyData.next">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="n">deadline</span> <span class="o">=</span> <span class="n">get_next_date</span><span class="p">(</span><span class="n">get_next_date</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">(),</span> <span class="s1">&#39;payment&#39;</span><span class="p">),</span> <span class="s1">&#39;deadline&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">year</span><span class="o">=</span><span class="n">deadline</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="o">=</span><span class="n">deadline</span><span class="o">.</span><span class="n">month</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">sum_used</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">requests</span> <span class="o">=</span> <span class="n">AidRequest</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">status__in</span><span class="o">=</span><span class="p">[</span><span class="n">AidRequest</span><span class="o">.</span><span class="n">ACCEPTED</span><span class="p">,</span> <span class="n">AidRequest</span><span class="o">.</span><span class="n">PRE_ACCEPTED</span><span class="p">],</span> <span class="n">paid_with_cash</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">payment_dt__year</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+                                             <span class="n">payment_dt__month</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">month</span><span class="p">)</span>
+        <span class="n">used</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="nb">sum</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">Sum</span><span class="p">(</span><span class="s1">&#39;accepted_sum&#39;</span><span class="p">))[</span><span class="s2">&quot;sum&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">used</span><span class="o">/</span><span class="n">TOTAL_TAX</span> <span class="k">if</span> <span class="n">used</span> <span class="k">else</span> <span class="mi">0</span></div>
+
+
+<span class="k">def</span> <span class="nf">_get_next_date_db</span><span class="p">(</span><span class="n">dt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="s1">&#39;payment&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dt</span><span class="p">:</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="s1">&#39;deadline&#39;</span><span class="p">:</span>
+        <span class="n">qs</span> <span class="o">=</span> <span class="n">MonthlyData</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">deadline_dt__gte</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">qs</span> <span class="o">=</span> <span class="n">MonthlyData</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">student_deadline_dt__gte</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+    <span class="n">next_month</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;payment_dt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">next_month</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="s1">&#39;payment&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">next_month</span><span class="o">.</span><span class="n">payment_dt</span>
+        <span class="k">elif</span> <span class="n">t</span> <span class="o">==</span> <span class="s1">&#39;deadline&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">next_month</span><span class="o">.</span><span class="n">deadline_dt</span>
+        <span class="k">elif</span> <span class="n">t</span> <span class="o">==</span> <span class="s1">&#39;student_deadline&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">next_month</span><span class="o">.</span><span class="n">student_deadline_dt</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="get_next_date"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.get_next_date">[docs]</a><span class="k">def</span> <span class="nf">get_next_date</span><span class="p">(</span><span class="n">dt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="s1">&#39;payment&#39;</span><span class="p">):</span>
+    <span class="n">next_date</span> <span class="o">=</span> <span class="n">_get_next_date_db</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">next_date</span><span class="p">:</span>
+        <span class="n">next_date</span> <span class="o">=</span> <span class="n">_get_next_date_naive</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">next_date</span></div>
+
+
+<span class="sd">&quot;&quot;&quot;def sum_by_month(year, month):</span>
+<span class="sd">    requests = AidRequest.objects.filter(status=AidRequest.ACCEPTED, payment_dt__year=year, payment_dt__month=month)</span>
+<span class="sd">    return requests.aggregate(sum=models.Sum(&#39;accepted_sum&#39;))[&quot;sum&quot;]&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="Scholarship"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.Scholarship">[docs]</a><span class="k">class</span> <span class="nc">Scholarship</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="s2">&quot;Название&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="nb">sum</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FloatField</span><span class="p">(</span><span class="s2">&quot;Сумма&quot;</span><span class="p">)</span>
+    <span class="n">MONTH</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">SEMESTER</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">YEAR</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">PAYMENT_FREQUENCY</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">MONTH</span><span class="p">,</span> <span class="s2">&quot;Раз в месяц&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">SEMESTER</span><span class="p">,</span> <span class="s2">&quot;Раз в семестр&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">YEAR</span><span class="p">,</span> <span class="s2">&quot;Раз в год&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">frequency</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="s2">&quot;Частота выплат&quot;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">PAYMENT_FREQUENCY</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">MONTH</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;стипендия&quot;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;стипендии&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span></div>
+
+
+<div class="viewcode-block" id="Scholar"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.admin.Scholar">[docs]</a><span class="k">class</span> <span class="nc">Scholar</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">student</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">StudentInfo</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Студент&quot;</span><span class="p">)</span>
+    <span class="n">scholarship</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Scholarship</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s2">&quot;Стипендия&quot;</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;стипендиат&quot;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;стипендиаты&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scholarship</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">student</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Pavel Semenenko.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

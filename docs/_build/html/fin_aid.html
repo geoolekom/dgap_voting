@@ -1,0 +1,1410 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>fin_aid package &#8212; DGAP Services 0.3 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="fin_aid.templatetags package" href="fin_aid.templatetags.html" />
+    <link rel="prev" title="blog.templatetags package" href="blog.templatetags.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="fin-aid-package">
+<h1>fin_aid package<a class="headerlink" href="#fin-aid-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fin_aid.templatetags.html">fin_aid.templatetags package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fin_aid.templatetags.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fin_aid.templatetags.html#module-fin_aid.templatetags.fin_aid_extras">fin_aid.templatetags.fin_aid_extras module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fin_aid.templatetags.html#module-fin_aid.templatetags">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-fin_aid.admin">
+<span id="fin-aid-admin-module"></span><h2>fin_aid.admin module<a class="headerlink" href="#module-fin_aid.admin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="fin_aid.admin.AidDocumentInline">
+<em class="property">class </em><code class="descclassname">fin_aid.admin.</code><code class="descname">AidDocumentInline</code><span class="sig-paren">(</span><em>parent_model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/admin.html#AidDocumentInline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.admin.AidDocumentInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.TabularInline</span></code></p>
+<dl class="attribute">
+<dt id="fin_aid.admin.AidDocumentInline.media">
+<code class="descname">media</code><a class="headerlink" href="#fin_aid.admin.AidDocumentInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.AidDocumentInline.model">
+<code class="descname">model</code><a class="headerlink" href="#fin_aid.admin.AidDocumentInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">AidDocument</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.admin.AidRequestAdmin">
+<em class="property">class </em><code class="descclassname">fin_aid.admin.</code><code class="descname">AidRequestAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/admin.html#AidRequestAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="class">
+<dt id="fin_aid.admin.AidRequestAdmin.Media">
+<em class="property">class </em><code class="descname">Media</code><a class="reference internal" href="_modules/fin_aid/admin.html#AidRequestAdmin.Media"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.Media" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="attribute">
+<dt id="fin_aid.admin.AidRequestAdmin.Media.css">
+<code class="descname">css</code><em class="property"> = {'all': ('//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css',)}</em><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.Media.css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.AidRequestAdmin.Media.js">
+<code class="descname">js</code><em class="property"> = ('//code.jquery.com/jquery-2.1.1.min.js', '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js')</em><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.Media.js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.admin.AidRequestAdmin.change_view">
+<code class="descname">change_view</code><span class="sig-paren">(</span><em>request</em>, <em>object_id</em>, <em>form_url=''</em>, <em>extra_context=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/admin.html#AidRequestAdmin.change_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.change_view" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.AidRequestAdmin.date_hierarchy">
+<code class="descname">date_hierarchy</code><em class="property"> = 'add_dttm'</em><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.date_hierarchy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.AidRequestAdmin.fieldsets">
+<code class="descname">fieldsets</code><em class="property"> = [(None, {'fields': (('applicant', 'author'), ('category', 'urgent'), 'reason', ('req_sum', 'accepted_sum'), 'status', ('month_of_payment', 'payment_dt'), 'examination_comment', ('submitted_paper', 'paid_with_cash', 'verified'), 'vk_link')}), ('Изображения', {'fields': ('images_tags',), 'classes': ('collapse',)})]</em><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.fieldsets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.AidRequestAdmin.form">
+<code class="descname">form</code><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.form" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">AidRequestAdminForm</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.admin.AidRequestAdmin.get_applicant_name">
+<code class="descname">get_applicant_name</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/admin.html#AidRequestAdmin.get_applicant_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.get_applicant_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.admin.AidRequestAdmin.get_changelist">
+<code class="descname">get_changelist</code><span class="sig-paren">(</span><em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/admin.html#AidRequestAdmin.get_changelist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.get_changelist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.admin.AidRequestAdmin.get_readonly_fields">
+<code class="descname">get_readonly_fields</code><span class="sig-paren">(</span><em>request</em>, <em>obj=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/admin.html#AidRequestAdmin.get_readonly_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.get_readonly_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can change applicant only if request is created by another person</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.AidRequestAdmin.inlines">
+<code class="descname">inlines</code><em class="property"> = [&lt;class 'fin_aid.admin.AidDocumentInline'&gt;]</em><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.inlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.AidRequestAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ['get_applicant_name', 'add_dttm', 'category', 'req_sum', 'urgent', 'status', 'accepted_sum', 'payment_dt', 'submitted_paper']</em><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.AidRequestAdmin.list_display_links">
+<code class="descname">list_display_links</code><em class="property"> = ['get_applicant_name', 'add_dttm', 'category', 'req_sum']</em><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.list_display_links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.AidRequestAdmin.list_editable">
+<code class="descname">list_editable</code><em class="property"> = ['status', 'accepted_sum', 'payment_dt', 'submitted_paper']</em><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.list_editable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.AidRequestAdmin.list_filter">
+<code class="descname">list_filter</code><em class="property"> = [&lt;class 'fin_aid.admin.PaymentMonthFilter'&gt;, 'status', 'category', 'urgent', 'submitted_paper', 'paid_with_cash', 'verified']</em><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.AidRequestAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.admin.AidRequestAdmin.save_model">
+<code class="descname">save_model</code><span class="sig-paren">(</span><em>request</em>, <em>obj</em>, <em>form</em>, <em>change</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/admin.html#AidRequestAdmin.save_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.save_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.AidRequestAdmin.search_fields">
+<code class="descname">search_fields</code><em class="property"> = ['applicant__first_name', 'applicant__last_name', 'reason']</em><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.search_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.admin.AidRequestAdmin.vk_link">
+<code class="descname">vk_link</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/admin.html#AidRequestAdmin.vk_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.admin.AidRequestAdmin.vk_link" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.admin.AidRequestChangeList">
+<em class="property">class </em><code class="descclassname">fin_aid.admin.</code><code class="descname">AidRequestChangeList</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/admin.html#AidRequestChangeList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.admin.AidRequestChangeList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.views.main.ChangeList</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.admin.CategoryAdmin">
+<em class="property">class </em><code class="descclassname">fin_aid.admin.</code><code class="descname">CategoryAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/admin.html#CategoryAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.admin.CategoryAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="fin_aid.admin.CategoryAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ('name', 'reason', 'max_sum', 'max_quantity', 'notifications')</em><a class="headerlink" href="#fin_aid.admin.CategoryAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.CategoryAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#fin_aid.admin.CategoryAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.admin.MonthlyDataAdmin">
+<em class="property">class </em><code class="descclassname">fin_aid.admin.</code><code class="descname">MonthlyDataAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/admin.html#MonthlyDataAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.admin.MonthlyDataAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="fin_aid.admin.MonthlyDataAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ('year', 'month', 'limit', 'deadline_dt', 'student_deadline_dt', 'payment_dt')</em><a class="headerlink" href="#fin_aid.admin.MonthlyDataAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.MonthlyDataAdmin.list_display_links">
+<code class="descname">list_display_links</code><em class="property"> = ('year', 'month', 'limit', 'deadline_dt', 'student_deadline_dt', 'payment_dt')</em><a class="headerlink" href="#fin_aid.admin.MonthlyDataAdmin.list_display_links" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.MonthlyDataAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#fin_aid.admin.MonthlyDataAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.admin.PaymentMonthFilter">
+<em class="property">class </em><code class="descclassname">fin_aid.admin.</code><code class="descname">PaymentMonthFilter</code><span class="sig-paren">(</span><em>request</em>, <em>params</em>, <em>model</em>, <em>model_admin</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/admin.html#PaymentMonthFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.admin.PaymentMonthFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.filters.SimpleListFilter</span></code></p>
+<dl class="method">
+<dt id="fin_aid.admin.PaymentMonthFilter.lookups">
+<code class="descname">lookups</code><span class="sig-paren">(</span><em>request</em>, <em>model_admin</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/admin.html#PaymentMonthFilter.lookups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.admin.PaymentMonthFilter.lookups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.PaymentMonthFilter.parameter_name">
+<code class="descname">parameter_name</code><em class="property"> = 'payment_dt'</em><a class="headerlink" href="#fin_aid.admin.PaymentMonthFilter.parameter_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.admin.PaymentMonthFilter.queryset">
+<code class="descname">queryset</code><span class="sig-paren">(</span><em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/admin.html#PaymentMonthFilter.queryset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.admin.PaymentMonthFilter.queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.PaymentMonthFilter.title">
+<code class="descname">title</code><em class="property"> = 'Месяц выплаты'</em><a class="headerlink" href="#fin_aid.admin.PaymentMonthFilter.title" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.admin.ScholarAdmin">
+<em class="property">class </em><code class="descclassname">fin_aid.admin.</code><code class="descname">ScholarAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/admin.html#ScholarAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.admin.ScholarAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="fin_aid.admin.ScholarAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ['student', 'scholarship']</em><a class="headerlink" href="#fin_aid.admin.ScholarAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.ScholarAdmin.list_filter">
+<code class="descname">list_filter</code><em class="property"> = ['scholarship']</em><a class="headerlink" href="#fin_aid.admin.ScholarAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.ScholarAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#fin_aid.admin.ScholarAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.admin.ScholarshipAdmin">
+<em class="property">class </em><code class="descclassname">fin_aid.admin.</code><code class="descname">ScholarshipAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/admin.html#ScholarshipAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.admin.ScholarshipAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="fin_aid.admin.ScholarshipAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ['name', 'sum', 'frequency']</em><a class="headerlink" href="#fin_aid.admin.ScholarshipAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.ScholarshipAdmin.list_filter">
+<code class="descname">list_filter</code><em class="property"> = ['frequency']</em><a class="headerlink" href="#fin_aid.admin.ScholarshipAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.admin.ScholarshipAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#fin_aid.admin.ScholarshipAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-fin_aid.create_paper">
+<span id="fin-aid-create-paper-module"></span><h2>fin_aid.create_paper module<a class="headerlink" href="#module-fin_aid.create_paper" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="fin_aid.create_paper.create_paper">
+<code class="descclassname">fin_aid.create_paper.</code><code class="descname">create_paper</code><span class="sig-paren">(</span><em>aid_request: fin_aid.models.AidRequest</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/create_paper.html#create_paper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.create_paper.create_paper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="fin_aid.create_paper.get_sex">
+<code class="descclassname">fin_aid.create_paper.</code><code class="descname">get_sex</code><span class="sig-paren">(</span><em>user: django.contrib.auth.models.User</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/create_paper.html#get_sex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.create_paper.get_sex" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-fin_aid.forms">
+<span id="fin-aid-forms-module"></span><h2>fin_aid.forms module<a class="headerlink" href="#module-fin_aid.forms" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="fin_aid.forms.AidRequestAdminForm">
+<em class="property">class </em><code class="descclassname">fin_aid.forms.</code><code class="descname">AidRequestAdminForm</code><span class="sig-paren">(</span><em>data=None</em>, <em>files=None</em>, <em>auto_id='id_%s'</em>, <em>prefix=None</em>, <em>initial=None</em>, <em>error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em>label_suffix=None</em>, <em>empty_permitted=False</em>, <em>instance=None</em>, <em>use_required_attribute=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/forms.html#AidRequestAdminForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.forms.AidRequestAdminForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.forms.models.ModelForm</span></code></p>
+<dl class="attribute">
+<dt id="fin_aid.forms.AidRequestAdminForm.FOLLOWING">
+<code class="descname">FOLLOWING</code><em class="property"> = 3</em><a class="headerlink" href="#fin_aid.forms.AidRequestAdminForm.FOLLOWING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.forms.AidRequestAdminForm.MONTHS">
+<code class="descname">MONTHS</code><em class="property"> = [(1, 'Ближайший месяц'), (2, 'Следующий месяц'), (3, 'Через месяц')]</em><a class="headerlink" href="#fin_aid.forms.AidRequestAdminForm.MONTHS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.forms.AidRequestAdminForm.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="reference internal" href="_modules/fin_aid/forms.html#AidRequestAdminForm.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.forms.AidRequestAdminForm.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="attribute">
+<dt id="fin_aid.forms.AidRequestAdminForm.Meta.exclude">
+<code class="descname">exclude</code><em class="property"> = ['examination_dttm']</em><a class="headerlink" href="#fin_aid.forms.AidRequestAdminForm.Meta.exclude" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.forms.AidRequestAdminForm.Meta.model">
+<code class="descname">model</code><a class="headerlink" href="#fin_aid.forms.AidRequestAdminForm.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">AidRequest</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.forms.AidRequestAdminForm.Meta.widgets">
+<code class="descname">widgets</code><em class="property"> = {'applicant': &lt;django_select2.forms.ModelSelect2Widget object&gt;, 'author': &lt;django_select2.forms.ModelSelect2Widget object&gt;}</em><a class="headerlink" href="#fin_aid.forms.AidRequestAdminForm.Meta.widgets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.forms.AidRequestAdminForm.NEXT">
+<code class="descname">NEXT</code><em class="property"> = 2</em><a class="headerlink" href="#fin_aid.forms.AidRequestAdminForm.NEXT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.forms.AidRequestAdminForm.THIS">
+<code class="descname">THIS</code><em class="property"> = 1</em><a class="headerlink" href="#fin_aid.forms.AidRequestAdminForm.THIS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.forms.AidRequestAdminForm.base_fields">
+<code class="descname">base_fields</code><em class="property"> = OrderedDict([('author', &lt;django.forms.models.ModelChoiceField object&gt;), ('applicant', &lt;django.forms.models.ModelChoiceField object&gt;), ('category', &lt;django.forms.models.ModelChoiceField object&gt;), ('reason', &lt;django.forms.fields.CharField object&gt;), ('req_sum', &lt;django.forms.fields.FloatField object&gt;), ('urgent', &lt;django.forms.fields.BooleanField object&gt;), ('accepted_sum', &lt;django.forms.fields.FloatField object&gt;), ('status', &lt;django.forms.fields.TypedChoiceField object&gt;), ('payment_dt', &lt;django.forms.fields.DateField object&gt;), ('examination_comment', &lt;django.forms.fields.CharField object&gt;), ('submitted_paper', &lt;django.forms.fields.BooleanField object&gt;), ('paid_with_cash', &lt;django.forms.fields.BooleanField object&gt;), ('verified', &lt;django.forms.fields.BooleanField object&gt;), ('month_of_payment', &lt;django.forms.fields.ChoiceField object&gt;)])</em><a class="headerlink" href="#fin_aid.forms.AidRequestAdminForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.forms.AidRequestAdminForm.declared_fields">
+<code class="descname">declared_fields</code><em class="property"> = OrderedDict([('month_of_payment', &lt;django.forms.fields.ChoiceField object&gt;)])</em><a class="headerlink" href="#fin_aid.forms.AidRequestAdminForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.forms.AidRequestAdminForm.media">
+<code class="descname">media</code><a class="headerlink" href="#fin_aid.forms.AidRequestAdminForm.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.forms.AidRequestCreateForm">
+<em class="property">class </em><code class="descclassname">fin_aid.forms.</code><code class="descname">AidRequestCreateForm</code><span class="sig-paren">(</span><em>data=None</em>, <em>files=None</em>, <em>auto_id='id_%s'</em>, <em>prefix=None</em>, <em>initial=None</em>, <em>error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em>label_suffix=None</em>, <em>empty_permitted=False</em>, <em>instance=None</em>, <em>use_required_attribute=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/forms.html#AidRequestCreateForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.forms.AidRequestCreateForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.forms.models.ModelForm</span></code></p>
+<dl class="class">
+<dt id="fin_aid.forms.AidRequestCreateForm.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="reference internal" href="_modules/fin_aid/forms.html#AidRequestCreateForm.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.forms.AidRequestCreateForm.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="attribute">
+<dt id="fin_aid.forms.AidRequestCreateForm.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ['category', 'reason', 'req_sum', 'urgent']</em><a class="headerlink" href="#fin_aid.forms.AidRequestCreateForm.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.forms.AidRequestCreateForm.Meta.model">
+<code class="descname">model</code><a class="headerlink" href="#fin_aid.forms.AidRequestCreateForm.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">AidRequest</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.forms.AidRequestCreateForm.base_fields">
+<code class="descname">base_fields</code><em class="property"> = OrderedDict([('category', &lt;django.forms.models.ModelChoiceField object&gt;), ('reason', &lt;django.forms.fields.CharField object&gt;), ('req_sum', &lt;django.forms.fields.FloatField object&gt;), ('urgent', &lt;django.forms.fields.BooleanField object&gt;), ('document1', &lt;django.forms.fields.FileField object&gt;), ('document2', &lt;django.forms.fields.FileField object&gt;), ('document3', &lt;django.forms.fields.FileField object&gt;)])</em><a class="headerlink" href="#fin_aid.forms.AidRequestCreateForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.forms.AidRequestCreateForm.declared_fields">
+<code class="descname">declared_fields</code><em class="property"> = OrderedDict([('document1', &lt;django.forms.fields.FileField object&gt;), ('document2', &lt;django.forms.fields.FileField object&gt;), ('document3', &lt;django.forms.fields.FileField object&gt;)])</em><a class="headerlink" href="#fin_aid.forms.AidRequestCreateForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.forms.AidRequestCreateForm.media">
+<code class="descname">media</code><a class="headerlink" href="#fin_aid.forms.AidRequestCreateForm.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.forms.SelectExportMonthForm">
+<em class="property">class </em><code class="descclassname">fin_aid.forms.</code><code class="descname">SelectExportMonthForm</code><span class="sig-paren">(</span><em>data=None</em>, <em>files=None</em>, <em>auto_id='id_%s'</em>, <em>prefix=None</em>, <em>initial=None</em>, <em>error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em>label_suffix=None</em>, <em>empty_permitted=False</em>, <em>field_order=None</em>, <em>use_required_attribute=None</em>, <em>renderer=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/forms.html#SelectExportMonthForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.forms.SelectExportMonthForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.forms.forms.Form</span></code></p>
+<dl class="attribute">
+<dt id="fin_aid.forms.SelectExportMonthForm.base_fields">
+<code class="descname">base_fields</code><em class="property"> = OrderedDict([('year', &lt;django.forms.fields.IntegerField object&gt;), ('month', &lt;django.forms.fields.ChoiceField object&gt;)])</em><a class="headerlink" href="#fin_aid.forms.SelectExportMonthForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.forms.SelectExportMonthForm.declared_fields">
+<code class="descname">declared_fields</code><em class="property"> = OrderedDict([('year', &lt;django.forms.fields.IntegerField object&gt;), ('month', &lt;django.forms.fields.ChoiceField object&gt;)])</em><a class="headerlink" href="#fin_aid.forms.SelectExportMonthForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.forms.SelectExportMonthForm.media">
+<code class="descname">media</code><a class="headerlink" href="#fin_aid.forms.SelectExportMonthForm.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-fin_aid.models">
+<span id="fin-aid-models-module"></span><h2>fin_aid.models module<a class="headerlink" href="#module-fin_aid.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="fin_aid.models.AidDocument">
+<em class="property">class </em><code class="descclassname">fin_aid.models.</code><code class="descname">AidDocument</code><span class="sig-paren">(</span><em>id</em>, <em>file</em>, <em>request</em>, <em>is_application_paper</em>, <em>is_image</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#AidDocument"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.AidDocument" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="exception">
+<dt id="fin_aid.models.AidDocument.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#fin_aid.models.AidDocument.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="fin_aid.models.AidDocument.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#fin_aid.models.AidDocument.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidDocument.file">
+<code class="descname">file</code><a class="headerlink" href="#fin_aid.models.AidDocument.file" title="Permalink to this definition">¶</a></dt>
+<dd><p>The descriptor for the file attribute on the model instance. Returns a
+FieldFile when accessed so you can do stuff like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">myapp.models</span> <span class="k">import</span> <span class="n">MyModel</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">MyModel</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">size</span>
+</pre></div>
+</div>
+<p>Assigns a file object on assignment so you can do:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/path/to/hello.world&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">instance</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidDocument.id">
+<code class="descname">id</code><a class="headerlink" href="#fin_aid.models.AidDocument.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidDocument.is_application_paper">
+<code class="descname">is_application_paper</code><a class="headerlink" href="#fin_aid.models.AidDocument.is_application_paper" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidDocument.is_image">
+<code class="descname">is_image</code><a class="headerlink" href="#fin_aid.models.AidDocument.is_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidDocument.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#fin_aid.models.AidDocument.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidDocument.request">
+<code class="descname">request</code><a class="headerlink" href="#fin_aid.models.AidDocument.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">child.parent</span></code> is a <code class="docutils literal"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidDocument.request_id">
+<code class="descname">request_id</code><a class="headerlink" href="#fin_aid.models.AidDocument.request_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.models.AidRequest">
+<em class="property">class </em><code class="descclassname">fin_aid.models.</code><code class="descname">AidRequest</code><span class="sig-paren">(</span><em>id</em>, <em>author</em>, <em>applicant</em>, <em>category</em>, <em>reason</em>, <em>req_sum</em>, <em>urgent</em>, <em>accepted_sum</em>, <em>status</em>, <em>add_dttm</em>, <em>examination_dttm</em>, <em>payment_dt</em>, <em>examination_comment</em>, <em>submitted_paper</em>, <em>paid_with_cash</em>, <em>verified</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#AidRequest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.AidRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.ACCEPTED">
+<code class="descname">ACCEPTED</code><em class="property"> = 2</em><a class="headerlink" href="#fin_aid.models.AidRequest.ACCEPTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.AID_REQUEST_STATUS">
+<code class="descname">AID_REQUEST_STATUS</code><em class="property"> = ((1, 'Заявление рассматривается'), (2, 'Заявление одобрено'), (3, 'В заявлении отказано'), (4, 'Необходимо уточнить данные'), (5, 'Предварительно одобрено'))</em><a class="headerlink" href="#fin_aid.models.AidRequest.AID_REQUEST_STATUS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.DECLINED">
+<code class="descname">DECLINED</code><em class="property"> = 3</em><a class="headerlink" href="#fin_aid.models.AidRequest.DECLINED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="fin_aid.models.AidRequest.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#fin_aid.models.AidRequest.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.INFO_NEEDED">
+<code class="descname">INFO_NEEDED</code><em class="property"> = 4</em><a class="headerlink" href="#fin_aid.models.AidRequest.INFO_NEEDED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="fin_aid.models.AidRequest.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#fin_aid.models.AidRequest.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.PRE_ACCEPTED">
+<code class="descname">PRE_ACCEPTED</code><em class="property"> = 5</em><a class="headerlink" href="#fin_aid.models.AidRequest.PRE_ACCEPTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.WAITING">
+<code class="descname">WAITING</code><em class="property"> = 1</em><a class="headerlink" href="#fin_aid.models.AidRequest.WAITING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.accepted_sum">
+<code class="descname">accepted_sum</code><a class="headerlink" href="#fin_aid.models.AidRequest.accepted_sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.add_dttm">
+<code class="descname">add_dttm</code><a class="headerlink" href="#fin_aid.models.AidRequest.add_dttm" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.aiddocument_set">
+<code class="descname">aiddocument_set</code><a class="headerlink" href="#fin_aid.models.AidRequest.aiddocument_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">parent.children</span></code> is a <code class="docutils literal"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.applicant">
+<code class="descname">applicant</code><a class="headerlink" href="#fin_aid.models.AidRequest.applicant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">child.parent</span></code> is a <code class="docutils literal"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.applicant_id">
+<code class="descname">applicant_id</code><a class="headerlink" href="#fin_aid.models.AidRequest.applicant_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.author">
+<code class="descname">author</code><a class="headerlink" href="#fin_aid.models.AidRequest.author" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">child.parent</span></code> is a <code class="docutils literal"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.author_id">
+<code class="descname">author_id</code><a class="headerlink" href="#fin_aid.models.AidRequest.author_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.models.AidRequest.can_view">
+<code class="descname">can_view</code><span class="sig-paren">(</span><em>user</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#AidRequest.can_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.AidRequest.can_view" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.category">
+<code class="descname">category</code><a class="headerlink" href="#fin_aid.models.AidRequest.category" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">child.parent</span></code> is a <code class="docutils literal"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.category_id">
+<code class="descname">category_id</code><a class="headerlink" href="#fin_aid.models.AidRequest.category_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.examination_comment">
+<code class="descname">examination_comment</code><a class="headerlink" href="#fin_aid.models.AidRequest.examination_comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.examination_dttm">
+<code class="descname">examination_dttm</code><a class="headerlink" href="#fin_aid.models.AidRequest.examination_dttm" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.models.AidRequest.get_absolute_url">
+<code class="descname">get_absolute_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#AidRequest.get_absolute_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.AidRequest.get_absolute_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.models.AidRequest.get_next_by_add_dttm">
+<code class="descname">get_next_by_add_dttm</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fin_aid.models.AidRequest.get_next_by_add_dttm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.models.AidRequest.get_previous_by_add_dttm">
+<code class="descname">get_previous_by_add_dttm</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fin_aid.models.AidRequest.get_previous_by_add_dttm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.models.AidRequest.get_status_display">
+<code class="descname">get_status_display</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fin_aid.models.AidRequest.get_status_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.id">
+<code class="descname">id</code><a class="headerlink" href="#fin_aid.models.AidRequest.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.models.AidRequest.images_tags">
+<code class="descname">images_tags</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#AidRequest.images_tags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.AidRequest.images_tags" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#fin_aid.models.AidRequest.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.paid_with_cash">
+<code class="descname">paid_with_cash</code><a class="headerlink" href="#fin_aid.models.AidRequest.paid_with_cash" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.payment_dt">
+<code class="descname">payment_dt</code><a class="headerlink" href="#fin_aid.models.AidRequest.payment_dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.reason">
+<code class="descname">reason</code><a class="headerlink" href="#fin_aid.models.AidRequest.reason" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.req_sum">
+<code class="descname">req_sum</code><a class="headerlink" href="#fin_aid.models.AidRequest.req_sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.status">
+<code class="descname">status</code><a class="headerlink" href="#fin_aid.models.AidRequest.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.status_text">
+<code class="descname">status_text</code><a class="headerlink" href="#fin_aid.models.AidRequest.status_text" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.submitted_paper">
+<code class="descname">submitted_paper</code><a class="headerlink" href="#fin_aid.models.AidRequest.submitted_paper" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="fin_aid.models.AidRequest.to_csv">
+<em class="property">static </em><code class="descname">to_csv</code><span class="sig-paren">(</span><em>filename</em>, <em>year=None</em>, <em>month=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#AidRequest.to_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.AidRequest.to_csv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.urgent">
+<code class="descname">urgent</code><a class="headerlink" href="#fin_aid.models.AidRequest.urgent" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="fin_aid.models.AidRequest.user_requests">
+<em class="property">classmethod </em><code class="descname">user_requests</code><span class="sig-paren">(</span><em>user: django.contrib.auth.models.User</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#AidRequest.user_requests"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.AidRequest.user_requests" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.AidRequest.verified">
+<code class="descname">verified</code><a class="headerlink" href="#fin_aid.models.AidRequest.verified" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.models.Category">
+<em class="property">class </em><code class="descclassname">fin_aid.models.</code><code class="descname">Category</code><span class="sig-paren">(</span><em>id</em>, <em>name</em>, <em>reason</em>, <em>max_sum</em>, <em>max_quantity</em>, <em>notifications</em>, <em>show_to_students</em>, <em>is_senate</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#Category"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.Category" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="exception">
+<dt id="fin_aid.models.Category.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#fin_aid.models.Category.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="fin_aid.models.Category.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#fin_aid.models.Category.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Category.aidrequest_set">
+<code class="descname">aidrequest_set</code><a class="headerlink" href="#fin_aid.models.Category.aidrequest_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">parent.children</span></code> is a <code class="docutils literal"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Category.id">
+<code class="descname">id</code><a class="headerlink" href="#fin_aid.models.Category.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Category.is_senate">
+<code class="descname">is_senate</code><a class="headerlink" href="#fin_aid.models.Category.is_senate" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Category.max_quantity">
+<code class="descname">max_quantity</code><a class="headerlink" href="#fin_aid.models.Category.max_quantity" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Category.max_sum">
+<code class="descname">max_sum</code><a class="headerlink" href="#fin_aid.models.Category.max_sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Category.name">
+<code class="descname">name</code><a class="headerlink" href="#fin_aid.models.Category.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Category.notifications">
+<code class="descname">notifications</code><a class="headerlink" href="#fin_aid.models.Category.notifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Category.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#fin_aid.models.Category.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Category.reason">
+<code class="descname">reason</code><a class="headerlink" href="#fin_aid.models.Category.reason" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Category.show_to_students">
+<code class="descname">show_to_students</code><a class="headerlink" href="#fin_aid.models.Category.show_to_students" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.models.MonthlyData">
+<em class="property">class </em><code class="descclassname">fin_aid.models.</code><code class="descname">MonthlyData</code><span class="sig-paren">(</span><em>id</em>, <em>year</em>, <em>month</em>, <em>limit</em>, <em>deadline_dt</em>, <em>student_deadline_dt</em>, <em>payment_dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#MonthlyData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.MonthlyData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="exception">
+<dt id="fin_aid.models.MonthlyData.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#fin_aid.models.MonthlyData.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.MonthlyData.MONTH">
+<code class="descname">MONTH</code><em class="property"> = [(1, 'Январь'), (2, 'Февраль'), (3, 'Март'), (4, 'Апрель'), (5, 'Май'), (6, 'Июнь'), (7, 'Июль'), (8, 'Август'), (9, 'Сентябрь'), (10, 'Октябрь'), (11, 'Ноябрь'), (12, 'Декабрь')]</em><a class="headerlink" href="#fin_aid.models.MonthlyData.MONTH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="fin_aid.models.MonthlyData.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#fin_aid.models.MonthlyData.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="fin_aid.models.MonthlyData.current">
+<em class="property">classmethod </em><code class="descname">current</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#MonthlyData.current"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.MonthlyData.current" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.MonthlyData.deadline_dt">
+<code class="descname">deadline_dt</code><a class="headerlink" href="#fin_aid.models.MonthlyData.deadline_dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.models.MonthlyData.get_month_display">
+<code class="descname">get_month_display</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fin_aid.models.MonthlyData.get_month_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.models.MonthlyData.get_next_by_deadline_dt">
+<code class="descname">get_next_by_deadline_dt</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fin_aid.models.MonthlyData.get_next_by_deadline_dt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.models.MonthlyData.get_next_by_payment_dt">
+<code class="descname">get_next_by_payment_dt</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fin_aid.models.MonthlyData.get_next_by_payment_dt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.models.MonthlyData.get_next_by_student_deadline_dt">
+<code class="descname">get_next_by_student_deadline_dt</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fin_aid.models.MonthlyData.get_next_by_student_deadline_dt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.models.MonthlyData.get_previous_by_deadline_dt">
+<code class="descname">get_previous_by_deadline_dt</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fin_aid.models.MonthlyData.get_previous_by_deadline_dt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.models.MonthlyData.get_previous_by_payment_dt">
+<code class="descname">get_previous_by_payment_dt</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fin_aid.models.MonthlyData.get_previous_by_payment_dt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.models.MonthlyData.get_previous_by_student_deadline_dt">
+<code class="descname">get_previous_by_student_deadline_dt</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fin_aid.models.MonthlyData.get_previous_by_student_deadline_dt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.MonthlyData.id">
+<code class="descname">id</code><a class="headerlink" href="#fin_aid.models.MonthlyData.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.MonthlyData.limit">
+<code class="descname">limit</code><a class="headerlink" href="#fin_aid.models.MonthlyData.limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.MonthlyData.month">
+<code class="descname">month</code><a class="headerlink" href="#fin_aid.models.MonthlyData.month" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="fin_aid.models.MonthlyData.next">
+<em class="property">classmethod </em><code class="descname">next</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#MonthlyData.next"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.MonthlyData.next" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.MonthlyData.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#fin_aid.models.MonthlyData.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.MonthlyData.payment_dt">
+<code class="descname">payment_dt</code><a class="headerlink" href="#fin_aid.models.MonthlyData.payment_dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.MonthlyData.student_deadline_dt">
+<code class="descname">student_deadline_dt</code><a class="headerlink" href="#fin_aid.models.MonthlyData.student_deadline_dt" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.MonthlyData.sum_used">
+<code class="descname">sum_used</code><a class="headerlink" href="#fin_aid.models.MonthlyData.sum_used" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.MonthlyData.year">
+<code class="descname">year</code><a class="headerlink" href="#fin_aid.models.MonthlyData.year" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.models.Scholar">
+<em class="property">class </em><code class="descclassname">fin_aid.models.</code><code class="descname">Scholar</code><span class="sig-paren">(</span><em>id</em>, <em>student</em>, <em>scholarship</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#Scholar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.Scholar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="exception">
+<dt id="fin_aid.models.Scholar.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#fin_aid.models.Scholar.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="fin_aid.models.Scholar.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#fin_aid.models.Scholar.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Scholar.id">
+<code class="descname">id</code><a class="headerlink" href="#fin_aid.models.Scholar.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Scholar.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#fin_aid.models.Scholar.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Scholar.scholarship">
+<code class="descname">scholarship</code><a class="headerlink" href="#fin_aid.models.Scholar.scholarship" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">child.parent</span></code> is a <code class="docutils literal"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Scholar.scholarship_id">
+<code class="descname">scholarship_id</code><a class="headerlink" href="#fin_aid.models.Scholar.scholarship_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Scholar.student">
+<code class="descname">student</code><a class="headerlink" href="#fin_aid.models.Scholar.student" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">child.parent</span></code> is a <code class="docutils literal"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Scholar.student_id">
+<code class="descname">student_id</code><a class="headerlink" href="#fin_aid.models.Scholar.student_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.models.Scholarship">
+<em class="property">class </em><code class="descclassname">fin_aid.models.</code><code class="descname">Scholarship</code><span class="sig-paren">(</span><em>id</em>, <em>name</em>, <em>sum</em>, <em>frequency</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#Scholarship"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.Scholarship" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="exception">
+<dt id="fin_aid.models.Scholarship.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#fin_aid.models.Scholarship.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Scholarship.MONTH">
+<code class="descname">MONTH</code><em class="property"> = 1</em><a class="headerlink" href="#fin_aid.models.Scholarship.MONTH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="fin_aid.models.Scholarship.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#fin_aid.models.Scholarship.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Scholarship.PAYMENT_FREQUENCY">
+<code class="descname">PAYMENT_FREQUENCY</code><em class="property"> = ((1, 'Раз в месяц'), (2, 'Раз в семестр'), (3, 'Раз в год'))</em><a class="headerlink" href="#fin_aid.models.Scholarship.PAYMENT_FREQUENCY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Scholarship.SEMESTER">
+<code class="descname">SEMESTER</code><em class="property"> = 2</em><a class="headerlink" href="#fin_aid.models.Scholarship.SEMESTER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Scholarship.YEAR">
+<code class="descname">YEAR</code><em class="property"> = 3</em><a class="headerlink" href="#fin_aid.models.Scholarship.YEAR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Scholarship.frequency">
+<code class="descname">frequency</code><a class="headerlink" href="#fin_aid.models.Scholarship.frequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.models.Scholarship.get_frequency_display">
+<code class="descname">get_frequency_display</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fin_aid.models.Scholarship.get_frequency_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Scholarship.id">
+<code class="descname">id</code><a class="headerlink" href="#fin_aid.models.Scholarship.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Scholarship.name">
+<code class="descname">name</code><a class="headerlink" href="#fin_aid.models.Scholarship.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Scholarship.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#fin_aid.models.Scholarship.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Scholarship.scholar_set">
+<code class="descname">scholar_set</code><a class="headerlink" href="#fin_aid.models.Scholarship.scholar_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">parent.children</span></code> is a <code class="docutils literal"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.models.Scholarship.sum">
+<code class="descname">sum</code><a class="headerlink" href="#fin_aid.models.Scholarship.sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="fin_aid.models.document_path">
+<code class="descclassname">fin_aid.models.</code><code class="descname">document_path</code><span class="sig-paren">(</span><em>instance</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#document_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.document_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="fin_aid.models.get_name">
+<code class="descclassname">fin_aid.models.</code><code class="descname">get_name</code><span class="sig-paren">(</span><em>self: django.contrib.auth.models.User</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#get_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.get_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="fin_aid.models.get_next_date">
+<code class="descclassname">fin_aid.models.</code><code class="descname">get_next_date</code><span class="sig-paren">(</span><em>dt=None</em>, <em>t='payment'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#get_next_date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.get_next_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="fin_aid.models.is_image">
+<code class="descclassname">fin_aid.models.</code><code class="descname">is_image</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#is_image"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.is_image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="fin_aid.models.user_hash">
+<code class="descclassname">fin_aid.models.</code><code class="descname">user_hash</code><span class="sig-paren">(</span><em>user</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/models.html#user_hash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.models.user_hash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-fin_aid.tests">
+<span id="fin-aid-tests-module"></span><h2>fin_aid.tests module<a class="headerlink" href="#module-fin_aid.tests" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-fin_aid.urls">
+<span id="fin-aid-urls-module"></span><h2>fin_aid.urls module<a class="headerlink" href="#module-fin_aid.urls" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-fin_aid.views">
+<span id="fin-aid-views-module"></span><h2>fin_aid.views module<a class="headerlink" href="#module-fin_aid.views" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="fin_aid.views.AidRequestCreate">
+<em class="property">class </em><code class="descclassname">fin_aid.views.</code><code class="descname">AidRequestCreate</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#AidRequestCreate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.AidRequestCreate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fin_aid.views.AidRequestCreateUpdate" title="fin_aid.views.AidRequestCreateUpdate"><code class="xref py py-class docutils literal"><span class="pre">fin_aid.views.AidRequestCreateUpdate</span></code></a>, <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.edit.BaseCreateView</span></code></p>
+<dl class="method">
+<dt id="fin_aid.views.AidRequestCreate.get_success_message">
+<code class="descname">get_success_message</code><span class="sig-paren">(</span><em>cleaned_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#AidRequestCreate.get_success_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.AidRequestCreate.get_success_message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.views.AidRequestCreateUpdate">
+<em class="property">class </em><code class="descclassname">fin_aid.views.</code><code class="descname">AidRequestCreateUpdate</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#AidRequestCreateUpdate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.AidRequestCreateUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.messages.views.SuccessMessageMixin</span></code>, <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.detail.SingleObjectTemplateResponseMixin</span></code>, <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.base.TemplateResponseMixin</span></code>, <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.edit.ModelFormMixin</span></code>, <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.edit.FormMixin</span></code>, <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.detail.SingleObjectMixin</span></code>, <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.edit.ProcessFormView</span></code>, <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.base.View</span></code></p>
+<dl class="method">
+<dt id="fin_aid.views.AidRequestCreateUpdate.dispatch">
+<code class="descname">dispatch</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fin_aid.views.AidRequestCreateUpdate.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.views.AidRequestCreateUpdate.form_class">
+<code class="descname">form_class</code><a class="headerlink" href="#fin_aid.views.AidRequestCreateUpdate.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">AidRequestCreateForm</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.views.AidRequestCreateUpdate.form_valid">
+<code class="descname">form_valid</code><span class="sig-paren">(</span><em>form</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#AidRequestCreateUpdate.form_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.AidRequestCreateUpdate.form_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.views.AidRequestCreateUpdate.get_context_data">
+<code class="descname">get_context_data</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#AidRequestCreateUpdate.get_context_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.AidRequestCreateUpdate.get_context_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.views.AidRequestCreateUpdate.get_success_url">
+<code class="descname">get_success_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#AidRequestCreateUpdate.get_success_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.AidRequestCreateUpdate.get_success_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.views.AidRequestCreateUpdate.model">
+<code class="descname">model</code><a class="headerlink" href="#fin_aid.views.AidRequestCreateUpdate.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">AidRequest</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.views.AidRequestCreateUpdate.template_name">
+<code class="descname">template_name</code><em class="property"> = 'fin_aid/aidrequest_form.html'</em><a class="headerlink" href="#fin_aid.views.AidRequestCreateUpdate.template_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.views.AidRequestDelete">
+<em class="property">class </em><code class="descclassname">fin_aid.views.</code><code class="descname">AidRequestDelete</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#AidRequestDelete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.AidRequestDelete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.edit.DeleteView</span></code></p>
+<dl class="method">
+<dt id="fin_aid.views.AidRequestDelete.dispatch">
+<code class="descname">dispatch</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#AidRequestDelete.dispatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.AidRequestDelete.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.views.AidRequestDelete.model">
+<code class="descname">model</code><a class="headerlink" href="#fin_aid.views.AidRequestDelete.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">AidRequest</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.views.AidRequestDelete.success_url">
+<code class="descname">success_url</code><em class="property"> = '/aid/requests'</em><a class="headerlink" href="#fin_aid.views.AidRequestDelete.success_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.views.AidRequestDetail">
+<em class="property">class </em><code class="descclassname">fin_aid.views.</code><code class="descname">AidRequestDetail</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#AidRequestDetail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.AidRequestDetail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.detail.DetailView</span></code></p>
+<dl class="method">
+<dt id="fin_aid.views.AidRequestDetail.dispatch">
+<code class="descname">dispatch</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#AidRequestDetail.dispatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.AidRequestDetail.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.views.AidRequestDetail.model">
+<code class="descname">model</code><a class="headerlink" href="#fin_aid.views.AidRequestDetail.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">AidRequest</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.views.AidRequestList">
+<em class="property">class </em><code class="descclassname">fin_aid.views.</code><code class="descname">AidRequestList</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#AidRequestList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.AidRequestList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.list.ListView</span></code></p>
+<dl class="method">
+<dt id="fin_aid.views.AidRequestList.dispatch">
+<code class="descname">dispatch</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#fin_aid.views.AidRequestList.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.views.AidRequestList.get_queryset">
+<code class="descname">get_queryset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#AidRequestList.get_queryset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.AidRequestList.get_queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.views.AidRequestList.model">
+<code class="descname">model</code><a class="headerlink" href="#fin_aid.views.AidRequestList.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">AidRequest</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.views.AidRequestUpdate">
+<em class="property">class </em><code class="descclassname">fin_aid.views.</code><code class="descname">AidRequestUpdate</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#AidRequestUpdate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.AidRequestUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#fin_aid.views.AidRequestCreateUpdate" title="fin_aid.views.AidRequestCreateUpdate"><code class="xref py py-class docutils literal"><span class="pre">fin_aid.views.AidRequestCreateUpdate</span></code></a>, <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.edit.BaseUpdateView</span></code></p>
+<dl class="method">
+<dt id="fin_aid.views.AidRequestUpdate.dispatch">
+<code class="descname">dispatch</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#AidRequestUpdate.dispatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.AidRequestUpdate.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.views.AidRequestUpdate.success_message">
+<code class="descname">success_message</code><em class="property"> = 'Заявление на матпомощь изменено. Результаты рассмотрения будут доступны в личном кабинете'</em><a class="headerlink" href="#fin_aid.views.AidRequestUpdate.success_message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="fin_aid.views.ExportAidRequest">
+<em class="property">class </em><code class="descclassname">fin_aid.views.</code><code class="descname">ExportAidRequest</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#ExportAidRequest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.ExportAidRequest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.edit.BaseFormView</span></code>, <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.edit.FormMixin</span></code>, <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.edit.ProcessFormView</span></code>, <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.base.View</span></code></p>
+<dl class="method">
+<dt id="fin_aid.views.ExportAidRequest.dispatch">
+<code class="descname">dispatch</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#ExportAidRequest.dispatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.ExportAidRequest.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.views.ExportAidRequest.form_class">
+<code class="descname">form_class</code><a class="headerlink" href="#fin_aid.views.ExportAidRequest.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">SelectExportMonthForm</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.views.ExportAidRequest.form_invalid">
+<code class="descname">form_invalid</code><span class="sig-paren">(</span><em>form</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#ExportAidRequest.form_invalid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.ExportAidRequest.form_invalid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="fin_aid.views.ExportAidRequest.form_valid">
+<code class="descname">form_valid</code><span class="sig-paren">(</span><em>form</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/views.html#ExportAidRequest.form_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.views.ExportAidRequest.form_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="fin_aid.views.ExportAidRequest.success_url">
+<code class="descname">success_url</code><em class="property"> = '/admin/fin_aid/aidrequest/'</em><a class="headerlink" href="#fin_aid.views.ExportAidRequest.success_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-fin_aid">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fin_aid" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="blog.templatetags.html" title="previous chapter">blog.templatetags package</a></li>
+      <li>Next: <a href="fin_aid.templatetags.html" title="next chapter">fin_aid.templatetags package</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Pavel Semenenko.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/fin_aid.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

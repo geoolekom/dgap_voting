@@ -1,0 +1,230 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>fin_aid.views &#8212; DGAP Services 0.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for fin_aid.views</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="k">import</span> <span class="n">DetailView</span><span class="p">,</span> <span class="n">ListView</span><span class="p">,</span> <span class="n">DeleteView</span>
+<span class="kn">from</span> <span class="nn">django.views.generic.edit</span> <span class="k">import</span> <span class="n">FormMixin</span><span class="p">,</span> <span class="n">ModelFormMixin</span><span class="p">,</span> <span class="n">BaseCreateView</span><span class="p">,</span> <span class="n">BaseUpdateView</span><span class="p">,</span> <span class="n">ProcessFormView</span><span class="p">,</span> <span class="n">BaseFormView</span>
+<span class="kn">from</span> <span class="nn">django.views.generic.base</span> <span class="k">import</span> <span class="n">TemplateResponseMixin</span><span class="p">,</span> <span class="n">View</span>
+<span class="kn">from</span> <span class="nn">django.views.generic.detail</span> <span class="k">import</span> <span class="n">SingleObjectTemplateResponseMixin</span><span class="p">,</span> <span class="n">SingleObjectMixin</span>
+<span class="kn">from</span> <span class="nn">django.contrib.messages.views</span> <span class="k">import</span> <span class="n">SuccessMessageMixin</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="k">import</span> <span class="n">login_required</span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="k">import</span> <span class="n">messages</span>
+<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="k">import</span> <span class="n">PermissionDenied</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="k">import</span> <span class="n">reverse</span><span class="p">,</span> <span class="n">reverse_lazy</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="k">import</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">redirect</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="k">import</span> <span class="n">timezone</span>
+<span class="kn">from</span> <span class="nn">django.utils.decorators</span> <span class="k">import</span> <span class="n">method_decorator</span>
+
+<span class="kn">from</span> <span class="nn">sendfile</span> <span class="k">import</span> <span class="n">sendfile</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">polls.views</span> <span class="k">import</span> <span class="n">make_win_csv</span>
+<span class="kn">from</span> <span class="nn">core.settings</span> <span class="k">import</span> <span class="n">MEDIA_ROOT</span><span class="p">,</span> <span class="n">BASE_DIR</span><span class="p">,</span> <span class="n">SENDFILE_ROOT</span>
+<span class="kn">from</span> <span class="nn">notifications.notify</span> <span class="k">import</span> <span class="n">vk_messages_allowed</span>
+
+<span class="kn">from</span> <span class="nn">.models</span> <span class="k">import</span> <span class="n">AidRequest</span><span class="p">,</span> <span class="n">AidDocument</span><span class="p">,</span> <span class="n">get_next_date</span><span class="p">,</span> <span class="n">is_image</span>
+<span class="kn">from</span> <span class="nn">.forms</span> <span class="k">import</span> <span class="n">AidRequestCreateForm</span><span class="p">,</span> <span class="n">SelectExportMonthForm</span>
+<span class="kn">from</span> <span class="nn">.create_paper</span> <span class="k">import</span> <span class="n">create_paper</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="AidRequestList"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.AidRequestList">[docs]</a><span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;dispatch&#39;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">AidRequestList</span><span class="p">(</span><span class="n">ListView</span><span class="p">):</span>
+    <span class="c1"># template_name = &#39;fin_aid/aidrequest_list.html&#39;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">AidRequest</span>
+
+<div class="viewcode-block" id="AidRequestList.get_queryset"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.AidRequestList.get_queryset">[docs]</a>    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">AidRequest</span><span class="o">.</span><span class="n">user_requests</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="AidRequestCreateUpdate"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.AidRequestCreateUpdate">[docs]</a><span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;dispatch&#39;</span><span class="p">)</span>
+<span class="c1"># Inherits all ancestors shared by CreateView and UpdateView + SuccessMessageMixin</span>
+<span class="k">class</span> <span class="nc">AidRequestCreateUpdate</span><span class="p">(</span><span class="n">SuccessMessageMixin</span><span class="p">,</span> <span class="n">SingleObjectTemplateResponseMixin</span><span class="p">,</span> <span class="n">TemplateResponseMixin</span><span class="p">,</span>
+                             <span class="n">ModelFormMixin</span><span class="p">,</span> <span class="n">FormMixin</span><span class="p">,</span> <span class="n">SingleObjectMixin</span><span class="p">,</span> <span class="n">ProcessFormView</span><span class="p">,</span> <span class="n">View</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">AidRequest</span>
+    <span class="n">form_class</span> <span class="o">=</span> <span class="n">AidRequestCreateForm</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s1">&#39;fin_aid/aidrequest_form.html&#39;</span>
+
+<div class="viewcode-block" id="AidRequestCreateUpdate.get_success_url"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.AidRequestCreateUpdate.get_success_url">[docs]</a>    <span class="k">def</span> <span class="nf">get_success_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;fin_aid:aid_request_detail&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">id</span><span class="p">,))</span></div>
+
+<div class="viewcode-block" id="AidRequestCreateUpdate.get_context_data"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.AidRequestCreateUpdate.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">AidRequestCreateUpdate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">context</span><span class="p">[</span><span class="s1">&#39;student_deadline_dt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_next_date</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;student_deadline&#39;</span><span class="p">)</span>
+        <span class="n">context</span><span class="p">[</span><span class="s1">&#39;payment_dt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_next_date</span><span class="p">(</span><span class="n">get_next_date</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;student_deadline&#39;</span><span class="p">),</span> <span class="s1">&#39;payment&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">context</span></div>
+
+<div class="viewcode-block" id="AidRequestCreateUpdate.form_valid"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.AidRequestCreateUpdate.form_valid">[docs]</a>    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">AidRequestCreateUpdate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">form_valid</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">applicant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">applicant</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+            <span class="n">document</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s1">&#39;document&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="n">document</span><span class="p">:</span>
+                <span class="n">AidDocument</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">document</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="n">is_image</span><span class="o">=</span><span class="n">is_image</span><span class="p">(</span><span class="n">document</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">applicant</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">is_approved</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">AidDocument</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">request</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="n">is_application_paper</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+                <span class="n">create_paper</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;request&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">})</span>
+
+        <span class="k">return</span> <span class="n">response</span></div></div>
+
+
+<div class="viewcode-block" id="AidRequestCreate"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.AidRequestCreate">[docs]</a><span class="k">class</span> <span class="nc">AidRequestCreate</span><span class="p">(</span><span class="n">AidRequestCreateUpdate</span><span class="p">,</span> <span class="n">BaseCreateView</span><span class="p">):</span>
+<div class="viewcode-block" id="AidRequestCreate.get_success_message"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.AidRequestCreate.get_success_message">[docs]</a>    <span class="k">def</span> <span class="nf">get_success_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cleaned_data</span><span class="p">):</span>
+        <span class="n">success_message</span> <span class="o">=</span> <span class="s2">&quot;Заявление на матпомощь принято. Результаты рассмотрения будут доступны в личном кабинете.&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">vk_messages_allowed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">):</span>
+            <span class="n">success_message</span> <span class="o">+=</span> <span class="s1">&#39; &lt;a class=&quot;alert-link&quot; href=</span><span class="si">{}</span><span class="s1">&gt;Разрешите получение уведомлений ВКонтакте,&lt;/a&gt; и мы &#39;</span> \
+                               <span class="s1">&#39;оповестим Вас о рассмотрении заявления!&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;blog:article_detail&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;notifications&#39;</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">success_message</span></div></div>
+
+
+<div class="viewcode-block" id="AidRequestUpdate"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.AidRequestUpdate">[docs]</a><span class="k">class</span> <span class="nc">AidRequestUpdate</span><span class="p">(</span><span class="n">AidRequestCreateUpdate</span><span class="p">,</span> <span class="n">BaseUpdateView</span><span class="p">):</span>
+    <span class="n">success_message</span> <span class="o">=</span> <span class="s2">&quot;Заявление на матпомощь изменено. Результаты рассмотрения будут доступны в личном кабинете&quot;</span>
+
+<div class="viewcode-block" id="AidRequestUpdate.dispatch"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.AidRequestUpdate.dispatch">[docs]</a>    <span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">aid_request</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">AidRequest</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pk&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">can_view</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">PermissionDenied</span>
+        <span class="k">if</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">status</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">AidRequest</span><span class="o">.</span><span class="n">WAITING</span><span class="p">,</span> <span class="n">AidRequest</span><span class="o">.</span><span class="n">INFO_NEEDED</span><span class="p">]:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Заявление уже рассмотрено, Вы не можете изменить его&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">reverse_lazy</span><span class="p">(</span><span class="s1">&#39;fin_aid:index&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">AidRequestUpdate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="AidRequestDelete"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.AidRequestDelete">[docs]</a><span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;dispatch&#39;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">AidRequestDelete</span><span class="p">(</span><span class="n">DeleteView</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">AidRequest</span>
+    <span class="n">success_url</span> <span class="o">=</span> <span class="n">reverse_lazy</span><span class="p">(</span><span class="s1">&#39;fin_aid:aid_request_list&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AidRequestDelete.dispatch"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.AidRequestDelete.dispatch">[docs]</a>    <span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">aid_request</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">AidRequest</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pk&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">can_view</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">PermissionDenied</span>
+        <span class="k">if</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">status</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">AidRequest</span><span class="o">.</span><span class="n">WAITING</span><span class="p">,</span> <span class="n">AidRequest</span><span class="o">.</span><span class="n">INFO_NEEDED</span><span class="p">]:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">add_message</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="n">messages</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span>
+                                 <span class="s2">&quot;Заявление уже рассмотрено, Вы не можете удалить его&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">reverse_lazy</span><span class="p">(</span><span class="s1">&#39;fin_aid:index&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">AidRequestDelete</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="AidRequestDetail"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.AidRequestDetail">[docs]</a><span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;dispatch&#39;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">AidRequestDetail</span><span class="p">(</span><span class="n">DetailView</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">AidRequest</span>
+
+<div class="viewcode-block" id="AidRequestDetail.dispatch"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.AidRequestDetail.dispatch">[docs]</a>    <span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">aid_request</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">AidRequest</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;pk&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">can_view</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">PermissionDenied</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">AidRequestDetail</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ExportAidRequest"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.ExportAidRequest">[docs]</a><span class="k">class</span> <span class="nc">ExportAidRequest</span><span class="p">(</span><span class="n">BaseFormView</span><span class="p">,</span> <span class="n">FormMixin</span><span class="p">,</span> <span class="n">ProcessFormView</span><span class="p">,</span> <span class="n">View</span><span class="p">):</span>
+    <span class="n">form_class</span> <span class="o">=</span> <span class="n">SelectExportMonthForm</span>
+    <span class="n">success_url</span> <span class="o">=</span> <span class="n">reverse_lazy</span><span class="p">(</span><span class="s2">&quot;admin:fin_aid_aidrequest_changelist&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ExportAidRequest.dispatch"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.ExportAidRequest.dispatch">[docs]</a>    <span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span> <span class="ow">or</span> \
+                <span class="p">(</span><span class="ow">not</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;finance&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_superuser</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">PermissionDenied</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">ExportAidRequest</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ExportAidRequest.form_invalid"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.ExportAidRequest.form_invalid">[docs]</a>    <span class="k">def</span> <span class="nf">form_invalid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Выберите допустимый год и месяц для создания выгрузки&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">reverse_lazy</span><span class="p">(</span><span class="s2">&quot;admin:fin_aid_aidrequest_changelist&quot;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="ExportAidRequest.form_valid"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.views.ExportAidRequest.form_valid">[docs]</a>    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+        <span class="n">year</span><span class="p">,</span> <span class="n">month</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">],</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s2">&quot;month&quot;</span><span class="p">]</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SENDFILE_ROOT</span><span class="p">,</span> <span class="s2">&quot;export_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">))</span>
+        <span class="n">AidRequest</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;Windows&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user_agent</span><span class="o">.</span><span class="n">os</span><span class="o">.</span><span class="n">family</span> <span class="ow">or</span> <span class="s1">&#39;windows&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user_agent</span><span class="o">.</span><span class="n">os</span><span class="o">.</span><span class="n">family</span><span class="p">:</span>
+            <span class="n">oldfilename</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SENDFILE_ROOT</span><span class="p">,</span> <span class="s2">&quot;export_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">win.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">make_win_csv</span><span class="p">(</span><span class="n">oldfilename</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">oldfilename</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Can&#39;t change file encoding for Windows&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sendfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">attachment</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">attachment_filename</span><span class="o">=</span><span class="s2">&quot;export_</span><span class="si">{}</span><span class="s2">_</span><span class="si">{}</span><span class="s2">.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">))</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Pavel Semenenko.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

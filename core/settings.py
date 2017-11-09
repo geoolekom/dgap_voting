@@ -275,12 +275,17 @@ LOGGING = {
 }
 
 import raven
+# Following code is workaround to allow setting up Django from docs/ subdir
+try:
+    RELEASE = raven.fetch_git_sha(os.path.dirname(os.pardir))
+except raven.exceptions.InvalidGitRepository:
+    RELEASE = raven.fetch_git_sha(os.path.abspath('..'))
 
 RAVEN_CONFIG = {
     'dsn': 'https://af8512c3bfe6466e92610a28d10584af:232450226e59481fb4f1020cdaad9d3e@sentry.io/225398',
     # If you are using git, you can also automatically configure the
     # release based on the git info.
-    'release': raven.fetch_git_sha(os.path.dirname(os.pardir)),
+    'release': RELEASE,
 }
 
 

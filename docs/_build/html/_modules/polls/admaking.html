@@ -1,0 +1,152 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>polls.admaking &#8212; DGAP Services 0.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for polls.admaking</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.template</span> <span class="k">import</span> <span class="n">RequestContext</span><span class="p">,</span> <span class="n">loader</span>
+<span class="kn">from</span> <span class="nn">polls.models</span> <span class="k">import</span> <span class="n">Poll</span> 
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="k">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">redirect</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="k">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="k">import</span> <span class="n">messages</span>
+<span class="kn">from</span> <span class="nn">sendfile</span> <span class="k">import</span> <span class="n">sendfile</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="k">import</span> <span class="n">settings</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">django_bleach.models</span> <span class="k">import</span> <span class="n">BleachField</span>
+<span class="kn">import</span> <span class="nn">pyqrcode</span>
+<span class="kn">from</span> <span class="nn">django.core.management</span> <span class="k">import</span> <span class="n">call_command</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;django.request&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="make_html_advert"><a class="viewcode-back" href="../../polls.html#polls.admaking.make_html_advert">[docs]</a><span class="k">def</span> <span class="nf">make_html_advert</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">poll_id</span><span class="p">,</span> <span class="n">poll_obj</span><span class="p">):</span>
+    <span class="n">qrcode_addr</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">SENDFILE_ROOT</span><span class="p">,</span> <span class="s2">&quot;qrcode</span><span class="si">{}</span><span class="s2">.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">poll_id</span><span class="p">))</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">qr</span> <span class="o">=</span> <span class="n">pyqrcode</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">build_absolute_uri</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;polls:detail&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">poll_id</span><span class="p">,])))</span>
+        <span class="n">qr</span><span class="o">.</span><span class="n">png</span><span class="p">(</span><span class="n">qrcode_addr</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">loader</span><span class="o">.</span><span class="n">render_to_string</span><span class="p">(</span><span class="s1">&#39;polls/advert.html&#39;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;poll_obj&#39;</span><span class="p">:</span> <span class="n">poll_obj</span><span class="p">,</span>
+        <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="s1">&#39;adv_html&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;main_text&#39;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;main_text&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;author_name&#39;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">[</span><span class="s1">&#39;author_name&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;poll_address&#39;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">build_absolute_uri</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;polls:detail&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">poll_id</span><span class="p">,])),</span>
+        <span class="s1">&#39;site_name&#39;</span><span class="p">:</span> <span class="n">request</span><span class="o">.</span><span class="n">get_host</span><span class="p">(),</span>
+        <span class="s1">&#39;qrcode_addr&#39;</span><span class="p">:</span> <span class="n">qrcode_addr</span>
+    <span class="p">},</span> <span class="n">RequestContext</span><span class="p">(</span><span class="n">request</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="create_advert"><a class="viewcode-back" href="../../polls.html#polls.admaking.create_advert">[docs]</a><span class="k">def</span> <span class="nf">create_advert</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">poll_id</span><span class="p">):</span>
+    <span class="n">poll_obj</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Poll</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">poll_id</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;polls/create_advert.html&#39;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;poll_id&#39;</span><span class="p">:</span> <span class="n">poll_id</span><span class="p">,</span>
+        <span class="s1">&#39;allowed_tags&#39;</span><span class="p">:</span> <span class="n">settings</span><span class="o">.</span><span class="n">BLEACH_ALLOWED_TAGS</span><span class="p">,</span>
+        <span class="s1">&#39;allowed_attrs&#39;</span><span class="p">:</span> <span class="n">settings</span><span class="o">.</span><span class="n">BLEACH_ALLOWED_ATTRIBUTES</span><span class="p">,</span>
+        <span class="s1">&#39;allowed_styles&#39;</span><span class="p">:</span> <span class="n">settings</span><span class="o">.</span><span class="n">BLEACH_ALLOWED_STYLES</span>
+    <span class="p">})</span></div>
+
+<div class="viewcode-block" id="html_to_pdf"><a class="viewcode-back" href="../../polls.html#polls.admaking.html_to_pdf">[docs]</a><span class="k">def</span> <span class="nf">html_to_pdf</span><span class="p">(</span><span class="n">html_filename</span><span class="p">,</span> <span class="n">pdf_filename</span><span class="p">):</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s2">&quot;wkhtmltopdf&quot;</span><span class="p">,</span> <span class="s2">&quot;--minimum-font-size&quot;</span><span class="p">,</span> <span class="s2">&quot;18&quot;</span><span class="p">,</span> <span class="s2">&quot;--margin-top&quot;</span><span class="p">,</span> <span class="s2">&quot;25mm&quot;</span><span class="p">,</span> <span class="s2">&quot;--margin-bottom&quot;</span><span class="p">,</span> <span class="s2">&quot;25mm&quot;</span><span class="p">,</span> <span class="s2">&quot;--margin-left&quot;</span><span class="p">,</span> <span class="s2">&quot;20mm&quot;</span><span class="p">,</span> <span class="s2">&quot;--margin-right&quot;</span><span class="p">,</span> <span class="s2">&quot;20mm&quot;</span><span class="p">,</span> <span class="n">html_filename</span><span class="p">,</span> <span class="n">pdf_filename</span><span class="p">])</span>
+    <span class="k">return</span> <span class="ow">not</span> <span class="n">error</span>  </div>
+
+<div class="viewcode-block" id="make_pdf"><a class="viewcode-back" href="../../polls.html#polls.admaking.make_pdf">[docs]</a><span class="k">def</span> <span class="nf">make_pdf</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">poll_id</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">poll_obj</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Poll</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">poll_id</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">SENDFILE_ROOT</span><span class="p">,</span> <span class="s2">&quot;poll</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">poll_id</span><span class="p">))</span> 
+        <span class="n">html_filename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.html&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">pdf_filename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.pdf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">html_filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">htmlfile</span><span class="p">:</span>
+            <span class="n">htmlfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">make_html_advert</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">poll_id</span><span class="p">,</span> <span class="n">poll_obj</span><span class="p">))</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">html_to_pdf</span><span class="p">(</span><span class="n">html_filename</span><span class="p">,</span> <span class="n">pdf_filename</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Something is wrong with wkhtmltopdf, see logs to understand&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sendfile</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">pdf_filename</span><span class="p">,</span> <span class="n">attachment</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">attachment_filename</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.pdf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">poll_obj</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span> 
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Невозможно сгенерировать объявление. При повторном возникновении проблемы обратитесь к администратору.&quot;</span>
+    <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;polls:done&#39;</span><span class="p">)</span></div>
+
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Pavel Semenenko.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

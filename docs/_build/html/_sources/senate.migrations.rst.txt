@@ -1,0 +1,150 @@
+senate\.migrations package
+==========================
+
+Submodules
+----------
+
+senate\.migrations\.0001\_initial module
+----------------------------------------
+
+.. automodule:: senate.migrations.0001_initial
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+senate\.migrations\.0002\_auto\_20170920\_1836 module
+-----------------------------------------------------
+
+.. automodule:: senate.migrations.0002_auto_20170920_1836
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+senate\.migrations\.0003\_auto\_20170920\_1840 module
+-----------------------------------------------------
+
+.. automodule:: senate.migrations.0003_auto_20170920_1840
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+senate\.migrations\.0004\_event\_new\_status module
+---------------------------------------------------
+
+.. automodule:: senate.migrations.0004_event_new_status
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+senate\.migrations\.0005\_department module
+-------------------------------------------
+
+.. automodule:: senate.migrations.0005_department
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+senate\.migrations\.0006\_auto\_20170921\_0027 module
+-----------------------------------------------------
+
+.. automodule:: senate.migrations.0006_auto_20170921_0027
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+senate\.migrations\.0007\_auto\_20170921\_0028 module
+-----------------------------------------------------
+
+.. automodule:: senate.migrations.0007_auto_20170921_0028
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+senate\.migrations\.0008\_auto\_20170921\_0232 module
+-----------------------------------------------------
+
+.. automodule:: senate.migrations.0008_auto_20170921_0232
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+senate\.migrations\.0009\_auto\_20170926\_1337 module
+-----------------------------------------------------
+
+.. automodule:: senate.migrations.0009_auto_20170926_1337
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+senate\.migrations\.0010\_auto\_20170926\_1340 module
+-----------------------------------------------------
+
+.. automodule:: senate.migrations.0010_auto_20170926_1340
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+senate\.migrations\.0011\_auto\_20170928\_1049 module
+-----------------------------------------------------
+
+.. automodule:: senate.migrations.0011_auto_20170928_1049
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+senate\.migrations\.0012\_employee module
+-----------------------------------------
+
+.. automodule:: senate.migrations.0012_employee
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+senate\.migrations\.0013\_employee\_importance module
+-----------------------------------------------------
+
+.. automodule:: senate.migrations.0013_employee_importance
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+senate\.migrations\.0014\_auto\_20170929\_1649 module
+-----------------------------------------------------
+
+.. automodule:: senate.migrations.0014_auto_20170929_1649
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+senate\.migrations\.0015\_category\_public module
+-------------------------------------------------
+
+.. automodule:: senate.migrations.0015_category_public
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+senate\.migrations\.0016\_category\_parent module
+-------------------------------------------------
+
+.. automodule:: senate.migrations.0016_category_parent
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+senate\.migrations\.0017\_remove\_category\_parent module
+---------------------------------------------------------
+
+.. automodule:: senate.migrations.0017_remove_category_parent
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: senate.migrations
+    :members:
+    :undoc-members:
+    :show-inheritance:

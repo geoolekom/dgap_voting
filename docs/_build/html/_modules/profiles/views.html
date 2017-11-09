@@ -1,0 +1,163 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>profiles.views &#8212; DGAP Services 0.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for profiles.views</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="k">import</span> <span class="n">MultipleObjectsReturned</span>
+
+<span class="kn">from</span> <span class="nn">profiles.models</span> <span class="k">import</span> <span class="n">UserProfile</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="k">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="k">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">redirect</span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="k">import</span> <span class="n">messages</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="k">import</span> <span class="n">login_required</span>
+<span class="kn">from</span> <span class="nn">django.views.generic.edit</span> <span class="k">import</span> <span class="n">UpdateView</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="k">import</span> <span class="n">reverse_lazy</span>
+<span class="kn">from</span> <span class="nn">django.utils.decorators</span> <span class="k">import</span> <span class="n">method_decorator</span>
+<span class="kn">from</span> <span class="nn">profiles.models</span> <span class="k">import</span> <span class="n">StudentInfo</span>
+
+
+<div class="viewcode-block" id="UserChangeEmail"><a class="viewcode-back" href="../../profiles.html#profiles.views.UserChangeEmail">[docs]</a><span class="k">class</span> <span class="nc">UserChangeEmail</span><span class="p">(</span><span class="n">UpdateView</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">]</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s1">&#39;profiles/user_change_email.html&#39;</span>
+    <span class="n">success_url</span> <span class="o">=</span> <span class="n">reverse_lazy</span><span class="p">(</span><span class="s1">&#39;polls:done&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="UserChangeEmail.form_valid"><a class="viewcode-back" href="../../profiles.html#profiles.views.UserChangeEmail.form_valid">[docs]</a>    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="s2">&quot;Ваш email был успешно изменён&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">UserChangeEmail</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">form_valid</span><span class="p">(</span><span class="n">form</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UserChangeEmail.get_object"><a class="viewcode-back" href="../../profiles.html#profiles.views.UserChangeEmail.get_object">[docs]</a>    <span class="k">def</span> <span class="nf">get_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span></div>
+
+<div class="viewcode-block" id="UserChangeEmail.dispatch"><a class="viewcode-back" href="../../profiles.html#profiles.views.UserChangeEmail.dispatch">[docs]</a>    <span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">UserChangeEmail</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="change_subscribing_status"><a class="viewcode-back" href="../../profiles.html#profiles.views.change_subscribing_status">[docs]</a><span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">change_subscribing_status</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">profile</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span>
+    <span class="n">profile</span><span class="o">.</span><span class="n">is_subscribed</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">profile</span><span class="o">.</span><span class="n">is_subscribed</span>
+    <span class="n">profile</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">profile</span><span class="o">.</span><span class="n">is_subscribed</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Вы подписаны на рассылку&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Вы больше не подписаны на рассылку&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;index&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="profile_view"><a class="viewcode-back" href="../../profiles.html#profiles.views.profile_view">[docs]</a><span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">profile_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+    <span class="n">mipt</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">phystech</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">vk</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">social_auth</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">social_auth</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s1">&#39;google-oauth2&#39;</span><span class="p">):</span>
+            <span class="n">student_infos</span> <span class="o">=</span> <span class="n">StudentInfo</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">phystech__iexact</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">student_infos</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">is_approved</span><span class="p">:</span>
+                    <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите администраторам сайта&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">student_infos</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Вы не прошли автоматическую верификацию, пишите администраторам сайта&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;В базе более одного студента с данной почтой. Вы можете попробовать авторизоваться через vk или напишите администраторам сайта&#39;</span><span class="p">)</span>
+            <span class="n">phystech</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">social_auth</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s1">&#39;google-oauth2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">uid</span>
+        <span class="k">elif</span> <span class="n">user</span><span class="o">.</span><span class="n">social_auth</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s1">&#39;vk-oauth2&#39;</span><span class="p">):</span>
+            <span class="n">student_infos</span> <span class="o">=</span> <span class="n">StudentInfo</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">vk</span><span class="o">=</span><span class="s1">&#39;https://vk.com/&#39;</span> <span class="o">+</span> <span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">student_infos</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">is_approved</span><span class="p">:</span>
+                    <span class="n">phystech</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">student_info</span><span class="o">.</span><span class="n">phystech</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите администраторам сайта&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">student_infos</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Вы не прошли автоматическую верификацию, пишите администраторам сайта&#39;</span><span class="p">)</span>
+                <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;В базе более одного студента с данным профилем VK. Вы можете попробовать авторизоваться через phystech.edu или напишите администраторам сайта&#39;</span><span class="p">)</span>
+            <span class="n">vk</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">social_auth</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s1">&#39;vk-oauth2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">uid</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите администраторам сайта&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;profiles/profile.html&#39;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;mipt&#39;</span><span class="p">:</span> <span class="n">mipt</span><span class="p">,</span>
+        <span class="s1">&#39;phystech&#39;</span><span class="p">:</span> <span class="n">phystech</span><span class="p">,</span>
+        <span class="s1">&#39;vk&#39;</span><span class="p">:</span> <span class="n">vk</span><span class="p">,</span>
+    <span class="p">})</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Pavel Semenenko.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

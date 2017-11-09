@@ -1,0 +1,174 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>polls.admin &#8212; DGAP Services 0.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for polls.admin</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="k">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">polls.models</span> <span class="k">import</span> <span class="n">Poll</span><span class="p">,</span> <span class="n">Choice</span>
+<span class="kn">from</span> <span class="nn">django.contrib.sites.models</span> <span class="k">import</span> <span class="n">Site</span>
+<span class="kn">from</span> <span class="nn">django.utils.safestring</span> <span class="k">import</span> <span class="n">mark_safe</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="k">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">polls.models</span> <span class="k">import</span> <span class="n">Participant</span><span class="p">,</span> <span class="n">Question</span>
+<span class="kn">from</span> <span class="nn">nested_inline.admin</span> <span class="k">import</span> <span class="n">NestedTabularInline</span><span class="p">,</span> <span class="n">NestedModelAdmin</span>
+
+
+<div class="viewcode-block" id="ParticipantInline"><a class="viewcode-back" href="../../polls.html#polls.admin.ParticipantInline">[docs]</a><span class="k">class</span> <span class="nc">ParticipantInline</span><span class="p">(</span><span class="n">NestedTabularInline</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Participant</span>
+    <span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;user_information&#39;</span><span class="p">,</span> <span class="p">)</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;voted&#39;</span><span class="p">,</span> <span class="p">)</span>
+    <span class="n">ordering</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;user_information&#39;</span><span class="p">,</span> <span class="p">)</span>
+
+    <span class="n">list_dispay</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;userprofile&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ChoiceInline"><a class="viewcode-back" href="../../polls.html#polls.admin.ChoiceInline">[docs]</a><span class="k">class</span> <span class="nc">ChoiceInline</span><span class="p">(</span><span class="n">NestedTabularInline</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Choice</span>
+    <span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;votes&#39;</span><span class="p">,)</span>
+    <span class="n">extra</span> <span class="o">=</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="QuestionInline"><a class="viewcode-back" href="../../polls.html#polls.admin.QuestionInline">[docs]</a><span class="k">class</span> <span class="nc">QuestionInline</span><span class="p">(</span><span class="n">NestedTabularInline</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Question</span>
+    <span class="n">extra</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">inlines</span> <span class="o">=</span> <span class="p">[</span><span class="n">ChoiceInline</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="QuestionAdmin"><a class="viewcode-back" href="../../polls.html#polls.admin.QuestionAdmin">[docs]</a><span class="k">class</span> <span class="nc">QuestionAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="n">Question</span>
+    <span class="n">inlines</span> <span class="o">=</span> <span class="p">[</span><span class="n">ChoiceInline</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="PollAdmin"><a class="viewcode-back" href="../../polls.html#polls.admin.PollAdmin">[docs]</a><span class="k">class</span> <span class="nc">PollAdmin</span><span class="p">(</span><span class="n">NestedModelAdmin</span><span class="p">):</span>
+    <span class="c1"># link for generating pdf</span>
+<div class="viewcode-block" id="PollAdmin.pdf_button"><a class="viewcode-back" href="../../polls.html#polls.admin.PollAdmin.pdf_button">[docs]</a>    <span class="k">def</span> <span class="nf">pdf_button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="n">site_url</span> <span class="o">=</span> <span class="n">Site</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_current</span><span class="p">()</span><span class="o">.</span><span class="n">domain</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">site_url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;http://&#39;</span><span class="p">):</span>
+            <span class="n">site_url</span> <span class="o">=</span> <span class="s1">&#39;http://</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">site_url</span>
+        <span class="k">return</span> <span class="n">mark_safe</span><span class="p">(</span><span class="s1">&#39;&lt;a href=</span><span class="se">\&#39;</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;polls:create_advert&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">,])</span> <span class="o">+</span><span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1">&quot;&gt;Генерировать pdf&lt;/a&gt;&#39;</span><span class="p">)</span></div>
+    <span class="n">pdf_button</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="s1">&#39;Создание объявления&#39;</span>
+
+    <span class="c1"># link for target audience display</span>
+<div class="viewcode-block" id="PollAdmin.audit_button"><a class="viewcode-back" href="../../polls.html#polls.admin.PollAdmin.audit_button">[docs]</a>    <span class="k">def</span> <span class="nf">audit_button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="n">site_url</span> <span class="o">=</span> <span class="n">Site</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_current</span><span class="p">()</span><span class="o">.</span><span class="n">domain</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">site_url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;http://&#39;</span><span class="p">):</span>
+            <span class="n">site_url</span> <span class="o">=</span> <span class="s1">&#39;http://</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">site_url</span>
+        <span class="k">return</span> <span class="n">mark_safe</span><span class="p">(</span><span class="s1">&#39;&lt;a href=</span><span class="se">\&#39;</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;polls:people&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">,])</span> <span class="o">+</span><span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1">&quot;&gt;Показать список избирателей&lt;/a&gt;&#39;</span><span class="p">)</span></div>
+    <span class="n">audit_button</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="s1">&#39;Целевая аудитория&#39;</span>
+
+    <span class="c1"># link for mailing for those who can vote but hadn&#39;t done it yet</span>
+    <span class="c1"># number in [] shows number of mailings already mage for the poll</span>
+<div class="viewcode-block" id="PollAdmin.mailing_button"><a class="viewcode-back" href="../../polls.html#polls.admin.PollAdmin.mailing_button">[docs]</a>    <span class="k">def</span> <span class="nf">mailing_button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="n">times_mailed</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">times_mailed</span>
+        <span class="n">site_url</span> <span class="o">=</span> <span class="n">Site</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_current</span><span class="p">()</span><span class="o">.</span><span class="n">domain</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">site_url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;http://&#39;</span><span class="p">):</span>
+            <span class="n">site_url</span> <span class="o">=</span> <span class="s1">&#39;http://</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">site_url</span>
+        <span class="k">return</span> <span class="n">mark_safe</span><span class="p">(</span><span class="s1">&#39;&lt;a href=</span><span class="se">\&#39;</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">site_url</span><span class="p">,</span> <span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;polls:approve_mailing&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">pk</span><span class="p">,]))</span> <span class="o">+</span><span class="s1">&#39;</span><span class="se">\&#39;</span><span class="s1">&quot;&gt;Сделать рассылку&lt;/a&gt; [</span><span class="si">{times_mailed}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">times_mailed</span><span class="o">=</span><span class="n">times_mailed</span><span class="p">))</span></div>
+    <span class="n">mailing_button</span><span class="o">.</span><span class="n">short_description</span> <span class="o">=</span> <span class="s1">&#39;Уведомление о голосовании&#39;</span>
+
+<div class="viewcode-block" id="PollAdmin.save_model"><a class="viewcode-back" href="../../polls.html#polls.admin.PollAdmin.save_model">[docs]</a>    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">form</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">poll_type</span> <span class="o">==</span> <span class="n">Poll</span><span class="o">.</span><span class="n">TARGET_LIST</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">change</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">create_target_list_from_group_room_course</span><span class="p">(</span>
+                <span class="n">group</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">target_group</span><span class="p">,</span>
+                <span class="n">room</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">target_room</span><span class="p">,</span>
+                <span class="n">course</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">target_course</span><span class="p">,</span>
+                <span class="n">only_staff</span><span class="o">=</span><span class="n">obj</span><span class="o">.</span><span class="n">only_for_staff</span>
+            <span class="p">)</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+    <span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;voted_users&#39;</span><span class="p">,</span> <span class="s1">&#39;times_mailed&#39;</span><span class="p">,</span> <span class="s1">&#39;last_mailing&#39;</span><span class="p">,)</span>
+    <span class="n">inlines</span> <span class="o">=</span> <span class="p">[</span><span class="n">ParticipantInline</span><span class="p">,</span> <span class="n">QuestionInline</span><span class="p">]</span>
+    <span class="n">list_display</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;pdf_button&#39;</span><span class="p">,</span> <span class="s1">&#39;audit_button&#39;</span><span class="p">,</span> <span class="s1">&#39;mailing_button&#39;</span><span class="p">,]</span></div>
+
+
+<div class="viewcode-block" id="ParticipantAdmin"><a class="viewcode-back" href="../../polls.html#polls.admin.ParticipantAdmin">[docs]</a><span class="k">class</span> <span class="nc">ParticipantAdmin</span><span class="p">(</span><span class="n">NestedModelAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;user_information&quot;</span><span class="p">,</span> <span class="s2">&quot;poll&quot;</span><span class="p">,</span> <span class="s2">&quot;voted&quot;</span><span class="p">]</span>
+    <span class="n">search_fields</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;user_information__fio&quot;</span><span class="p">]</span>
+    <span class="n">list_editable</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;voted&quot;</span><span class="p">]</span>
+    <span class="n">list_filter</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;voted&quot;</span><span class="p">,</span> <span class="s2">&quot;poll&quot;</span><span class="p">]</span></div>
+
+
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Poll</span><span class="p">,</span> <span class="n">PollAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Participant</span><span class="p">,</span> <span class="n">ParticipantAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Question</span><span class="p">,</span> <span class="n">QuestionAdmin</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Choice</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Pavel Semenenko.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

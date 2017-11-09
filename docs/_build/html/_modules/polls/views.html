@@ -1,0 +1,369 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>polls.views &#8212; DGAP Services 0.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for polls.views</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">polls.models</span> <span class="k">import</span> <span class="n">Choice</span><span class="p">,</span> <span class="n">Poll</span><span class="p">,</span> <span class="n">UserHash</span>
+<span class="kn">from</span> <span class="nn">profiles.models</span> <span class="k">import</span> <span class="n">UserProfile</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="k">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">redirect</span>
+<span class="kn">from</span> <span class="nn">django.views</span> <span class="k">import</span> <span class="n">generic</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="k">import</span> <span class="n">randint</span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="k">import</span> <span class="n">messages</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="k">import</span> <span class="n">timezone</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="k">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="k">import</span> <span class="n">login_required</span><span class="p">,</span> <span class="n">user_passes_test</span>
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="k">import</span> <span class="n">F</span>
+
+
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">from</span> <span class="nn">sendfile</span> <span class="k">import</span> <span class="n">sendfile</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+
+<span class="n">maxInt</span> <span class="o">=</span> <span class="mi">2147483647</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;django.request&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="IndexBase"><a class="viewcode-back" href="../../polls.html#polls.views.IndexBase">[docs]</a><span class="k">class</span> <span class="nc">IndexBase</span><span class="p">(</span><span class="n">generic</span><span class="o">.</span><span class="n">ListView</span><span class="p">):</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s1">&#39;polls/index.html&#39;</span>
+    <span class="n">context_object_name</span> <span class="o">=</span> <span class="s1">&#39;poll_list&#39;</span>
+    <span class="n">paginate_by</span> <span class="o">=</span> <span class="mi">10</span></div>
+
+
+<div class="viewcode-block" id="Closed"><a class="viewcode-back" href="../../polls.html#polls.views.Closed">[docs]</a><span class="k">class</span> <span class="nc">Closed</span><span class="p">(</span><span class="n">IndexBase</span><span class="p">):</span>
+<div class="viewcode-block" id="Closed.get_context_data"><a class="viewcode-back" href="../../polls.html#polls.views.Closed.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Closed</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">context</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;closed&#39;</span>
+        <span class="k">return</span> <span class="n">context</span></div>
+
+<div class="viewcode-block" id="Closed.get_queryset"><a class="viewcode-back" href="../../polls.html#polls.views.Closed.get_queryset">[docs]</a>    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Poll</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">end_date__lte</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">())</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;-end_date&#39;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Voted"><a class="viewcode-back" href="../../polls.html#polls.views.Voted">[docs]</a><span class="k">class</span> <span class="nc">Voted</span><span class="p">(</span><span class="n">IndexBase</span><span class="p">):</span>
+<div class="viewcode-block" id="Voted.get_context_data"><a class="viewcode-back" href="../../polls.html#polls.views.Voted.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Voted</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">context</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;voted&#39;</span>
+        <span class="k">return</span> <span class="n">context</span></div>
+
+<div class="viewcode-block" id="Voted.get_queryset"><a class="viewcode-back" href="../../polls.html#polls.views.Voted.get_queryset">[docs]</a>    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+            <span class="n">polls</span> <span class="o">=</span> <span class="p">[</span><span class="n">poll</span> <span class="k">for</span> <span class="n">poll</span> <span class="ow">in</span> <span class="n">Poll</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">end_date__gte</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">())</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;-begin_date&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">poll</span><span class="o">.</span><span class="n">is_user_voted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)]</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_staff</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">polls</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">poll</span> <span class="k">for</span> <span class="n">poll</span> <span class="ow">in</span> <span class="n">polls</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">poll</span><span class="o">.</span><span class="n">poll_type</span> <span class="o">==</span> <span class="n">Poll</span><span class="o">.</span><span class="n">TARGET_LIST</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">poll</span><span class="o">.</span><span class="n">only_for_staff</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span></div></div>
+
+
+<div class="viewcode-block" id="Available"><a class="viewcode-back" href="../../polls.html#polls.views.Available">[docs]</a><span class="k">class</span> <span class="nc">Available</span><span class="p">(</span><span class="n">IndexBase</span><span class="p">):</span>
+<div class="viewcode-block" id="Available.get_context_data"><a class="viewcode-back" href="../../polls.html#polls.views.Available.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Available</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">context</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;available&#39;</span>
+
+        <span class="k">return</span> <span class="n">context</span></div>
+
+<div class="viewcode-block" id="Available.get_queryset"><a class="viewcode-back" href="../../polls.html#polls.views.Available.get_queryset">[docs]</a>    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+            <span class="n">polls</span> <span class="o">=</span> <span class="p">[</span><span class="n">poll</span> <span class="k">for</span> <span class="n">poll</span> <span class="ow">in</span> <span class="n">Poll</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">begin_date__lte</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">())</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">end_date__gte</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">())</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;-begin_date&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">poll</span><span class="o">.</span><span class="n">is_user_target</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">poll</span><span class="o">.</span><span class="n">is_user_voted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)]</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_staff</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">polls</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">poll</span> <span class="k">for</span> <span class="n">poll</span> <span class="ow">in</span> <span class="n">polls</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">poll</span><span class="o">.</span><span class="n">poll_type</span> <span class="o">==</span> <span class="n">Poll</span><span class="o">.</span><span class="n">TARGET_LIST</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">poll</span><span class="o">.</span><span class="n">only_for_staff</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span></div></div>
+
+
+<div class="viewcode-block" id="Index"><a class="viewcode-back" href="../../polls.html#polls.views.Index">[docs]</a><span class="k">class</span> <span class="nc">Index</span><span class="p">(</span><span class="n">Closed</span><span class="p">,</span> <span class="n">Available</span><span class="p">):</span>
+<div class="viewcode-block" id="Index.get_context_data"><a class="viewcode-back" href="../../polls.html#polls.views.Index.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">Available</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Closed</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Index.get_queryset"><a class="viewcode-back" href="../../polls.html#polls.views.Index.get_queryset">[docs]</a>    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">Available</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Closed</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Detail"><a class="viewcode-back" href="../../polls.html#polls.views.Detail">[docs]</a><span class="k">class</span> <span class="nc">Detail</span><span class="p">(</span><span class="n">generic</span><span class="o">.</span><span class="n">DetailView</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Poll</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s1">&#39;polls/detail.html&#39;</span>
+
+<div class="viewcode-block" id="Detail.get_context_data"><a class="viewcode-back" href="../../polls.html#polls.views.Detail.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Detail</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">poll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object</span>
+        <span class="k">if</span> <span class="n">poll</span><span class="o">.</span><span class="n">is_user_voted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">):</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;voted&#39;</span>
+        <span class="k">elif</span> <span class="n">poll</span><span class="o">.</span><span class="n">is_user_target</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span> <span class="ow">and</span> <span class="n">poll</span><span class="o">.</span><span class="n">is_started</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">poll</span><span class="o">.</span><span class="n">is_closed</span><span class="p">():</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;available&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;not available&#39;</span></div></div>
+    <span class="c1">#def get_queryset(self):</span>
+    <span class="c1">#    return Poll.objects.filter(begin_date__lte=timezone.now(), end_date__gte=timezone.now())</span>
+
+
+<div class="viewcode-block" id="Results"><a class="viewcode-back" href="../../polls.html#polls.views.Results">[docs]</a><span class="k">class</span> <span class="nc">Results</span><span class="p">(</span><span class="n">generic</span><span class="o">.</span><span class="n">DetailView</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Poll</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s1">&#39;polls/results.html&#39;</span>
+
+<div class="viewcode-block" id="Results.get_queryset"><a class="viewcode-back" href="../../polls.html#polls.views.Results.get_queryset">[docs]</a>    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Poll</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">end_date__lte</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">())</span></div></div>
+
+
+<div class="viewcode-block" id="is_staff"><a class="viewcode-back" href="../../polls.html#polls.views.is_staff">[docs]</a><span class="k">def</span> <span class="nf">is_staff</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">user</span><span class="o">.</span><span class="n">is_staff</span></div>
+
+
+<div class="viewcode-block" id="voters"><a class="viewcode-back" href="../../polls.html#polls.views.voters">[docs]</a><span class="nd">@login_required</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">is_staff</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">voters</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">poll_id</span><span class="p">):</span>
+    <span class="n">poll_obj</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Poll</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">poll_id</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">poll_obj</span><span class="o">.</span><span class="n">poll_type</span> <span class="o">==</span> <span class="n">Poll</span><span class="o">.</span><span class="n">TARGET_LIST</span><span class="p">:</span>
+        <span class="n">raw_people</span> <span class="o">=</span> <span class="p">[</span><span class="n">voter</span><span class="o">.</span><span class="n">student_info</span> <span class="k">for</span> <span class="n">voter</span> <span class="ow">in</span> <span class="n">poll_obj</span><span class="o">.</span><span class="n">participant_set</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="k">if</span> <span class="n">voter</span><span class="o">.</span><span class="n">student_info</span><span class="p">]</span>
+        <span class="n">people</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">raw_people</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s1">&#39;userprofile_set&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">userprofile_set</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                    <span class="n">people</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">userprofile_set</span><span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">people</span> <span class="o">=</span> <span class="p">[</span><span class="n">voter</span> <span class="k">for</span> <span class="n">voter</span> <span class="ow">in</span> <span class="n">UserProfile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;user__last_name&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">voter</span><span class="o">.</span><span class="n">is_approved</span> <span class="ow">and</span> <span class="n">poll_obj</span><span class="o">.</span><span class="n">is_user_target</span><span class="p">(</span><span class="n">voter</span><span class="o">.</span><span class="n">user</span><span class="p">)]</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;polls/people.html&#39;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;voters&#39;</span><span class="p">:</span> <span class="n">people</span><span class="p">,</span>
+        <span class="s1">&#39;voters_num&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">people</span><span class="p">)</span>
+    <span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="make_csv"><a class="viewcode-back" href="../../polls.html#polls.views.make_csv">[docs]</a><span class="k">def</span> <span class="nf">make_csv</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">])</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([])</span>
+            <span class="k">for</span> <span class="n">question</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">question_set</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">question</span><span class="o">.</span><span class="n">question</span><span class="p">])</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;Вариант ответа&#39;</span><span class="p">,</span> <span class="s1">&#39;Количество голосов&#39;</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">question</span><span class="o">.</span><span class="n">choice_set</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;-votes&#39;</span><span class="p">):</span>
+                    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">choice</span><span class="o">.</span><span class="n">choice_text</span><span class="p">,</span> <span class="n">choice</span><span class="o">.</span><span class="n">votes</span><span class="p">])</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([])</span>
+                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">public</span><span class="p">:</span>
+                    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;Фамилия&#39;</span><span class="p">,</span> <span class="s1">&#39;Имя&#39;</span><span class="p">,</span> <span class="s1">&#39;Отчество&#39;</span><span class="p">,</span> <span class="s1">&#39;Группа&#39;</span><span class="p">,</span> <span class="s1">&#39;Комната&#39;</span><span class="p">,</span> <span class="s1">&#39;Голос&#39;</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;Ключ&#39;</span><span class="p">,</span> <span class="s1">&#39;Голос&#39;</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">question</span><span class="o">.</span><span class="n">choice_set</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                    <span class="k">for</span> <span class="n">user_hash</span> <span class="ow">in</span> <span class="n">choice</span><span class="o">.</span><span class="n">userhash_set</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">public</span><span class="p">:</span>
+                            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span>
+                                <span class="n">user_hash</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">last_name</span><span class="p">,</span>
+                                <span class="n">user_hash</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span>
+                                <span class="n">user_hash</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">middlename</span><span class="p">,</span>
+                                <span class="n">user_hash</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">group</span><span class="p">,</span>
+                                <span class="n">user_hash</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">room</span><span class="p">,</span>
+                                <span class="n">choice</span><span class="o">.</span><span class="n">choice_text</span>
+                                <span class="p">])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span>
+                                <span class="n">user_hash</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                                <span class="n">choice</span><span class="o">.</span><span class="n">choice_text</span>
+                                <span class="p">])</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">public</span><span class="p">:</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([])</span>
+                <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s2">&quot;Участники&quot;</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">poll_type</span> <span class="o">==</span> <span class="n">Poll</span><span class="o">.</span><span class="n">TARGET_LIST</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">participate</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">participant_set</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="n">participate</span><span class="o">.</span><span class="n">voted</span><span class="p">:</span>
+                            <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">participate</span><span class="o">.</span><span class="n">user_info</span><span class="o">.</span><span class="n">fio</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">voted_users</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;last_name&#39;</span><span class="p">,</span> <span class="s1">&#39;first_name&#39;</span><span class="p">):</span>
+                        <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">last_name</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span> <span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">middlename</span> <span class="p">)])</span>
+    <span class="k">except</span> <span class="ne">FileExistsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<span class="c1"># Convert file to WIN-1251 for windows users</span>
+<div class="viewcode-block" id="make_win_csv"><a class="viewcode-back" href="../../polls.html#polls.views.make_win_csv">[docs]</a><span class="k">def</span> <span class="nf">make_win_csv</span><span class="p">(</span><span class="n">oldfilename</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="s2">&quot;iconv&quot;</span><span class="p">,</span> <span class="s2">&quot;-t&quot;</span><span class="p">,</span> <span class="s2">&quot;WINDOWS-1251&quot;</span><span class="p">,</span> <span class="n">oldfilename</span><span class="p">,</span> <span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">error</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;&quot;iconv&quot; failed while processing &quot;make_win_csv&quot;, see logs to understand&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="detailed"><a class="viewcode-back" href="../../polls.html#polls.views.detailed">[docs]</a><span class="k">def</span> <span class="nf">detailed</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">poll_id</span><span class="p">):</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Poll</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">poll_id</span><span class="p">,</span> <span class="n">end_date__lte</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">SENDFILE_ROOT</span><span class="p">,</span> <span class="s2">&quot;poll</span><span class="si">{}</span><span class="s2">.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">poll_id</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">make_csv</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Результаты недоступны в данный момент, попробуйте позже.&quot;</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;polls:done&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;Windows&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">user_agent</span><span class="o">.</span><span class="n">os</span><span class="o">.</span><span class="n">family</span> <span class="ow">or</span> <span class="s1">&#39;windows&#39;</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">user_agent</span><span class="o">.</span><span class="n">os</span><span class="o">.</span><span class="n">family</span><span class="p">:</span>
+        <span class="n">oldfilename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">SENDFILE_ROOT</span><span class="p">,</span> <span class="s2">&quot;poll</span><span class="si">{}</span><span class="s2">win.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">poll_id</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">make_win_csv</span><span class="p">(</span><span class="n">oldfilename</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Результаты недоступны в данный момент, попробуйте позже.&quot;</span>
+                <span class="n">messages</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;polls:done&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sendfile</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">attachment</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">attachment_filename</span><span class="o">=</span><span class="s2">&quot;poll</span><span class="si">{}</span><span class="s2">.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">poll_id</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="done"><a class="viewcode-back" href="../../polls.html#polls.views.done">[docs]</a><span class="k">def</span> <span class="nf">done</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">storage</span> <span class="o">=</span> <span class="n">messages</span><span class="o">.</span><span class="n">get_messages</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">storage</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;polls/done.html&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;polls:index&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="vote"><a class="viewcode-back" href="../../polls.html#polls.views.vote">[docs]</a><span class="k">def</span> <span class="nf">vote</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">poll_id</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Poll</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">poll_id</span><span class="p">,</span> <span class="n">begin_date__lte</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">end_date__gte</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">():</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Вы не вошли как зарегистрированный пользователь&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;polls:detail&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">poll_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">is_approved</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Вы не являетесь подтверждённым пользователем&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;polls:detail&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">poll_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">is_user_voted</span><span class="p">(</span><span class="n">user</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">is_staff</span> <span class="ow">and</span> <span class="n">settings</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Вы уже приняли участие в этом голосовании&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;polls:detail&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">poll_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">is_user_target</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Вы не являетесь целевой аудиторией голосования&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;polls:detail&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">poll_id</span><span class="p">)</span>
+
+        <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;Ваш голос учтён. Идентификационные ключи, соответствующие вашему выбору:</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+        <span class="k">for</span> <span class="n">question</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">question_set</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="n">choices</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">getlist</span><span class="p">(</span><span class="s1">&#39;question</span><span class="si">{}</span><span class="s1">-choice&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question</span><span class="o">.</span><span class="n">id</span><span class="p">),</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">choices</span> <span class="ow">and</span> <span class="n">question</span><span class="o">.</span><span class="n">required</span><span class="p">:</span>
+                <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;Вопрос </span><span class="si">{}</span><span class="s1"> является обязательным. Вы не ответили на него&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question</span><span class="o">.</span><span class="n">question</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;polls:detail&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">poll_id</span><span class="p">)</span>
+            <span class="n">choices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">choices</span><span class="p">))</span>
+
+            <span class="n">userHashes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">question</span><span class="o">.</span><span class="n">answer_type</span> <span class="o">==</span> <span class="s1">&#39;OWN&#39;</span><span class="p">:</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">question</span><span class="o">.</span><span class="n">choice_set</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">choice_text</span><span class="o">=</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">votes</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">pk</span>
+            <span class="k">if</span> <span class="n">question</span><span class="o">.</span><span class="n">answer_type</span> <span class="o">!=</span> <span class="s1">&#39;MANY&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;В вопросе </span><span class="si">{}</span><span class="s1"> можно выбрать только один вариант ответа&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">question</span><span class="o">.</span><span class="n">question</span><span class="p">))</span>
+                    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;polls:detail&#39;</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">poll_id</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">choices</span><span class="p">)):</span>
+                <span class="n">selected_choice</span> <span class="o">=</span> <span class="n">question</span><span class="o">.</span><span class="n">choice_set</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">choices</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="n">selected_choice</span><span class="o">.</span><span class="n">votes</span> <span class="o">=</span> <span class="n">F</span><span class="p">(</span><span class="s1">&#39;votes&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">selected_choice</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+                <span class="n">userHashes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">UserHash</span><span class="p">()</span>
+                <span class="n">userHashes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">maxInt</span><span class="p">)</span>
+                <span class="n">userHashes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">choice</span> <span class="o">=</span> <span class="n">selected_choice</span>
+                <span class="n">message</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">userHashes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">public</span><span class="p">:</span>
+                    <span class="n">userHashes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
+                <span class="n">userHashes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">poll_type</span> <span class="o">==</span> <span class="n">Poll</span><span class="o">.</span><span class="n">TARGET_LIST</span><span class="p">:</span>
+            <span class="n">participate</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">student_info</span><span class="o">.</span><span class="n">participant_set</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">participate</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">poll</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">p</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+                    <span class="n">item</span><span class="o">.</span><span class="n">voted</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">item</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">voted_users</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;polls:voted&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">request</span><span class="p">(</span><span class="s1">&#39;polls:available&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Pavel Semenenko.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

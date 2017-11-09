@@ -1,0 +1,741 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>cycle_storage package &#8212; DGAP Services 0.3 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="cycle-storage-package">
+<h1>cycle_storage package<a class="headerlink" href="#cycle-storage-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cycle_storage.admin">
+<span id="cycle-storage-admin-module"></span><h2>cycle_storage.admin module<a class="headerlink" href="#module-cycle_storage.admin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cycle_storage.admin.BicycleAdmin">
+<em class="property">class </em><code class="descclassname">cycle_storage.admin.</code><code class="descname">BicycleAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/admin.html#BicycleAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.admin.BicycleAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="cycle_storage.admin.BicycleAdmin.form">
+<code class="descname">form</code><a class="headerlink" href="#cycle_storage.admin.BicycleAdmin.form" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">BicycleAdminForm</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.admin.BicycleAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ('owner', 'manufacturer', 'model', 'place', 'verified', 'request_status')</em><a class="headerlink" href="#cycle_storage.admin.BicycleAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.admin.BicycleAdmin.list_filter">
+<code class="descname">list_filter</code><em class="property"> = ('verified', 'request_status', &lt;class 'cycle_storage.admin.PlaceFilter'&gt;)</em><a class="headerlink" href="#cycle_storage.admin.BicycleAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.admin.BicycleAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#cycle_storage.admin.BicycleAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.admin.BicycleAdmin.readonly_fields">
+<code class="descname">readonly_fields</code><em class="property"> = ['image_tag']</em><a class="headerlink" href="#cycle_storage.admin.BicycleAdmin.readonly_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cycle_storage.admin.BicycleAdmin.save_model">
+<code class="descname">save_model</code><span class="sig-paren">(</span><em>request</em>, <em>obj</em>, <em>form</em>, <em>change</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/admin.html#BicycleAdmin.save_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.admin.BicycleAdmin.save_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cycle_storage.admin.PlaceAdmin">
+<em class="property">class </em><code class="descclassname">cycle_storage.admin.</code><code class="descname">PlaceAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/admin.html#PlaceAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.admin.PlaceAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="cycle_storage.admin.PlaceAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ('__str__', 'bicycle')</em><a class="headerlink" href="#cycle_storage.admin.PlaceAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.admin.PlaceAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#cycle_storage.admin.PlaceAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cycle_storage.admin.PlaceFilter">
+<em class="property">class </em><code class="descclassname">cycle_storage.admin.</code><code class="descname">PlaceFilter</code><span class="sig-paren">(</span><em>request</em>, <em>params</em>, <em>model</em>, <em>model_admin</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/admin.html#PlaceFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.admin.PlaceFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.filters.SimpleListFilter</span></code></p>
+<dl class="method">
+<dt id="cycle_storage.admin.PlaceFilter.lookups">
+<code class="descname">lookups</code><span class="sig-paren">(</span><em>request</em>, <em>model_admin</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/admin.html#PlaceFilter.lookups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.admin.PlaceFilter.lookups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.admin.PlaceFilter.parameter_name">
+<code class="descname">parameter_name</code><em class="property"> = 'place'</em><a class="headerlink" href="#cycle_storage.admin.PlaceFilter.parameter_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cycle_storage.admin.PlaceFilter.queryset">
+<code class="descname">queryset</code><span class="sig-paren">(</span><em>request</em>, <em>queryset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/admin.html#PlaceFilter.queryset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.admin.PlaceFilter.queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.admin.PlaceFilter.title">
+<code class="descname">title</code><em class="property"> = 'Присвоено место'</em><a class="headerlink" href="#cycle_storage.admin.PlaceFilter.title" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cycle_storage.admin.StorageAdmin">
+<em class="property">class </em><code class="descclassname">cycle_storage.admin.</code><code class="descname">StorageAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/admin.html#StorageAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.admin.StorageAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="cycle_storage.admin.StorageAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ('dorm', 'name', 'total_places', 'free_places')</em><a class="headerlink" href="#cycle_storage.admin.StorageAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.admin.StorageAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#cycle_storage.admin.StorageAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cycle_storage.forms">
+<span id="cycle-storage-forms-module"></span><h2>cycle_storage.forms module<a class="headerlink" href="#module-cycle_storage.forms" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cycle_storage.forms.BicycleAdminForm">
+<em class="property">class </em><code class="descclassname">cycle_storage.forms.</code><code class="descname">BicycleAdminForm</code><span class="sig-paren">(</span><em>data=None</em>, <em>files=None</em>, <em>auto_id='id_%s'</em>, <em>prefix=None</em>, <em>initial=None</em>, <em>error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em>label_suffix=None</em>, <em>empty_permitted=False</em>, <em>instance=None</em>, <em>use_required_attribute=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/forms.html#BicycleAdminForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.forms.BicycleAdminForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.forms.models.ModelForm</span></code></p>
+<dl class="class">
+<dt id="cycle_storage.forms.BicycleAdminForm.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="reference internal" href="_modules/cycle_storage/forms.html#BicycleAdminForm.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.forms.BicycleAdminForm.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="attribute">
+<dt id="cycle_storage.forms.BicycleAdminForm.Meta.exclude">
+<code class="descname">exclude</code><em class="property"> = ['image_tag', 'photo']</em><a class="headerlink" href="#cycle_storage.forms.BicycleAdminForm.Meta.exclude" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.forms.BicycleAdminForm.Meta.model">
+<code class="descname">model</code><a class="headerlink" href="#cycle_storage.forms.BicycleAdminForm.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">Bicycle</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.forms.BicycleAdminForm.base_fields">
+<code class="descname">base_fields</code><em class="property"> = OrderedDict([('owner', &lt;django.forms.models.ModelChoiceField object&gt;), ('manufacturer', &lt;django.forms.fields.CharField object&gt;), ('model', &lt;django.forms.fields.CharField object&gt;), ('info', &lt;django.forms.fields.CharField object&gt;), ('verified', &lt;django.forms.fields.BooleanField object&gt;), ('request_status', &lt;django.forms.fields.TypedChoiceField object&gt;), ('place', &lt;django.forms.models.ModelChoiceField object&gt;)])</em><a class="headerlink" href="#cycle_storage.forms.BicycleAdminForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.forms.BicycleAdminForm.declared_fields">
+<code class="descname">declared_fields</code><em class="property"> = OrderedDict([('place', &lt;django.forms.models.ModelChoiceField object&gt;)])</em><a class="headerlink" href="#cycle_storage.forms.BicycleAdminForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.forms.BicycleAdminForm.media">
+<code class="descname">media</code><a class="headerlink" href="#cycle_storage.forms.BicycleAdminForm.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cycle_storage.forms.BicycleCreateForm">
+<em class="property">class </em><code class="descclassname">cycle_storage.forms.</code><code class="descname">BicycleCreateForm</code><span class="sig-paren">(</span><em>data=None</em>, <em>files=None</em>, <em>auto_id='id_%s'</em>, <em>prefix=None</em>, <em>initial=None</em>, <em>error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em>label_suffix=None</em>, <em>empty_permitted=False</em>, <em>instance=None</em>, <em>use_required_attribute=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/forms.html#BicycleCreateForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.forms.BicycleCreateForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.forms.models.ModelForm</span></code></p>
+<dl class="class">
+<dt id="cycle_storage.forms.BicycleCreateForm.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="reference internal" href="_modules/cycle_storage/forms.html#BicycleCreateForm.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.forms.BicycleCreateForm.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="attribute">
+<dt id="cycle_storage.forms.BicycleCreateForm.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ['manufacturer', 'model', 'info', 'photo']</em><a class="headerlink" href="#cycle_storage.forms.BicycleCreateForm.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.forms.BicycleCreateForm.Meta.model">
+<code class="descname">model</code><a class="headerlink" href="#cycle_storage.forms.BicycleCreateForm.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">Bicycle</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.forms.BicycleCreateForm.base_fields">
+<code class="descname">base_fields</code><em class="property"> = OrderedDict([('manufacturer', &lt;django.forms.fields.CharField object&gt;), ('model', &lt;django.forms.fields.CharField object&gt;), ('info', &lt;django.forms.fields.CharField object&gt;), ('photo', &lt;django.forms.fields.ImageField object&gt;)])</em><a class="headerlink" href="#cycle_storage.forms.BicycleCreateForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.forms.BicycleCreateForm.declared_fields">
+<code class="descname">declared_fields</code><em class="property"> = OrderedDict()</em><a class="headerlink" href="#cycle_storage.forms.BicycleCreateForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.forms.BicycleCreateForm.media">
+<code class="descname">media</code><a class="headerlink" href="#cycle_storage.forms.BicycleCreateForm.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cycle_storage.models">
+<span id="cycle-storage-models-module"></span><h2>cycle_storage.models module<a class="headerlink" href="#module-cycle_storage.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cycle_storage.models.Bicycle">
+<em class="property">class </em><code class="descclassname">cycle_storage.models.</code><code class="descname">Bicycle</code><span class="sig-paren">(</span><em>id</em>, <em>owner</em>, <em>manufacturer</em>, <em>model</em>, <em>info</em>, <em>add_dttm</em>, <em>photo</em>, <em>verified</em>, <em>request_status</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/models.html#Bicycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.models.Bicycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="attribute">
+<dt id="cycle_storage.models.Bicycle.ACCEPTED">
+<code class="descname">ACCEPTED</code><em class="property"> = 2</em><a class="headerlink" href="#cycle_storage.models.Bicycle.ACCEPTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Bicycle.BIKE_STATUS">
+<code class="descname">BIKE_STATUS</code><em class="property"> = ((1, 'Заявка рассматривается'), (2, 'Одобрено'), (3, 'Отказано'), (4, 'Нет мест'))</em><a class="headerlink" href="#cycle_storage.models.Bicycle.BIKE_STATUS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Bicycle.DECLINED">
+<code class="descname">DECLINED</code><em class="property"> = 3</em><a class="headerlink" href="#cycle_storage.models.Bicycle.DECLINED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="cycle_storage.models.Bicycle.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#cycle_storage.models.Bicycle.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cycle_storage.models.Bicycle.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#cycle_storage.models.Bicycle.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Bicycle.NO_PLACE">
+<code class="descname">NO_PLACE</code><em class="property"> = 4</em><a class="headerlink" href="#cycle_storage.models.Bicycle.NO_PLACE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Bicycle.WAITING">
+<code class="descname">WAITING</code><em class="property"> = 1</em><a class="headerlink" href="#cycle_storage.models.Bicycle.WAITING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Bicycle.add_dttm">
+<code class="descname">add_dttm</code><a class="headerlink" href="#cycle_storage.models.Bicycle.add_dttm" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cycle_storage.models.Bicycle.get_absolute_url">
+<code class="descname">get_absolute_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/models.html#Bicycle.get_absolute_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.models.Bicycle.get_absolute_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cycle_storage.models.Bicycle.get_next_by_add_dttm">
+<code class="descname">get_next_by_add_dttm</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#cycle_storage.models.Bicycle.get_next_by_add_dttm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cycle_storage.models.Bicycle.get_previous_by_add_dttm">
+<code class="descname">get_previous_by_add_dttm</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#cycle_storage.models.Bicycle.get_previous_by_add_dttm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cycle_storage.models.Bicycle.get_request_status_display">
+<code class="descname">get_request_status_display</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#cycle_storage.models.Bicycle.get_request_status_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Bicycle.id">
+<code class="descname">id</code><a class="headerlink" href="#cycle_storage.models.Bicycle.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cycle_storage.models.Bicycle.image_tag">
+<code class="descname">image_tag</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/models.html#Bicycle.image_tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.models.Bicycle.image_tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Bicycle.info">
+<code class="descname">info</code><a class="headerlink" href="#cycle_storage.models.Bicycle.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Bicycle.manufacturer">
+<code class="descname">manufacturer</code><a class="headerlink" href="#cycle_storage.models.Bicycle.manufacturer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Bicycle.model">
+<code class="descname">model</code><a class="headerlink" href="#cycle_storage.models.Bicycle.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Bicycle.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#cycle_storage.models.Bicycle.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Bicycle.owner">
+<code class="descname">owner</code><a class="headerlink" href="#cycle_storage.models.Bicycle.owner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">child.parent</span></code> is a <code class="docutils literal"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Bicycle.owner_id">
+<code class="descname">owner_id</code><a class="headerlink" href="#cycle_storage.models.Bicycle.owner_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Bicycle.photo">
+<code class="descname">photo</code><a class="headerlink" href="#cycle_storage.models.Bicycle.photo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Just like the FileDescriptor, but for ImageFields. The only difference is
+assigning the width/height to the width_field/height_field, if appropriate.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Bicycle.place">
+<code class="descname">place</code><a class="headerlink" href="#cycle_storage.models.Bicycle.place" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">place.restaurant</span></code> is a <code class="docutils literal"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Bicycle.request_status">
+<code class="descname">request_status</code><a class="headerlink" href="#cycle_storage.models.Bicycle.request_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Bicycle.verified">
+<code class="descname">verified</code><a class="headerlink" href="#cycle_storage.models.Bicycle.verified" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cycle_storage.models.Place">
+<em class="property">class </em><code class="descclassname">cycle_storage.models.</code><code class="descname">Place</code><span class="sig-paren">(</span><em>id</em>, <em>storage</em>, <em>name</em>, <em>bicycle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/models.html#Place"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.models.Place" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="exception">
+<dt id="cycle_storage.models.Place.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#cycle_storage.models.Place.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cycle_storage.models.Place.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#cycle_storage.models.Place.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Place.bicycle">
+<code class="descname">bicycle</code><a class="headerlink" href="#cycle_storage.models.Place.bicycle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">restaurant.place</span></code> is a <code class="docutils literal"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Place.bicycle_id">
+<code class="descname">bicycle_id</code><a class="headerlink" href="#cycle_storage.models.Place.bicycle_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Place.id">
+<code class="descname">id</code><a class="headerlink" href="#cycle_storage.models.Place.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Place.name">
+<code class="descname">name</code><a class="headerlink" href="#cycle_storage.models.Place.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Place.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#cycle_storage.models.Place.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Place.storage">
+<code class="descname">storage</code><a class="headerlink" href="#cycle_storage.models.Place.storage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">child.parent</span></code> is a <code class="docutils literal"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Place.storage_id">
+<code class="descname">storage_id</code><a class="headerlink" href="#cycle_storage.models.Place.storage_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cycle_storage.models.Storage">
+<em class="property">class </em><code class="descclassname">cycle_storage.models.</code><code class="descname">Storage</code><span class="sig-paren">(</span><em>id</em>, <em>dorm</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/models.html#Storage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.models.Storage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="exception">
+<dt id="cycle_storage.models.Storage.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#cycle_storage.models.Storage.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cycle_storage.models.Storage.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#cycle_storage.models.Storage.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cycle_storage.models.Storage.create_places">
+<code class="descname">create_places</code><span class="sig-paren">(</span><em>num</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/models.html#Storage.create_places"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.models.Storage.create_places" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Storage.dorm">
+<code class="descname">dorm</code><a class="headerlink" href="#cycle_storage.models.Storage.dorm" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Storage.free_places">
+<code class="descname">free_places</code><a class="headerlink" href="#cycle_storage.models.Storage.free_places" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Storage.id">
+<code class="descname">id</code><a class="headerlink" href="#cycle_storage.models.Storage.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Storage.name">
+<code class="descname">name</code><a class="headerlink" href="#cycle_storage.models.Storage.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Storage.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#cycle_storage.models.Storage.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Storage.place_set">
+<code class="descname">place_set</code><a class="headerlink" href="#cycle_storage.models.Storage.place_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">parent.children</span></code> is a <code class="docutils literal"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cycle_storage.models.Storage.randomly_fill">
+<code class="descname">randomly_fill</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/models.html#Storage.randomly_fill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.models.Storage.randomly_fill" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.models.Storage.total_places">
+<code class="descname">total_places</code><a class="headerlink" href="#cycle_storage.models.Storage.total_places" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cycle_storage.models.bike_photo_path">
+<code class="descclassname">cycle_storage.models.</code><code class="descname">bike_photo_path</code><span class="sig-paren">(</span><em>instance</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/models.html#bike_photo_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.models.bike_photo_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cycle_storage.tests">
+<span id="cycle-storage-tests-module"></span><h2>cycle_storage.tests module<a class="headerlink" href="#module-cycle_storage.tests" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cycle_storage.urls">
+<span id="cycle-storage-urls-module"></span><h2>cycle_storage.urls module<a class="headerlink" href="#module-cycle_storage.urls" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cycle_storage.views">
+<span id="cycle-storage-views-module"></span><h2>cycle_storage.views module<a class="headerlink" href="#module-cycle_storage.views" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cycle_storage.views.BicycleCreate">
+<em class="property">class </em><code class="descclassname">cycle_storage.views.</code><code class="descname">BicycleCreate</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/views.html#BicycleCreate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.views.BicycleCreate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.edit.CreateView</span></code></p>
+<dl class="method">
+<dt id="cycle_storage.views.BicycleCreate.dispatch">
+<code class="descname">dispatch</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/views.html#BicycleCreate.dispatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.views.BicycleCreate.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.views.BicycleCreate.form_class">
+<code class="descname">form_class</code><a class="headerlink" href="#cycle_storage.views.BicycleCreate.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">BicycleCreateForm</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cycle_storage.views.BicycleCreate.form_valid">
+<code class="descname">form_valid</code><span class="sig-paren">(</span><em>form</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/views.html#BicycleCreate.form_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.views.BicycleCreate.form_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.views.BicycleCreate.model">
+<code class="descname">model</code><a class="headerlink" href="#cycle_storage.views.BicycleCreate.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">Bicycle</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.views.BicycleCreate.success_url">
+<code class="descname">success_url</code><em class="property"> = '/bicycle/my'</em><a class="headerlink" href="#cycle_storage.views.BicycleCreate.success_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cycle_storage.views.BicycleDelete">
+<em class="property">class </em><code class="descclassname">cycle_storage.views.</code><code class="descname">BicycleDelete</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/views.html#BicycleDelete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.views.BicycleDelete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.edit.DeleteView</span></code></p>
+<dl class="method">
+<dt id="cycle_storage.views.BicycleDelete.dispatch">
+<code class="descname">dispatch</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/views.html#BicycleDelete.dispatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.views.BicycleDelete.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.views.BicycleDelete.model">
+<code class="descname">model</code><a class="headerlink" href="#cycle_storage.views.BicycleDelete.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">Bicycle</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.views.BicycleDelete.success_url">
+<code class="descname">success_url</code><em class="property"> = '/bicycle/'</em><a class="headerlink" href="#cycle_storage.views.BicycleDelete.success_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cycle_storage.views.BicycleDetail">
+<em class="property">class </em><code class="descclassname">cycle_storage.views.</code><code class="descname">BicycleDetail</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/views.html#BicycleDetail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.views.BicycleDetail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.detail.DetailView</span></code></p>
+<dl class="attribute">
+<dt id="cycle_storage.views.BicycleDetail.model">
+<code class="descname">model</code><a class="headerlink" href="#cycle_storage.views.BicycleDetail.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">Bicycle</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cycle_storage.views.BicycleUpdate">
+<em class="property">class </em><code class="descclassname">cycle_storage.views.</code><code class="descname">BicycleUpdate</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/views.html#BicycleUpdate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.views.BicycleUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.edit.UpdateView</span></code></p>
+<dl class="method">
+<dt id="cycle_storage.views.BicycleUpdate.dispatch">
+<code class="descname">dispatch</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/views.html#BicycleUpdate.dispatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.views.BicycleUpdate.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.views.BicycleUpdate.form_class">
+<code class="descname">form_class</code><a class="headerlink" href="#cycle_storage.views.BicycleUpdate.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">BicycleCreateForm</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cycle_storage.views.BicycleUpdate.form_valid">
+<code class="descname">form_valid</code><span class="sig-paren">(</span><em>form</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/views.html#BicycleUpdate.form_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.views.BicycleUpdate.form_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.views.BicycleUpdate.model">
+<code class="descname">model</code><a class="headerlink" href="#cycle_storage.views.BicycleUpdate.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">Bicycle</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.views.BicycleUpdate.success_url">
+<code class="descname">success_url</code><em class="property"> = '/bicycle/my'</em><a class="headerlink" href="#cycle_storage.views.BicycleUpdate.success_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cycle_storage.views.MyBicycleDetail">
+<em class="property">class </em><code class="descclassname">cycle_storage.views.</code><code class="descname">MyBicycleDetail</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/views.html#MyBicycleDetail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.views.MyBicycleDetail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.detail.DetailView</span></code></p>
+<dl class="method">
+<dt id="cycle_storage.views.MyBicycleDetail.dispatch">
+<code class="descname">dispatch</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/views.html#MyBicycleDetail.dispatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.views.MyBicycleDetail.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cycle_storage.views.MyBicycleDetail.get_object">
+<code class="descname">get_object</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/views.html#MyBicycleDetail.get_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.views.MyBicycleDetail.get_object" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.views.MyBicycleDetail.model">
+<code class="descname">model</code><a class="headerlink" href="#cycle_storage.views.MyBicycleDetail.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">Bicycle</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cycle_storage.views.MyBicycleDetail.template">
+<code class="descname">template</code><em class="property"> = 'bicycle/bicycle_detail.html'</em><a class="headerlink" href="#cycle_storage.views.MyBicycleDetail.template" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cycle_storage.views.has_bike">
+<code class="descclassname">cycle_storage.views.</code><code class="descname">has_bike</code><span class="sig-paren">(</span><em>user</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cycle_storage/views.html#has_bike"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cycle_storage.views.has_bike" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-cycle_storage">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cycle_storage" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Pavel Semenenko.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/cycle_storage.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -4,6 +4,7 @@ from .forms import ArticleAdminForm
 
 
 class ArticleAdmin(admin.ModelAdmin):
+    """:class:`Article` admin class. New articles are created by moderators via this page"""
     prepopulated_fields = {"slug": ("title",)}
     form = ArticleAdminForm
     list_display = ["title", "author", "publish_dttm", "hidden", "show_in_feed", "is_django_template"]

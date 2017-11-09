@@ -1,0 +1,160 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>polls.forms &#8212; DGAP Services 0.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for polls.forms</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">polls.models</span> <span class="k">import</span> <span class="n">UserProfile</span>
+<span class="kn">from</span> <span class="nn">django</span> <span class="k">import</span> <span class="n">forms</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="k">import</span> <span class="n">User</span>
+
+<span class="kn">from</span> <span class="nn">.models</span> <span class="k">import</span> <span class="n">Question</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">class QuestionForm(forms.Form):</span>
+
+<span class="sd">    def __init__(self, question: Question, *args, **kwargs):</span>
+<span class="sd">        super(QuestionForm, self).__init__(*args, **kwargs)</span>
+
+<span class="sd">        self.question = question.question</span>
+<span class="sd">        answer_type = question.answer_type</span>
+<span class="sd">        choices = question.choice_set.all()</span>
+<span class="sd">        if answer_type == Question.ONE:</span>
+<span class="sd">            field = forms.ModelChoiceField(choices, widget=forms.RadioSelect)</span>
+<span class="sd">        elif answer_type == Question.MANY:</span>
+<span class="sd">            field = forms.ModelMultipleChoiceField(choices, widget=forms.CheckboxSelectMultiple)</span>
+<span class="sd">        elif answer_type == Question.OWN:</span>
+<span class="sd">            field = forms.CharField(max_length=200)</span>
+<span class="sd">        else:</span>
+<span class="sd">            raise ValueError(&quot;Incorrect answer type&quot;)</span>
+<span class="sd">        self.fields[&quot;choices&quot;] = field</span>
+
+
+<span class="sd">class PollForm(forms.Form):</span>
+
+<span class="sd">    def __init__(self, questions, *args, **kwargs):</span>
+<span class="sd">        super(QuestionForm, self).__init__(*args, **kwargs)</span>
+
+<span class="sd">        for question in questions:</span>
+<span class="sd">            self.question = question.question</span>
+<span class="sd">            answer_type = question.answer_type</span>
+<span class="sd">            choices = question.choice_set.all()</span>
+<span class="sd">            if answer_type == Question.ONE:</span>
+<span class="sd">                field = forms.ModelChoiceField(choices, widget=forms.RadioSelect)</span>
+<span class="sd">            elif answer_type == Question.MANY:</span>
+<span class="sd">                field = forms.ModelMultipleChoiceField(choices, widget=forms.CheckboxSelectMultiple)</span>
+<span class="sd">            elif answer_type == Question.OWN:</span>
+<span class="sd">                field = forms.CharField(max_length=200)</span>
+<span class="sd">            else:</span>
+<span class="sd">                raise ValueError(&quot;Incorrect answer type&quot;)</span>
+<span class="sd">            self.fields[&quot;choices&quot;] = field</span>
+
+
+<span class="sd">class QuestionFormset(forms.BaseFormSet):</span>
+<span class="sd">    def __init__(self, questions):</span>
+<span class="sd">        data = {</span>
+<span class="sd">            &#39;form-TOTAL_FORMS&#39;: str(len(questions)),</span>
+<span class="sd">            &#39;form-INITIAL_FORMS&#39;: &#39;0&#39;,</span>
+<span class="sd">            &#39;form-MAX_NUM_FORMS&#39;: &#39;&#39;,</span>
+<span class="sd">        }</span>
+<span class="sd">        data.update({&#39;form-{}-question&#39;: })</span>
+
+<span class="sd">QuestionFormset = forms.formset_factory(QuestionForm)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># TODO legacy forms, delete?</span>
+<div class="viewcode-block" id="UserForm"><a class="viewcode-back" href="../../polls.html#polls.forms.UserForm">[docs]</a><span class="k">class</span> <span class="nc">UserForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+<div class="viewcode-block" id="UserForm.Meta"><a class="viewcode-back" href="../../polls.html#polls.forms.UserForm.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;last_name&#39;</span><span class="p">,</span> <span class="s1">&#39;first_name&#39;</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="UserProfileFormReduced"><a class="viewcode-back" href="../../polls.html#polls.forms.UserProfileFormReduced">[docs]</a><span class="k">class</span> <span class="nc">UserProfileFormReduced</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+<div class="viewcode-block" id="UserProfileFormReduced.Meta"><a class="viewcode-back" href="../../polls.html#polls.forms.UserProfileFormReduced.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">UserProfile</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;room&#39;</span><span class="p">,)</span></div></div>
+
+
+<div class="viewcode-block" id="UserProfileForm"><a class="viewcode-back" href="../../polls.html#polls.forms.UserProfileForm">[docs]</a><span class="k">class</span> <span class="nc">UserProfileForm</span><span class="p">(</span><span class="n">UserProfileFormReduced</span><span class="p">):</span>
+    <span class="n">cardnumber</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="viewcode-block" id="UserProfileForm.Meta"><a class="viewcode-back" href="../../polls.html#polls.forms.UserProfileForm.Meta">[docs]</a>    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">UserProfileFormReduced</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">UserProfileFormReduced</span><span class="o">.</span><span class="n">Meta</span><span class="o">.</span><span class="n">fields</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;cardnumber&#39;</span><span class="p">,)</span></div></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Pavel Semenenko.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

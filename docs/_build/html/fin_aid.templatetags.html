@@ -1,0 +1,123 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>fin_aid.templatetags package &#8212; DGAP Services 0.3 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="fin_aid.migrations package" href="fin_aid.migrations.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="fin-aid-templatetags-package">
+<h1>fin_aid.templatetags package<a class="headerlink" href="#fin-aid-templatetags-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-fin_aid.templatetags.fin_aid_extras">
+<span id="fin-aid-templatetags-fin-aid-extras-module"></span><h2>fin_aid.templatetags.fin_aid_extras module<a class="headerlink" href="#module-fin_aid.templatetags.fin_aid_extras" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="fin_aid.templatetags.fin_aid_extras.filename">
+<code class="descclassname">fin_aid.templatetags.fin_aid_extras.</code><code class="descname">filename</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fin_aid/templatetags/fin_aid_extras.html#filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#fin_aid.templatetags.fin_aid_extras.filename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="fin_aid.templatetags.fin_aid_extras.register">
+<code class="descclassname">fin_aid.templatetags.fin_aid_extras.</code><code class="descname">register</code><em class="property"> = &lt;django.template.library.Library object&gt;</em><a class="headerlink" href="#fin_aid.templatetags.fin_aid_extras.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;register.simple_tag
+def month_info():</p>
+<blockquote>
+<div><p>text = “Сейчас: {}, Лимит: {:.0f}, Использовано: {:.0f}, Профицит: {:.0f}, Рассмаатривается: {:.0f}”
+current = MonthlyData.current()
+used = current.sum_used
+waiting = AidRequest.objects.filter(status=AidRequest.WAITING).aggregate(Sum(‘req_sum’))[‘req_sum__sum’]
+if not used:</p>
+<blockquote>
+<div>used = 0</div></blockquote>
+<p>return text.format(current.get_month_display(), current.limit, used, current.limit - used, waiting)</p>
+</div></blockquote>
+<p>month_info.allow_tags = True</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-fin_aid.templatetags">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-fin_aid.templatetags" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="fin_aid.html">fin_aid package</a><ul>
+      <li>Previous: <a href="fin_aid.migrations.html" title="previous chapter">fin_aid.migrations package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Pavel Semenenko.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/fin_aid.templatetags.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

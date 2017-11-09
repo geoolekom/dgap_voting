@@ -1,0 +1,54 @@
+profiles\.migrations package
+============================
+
+Submodules
+----------
+
+profiles\.migrations\.0001\_initial module
+------------------------------------------
+
+.. automodule:: profiles.migrations.0001_initial
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+profiles\.migrations\.0002\_studentinfo\_sex module
+---------------------------------------------------
+
+.. automodule:: profiles.migrations.0002_studentinfo_sex
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+profiles\.migrations\.0003\_auto\_20170929\_1512 module
+-------------------------------------------------------
+
+.. automodule:: profiles.migrations.0003_auto_20170929_1512
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+profiles\.migrations\.0004\_studentinfo\_room module
+----------------------------------------------------
+
+.. automodule:: profiles.migrations.0004_studentinfo_room
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+profiles\.migrations\.0005\_auto\_20171008\_1747 module
+-------------------------------------------------------
+
+.. automodule:: profiles.migrations.0005_auto_20171008_1747
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: profiles.migrations
+    :members:
+    :undoc-members:
+    :show-inheritance:

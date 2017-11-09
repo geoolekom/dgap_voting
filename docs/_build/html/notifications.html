@@ -1,0 +1,461 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>notifications package &#8212; DGAP Services 0.3 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="notifications-package">
+<h1>notifications package<a class="headerlink" href="#notifications-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-notifications.admin">
+<span id="notifications-admin-module"></span><h2>notifications.admin module<a class="headerlink" href="#module-notifications.admin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="notifications.admin.NotificationAdmin">
+<em class="property">class </em><code class="descclassname">notifications.admin.</code><code class="descname">NotificationAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/admin.html#NotificationAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.admin.NotificationAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="notifications.admin.NotificationAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ('user', 'send_dttm', 'method', 'text', 'result')</em><a class="headerlink" href="#notifications.admin.NotificationAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.admin.NotificationAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#notifications.admin.NotificationAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="notifications.admin.UserNotificationSettingsAdmin">
+<em class="property">class </em><code class="descclassname">notifications.admin.</code><code class="descname">UserNotificationSettingsAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/admin.html#UserNotificationSettingsAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.admin.UserNotificationSettingsAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="notifications.admin.UserNotificationSettingsAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ('user', 'allow_vk', 'allow_email', 'allow_telegram')</em><a class="headerlink" href="#notifications.admin.UserNotificationSettingsAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.admin.UserNotificationSettingsAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#notifications.admin.UserNotificationSettingsAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-notifications.app">
+<span id="notifications-app-module"></span><h2>notifications.app module<a class="headerlink" href="#module-notifications.app" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="notifications.app.NotificationsConfig">
+<em class="property">class </em><code class="descclassname">notifications.app.</code><code class="descname">NotificationsConfig</code><span class="sig-paren">(</span><em>app_name</em>, <em>app_module</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/app.html#NotificationsConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.app.NotificationsConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.apps.config.AppConfig</span></code></p>
+<dl class="attribute">
+<dt id="notifications.app.NotificationsConfig.name">
+<code class="descname">name</code><em class="property"> = 'notifications'</em><a class="headerlink" href="#notifications.app.NotificationsConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="notifications.app.NotificationsConfig.ready">
+<code class="descname">ready</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/app.html#NotificationsConfig.ready"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.app.NotificationsConfig.ready" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.app.NotificationsConfig.verbose_name">
+<code class="descname">verbose_name</code><em class="property"> = 'Уведомления'</em><a class="headerlink" href="#notifications.app.NotificationsConfig.verbose_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-notifications.models">
+<span id="notifications-models-module"></span><h2>notifications.models module<a class="headerlink" href="#module-notifications.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="notifications.models.Notification">
+<em class="property">class </em><code class="descclassname">notifications.models.</code><code class="descname">Notification</code><span class="sig-paren">(</span><em>id</em>, <em>user</em>, <em>send_dttm</em>, <em>method</em>, <em>text</em>, <em>result</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/models.html#Notification"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.models.Notification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="exception">
+<dt id="notifications.models.Notification.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#notifications.models.Notification.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.Notification.MAIL">
+<code class="descname">MAIL</code><em class="property"> = 1</em><a class="headerlink" href="#notifications.models.Notification.MAIL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.Notification.METHODS">
+<code class="descname">METHODS</code><em class="property"> = [(1, 'e-mail'), (2, 'Вконтакте'), (3, 'telegram')]</em><a class="headerlink" href="#notifications.models.Notification.METHODS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="notifications.models.Notification.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#notifications.models.Notification.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.Notification.TELEGRAM">
+<code class="descname">TELEGRAM</code><em class="property"> = 3</em><a class="headerlink" href="#notifications.models.Notification.TELEGRAM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.Notification.VK">
+<code class="descname">VK</code><em class="property"> = 2</em><a class="headerlink" href="#notifications.models.Notification.VK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="notifications.models.Notification.get_method_display">
+<code class="descname">get_method_display</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#notifications.models.Notification.get_method_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="notifications.models.Notification.get_next_by_send_dttm">
+<code class="descname">get_next_by_send_dttm</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#notifications.models.Notification.get_next_by_send_dttm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="notifications.models.Notification.get_previous_by_send_dttm">
+<code class="descname">get_previous_by_send_dttm</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#notifications.models.Notification.get_previous_by_send_dttm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.Notification.id">
+<code class="descname">id</code><a class="headerlink" href="#notifications.models.Notification.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.Notification.method">
+<code class="descname">method</code><a class="headerlink" href="#notifications.models.Notification.method" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.Notification.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#notifications.models.Notification.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.Notification.result">
+<code class="descname">result</code><a class="headerlink" href="#notifications.models.Notification.result" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.Notification.send_dttm">
+<code class="descname">send_dttm</code><a class="headerlink" href="#notifications.models.Notification.send_dttm" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.Notification.text">
+<code class="descname">text</code><a class="headerlink" href="#notifications.models.Notification.text" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.Notification.user">
+<code class="descname">user</code><a class="headerlink" href="#notifications.models.Notification.user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">restaurant.place</span></code> is a <code class="docutils literal"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.Notification.user_id">
+<code class="descname">user_id</code><a class="headerlink" href="#notifications.models.Notification.user_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="notifications.models.UserNotificationsSettings">
+<em class="property">class </em><code class="descclassname">notifications.models.</code><code class="descname">UserNotificationsSettings</code><span class="sig-paren">(</span><em>id</em>, <em>user</em>, <em>allow_email</em>, <em>allow_vk</em>, <em>allow_telegram</em>, <em>last_allow_vk_reminder</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/models.html#UserNotificationsSettings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.models.UserNotificationsSettings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="exception">
+<dt id="notifications.models.UserNotificationsSettings.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#notifications.models.UserNotificationsSettings.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="notifications.models.UserNotificationsSettings.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#notifications.models.UserNotificationsSettings.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.UserNotificationsSettings.allow_email">
+<code class="descname">allow_email</code><a class="headerlink" href="#notifications.models.UserNotificationsSettings.allow_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.UserNotificationsSettings.allow_telegram">
+<code class="descname">allow_telegram</code><a class="headerlink" href="#notifications.models.UserNotificationsSettings.allow_telegram" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.UserNotificationsSettings.allow_vk">
+<code class="descname">allow_vk</code><a class="headerlink" href="#notifications.models.UserNotificationsSettings.allow_vk" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.UserNotificationsSettings.id">
+<code class="descname">id</code><a class="headerlink" href="#notifications.models.UserNotificationsSettings.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.UserNotificationsSettings.last_allow_vk_reminder">
+<code class="descname">last_allow_vk_reminder</code><a class="headerlink" href="#notifications.models.UserNotificationsSettings.last_allow_vk_reminder" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.UserNotificationsSettings.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#notifications.models.UserNotificationsSettings.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.UserNotificationsSettings.user">
+<code class="descname">user</code><a class="headerlink" href="#notifications.models.UserNotificationsSettings.user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">restaurant.place</span></code> is a <code class="docutils literal"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="notifications.models.UserNotificationsSettings.user_id">
+<code class="descname">user_id</code><a class="headerlink" href="#notifications.models.UserNotificationsSettings.user_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-notifications.notify">
+<span id="notifications-notify-module"></span><h2>notifications.notify module<a class="headerlink" href="#module-notifications.notify" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="notifications.notify.get_email">
+<code class="descclassname">notifications.notify.</code><code class="descname">get_email</code><span class="sig-paren">(</span><em>user: django.contrib.auth.models.User</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/notify.html#get_email"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.notify.get_email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="notifications.notify.get_telegram_uid">
+<code class="descclassname">notifications.notify.</code><code class="descname">get_telegram_uid</code><span class="sig-paren">(</span><em>user: django.contrib.auth.models.User</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/notify.html#get_telegram_uid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.notify.get_telegram_uid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="notifications.notify.get_vk_uid">
+<code class="descclassname">notifications.notify.</code><code class="descname">get_vk_uid</code><span class="sig-paren">(</span><em>user: django.contrib.auth.models.User</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/notify.html#get_vk_uid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.notify.get_vk_uid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="notifications.notify.message_int_hash">
+<code class="descclassname">notifications.notify.</code><code class="descname">message_int_hash</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/notify.html#message_int_hash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.notify.message_int_hash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="notifications.notify.notify">
+<code class="descclassname">notifications.notify.</code><code class="descname">notify</code><span class="sig-paren">(</span><em>user: django.contrib.auth.models.User</em>, <em>text</em>, <em>title=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/notify.html#notify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.notify.notify" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="notifications.notify.notify_group">
+<code class="descclassname">notifications.notify.</code><code class="descname">notify_group</code><span class="sig-paren">(</span><em>group</em>, <em>text</em>, <em>title=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/notify.html#notify_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.notify.notify_group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="notifications.notify.vk_html_user_link">
+<code class="descclassname">notifications.notify.</code><code class="descname">vk_html_user_link</code><span class="sig-paren">(</span><em>user</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/notify.html#vk_html_user_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.notify.vk_html_user_link" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="notifications.notify.vk_message_user_link">
+<code class="descclassname">notifications.notify.</code><code class="descname">vk_message_user_link</code><span class="sig-paren">(</span><em>user</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/notify.html#vk_message_user_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.notify.vk_message_user_link" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="notifications.notify.vk_messages_allowed">
+<code class="descclassname">notifications.notify.</code><code class="descname">vk_messages_allowed</code><span class="sig-paren">(</span><em>user</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/notify.html#vk_messages_allowed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.notify.vk_messages_allowed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-notifications.signals">
+<span id="notifications-signals-module"></span><h2>notifications.signals module<a class="headerlink" href="#module-notifications.signals" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="notifications.signals.aidrequest_save_notify">
+<code class="descclassname">notifications.signals.</code><code class="descname">aidrequest_save_notify</code><span class="sig-paren">(</span><em>sender</em>, <em>instance</em>, <em>created</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/signals.html#aidrequest_save_notify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.signals.aidrequest_save_notify" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="notifications.signals.bicycle_save_notify">
+<code class="descclassname">notifications.signals.</code><code class="descname">bicycle_save_notify</code><span class="sig-paren">(</span><em>sender</em>, <em>instance</em>, <em>created</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/signals.html#bicycle_save_notify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.signals.bicycle_save_notify" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="notifications.signals.remind_to_allow_messages">
+<code class="descclassname">notifications.signals.</code><code class="descname">remind_to_allow_messages</code><span class="sig-paren">(</span><em>sender</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/signals.html#remind_to_allow_messages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.signals.remind_to_allow_messages" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="notifications.signals.user_create">
+<code class="descclassname">notifications.signals.</code><code class="descname">user_create</code><span class="sig-paren">(</span><em>sender</em>, <em>instance</em>, <em>created</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/signals.html#user_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.signals.user_create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-notifications.templates">
+<span id="notifications-templates-module"></span><h2>notifications.templates module<a class="headerlink" href="#module-notifications.templates" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="notifications.templates.bicycle_new_request">
+<code class="descclassname">notifications.templates.</code><code class="descname">bicycle_new_request</code><span class="sig-paren">(</span><em>bicycle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/templates.html#bicycle_new_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.templates.bicycle_new_request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="notifications.templates.bicycle_request_status_change">
+<code class="descclassname">notifications.templates.</code><code class="descname">bicycle_request_status_change</code><span class="sig-paren">(</span><em>bicycle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/templates.html#bicycle_request_status_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.templates.bicycle_request_status_change" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="notifications.templates.fin_aid_new_request">
+<code class="descclassname">notifications.templates.</code><code class="descname">fin_aid_new_request</code><span class="sig-paren">(</span><em>aid_request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/templates.html#fin_aid_new_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.templates.fin_aid_new_request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="notifications.templates.fin_aid_received">
+<code class="descclassname">notifications.templates.</code><code class="descname">fin_aid_received</code><span class="sig-paren">(</span><em>user</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/templates.html#fin_aid_received"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.templates.fin_aid_received" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="notifications.templates.fin_aid_request_status_change">
+<code class="descclassname">notifications.templates.</code><code class="descname">fin_aid_request_status_change</code><span class="sig-paren">(</span><em>aid_request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/templates.html#fin_aid_request_status_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.templates.fin_aid_request_status_change" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="notifications.templates.get_abs_url">
+<code class="descclassname">notifications.templates.</code><code class="descname">get_abs_url</code><span class="sig-paren">(</span><em>loc_url</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/templates.html#get_abs_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.templates.get_abs_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="notifications.templates.poll_available">
+<code class="descclassname">notifications.templates.</code><code class="descname">poll_available</code><span class="sig-paren">(</span><em>poll</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notifications/templates.html#poll_available"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#notifications.templates.poll_available" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-notifications.tests">
+<span id="notifications-tests-module"></span><h2>notifications.tests module<a class="headerlink" href="#module-notifications.tests" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-notifications">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-notifications" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Pavel Semenenko.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/notifications.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

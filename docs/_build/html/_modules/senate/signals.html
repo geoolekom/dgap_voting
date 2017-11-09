@@ -1,0 +1,171 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>senate.signals &#8212; DGAP Services 0.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for senate.signals</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="k">import</span> <span class="n">post_save</span>
+<span class="kn">from</span> <span class="nn">django.dispatch</span> <span class="k">import</span> <span class="n">receiver</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="k">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="k">import</span> <span class="n">dateformat</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="k">import</span> <span class="n">Group</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="k">import</span> <span class="n">Issue</span><span class="p">,</span> <span class="n">Event</span><span class="p">,</span> <span class="n">Employee</span>
+<span class="kn">from</span> <span class="nn">notifications.notify</span> <span class="k">import</span> <span class="n">get_vk_uid</span><span class="p">,</span> <span class="n">vk_message_user_link</span><span class="p">,</span> <span class="n">notify</span><span class="p">,</span> <span class="n">notify_group</span>
+<span class="kn">from</span> <span class="nn">notifications.templates</span> <span class="k">import</span> <span class="n">get_abs_url</span>
+<span class="kn">from</span> <span class="nn">core</span> <span class="k">import</span> <span class="n">settings</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="new_issue_text"><a class="viewcode-back" href="../../senate.html#senate.signals.new_issue_text">[docs]</a><span class="k">def</span> <span class="nf">new_issue_text</span><span class="p">(</span><span class="n">issue</span><span class="p">:</span> <span class="n">Issue</span><span class="p">):</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="n">vk_message_user_link</span><span class="p">(</span><span class="n">issue</span><span class="o">.</span><span class="n">author</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Новое обращение от </span><span class="si">{}</span><span class="se">\n</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">author</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">issue</span><span class="p">))</span>
+    <span class="n">event</span> <span class="o">=</span> <span class="n">issue</span><span class="o">.</span><span class="n">event_set</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">cls</span><span class="o">=</span><span class="n">Event</span><span class="o">.</span><span class="n">OPEN</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">info</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">event</span><span class="o">.</span><span class="n">info</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="k">if</span> <span class="n">issue</span><span class="o">.</span><span class="n">want_to_help</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s1">&#39;Студент готов помочь с реализацией</span><span class="se">\n</span><span class="s1">&#39;</span>
+    <span class="k">if</span> <span class="n">issue</span><span class="o">.</span><span class="n">assigned_dept</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;Ответственный отдел: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">issue</span><span class="o">.</span><span class="n">assigned_dept</span><span class="o">.</span><span class="n">department</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">issue</span><span class="o">.</span><span class="n">assigned_worker</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;Ответственный сотрудник: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vk_message_user_link</span><span class="p">(</span><span class="n">issue</span><span class="o">.</span><span class="n">assigned_worker</span><span class="p">))</span>
+    <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;Подробнее на сайте: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">get_abs_url</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;senate:issue_detail&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">issue</span><span class="o">.</span><span class="n">pk</span><span class="p">])))</span>
+    <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="issue_update_text"><a class="viewcode-back" href="../../senate.html#senate.signals.issue_update_text">[docs]</a><span class="k">def</span> <span class="nf">issue_update_text</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">):</span>
+    <span class="n">issue</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">issue</span>
+    <span class="n">dt_add</span> <span class="o">=</span> <span class="n">dateformat</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">issue</span><span class="o">.</span><span class="n">add_dttm</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">DATE_FORMAT</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> обновил информация по обращению &quot;</span><span class="si">{}</span><span class="s1">&quot; от </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vk_message_user_link</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">author</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">issue</span><span class="p">),</span> <span class="n">dt_add</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">new_status</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;Новый статус: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">get_new_status_display</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">new_dept</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;Обращение передано в </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">new_dept</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">new_worker</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;Теперь с обращением работает </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vk_message_user_link</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">new_worker</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">info</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">event</span><span class="o">.</span><span class="n">info</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;Подробнее на сайте: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">get_abs_url</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;senate:issue_detail&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">issue</span><span class="o">.</span><span class="n">pk</span><span class="p">])))</span>
+    <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="event_save"><a class="viewcode-back" href="../../senate.html#senate.signals.event_save">[docs]</a><span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">Event</span><span class="p">,</span> <span class="n">dispatch_uid</span><span class="o">=</span><span class="s1">&#39;senate&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">event_save</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Event</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">created</span><span class="p">:</span>
+        <span class="n">issue</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">issue</span>
+        <span class="n">issue</span><span class="o">.</span><span class="n">last_event</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">issue</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">cls</span> <span class="o">==</span> <span class="n">Event</span><span class="o">.</span><span class="n">OPEN</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="n">new_issue_text</span><span class="p">(</span><span class="n">issue</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Новое обращение в отдел&quot;</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span> <span class="n">instance</span><span class="p">})</span>
+            <span class="n">notify_group</span><span class="p">(</span><span class="n">issue</span><span class="o">.</span><span class="n">assigned_dept</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="n">issue_update_text</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Информация по обращению в Сенат обновлена&quot;</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;event&#39;</span><span class="p">:</span> <span class="n">instance</span><span class="p">})</span>
+            <span class="k">if</span> <span class="n">issue</span><span class="o">.</span><span class="n">author</span> <span class="o">==</span> <span class="n">instance</span><span class="o">.</span><span class="n">author</span><span class="p">:</span>
+                <span class="n">notify_group</span><span class="p">(</span><span class="n">issue</span><span class="o">.</span><span class="n">assigned_dept</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">notify</span><span class="p">(</span><span class="n">issue</span><span class="o">.</span><span class="n">author</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">new_status</span><span class="p">:</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">issue</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">new_status</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">issue</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">new_dept</span><span class="p">:</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">issue</span><span class="o">.</span><span class="n">assigned_dept</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">new_dept</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">issue</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">new_worker</span><span class="p">:</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">issue</span><span class="o">.</span><span class="n">assigned_worker</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">new_worker</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">issue</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="employee_create"><a class="viewcode-back" href="../../senate.html#senate.signals.employee_create">[docs]</a><span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">Employee</span><span class="p">,</span> <span class="n">dispatch_uid</span><span class="o">=</span><span class="s1">&#39;senate&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">employee_create</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Employee</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">person</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">department</span><span class="o">.</span><span class="n">group</span><span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">person</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Group</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;senate_employee&quot;</span><span class="p">))</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">person</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Pavel Semenenko.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,172 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>fin_aid.create_paper &#8212; DGAP Services 0.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for fin_aid.create_paper</h1><div class="highlight"><pre>
+<span></span><span class="c1"># TODO check importancy of this feature. If essential, make create_paper method of AidRequest class</span>
+<span class="c1"># all further imports are needed only to make application paper!</span>
+<span class="kn">from</span> <span class="nn">django.core.files</span> <span class="k">import</span> <span class="n">File</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="k">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="k">import</span> <span class="n">timezone</span>
+<span class="kn">from</span> <span class="nn">docxtpl</span> <span class="k">import</span> <span class="n">DocxTemplate</span>  <span class="c1"># create word document from template</span>
+<span class="kn">from</span> <span class="nn">petrovich.enums</span> <span class="k">import</span> <span class="n">Case</span><span class="p">,</span> <span class="n">Gender</span>  <span class="c1"># склоняем фамилию (в заявлении нужен родительский падеж</span>
+<span class="kn">from</span> <span class="nn">petrovich.main</span> <span class="k">import</span> <span class="n">Petrovich</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">core.settings</span> <span class="k">import</span> <span class="n">MEDIA_ROOT</span><span class="p">,</span> <span class="n">STATIC_ROOT</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="k">import</span> <span class="n">user_hash</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="k">import</span> <span class="n">AidRequest</span><span class="p">,</span> <span class="n">AidDocument</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># russian, genitive</span>
+<span class="n">MONTH_RU</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;января&quot;</span><span class="p">,</span>
+    <span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;февраля&quot;</span><span class="p">,</span>
+    <span class="mi">3</span><span class="p">:</span> <span class="s2">&quot;марта&quot;</span><span class="p">,</span>
+    <span class="mi">4</span><span class="p">:</span> <span class="s2">&quot;апреля&quot;</span><span class="p">,</span>
+    <span class="mi">5</span><span class="p">:</span> <span class="s2">&quot;мая&quot;</span><span class="p">,</span>
+    <span class="mi">6</span><span class="p">:</span> <span class="s2">&quot;июня&quot;</span><span class="p">,</span>
+    <span class="mi">7</span><span class="p">:</span> <span class="s2">&quot;июля&quot;</span><span class="p">,</span>
+    <span class="mi">8</span><span class="p">:</span> <span class="s2">&quot;августа&quot;</span><span class="p">,</span>
+    <span class="mi">9</span><span class="p">:</span> <span class="s2">&quot;сентября&quot;</span><span class="p">,</span>
+    <span class="mi">10</span><span class="p">:</span> <span class="s2">&quot;октября&quot;</span><span class="p">,</span>
+    <span class="mi">11</span><span class="p">:</span> <span class="s2">&quot;ноября&quot;</span><span class="p">,</span>
+    <span class="mi">12</span><span class="p">:</span> <span class="s2">&quot;декабря&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="get_sex"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.create_paper.get_sex">[docs]</a><span class="k">def</span> <span class="nf">get_sex</span><span class="p">(</span><span class="n">user</span><span class="p">:</span> <span class="n">User</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">student_info</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">student_info</span><span class="o">.</span><span class="n">get_sex_display</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">middlename</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">middlename</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;ч&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;male&#39;</span>
+    <span class="k">elif</span> <span class="n">user</span><span class="o">.</span><span class="n">first_name</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s1">&#39;я&#39;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="s1">&#39;female&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;male&#39;</span></div>
+
+
+<div class="viewcode-block" id="create_paper"><a class="viewcode-back" href="../../fin_aid.html#fin_aid.create_paper.create_paper">[docs]</a><span class="k">def</span> <span class="nf">create_paper</span><span class="p">(</span><span class="n">aid_request</span><span class="p">:</span> <span class="n">AidRequest</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">today</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> г.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">today</span><span class="o">.</span><span class="n">day</span><span class="p">,</span> <span class="n">MONTH_RU</span><span class="p">[</span><span class="n">today</span><span class="o">.</span><span class="n">month</span><span class="p">],</span> <span class="n">today</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">applicant</span>
+        <span class="n">userprofile</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">userprofile</span>
+        <span class="n">student_info</span> <span class="o">=</span> <span class="n">userprofile</span><span class="o">.</span><span class="n">student_info</span>
+        <span class="n">sex</span> <span class="o">=</span> <span class="n">get_sex</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sex</span> <span class="o">==</span> <span class="s1">&#39;female&#39;</span><span class="p">:</span>
+            <span class="n">student</span> <span class="o">=</span> <span class="s2">&quot;студентки&quot;</span>
+            <span class="n">gender</span> <span class="o">=</span> <span class="n">Gender</span><span class="o">.</span><span class="n">FEMALE</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">student</span> <span class="o">=</span> <span class="s2">&quot;студента&quot;</span>
+            <span class="n">gender</span> <span class="o">=</span> <span class="n">Gender</span><span class="o">.</span><span class="n">MALE</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Petrovich</span><span class="p">()</span>
+        <span class="n">fst</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">firstname</span><span class="p">(</span><span class="n">student_info</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span> <span class="n">Case</span><span class="o">.</span><span class="n">GENITIVE</span><span class="p">,</span> <span class="n">gender</span><span class="p">)</span>
+        <span class="n">lst</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">firstname</span><span class="p">(</span><span class="n">student_info</span><span class="o">.</span><span class="n">last_name</span><span class="p">,</span> <span class="n">Case</span><span class="o">.</span><span class="n">GENITIVE</span><span class="p">,</span> <span class="n">gender</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">userprofile</span><span class="o">.</span><span class="n">middlename</span><span class="p">:</span>
+            <span class="n">mdl</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">firstname</span><span class="p">(</span><span class="n">userprofile</span><span class="o">.</span><span class="n">middlename</span><span class="p">,</span> <span class="n">Case</span><span class="o">.</span><span class="n">GENITIVE</span><span class="p">,</span> <span class="n">gender</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mdl</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span> <span class="n">fst</span><span class="p">,</span> <span class="n">mdl</span><span class="p">)</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;student&quot;</span><span class="p">:</span> <span class="n">student</span><span class="p">,</span>
+            <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">student_info</span><span class="o">.</span><span class="n">group</span><span class="p">),</span>
+            <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+            <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">category</span><span class="o">.</span><span class="n">reason</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">tpl</span> <span class="o">=</span> <span class="n">DocxTemplate</span><span class="p">(</span><span class="n">STATIC_ROOT</span> <span class="o">+</span> <span class="s2">&quot;/fin_aid/Obrazets_Zayavlenia_Na_Matpomosch.docx&quot;</span><span class="p">)</span>
+        <span class="n">tpl</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">MEDIA_ROOT</span> <span class="o">+</span> <span class="s2">&quot;/aid_docs/user_</span><span class="si">{}</span><span class="s2">/&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user_hash</span><span class="p">(</span><span class="n">user</span><span class="p">))</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;application-</span><span class="si">{}</span><span class="s2">-</span><span class="si">{}</span><span class="s2">-</span><span class="si">{}</span><span class="s2">.docx&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">today</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">today</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="n">today</span><span class="o">.</span><span class="n">day</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">tpl</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="n">application</span> <span class="o">=</span> <span class="n">AidDocument</span><span class="p">(</span><span class="n">request</span><span class="o">=</span><span class="n">aid_request</span><span class="p">,</span> <span class="n">is_application_paper</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">application</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)),</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">filename</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Pavel Semenenko.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

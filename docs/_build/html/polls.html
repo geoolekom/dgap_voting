@@ -1,0 +1,1286 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>polls package &#8212; DGAP Services 0.3 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="polls-package">
+<h1>polls package<a class="headerlink" href="#polls-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="polls.templatetags.html">polls.templatetags package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="polls.templatetags.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polls.templatetags.html#module-polls.templatetags.polls_extras">polls.templatetags.polls_extras module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polls.templatetags.html#module-polls.templatetags">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-polls.admaking">
+<span id="polls-admaking-module"></span><h2>polls.admaking module<a class="headerlink" href="#module-polls.admaking" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="polls.admaking.create_advert">
+<code class="descclassname">polls.admaking.</code><code class="descname">create_advert</code><span class="sig-paren">(</span><em>request</em>, <em>poll_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/admaking.html#create_advert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.admaking.create_advert" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="polls.admaking.html_to_pdf">
+<code class="descclassname">polls.admaking.</code><code class="descname">html_to_pdf</code><span class="sig-paren">(</span><em>html_filename</em>, <em>pdf_filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/admaking.html#html_to_pdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.admaking.html_to_pdf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="polls.admaking.make_html_advert">
+<code class="descclassname">polls.admaking.</code><code class="descname">make_html_advert</code><span class="sig-paren">(</span><em>request</em>, <em>poll_id</em>, <em>poll_obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/admaking.html#make_html_advert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.admaking.make_html_advert" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="polls.admaking.make_pdf">
+<code class="descclassname">polls.admaking.</code><code class="descname">make_pdf</code><span class="sig-paren">(</span><em>request</em>, <em>poll_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/admaking.html#make_pdf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.admaking.make_pdf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-polls.admin">
+<span id="polls-admin-module"></span><h2>polls.admin module<a class="headerlink" href="#module-polls.admin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="polls.admin.ChoiceInline">
+<em class="property">class </em><code class="descclassname">polls.admin.</code><code class="descname">ChoiceInline</code><span class="sig-paren">(</span><em>parent_model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/admin.html#ChoiceInline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.admin.ChoiceInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nested_inline.admin.NestedTabularInline</span></code></p>
+<dl class="attribute">
+<dt id="polls.admin.ChoiceInline.exclude">
+<code class="descname">exclude</code><em class="property"> = ('votes',)</em><a class="headerlink" href="#polls.admin.ChoiceInline.exclude" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.ChoiceInline.extra">
+<code class="descname">extra</code><em class="property"> = 1</em><a class="headerlink" href="#polls.admin.ChoiceInline.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.ChoiceInline.media">
+<code class="descname">media</code><a class="headerlink" href="#polls.admin.ChoiceInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.ChoiceInline.model">
+<code class="descname">model</code><a class="headerlink" href="#polls.admin.ChoiceInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">Choice</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polls.admin.ParticipantAdmin">
+<em class="property">class </em><code class="descclassname">polls.admin.</code><code class="descname">ParticipantAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/admin.html#ParticipantAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.admin.ParticipantAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nested_inline.admin.NestedModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="polls.admin.ParticipantAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ['user_information', 'poll', 'voted']</em><a class="headerlink" href="#polls.admin.ParticipantAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.ParticipantAdmin.list_editable">
+<code class="descname">list_editable</code><em class="property"> = ['voted']</em><a class="headerlink" href="#polls.admin.ParticipantAdmin.list_editable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.ParticipantAdmin.list_filter">
+<code class="descname">list_filter</code><em class="property"> = ['voted', 'poll']</em><a class="headerlink" href="#polls.admin.ParticipantAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.ParticipantAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#polls.admin.ParticipantAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.ParticipantAdmin.search_fields">
+<code class="descname">search_fields</code><em class="property"> = ['user_information__fio']</em><a class="headerlink" href="#polls.admin.ParticipantAdmin.search_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polls.admin.ParticipantInline">
+<em class="property">class </em><code class="descclassname">polls.admin.</code><code class="descname">ParticipantInline</code><span class="sig-paren">(</span><em>parent_model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/admin.html#ParticipantInline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.admin.ParticipantInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nested_inline.admin.NestedTabularInline</span></code></p>
+<dl class="attribute">
+<dt id="polls.admin.ParticipantInline.exclude">
+<code class="descname">exclude</code><em class="property"> = ('user_information',)</em><a class="headerlink" href="#polls.admin.ParticipantInline.exclude" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.ParticipantInline.fields">
+<code class="descname">fields</code><em class="property"> = ('voted',)</em><a class="headerlink" href="#polls.admin.ParticipantInline.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.ParticipantInline.list_dispay">
+<code class="descname">list_dispay</code><em class="property"> = ['userprofile']</em><a class="headerlink" href="#polls.admin.ParticipantInline.list_dispay" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.ParticipantInline.media">
+<code class="descname">media</code><a class="headerlink" href="#polls.admin.ParticipantInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.ParticipantInline.model">
+<code class="descname">model</code><a class="headerlink" href="#polls.admin.ParticipantInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">Participant</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.ParticipantInline.ordering">
+<code class="descname">ordering</code><em class="property"> = ('user_information',)</em><a class="headerlink" href="#polls.admin.ParticipantInline.ordering" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polls.admin.PollAdmin">
+<em class="property">class </em><code class="descclassname">polls.admin.</code><code class="descname">PollAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/admin.html#PollAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.admin.PollAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nested_inline.admin.NestedModelAdmin</span></code></p>
+<dl class="method">
+<dt id="polls.admin.PollAdmin.audit_button">
+<code class="descname">audit_button</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/admin.html#PollAdmin.audit_button"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.admin.PollAdmin.audit_button" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.PollAdmin.exclude">
+<code class="descname">exclude</code><em class="property"> = ('voted_users', 'times_mailed', 'last_mailing')</em><a class="headerlink" href="#polls.admin.PollAdmin.exclude" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.PollAdmin.inlines">
+<code class="descname">inlines</code><em class="property"> = [&lt;class 'polls.admin.ParticipantInline'&gt;, &lt;class 'polls.admin.QuestionInline'&gt;]</em><a class="headerlink" href="#polls.admin.PollAdmin.inlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.PollAdmin.list_display">
+<code class="descname">list_display</code><em class="property"> = ['name', 'pdf_button', 'audit_button', 'mailing_button']</em><a class="headerlink" href="#polls.admin.PollAdmin.list_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.admin.PollAdmin.mailing_button">
+<code class="descname">mailing_button</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/admin.html#PollAdmin.mailing_button"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.admin.PollAdmin.mailing_button" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.PollAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#polls.admin.PollAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.admin.PollAdmin.pdf_button">
+<code class="descname">pdf_button</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/admin.html#PollAdmin.pdf_button"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.admin.PollAdmin.pdf_button" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.admin.PollAdmin.save_model">
+<code class="descname">save_model</code><span class="sig-paren">(</span><em>request</em>, <em>obj</em>, <em>form</em>, <em>change</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/admin.html#PollAdmin.save_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.admin.PollAdmin.save_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polls.admin.QuestionAdmin">
+<em class="property">class </em><code class="descclassname">polls.admin.</code><code class="descname">QuestionAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/admin.html#QuestionAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.admin.QuestionAdmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
+<dl class="attribute">
+<dt id="polls.admin.QuestionAdmin.inlines">
+<code class="descname">inlines</code><em class="property"> = [&lt;class 'polls.admin.ChoiceInline'&gt;]</em><a class="headerlink" href="#polls.admin.QuestionAdmin.inlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.QuestionAdmin.media">
+<code class="descname">media</code><a class="headerlink" href="#polls.admin.QuestionAdmin.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.QuestionAdmin.models">
+<code class="descname">models</code><a class="headerlink" href="#polls.admin.QuestionAdmin.models" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">Question</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polls.admin.QuestionInline">
+<em class="property">class </em><code class="descclassname">polls.admin.</code><code class="descname">QuestionInline</code><span class="sig-paren">(</span><em>parent_model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/admin.html#QuestionInline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.admin.QuestionInline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">nested_inline.admin.NestedTabularInline</span></code></p>
+<dl class="attribute">
+<dt id="polls.admin.QuestionInline.extra">
+<code class="descname">extra</code><em class="property"> = 1</em><a class="headerlink" href="#polls.admin.QuestionInline.extra" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.QuestionInline.inlines">
+<code class="descname">inlines</code><em class="property"> = [&lt;class 'polls.admin.ChoiceInline'&gt;]</em><a class="headerlink" href="#polls.admin.QuestionInline.inlines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.QuestionInline.media">
+<code class="descname">media</code><a class="headerlink" href="#polls.admin.QuestionInline.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.admin.QuestionInline.model">
+<code class="descname">model</code><a class="headerlink" href="#polls.admin.QuestionInline.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">Question</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-polls.app">
+<span id="polls-app-module"></span><h2>polls.app module<a class="headerlink" href="#module-polls.app" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="polls.app.PollsConfig">
+<em class="property">class </em><code class="descclassname">polls.app.</code><code class="descname">PollsConfig</code><span class="sig-paren">(</span><em>app_name</em>, <em>app_module</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/app.html#PollsConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.app.PollsConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.apps.config.AppConfig</span></code></p>
+<dl class="attribute">
+<dt id="polls.app.PollsConfig.name">
+<code class="descname">name</code><em class="property"> = 'polls'</em><a class="headerlink" href="#polls.app.PollsConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.app.PollsConfig.ready">
+<code class="descname">ready</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/app.html#PollsConfig.ready"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.app.PollsConfig.ready" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.app.PollsConfig.verbose_name">
+<code class="descname">verbose_name</code><em class="property"> = 'Голосовалка'</em><a class="headerlink" href="#polls.app.PollsConfig.verbose_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-polls.forms">
+<span id="polls-forms-module"></span><h2>polls.forms module<a class="headerlink" href="#module-polls.forms" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="polls.forms.UserForm">
+<em class="property">class </em><code class="descclassname">polls.forms.</code><code class="descname">UserForm</code><span class="sig-paren">(</span><em>data=None</em>, <em>files=None</em>, <em>auto_id='id_%s'</em>, <em>prefix=None</em>, <em>initial=None</em>, <em>error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em>label_suffix=None</em>, <em>empty_permitted=False</em>, <em>instance=None</em>, <em>use_required_attribute=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/forms.html#UserForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.forms.UserForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.forms.models.ModelForm</span></code></p>
+<dl class="class">
+<dt id="polls.forms.UserForm.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="reference internal" href="_modules/polls/forms.html#UserForm.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.forms.UserForm.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="attribute">
+<dt id="polls.forms.UserForm.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('last_name', 'first_name')</em><a class="headerlink" href="#polls.forms.UserForm.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.forms.UserForm.Meta.model">
+<code class="descname">model</code><a class="headerlink" href="#polls.forms.UserForm.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">User</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.forms.UserForm.base_fields">
+<code class="descname">base_fields</code><em class="property"> = OrderedDict([('last_name', &lt;django.forms.fields.CharField object&gt;), ('first_name', &lt;django.forms.fields.CharField object&gt;)])</em><a class="headerlink" href="#polls.forms.UserForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.forms.UserForm.declared_fields">
+<code class="descname">declared_fields</code><em class="property"> = OrderedDict()</em><a class="headerlink" href="#polls.forms.UserForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.forms.UserForm.media">
+<code class="descname">media</code><a class="headerlink" href="#polls.forms.UserForm.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polls.forms.UserProfileForm">
+<em class="property">class </em><code class="descclassname">polls.forms.</code><code class="descname">UserProfileForm</code><span class="sig-paren">(</span><em>data=None</em>, <em>files=None</em>, <em>auto_id='id_%s'</em>, <em>prefix=None</em>, <em>initial=None</em>, <em>error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em>label_suffix=None</em>, <em>empty_permitted=False</em>, <em>instance=None</em>, <em>use_required_attribute=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/forms.html#UserProfileForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.forms.UserProfileForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#polls.forms.UserProfileFormReduced" title="polls.forms.UserProfileFormReduced"><code class="xref py py-class docutils literal"><span class="pre">polls.forms.UserProfileFormReduced</span></code></a></p>
+<dl class="class">
+<dt id="polls.forms.UserProfileForm.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="reference internal" href="_modules/polls/forms.html#UserProfileForm.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.forms.UserProfileForm.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">polls.forms.Meta</span></code></p>
+<dl class="attribute">
+<dt id="polls.forms.UserProfileForm.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('room', 'cardnumber')</em><a class="headerlink" href="#polls.forms.UserProfileForm.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.forms.UserProfileForm.base_fields">
+<code class="descname">base_fields</code><em class="property"> = OrderedDict([('room', &lt;django.forms.fields.CharField object&gt;), ('cardnumber', &lt;django.forms.fields.CharField object&gt;)])</em><a class="headerlink" href="#polls.forms.UserProfileForm.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.forms.UserProfileForm.declared_fields">
+<code class="descname">declared_fields</code><em class="property"> = OrderedDict([('cardnumber', &lt;django.forms.fields.CharField object&gt;)])</em><a class="headerlink" href="#polls.forms.UserProfileForm.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.forms.UserProfileForm.media">
+<code class="descname">media</code><a class="headerlink" href="#polls.forms.UserProfileForm.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polls.forms.UserProfileFormReduced">
+<em class="property">class </em><code class="descclassname">polls.forms.</code><code class="descname">UserProfileFormReduced</code><span class="sig-paren">(</span><em>data=None</em>, <em>files=None</em>, <em>auto_id='id_%s'</em>, <em>prefix=None</em>, <em>initial=None</em>, <em>error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em>label_suffix=None</em>, <em>empty_permitted=False</em>, <em>instance=None</em>, <em>use_required_attribute=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/forms.html#UserProfileFormReduced"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.forms.UserProfileFormReduced" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.forms.models.ModelForm</span></code></p>
+<dl class="class">
+<dt id="polls.forms.UserProfileFormReduced.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="reference internal" href="_modules/polls/forms.html#UserProfileFormReduced.Meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.forms.UserProfileFormReduced.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="attribute">
+<dt id="polls.forms.UserProfileFormReduced.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('room',)</em><a class="headerlink" href="#polls.forms.UserProfileFormReduced.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.forms.UserProfileFormReduced.Meta.model">
+<code class="descname">model</code><a class="headerlink" href="#polls.forms.UserProfileFormReduced.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">UserProfile</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.forms.UserProfileFormReduced.base_fields">
+<code class="descname">base_fields</code><em class="property"> = OrderedDict([('room', &lt;django.forms.fields.CharField object&gt;)])</em><a class="headerlink" href="#polls.forms.UserProfileFormReduced.base_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.forms.UserProfileFormReduced.declared_fields">
+<code class="descname">declared_fields</code><em class="property"> = OrderedDict()</em><a class="headerlink" href="#polls.forms.UserProfileFormReduced.declared_fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.forms.UserProfileFormReduced.media">
+<code class="descname">media</code><a class="headerlink" href="#polls.forms.UserProfileFormReduced.media" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-polls.mailing">
+<span id="polls-mailing-module"></span><h2>polls.mailing module<a class="headerlink" href="#module-polls.mailing" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="polls.mailing.approve_mailing">
+<code class="descclassname">polls.mailing.</code><code class="descname">approve_mailing</code><span class="sig-paren">(</span><em>request</em>, <em>poll_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/mailing.html#approve_mailing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.mailing.approve_mailing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="polls.mailing.is_staff">
+<code class="descclassname">polls.mailing.</code><code class="descname">is_staff</code><span class="sig-paren">(</span><em>user</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/mailing.html#is_staff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.mailing.is_staff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="polls.mailing.mail_unvoted">
+<code class="descclassname">polls.mailing.</code><code class="descname">mail_unvoted</code><span class="sig-paren">(</span><em>request</em>, <em>poll_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/mailing.html#mail_unvoted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.mailing.mail_unvoted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-polls.models">
+<span id="polls-models-module"></span><h2>polls.models module<a class="headerlink" href="#module-polls.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="polls.models.Choice">
+<em class="property">class </em><code class="descclassname">polls.models.</code><code class="descname">Choice</code><span class="sig-paren">(</span><em>id</em>, <em>question</em>, <em>choice_text</em>, <em>votes</em>, <em>created</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/models.html#Choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.models.Choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="exception">
+<dt id="polls.models.Choice.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#polls.models.Choice.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="polls.models.Choice.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#polls.models.Choice.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Choice.choice_text">
+<code class="descname">choice_text</code><a class="headerlink" href="#polls.models.Choice.choice_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Choice.created">
+<code class="descname">created</code><a class="headerlink" href="#polls.models.Choice.created" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Choice.id">
+<code class="descname">id</code><a class="headerlink" href="#polls.models.Choice.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Choice.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#polls.models.Choice.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Choice.question">
+<code class="descname">question</code><a class="headerlink" href="#polls.models.Choice.question" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">child.parent</span></code> is a <code class="docutils literal"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Choice.question_id">
+<code class="descname">question_id</code><a class="headerlink" href="#polls.models.Choice.question_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polls.models.Choice.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/models.html#Choice.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.models.Choice.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Choice.userhash_set">
+<code class="descname">userhash_set</code><a class="headerlink" href="#polls.models.Choice.userhash_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">parent.children</span></code> is a <code class="docutils literal"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Choice.votes">
+<code class="descname">votes</code><a class="headerlink" href="#polls.models.Choice.votes" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polls.models.Participant">
+<em class="property">class </em><code class="descclassname">polls.models.</code><code class="descname">Participant</code><span class="sig-paren">(</span><em>id</em>, <em>user_information</em>, <em>poll</em>, <em>voted</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/models.html#Participant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.models.Participant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="exception">
+<dt id="polls.models.Participant.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#polls.models.Participant.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="polls.models.Participant.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#polls.models.Participant.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Participant.id">
+<code class="descname">id</code><a class="headerlink" href="#polls.models.Participant.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Participant.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#polls.models.Participant.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Participant.poll">
+<code class="descname">poll</code><a class="headerlink" href="#polls.models.Participant.poll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">child.parent</span></code> is a <code class="docutils literal"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Participant.poll_id">
+<code class="descname">poll_id</code><a class="headerlink" href="#polls.models.Participant.poll_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Participant.user_information">
+<code class="descname">user_information</code><a class="headerlink" href="#polls.models.Participant.user_information" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">child.parent</span></code> is a <code class="docutils literal"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Participant.user_information_id">
+<code class="descname">user_information_id</code><a class="headerlink" href="#polls.models.Participant.user_information_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Participant.voted">
+<code class="descname">voted</code><a class="headerlink" href="#polls.models.Participant.voted" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polls.models.Poll">
+<em class="property">class </em><code class="descclassname">polls.models.</code><code class="descname">Poll</code><span class="sig-paren">(</span><em>id</em>, <em>name</em>, <em>begin_date</em>, <em>end_date</em>, <em>target_room</em>, <em>target_group</em>, <em>target_course</em>, <em>public</em>, <em>times_mailed</em>, <em>last_mailing</em>, <em>poll_type</em>, <em>only_for_staff</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/models.html#Poll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.models.Poll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="exception">
+<dt id="polls.models.Poll.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#polls.models.Poll.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="polls.models.Poll.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#polls.models.Poll.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.POLL_TYPE">
+<code class="descname">POLL_TYPE</code><em class="property"> = (('WITHOUT_TARGET_LIST', 'WITHOUT TARGET LIST'), ('TARGET_LIST', 'TARGET LIST'))</em><a class="headerlink" href="#polls.models.Poll.POLL_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.TARGET_LIST">
+<code class="descname">TARGET_LIST</code><em class="property"> = 'TARGET_LIST'</em><a class="headerlink" href="#polls.models.Poll.TARGET_LIST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.WITHOUT_TARGET_LIST">
+<code class="descname">WITHOUT_TARGET_LIST</code><em class="property"> = 'WITHOUT_TARGET_LIST'</em><a class="headerlink" href="#polls.models.Poll.WITHOUT_TARGET_LIST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.begin_date">
+<code class="descname">begin_date</code><a class="headerlink" href="#polls.models.Poll.begin_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polls.models.Poll.create_target_list_from_group_room_course">
+<code class="descname">create_target_list_from_group_room_course</code><span class="sig-paren">(</span><em>group=None</em>, <em>room=None</em>, <em>course=None</em>, <em>only_staff=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/models.html#Poll.create_target_list_from_group_room_course"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.models.Poll.create_target_list_from_group_room_course" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.end_date">
+<code class="descname">end_date</code><a class="headerlink" href="#polls.models.Poll.end_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polls.models.Poll.get_next_by_begin_date">
+<code class="descname">get_next_by_begin_date</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#polls.models.Poll.get_next_by_begin_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.models.Poll.get_next_by_end_date">
+<code class="descname">get_next_by_end_date</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#polls.models.Poll.get_next_by_end_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.models.Poll.get_poll_type_display">
+<code class="descname">get_poll_type_display</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#polls.models.Poll.get_poll_type_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.models.Poll.get_previous_by_begin_date">
+<code class="descname">get_previous_by_begin_date</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#polls.models.Poll.get_previous_by_begin_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.models.Poll.get_previous_by_end_date">
+<code class="descname">get_previous_by_end_date</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#polls.models.Poll.get_previous_by_end_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.id">
+<code class="descname">id</code><a class="headerlink" href="#polls.models.Poll.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polls.models.Poll.is_closed">
+<code class="descname">is_closed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/models.html#Poll.is_closed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.models.Poll.is_closed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.models.Poll.is_started">
+<code class="descname">is_started</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/models.html#Poll.is_started"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.models.Poll.is_started" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.models.Poll.is_user_target">
+<code class="descname">is_user_target</code><span class="sig-paren">(</span><em>user</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/models.html#Poll.is_user_target"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.models.Poll.is_user_target" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.models.Poll.is_user_voted">
+<code class="descname">is_user_voted</code><span class="sig-paren">(</span><em>user</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/models.html#Poll.is_user_voted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.models.Poll.is_user_voted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.last_mailing">
+<code class="descname">last_mailing</code><a class="headerlink" href="#polls.models.Poll.last_mailing" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.name">
+<code class="descname">name</code><a class="headerlink" href="#polls.models.Poll.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#polls.models.Poll.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.only_for_staff">
+<code class="descname">only_for_staff</code><a class="headerlink" href="#polls.models.Poll.only_for_staff" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.participant_set">
+<code class="descname">participant_set</code><a class="headerlink" href="#polls.models.Poll.participant_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">parent.children</span></code> is a <code class="docutils literal"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.poll_type">
+<code class="descname">poll_type</code><a class="headerlink" href="#polls.models.Poll.poll_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.public">
+<code class="descname">public</code><a class="headerlink" href="#polls.models.Poll.public" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.question_set">
+<code class="descname">question_set</code><a class="headerlink" href="#polls.models.Poll.question_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">parent.children</span></code> is a <code class="docutils literal"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.target_course">
+<code class="descname">target_course</code><a class="headerlink" href="#polls.models.Poll.target_course" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.target_group">
+<code class="descname">target_group</code><a class="headerlink" href="#polls.models.Poll.target_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.target_room">
+<code class="descname">target_room</code><a class="headerlink" href="#polls.models.Poll.target_room" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.times_mailed">
+<code class="descname">times_mailed</code><a class="headerlink" href="#polls.models.Poll.times_mailed" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Poll.voted_users">
+<code class="descname">voted_users</code><a class="headerlink" href="#polls.models.Poll.voted_users" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the forward and reverse sides of
+a many-to-many relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Pizza</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">toppings</span> <span class="o">=</span> <span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Topping</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;pizzas&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">pizza.toppings</span></code> and <code class="docutils literal"><span class="pre">topping.pizzas</span></code> are <code class="docutils literal"><span class="pre">ManyToManyDescriptor</span></code>
+instances.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polls.models.Question">
+<em class="property">class </em><code class="descclassname">polls.models.</code><code class="descname">Question</code><span class="sig-paren">(</span><em>id</em>, <em>poll</em>, <em>question</em>, <em>answer_type</em>, <em>choices_order</em>, <em>required</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/models.html#Question"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.models.Question" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="attribute">
+<dt id="polls.models.Question.ANSWER_TYPE_CHOICES">
+<code class="descname">ANSWER_TYPE_CHOICES</code><em class="property"> = (('ONE', 'Выбор одного варианта'), ('MANY', 'Выбор нескольких вариантов'), ('OWN', 'Свой вариант'))</em><a class="headerlink" href="#polls.models.Question.ANSWER_TYPE_CHOICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Question.CREATION">
+<code class="descname">CREATION</code><em class="property"> = 'created'</em><a class="headerlink" href="#polls.models.Question.CREATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="polls.models.Question.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#polls.models.Question.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Question.MANY">
+<code class="descname">MANY</code><em class="property"> = 'MANY'</em><a class="headerlink" href="#polls.models.Question.MANY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="polls.models.Question.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#polls.models.Question.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Question.ONE">
+<code class="descname">ONE</code><em class="property"> = 'ONE'</em><a class="headerlink" href="#polls.models.Question.ONE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Question.ORDER_TYPES">
+<code class="descname">ORDER_TYPES</code><em class="property"> = (('created', 'В порядке добавления'), ('?', 'В случайном порядке'))</em><a class="headerlink" href="#polls.models.Question.ORDER_TYPES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Question.OWN">
+<code class="descname">OWN</code><em class="property"> = 'OWN'</em><a class="headerlink" href="#polls.models.Question.OWN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Question.RANDOM">
+<code class="descname">RANDOM</code><em class="property"> = '?'</em><a class="headerlink" href="#polls.models.Question.RANDOM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Question.answer_type">
+<code class="descname">answer_type</code><a class="headerlink" href="#polls.models.Question.answer_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Question.choice_set">
+<code class="descname">choice_set</code><a class="headerlink" href="#polls.models.Question.choice_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">parent.children</span></code> is a <code class="docutils literal"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Question.choices_order">
+<code class="descname">choices_order</code><a class="headerlink" href="#polls.models.Question.choices_order" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polls.models.Question.get_answer_type_display">
+<code class="descname">get_answer_type_display</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#polls.models.Question.get_answer_type_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.models.Question.get_choices_order_display">
+<code class="descname">get_choices_order_display</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#polls.models.Question.get_choices_order_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.models.Question.get_ordered_choices">
+<code class="descname">get_ordered_choices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/models.html#Question.get_ordered_choices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.models.Question.get_ordered_choices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Question.id">
+<code class="descname">id</code><a class="headerlink" href="#polls.models.Question.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Question.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#polls.models.Question.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Question.poll">
+<code class="descname">poll</code><a class="headerlink" href="#polls.models.Question.poll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">child.parent</span></code> is a <code class="docutils literal"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Question.poll_id">
+<code class="descname">poll_id</code><a class="headerlink" href="#polls.models.Question.poll_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Question.question">
+<code class="descname">question</code><a class="headerlink" href="#polls.models.Question.question" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.Question.required">
+<code class="descname">required</code><a class="headerlink" href="#polls.models.Question.required" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polls.models.UserHash">
+<em class="property">class </em><code class="descclassname">polls.models.</code><code class="descname">UserHash</code><span class="sig-paren">(</span><em>id</em>, <em>value</em>, <em>choice</em>, <em>user</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/models.html#UserHash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.models.UserHash" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<dl class="exception">
+<dt id="polls.models.UserHash.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#polls.models.UserHash.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="polls.models.UserHash.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#polls.models.UserHash.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.UserHash.choice">
+<code class="descname">choice</code><a class="headerlink" href="#polls.models.UserHash.choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">child.parent</span></code> is a <code class="docutils literal"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.UserHash.choice_id">
+<code class="descname">choice_id</code><a class="headerlink" href="#polls.models.UserHash.choice_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.UserHash.id">
+<code class="descname">id</code><a class="headerlink" href="#polls.models.UserHash.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.UserHash.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#polls.models.UserHash.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.UserHash.user">
+<code class="descname">user</code><a class="headerlink" href="#polls.models.UserHash.user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">child.parent</span></code> is a <code class="docutils literal"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.UserHash.user_id">
+<code class="descname">user_id</code><a class="headerlink" href="#polls.models.UserHash.user_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.models.UserHash.value">
+<code class="descname">value</code><a class="headerlink" href="#polls.models.UserHash.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-polls.signals">
+<span id="polls-signals-module"></span><h2>polls.signals module<a class="headerlink" href="#module-polls.signals" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="polls.signals.remind_to_vote">
+<code class="descclassname">polls.signals.</code><code class="descname">remind_to_vote</code><span class="sig-paren">(</span><em>sender</em>, <em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/signals.html#remind_to_vote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.signals.remind_to_vote" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-polls.tests">
+<span id="polls-tests-module"></span><h2>polls.tests module<a class="headerlink" href="#module-polls.tests" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="polls.tests.PollTestCase">
+<em class="property">class </em><code class="descclassname">polls.tests.</code><code class="descname">PollTestCase</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/tests.html#PollTestCase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.tests.PollTestCase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.test.testcases.TestCase</span></code></p>
+<dl class="method">
+<dt id="polls.tests.PollTestCase.setUp">
+<code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/tests.html#PollTestCase.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.tests.PollTestCase.setUp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.tests.PollTestCase.test_vote_answer_type_MANY">
+<code class="descname">test_vote_answer_type_MANY</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/tests.html#PollTestCase.test_vote_answer_type_MANY"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.tests.PollTestCase.test_vote_answer_type_MANY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.tests.PollTestCase.test_vote_answer_type_ONE">
+<code class="descname">test_vote_answer_type_ONE</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/tests.html#PollTestCase.test_vote_answer_type_ONE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.tests.PollTestCase.test_vote_answer_type_ONE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-polls.urls">
+<span id="polls-urls-module"></span><h2>polls.urls module<a class="headerlink" href="#module-polls.urls" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-polls.views">
+<span id="polls-views-module"></span><h2>polls.views module<a class="headerlink" href="#module-polls.views" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="polls.views.Available">
+<em class="property">class </em><code class="descclassname">polls.views.</code><code class="descname">Available</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#Available"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.Available" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#polls.views.IndexBase" title="polls.views.IndexBase"><code class="xref py py-class docutils literal"><span class="pre">polls.views.IndexBase</span></code></a></p>
+<dl class="method">
+<dt id="polls.views.Available.get_context_data">
+<code class="descname">get_context_data</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#Available.get_context_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.Available.get_context_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.views.Available.get_queryset">
+<code class="descname">get_queryset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#Available.get_queryset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.Available.get_queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polls.views.Closed">
+<em class="property">class </em><code class="descclassname">polls.views.</code><code class="descname">Closed</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#Closed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.Closed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#polls.views.IndexBase" title="polls.views.IndexBase"><code class="xref py py-class docutils literal"><span class="pre">polls.views.IndexBase</span></code></a></p>
+<dl class="method">
+<dt id="polls.views.Closed.get_context_data">
+<code class="descname">get_context_data</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#Closed.get_context_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.Closed.get_context_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.views.Closed.get_queryset">
+<code class="descname">get_queryset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#Closed.get_queryset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.Closed.get_queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polls.views.Detail">
+<em class="property">class </em><code class="descclassname">polls.views.</code><code class="descname">Detail</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#Detail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.Detail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.detail.DetailView</span></code></p>
+<dl class="method">
+<dt id="polls.views.Detail.get_context_data">
+<code class="descname">get_context_data</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#Detail.get_context_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.Detail.get_context_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.views.Detail.model">
+<code class="descname">model</code><a class="headerlink" href="#polls.views.Detail.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">Poll</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.views.Detail.template_name">
+<code class="descname">template_name</code><em class="property"> = 'polls/detail.html'</em><a class="headerlink" href="#polls.views.Detail.template_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polls.views.Index">
+<em class="property">class </em><code class="descclassname">polls.views.</code><code class="descname">Index</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#Index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.Index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#polls.views.Closed" title="polls.views.Closed"><code class="xref py py-class docutils literal"><span class="pre">polls.views.Closed</span></code></a>, <a class="reference internal" href="#polls.views.Available" title="polls.views.Available"><code class="xref py py-class docutils literal"><span class="pre">polls.views.Available</span></code></a></p>
+<dl class="method">
+<dt id="polls.views.Index.get_context_data">
+<code class="descname">get_context_data</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#Index.get_context_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.Index.get_context_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.views.Index.get_queryset">
+<code class="descname">get_queryset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#Index.get_queryset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.Index.get_queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polls.views.IndexBase">
+<em class="property">class </em><code class="descclassname">polls.views.</code><code class="descname">IndexBase</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#IndexBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.IndexBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.list.ListView</span></code></p>
+<dl class="attribute">
+<dt id="polls.views.IndexBase.context_object_name">
+<code class="descname">context_object_name</code><em class="property"> = 'poll_list'</em><a class="headerlink" href="#polls.views.IndexBase.context_object_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.views.IndexBase.paginate_by">
+<code class="descname">paginate_by</code><em class="property"> = 10</em><a class="headerlink" href="#polls.views.IndexBase.paginate_by" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.views.IndexBase.template_name">
+<code class="descname">template_name</code><em class="property"> = 'polls/index.html'</em><a class="headerlink" href="#polls.views.IndexBase.template_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polls.views.Results">
+<em class="property">class </em><code class="descclassname">polls.views.</code><code class="descname">Results</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#Results"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.Results" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.detail.DetailView</span></code></p>
+<dl class="method">
+<dt id="polls.views.Results.get_queryset">
+<code class="descname">get_queryset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#Results.get_queryset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.Results.get_queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="polls.views.Results.model">
+<code class="descname">model</code><a class="headerlink" href="#polls.views.Results.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">Poll</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="polls.views.Results.template_name">
+<code class="descname">template_name</code><em class="property"> = 'polls/results.html'</em><a class="headerlink" href="#polls.views.Results.template_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="polls.views.Voted">
+<em class="property">class </em><code class="descclassname">polls.views.</code><code class="descname">Voted</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#Voted"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.Voted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#polls.views.IndexBase" title="polls.views.IndexBase"><code class="xref py py-class docutils literal"><span class="pre">polls.views.IndexBase</span></code></a></p>
+<dl class="method">
+<dt id="polls.views.Voted.get_context_data">
+<code class="descname">get_context_data</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#Voted.get_context_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.Voted.get_context_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="polls.views.Voted.get_queryset">
+<code class="descname">get_queryset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#Voted.get_queryset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.Voted.get_queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="polls.views.detailed">
+<code class="descclassname">polls.views.</code><code class="descname">detailed</code><span class="sig-paren">(</span><em>request</em>, <em>poll_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#detailed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.detailed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="polls.views.done">
+<code class="descclassname">polls.views.</code><code class="descname">done</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#done"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.done" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="polls.views.is_staff">
+<code class="descclassname">polls.views.</code><code class="descname">is_staff</code><span class="sig-paren">(</span><em>user</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#is_staff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.is_staff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="polls.views.make_csv">
+<code class="descclassname">polls.views.</code><code class="descname">make_csv</code><span class="sig-paren">(</span><em>p</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#make_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.make_csv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="polls.views.make_win_csv">
+<code class="descclassname">polls.views.</code><code class="descname">make_win_csv</code><span class="sig-paren">(</span><em>oldfilename</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#make_win_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.make_win_csv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="polls.views.vote">
+<code class="descclassname">polls.views.</code><code class="descname">vote</code><span class="sig-paren">(</span><em>request</em>, <em>poll_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#vote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.vote" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="polls.views.voters">
+<code class="descclassname">polls.views.</code><code class="descname">voters</code><span class="sig-paren">(</span><em>request</em>, <em>poll_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/polls/views.html#voters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#polls.views.voters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-polls">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-polls" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Pavel Semenenko.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/polls.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

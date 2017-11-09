@@ -1,0 +1,167 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>notifications.templates &#8212; DGAP Services 0.3 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for notifications.templates</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="k">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="k">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="k">import</span> <span class="n">dateformat</span>
+<span class="kn">from</span> <span class="nn">django.contrib.sites.models</span> <span class="k">import</span> <span class="n">Site</span>
+
+<span class="kn">from</span> <span class="nn">.notify</span> <span class="k">import</span> <span class="n">get_vk_uid</span><span class="p">,</span> <span class="n">vk_message_user_link</span>
+
+
+<div class="viewcode-block" id="get_abs_url"><a class="viewcode-back" href="../../notifications.html#notifications.templates.get_abs_url">[docs]</a><span class="k">def</span> <span class="nf">get_abs_url</span><span class="p">(</span><span class="n">loc_url</span><span class="p">):</span>
+    <span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_current</span><span class="p">()</span><span class="o">.</span><span class="n">domain</span>
+    <span class="k">return</span> <span class="s2">&quot;http://</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">site</span><span class="p">,</span> <span class="n">loc_url</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="fin_aid_request_status_change"><a class="viewcode-back" href="../../notifications.html#notifications.templates.fin_aid_request_status_change">[docs]</a><span class="k">def</span> <span class="nf">fin_aid_request_status_change</span><span class="p">(</span><span class="n">aid_request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">ACCEPTED</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Одобрено заявление на матпомощь&quot;</span>
+    <span class="k">elif</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">DECLINED</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Отклонено заявление на матпомощь&quot;</span>
+    <span class="k">elif</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">INFO_NEEDED</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">get_abs_url</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;fin_aid:aid_request_update&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">aid_request</span><span class="o">.</span><span class="n">pk</span><span class="p">]))</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Необходимо уточнить информацию по заявлению на матпомощь. Редактировать заявление : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">WAITING</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Ожидает рассмотрения заявление на матпомощь&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Неизвестный статус заявления на матпомощь&quot;</span><span class="p">)</span>
+
+    <span class="n">dt_add</span> <span class="o">=</span> <span class="n">dateformat</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">aid_request</span><span class="o">.</span><span class="n">add_dttm</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">DATE_FORMAT</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot; от </span><span class="si">{}</span><span class="s2"> по категории &#39;</span><span class="si">{}</span><span class="s2">&#39;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dt_add</span><span class="p">,</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">category</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">ACCEPTED</span><span class="p">:</span>
+        <span class="n">dt_pay</span> <span class="o">=</span> <span class="n">dateformat</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">aid_request</span><span class="o">.</span><span class="n">payment_dt</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">DATE_FORMAT</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;Одобренная сумма: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">aid_request</span><span class="o">.</span><span class="n">accepted_sum</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">paid_with_cash</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;Ожидаемая дата выплаты: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span> <span class="n">dt_pay</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;Выплата наличными. Для уточнения деталей обращайтесь к [fizikaislove|стипкомиссии]&quot;</span>
+    <span class="k">if</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">examination_comment</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;Комментарий стип. комиссии: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">aid_request</span><span class="o">.</span><span class="n">examination_comment</span><span class="p">)</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">get_abs_url</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;fin_aid:aid_request_detail&quot;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">aid_request</span><span class="o">.</span><span class="n">pk</span><span class="p">]))</span>
+    <span class="k">if</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">ACCEPTED</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">submitted_paper</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;Не забудьте распечатать заявление из личного кабинета и опустить вместе с оригиналами документов в ящик пожеланий на 1 этаже общежития!</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;Подробнее на сайте: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="fin_aid_new_request"><a class="viewcode-back" href="../../notifications.html#notifications.templates.fin_aid_new_request">[docs]</a><span class="k">def</span> <span class="nf">fin_aid_new_request</span><span class="p">(</span><span class="n">aid_request</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;СРОЧНО: &quot;</span> <span class="k">if</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">urgent</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;Новое заявление на матпомощь: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vk_message_user_link</span><span class="p">(</span><span class="n">aid_request</span><span class="o">.</span><span class="n">applicant</span><span class="p">),</span><span class="n">aid_request</span><span class="o">.</span><span class="n">applicant</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span>
+                                              <span class="n">aid_request</span><span class="o">.</span><span class="n">applicant</span><span class="o">.</span><span class="n">last_name</span><span class="p">,</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">category</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;Обоснование: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">Запрошенная сумма: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">aid_request</span><span class="o">.</span><span class="n">reason</span><span class="p">,</span> <span class="n">aid_request</span><span class="o">.</span><span class="n">req_sum</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span></div>
+
+
+<span class="c1"># TODO return total sum of financial aid for the last month</span>
+<div class="viewcode-block" id="fin_aid_received"><a class="viewcode-back" href="../../notifications.html#notifications.templates.fin_aid_received">[docs]</a><span class="k">def</span> <span class="nf">fin_aid_received</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="poll_available"><a class="viewcode-back" href="../../notifications.html#notifications.templates.poll_available">[docs]</a><span class="k">def</span> <span class="nf">poll_available</span><span class="p">(</span><span class="n">poll</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;Ура, этот день настал! Вы можете принять участие в голосовании &quot;</span><span class="si">{}</span><span class="s1">&quot;. Оно пройдет с </span><span class="si">{}</span><span class="s1"> по </span><span class="si">{}</span><span class="s1">.</span><span class="se">\n</span><span class="s1">&#39;</span> \
+        <span class="s1">&#39;Принять участие можно по ссылке: </span><span class="si">{}</span><span class="s1">&#39;</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">get_abs_url</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s2">&quot;polls:available&quot;</span><span class="p">))</span>
+    <span class="n">begin_date</span> <span class="o">=</span> <span class="n">dateformat</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">poll</span><span class="o">.</span><span class="n">begin_date</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">DATETIME_FORMAT</span><span class="p">)</span>
+    <span class="n">end_date</span> <span class="o">=</span> <span class="n">dateformat</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">poll</span><span class="o">.</span><span class="n">end_date</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">DATETIME_FORMAT</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">poll</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">begin_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="bicycle_request_status_change"><a class="viewcode-back" href="../../notifications.html#notifications.templates.bicycle_request_status_change">[docs]</a><span class="k">def</span> <span class="nf">bicycle_request_status_change</span><span class="p">(</span><span class="n">bicycle</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">bicycle</span><span class="o">.</span><span class="n">request_status</span> <span class="o">==</span> <span class="n">bicycle</span><span class="o">.</span><span class="n">ACCEPTED</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Одобрено заявление на место в велокомнате. Ваше место: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bicycle</span><span class="o">.</span><span class="n">place</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">bicycle</span><span class="o">.</span><span class="n">request_status</span> <span class="o">==</span> <span class="n">bicycle</span><span class="o">.</span><span class="n">DECLINED</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Отказано в заявлении на место в велокомнате&quot;</span>
+    <span class="k">elif</span> <span class="n">bicycle</span><span class="o">.</span><span class="n">request_status</span> <span class="o">==</span> <span class="n">bicycle</span><span class="o">.</span><span class="n">NO_PLACE</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Отказано в заявлении на велокомнату из-за отсутствия мест.&quot;</span>
+    <span class="k">elif</span> <span class="n">bicycle</span><span class="o">.</span><span class="n">request_status</span> <span class="o">==</span> <span class="n">bicycle</span><span class="o">.</span><span class="n">WAITING</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Ожидает рассмотрения заявление на велокомнату&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Неизвестный статус заявления на место в велокомнате&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="bicycle_new_request"><a class="viewcode-back" href="../../notifications.html#notifications.templates.bicycle_new_request">[docs]</a><span class="k">def</span> <span class="nf">bicycle_new_request</span><span class="p">(</span><span class="n">bicycle</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Новое заявление на велокомнату&quot;</span>
+    <span class="k">return</span> <span class="n">s</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Pavel Semenenko.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
