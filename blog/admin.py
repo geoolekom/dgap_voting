@@ -11,6 +11,7 @@ class ArticleAdmin(admin.ModelAdmin):
     readonly_fields = ['author']
 
     def save_model(self, request, obj, form, change):
+        "Sets object author as `request.user`"
         obj.author = request.user.userprofile
         obj.save()
         super(ArticleAdmin, self).save_model(request, obj, form, change)

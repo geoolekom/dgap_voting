@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import PermissionDenied
 from django.views import generic
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from .models import Article
 from .forms import ArticleCreateForm
 
@@ -12,11 +13,13 @@ def can_view_hidden_post(user): # TODO move to models
 
 
 class ArticleList(generic.ListView):
+    """Blog's newsfeed."""
     model = Article
 
     def get_context_data(self, **kwargs):
+        """Returns list of articles to be shown in feed. See :class:`Article` params for details"""
         context = super(ArticleList, self).get_context_data(**kwargs)
-        if can_view_hidden_post(self.request.user):
+        if can_view_hidden_post(self.request.user): # TODO use Article.is_visible() instead
             objects = Article.objects.filter(show_in_feed=True)
         else:
             objects = Article.objects.filter(publish_dttm__lte=timezone.now(), hidden=False, show_in_feed=True)
@@ -25,17 +28,19 @@ class ArticleList(generic.ListView):
 
 
 class ArticleDetail(generic.DetailView):
+    """Detailed view of article"""
     model = Article
 
     def get_context_data(self, **kwargs):
+        """Raises 403 error if user can't view this article. See :func:`Article.is_visible`"""
         context = super(ArticleDetail, self).get_context_data(**kwargs)
         if not context["object"].is_visible(self.request.user):
             raise PermissionDenied
         return context
 
 
-# TODO decorator doesn't work, fix
-# @permission_required('blog.add_article')
+# TODO legacy, articles are created through admin interface
+@method_decorator(permission_required('blog.add_article'), name=dispatch)
 class ArticleCreate(generic.edit.CreateView):
     model = Article
     form_class = ArticleCreateForm
