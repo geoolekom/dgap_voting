@@ -1,8 +1,8 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <h2>
-            {% if header_link %}<a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
-            {% else %}{{ article.title }}{% endif %}
+            {% if header_link %}<a href="{{ article.get_absolute_url }}">{{ article.title|safe }}</a>
+            {% else %}{{ article.title|safe }}{% endif %}
         </h2>
     </div>
     <div class="panel-body">

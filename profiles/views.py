@@ -1,3 +1,5 @@
+"""Currently uses only one template - ``profiles/profile.html``"""
+
 from django.core.exceptions import MultipleObjectsReturned
 
 from profiles.models import UserProfile
@@ -12,7 +14,7 @@ from profiles.models import StudentInfo
 
 
 class UserChangeEmail(UpdateView):
-    """Legacy function for changing user email."""
+    """Legacy function for changing user email. Currently not used"""
     model = User
     fields = ['email']
     template_name = 'profiles/user_change_email.html'
@@ -48,7 +50,7 @@ def change_subscribing_status(request):
 
 @login_required
 def profile_view(request):
-    """Super old and super shitty view displaying info about current user.
+    """Super old and super shitty view displaying info about current user. Looks like a bit of refactoring needed.
 
     * Adds error messages if user is not approved & so on.
     * Sets context variables with user's social services logins

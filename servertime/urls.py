@@ -1,3 +1,7 @@
+"""Available URLs:
+* ``servertime/`` - returns server time
+* ``serverdate/`` - returns server date
+* ``servertimezone`` - returns server timezone"""
 from django.conf.urls import url
 from django.views.generic import TemplateView
 

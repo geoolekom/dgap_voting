@@ -1,3 +1,5 @@
+"""Functions generating text for notifications."""
+
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils import dateformat
@@ -7,11 +9,15 @@ from .notify import get_vk_uid, vk_message_user_link
 
 
 def get_abs_url(loc_url):
+    """Get absolute (including domain name) url based on ``loc_url`` provided.
+
+    Should be moved to :mod:`core` app."""
     site = Site.objects.get_current().domain
     return "http://{}{}".format(site, loc_url)
 
 
 def fin_aid_request_status_change(aid_request):
+    """Message notifying student about examination of :class:`fin_aid.models.AidRequest`"""
     if aid_request.status == aid_request.ACCEPTED:
         s = "Одобрено заявление на матпомощь"
     elif aid_request.status == aid_request.DECLINED:
@@ -43,6 +49,7 @@ def fin_aid_request_status_change(aid_request):
 
 
 def fin_aid_new_request(aid_request):
+    """Message notifying treasurers about new aid requests"""
     s = "СРОЧНО: " if aid_request.urgent else ""
     s += "Новое заявление на матпомощь: {}\n".format(vk_message_user_link(aid_request.applicant),aid_request.applicant.first_name,
                                               aid_request.applicant.last_name, aid_request.category)
@@ -52,10 +59,12 @@ def fin_aid_new_request(aid_request):
 
 # TODO return total sum of financial aid for the last month
 def fin_aid_received(user):
+    """Skeleton for message notifying student about aid received this month. SHould be send at time when scholarship is received"""
     pass
 
 
 def poll_available(poll):
+    """Message notifying user about available poll"""
     s = 'Ура, этот день настал! Вы можете принять участие в голосовании "{}". Оно пройдет с {} по {}.\n' \
         'Принять участие можно по ссылке: {}'
     url = get_abs_url(reverse("polls:available"))
@@ -65,6 +74,7 @@ def poll_available(poll):
 
 
 def bicycle_request_status_change(bicycle):
+    """Message notifying user about examination of his bicycle storage request"""
     if bicycle.request_status == bicycle.ACCEPTED:
         s = "Одобрено заявление на место в велокомнате. Ваше место: {}".format(bicycle.place)
     elif bicycle.request_status == bicycle.DECLINED:
@@ -79,5 +89,6 @@ def bicycle_request_status_change(bicycle):
 
 
 def bicycle_new_request(bicycle):
+    """Message notifying staff about new cycle storage request"""
     s = "Новое заявление на велокомнату"
     return s

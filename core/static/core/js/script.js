@@ -4,6 +4,8 @@ jQuery(document).ready(function($) {
     });
 });
 
+
+/* Move following code to servertime app*/
 function serverTime() {
     var time = null;
     $.ajax({url: $('#defaultTime').attr("url_servertime"),

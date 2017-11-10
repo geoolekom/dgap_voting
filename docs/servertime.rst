@@ -1,5 +1,8 @@
 servertime package
 ==================
+App that helps to display server date, time and timezone.
+Currently results of app's work are displayed (via ajax queries) near site logo in navigation menu.
+
 
 Subpackages
 -----------
@@ -22,7 +25,6 @@ servertime\.urls module
 
 .. automodule:: servertime.urls
     :members:
-    :undoc-members:
     :show-inheritance:
 
 

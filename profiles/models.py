@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import django.db.models.options as options
 from pandas import DataFrame
-options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',) # добавление нового атрибута в мета # TODO legacy?
+options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',) # добавление нового атрибута в мета # TODO is it used now?
 
 
 # received from MIPT administration
@@ -90,19 +90,19 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     """Link to user"""
     dorm = models.IntegerField(default=0)
-    """Super legacy, lol"""
+    """Super old, lol"""
     middlename = models.CharField('Отчество', max_length=100, blank=True)
-    """Legacy"""
+    """Not used now"""
     group = models.CharField('Номер группы', max_length=10, blank=True)
-    """Legacy"""
+    """Not used now"""
     room = models.CharField('Номер комнаты', max_length=4, blank=True)
-    """Legacy"""
+    """Not used now"""
     is_approved = models.BooleanField('Пользователь подтверждён', default=False)
     """``True`` if user is approved ad DGAP student. Variable is set in :func:`profiles.psa.approve_student`"""
     is_subscribed = models.BooleanField('Пользователь подписан на рассылку', default=True) # remove
-    """Legacy, now notifications are moved to standalone app :mod:`notifications`, so this setting should migrate to
+    """Currently notifications are moved to standalone app :mod:`notifications`, so this setting should migrate to
     :class:`notification.models.UserNotificationsSettings, because different nitification services are available 
-    (vk, email, telegram)`
+    (vk, email, telegram)`.
     """
     student_info = models.ForeignKey(StudentInfo, default=None, null=True, blank=True)
     """Link to StudentInfo"""
