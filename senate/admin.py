@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User, Group
-from .models import Department, Employee, Category, Issue, Event, EventDocument
+from .models import Department, Employee, Category, Issue, Event#, EventDocument
 
 
 """class UserInline(admin.StackedInline):
@@ -45,6 +45,6 @@ admin.site.register(Employee, EmployeeAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Issue, IssueAdmin)
 admin.site.register(Event)
-admin.site.register(EventDocument)
+#admin.site.register(EventDocument)
 
 

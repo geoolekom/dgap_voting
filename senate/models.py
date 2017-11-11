@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
+from django.contrib.contenttypes.fields import GenericRelation
+from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse_lazy
 
+from files.models import Document
 from profiles.models import StudentInfo
 
 
@@ -115,6 +118,7 @@ class Event(models.Model):
     new_worker = models.ForeignKey(User, verbose_name="Новый сотрудник", blank=True, null=True,
                                    default=None, related_name='new_worker')
     new_status = models.IntegerField("Новый статус", choices=Issue.STATUS, null=True, blank=True, default=None)
+    documents = GenericRelation(Document)
 
     class Meta:
         verbose_name = "событие"
@@ -125,7 +129,7 @@ class Event(models.Model):
 
     def images_tags(self):
         html = ""
-        files = self.eventdocument_set.all()
+        files = self.documents.all()
         for file in files:
             html += '<img class="aiddocument" style="max-width:100%;" src={}>'.format(file.file.url)
         return html
@@ -133,14 +137,3 @@ class Event(models.Model):
     images_tags.short_description = "Приложенные изображения"
 
 
-class EventDocument(models.Model):
-    file = models.ImageField("Изображение", upload_to='feedback/')
-    event = models.ForeignKey(Event, verbose_name="Событие")
-    # is_image = models.BooleanField("Является изображением", default=True)
-
-    class Meta:
-        verbose_name = "документ"
-        verbose_name_plural = "документы"
-
-    def __str__(self):
-        return "Документ {} к событию {}".format(self.file.name, self.event)

@@ -1,0 +1,15 @@
+
+<div id="formset" data-formset-prefix="{{ formset.prefix }}">
+    {{ formset.management_form }}
+    {% for file_form in formset %}
+        {{ file_form.file }}
+    {% endfor %}
+    <script>jQuery(function($) {
+        $("#formset").formset({
+            animateForms: true,
+            addText: "Add another",
+            deleteText: "",
+        });
+    });
+    </script>
+</div>

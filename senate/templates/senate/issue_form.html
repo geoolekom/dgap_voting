@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block content %}
+    {{ files_formset.media }}
     <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -17,6 +18,7 @@
                 <form action="" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {% bootstrap_form form%}
+                    {% include "files/formset.html" with formset=formset only %}
                     {% buttons %}
                     <button type="submit" class="btn btn-primary">
                         Отправить обращение

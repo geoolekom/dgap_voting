@@ -53,6 +53,7 @@ INSTALLED_APPS = (
     'core',
     'polls',
     'blog',
+    'files',
     'fin_aid',
     'cycle_storage',
     'notifications',
@@ -63,6 +64,7 @@ INSTALLED_APPS = (
     'servertime',
     'profiles',
     'nested_inline',
+
 )
 
 TEMPLATES = [

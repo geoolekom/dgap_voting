@@ -13,3 +13,24 @@ span.post-info {
 .student-select {
     min-width: 250px;
 }
+
+.add-row {
+    display: inline-block;
+    padding: 5px 10px;
+    margin-bottom: 9px;
+    margin-top: 5px;
+    margin-left: 15px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #fff;
+    background-color: forestgreen;
+    font-family: inherit;
+    }
+
+

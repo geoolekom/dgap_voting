@@ -1,13 +1,8 @@
 from django import forms
 from .models import Issue, Event
 
-
 class IssueCreateForm(forms.ModelForm):
     issue_descr = forms.CharField(label="Описание", max_length=Event.MAX_INFO_LEN, widget=forms.Textarea(attrs={'rows': 5}))
-    # TODO rewrite
-    photo1 = forms.ImageField(required=False, label="Фотография")
-    photo2 = forms.ImageField(required=False, label="Фотография")
-    photo3 = forms.ImageField(required=False, label="Фотография")
 
     class Meta:
         model = Issue
@@ -15,9 +10,9 @@ class IssueCreateForm(forms.ModelForm):
 
 
 class DeptEventCreateForm(forms.ModelForm):
-    photo1 = forms.ImageField(required=False, label="Фотография")
-    photo2 = forms.ImageField(required=False, label="Фотография")
-    photo3 = forms.ImageField(required=False, label="Фотография")
+    #photo1 = forms.ImageField(required=False, label="Фотография")
+    #photo2 = forms.ImageField(required=False, label="Фотография")
+    #photo3 = forms.ImageField(required=False, label="Фотография")
 
     class Meta:
         model = Event
@@ -26,9 +21,9 @@ class DeptEventCreateForm(forms.ModelForm):
 
 
 class UserEventCreateForm(forms.ModelForm):
-    photo1 = forms.ImageField(required=False, label="Фотография")
-    photo2 = forms.ImageField(required=False, label="Фотография")
-    photo3 = forms.ImageField(required=False, label="Фотография")
+    #photo1 = forms.ImageField(required=False, label="Фотография")
+    #photo2 = forms.ImageField(required=False, label="Фотография")
+    #photo3 = forms.ImageField(required=False, label="Фотография")
 
     class Meta:
         model = Event

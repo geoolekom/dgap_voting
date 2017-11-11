@@ -2,15 +2,16 @@ from django.views import generic, View
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.utils.decorators import method_decorator
-from django.shortcuts import get_object_or_404, redirect
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib import messages
 from django.db.models import Q
 
-from .models import Issue, Event, EventDocument, Employee
+from .models import Issue, Event, Employee
 from .forms import IssueCreateForm, DeptEventCreateForm, UserEventCreateForm
-from profiles.models import get_profiles
+from files.models import Document, FileUploadMixin
+from files.forms import FilesFormSet
+from profiles.models import same_users_list
 from notifications.notify import vk_messages_allowed
 
 
@@ -26,6 +27,7 @@ class IssueDisplay(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(IssueDisplay, self).get_context_data(**kwargs)
         context['events'] = context["object"].event_set.order_by("add_dttm")
+        context['formset'] = FilesFormSet()
         user = self.request.user
         if user.is_staff or user.is_superuser:
             context["form"] = DeptEventCreateForm()
@@ -39,8 +41,7 @@ class IssueDisplay(generic.DetailView):
 
 
 @method_decorator(login_required, name='dispatch')
-class UserEventCreate(generic.detail.SingleObjectMixin, generic.FormView):
-    template_name = 'senate/issue_detail.html'
+class UserEventCreate(generic.FormView, FileUploadMixin):
     model = Issue
 
     def post(self, request, *args, **kwargs):
@@ -71,10 +72,7 @@ class UserEventCreate(generic.detail.SingleObjectMixin, generic.FormView):
                                      info=form.cleaned_data["info"],
                                      new_status=new_status,
                                      new_dept=new_dept)
-        for i in range(1, 4):
-            photo = form.cleaned_data['photo' + str(i)]
-            if photo:
-                EventDocument.objects.create(file=photo, event=event)
+        self.file_processing(content_object=event)
         messages.add_message(self.request, messages.SUCCESS, "Обращение обновлено")
         return super(UserEventCreate, self).form_valid(form)
 
@@ -91,7 +89,7 @@ class IssueDetail(View):
 
 
 @method_decorator(login_required, name='dispatch')
-class IssueCreate(generic.CreateView):
+class IssueCreate(generic.CreateView, FileUploadMixin):
     model = Issue
     form_class = IssueCreateForm
 
@@ -117,10 +115,7 @@ class IssueCreate(generic.CreateView):
                                              info=event_info,
                                              new_dept=assigned_dept)
 
-        for i in range(1, 4):
-            photo = form.cleaned_data['photo' + str(i)]
-            if photo:
-                EventDocument.objects.create(file=photo, event=opening_event)
+        self.file_processing(content_object=opening_event)
         messages.success(self.request, "Ваше обращение принято. За результатами рассмотрения следите на сайте")
         if not vk_messages_allowed(self.request.user):
             messages.info(self.request, 'Для оперативного получения информации о рассмотрении Вашего обрашения '
@@ -135,7 +130,7 @@ class MyIssueList(generic.ListView):
     template_name = 'senate/issue_list.html'
 
     def get_queryset(self):
-        return Issue.objects.filter(author__in=get_profiles(self.request.user)).order_by("-add_dttm")
+        return Issue.objects.filter(author__in=same_users_list(self.request.user)).order_by("-add_dttm")
 
 
 @method_decorator(login_required, name='dispatch')
@@ -162,4 +157,5 @@ class FullIssueList(generic.ListView):
         user = self.request.user
         if user.is_superuser or user.is_staff:
             return queryset
-        return queryset.filter(Q(category__public=True)|Q(author__in=get_profiles(user)))
+        return queryset.filter(Q(category__public=True)|Q(author__in=same_users_list(user)))
+
