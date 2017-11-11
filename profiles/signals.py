@@ -6,6 +6,7 @@ from .models import UserProfile, StudentInfo
 
 @receiver(post_save, sender=User, dispatch_uid='profiles')
 def create_user_profile(sender, instance, created, **kwargs):
+    """Receives ``post_save`` signal from :class:`User`. Creates :class:`profiles.models.Userprofile` for new users"""
     if created:
         profile, created = UserProfile.objects.get_or_create(user=instance)
 # move to views
@@ -16,6 +17,9 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=StudentInfo, dispatch_uid='profiles')
 def update_student_info(sender, instance, created, **kwargs):
+    """Receives ``post_save`` signal from :class:`profiles.models.StudentInfo`. Updates linked :class:`profiles.models.UserProfile`
+
+    As :class:`UserProfile` is no longer used to store ersonal data, this function is unnecessary."""
     try:
         user = User.objects.get(username=instance.vk.split("/")[-1])
         if not user.userprofile.is_aproved:

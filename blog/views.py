@@ -13,11 +13,13 @@ def can_view_hidden_post(user): # TODO move to models
 
 
 class ArticleList(generic.ListView):
-    """Blog's newsfeed."""
+    """Blog's newsfeed. Shows all visible articles with ``show_in_feed == True``
+
+    Base temlate is ``blog/article_list.html``."""
     model = Article
 
     def get_context_data(self, **kwargs):
-        """Returns list of articles to be shown in feed. See :class:`Article` params for details"""
+        """Returns list of articles to be shown in feed. See :class:`blog.models.Article` params for details"""
         context = super(ArticleList, self).get_context_data(**kwargs)
         if can_view_hidden_post(self.request.user):
             objects = Article.objects.filter(show_in_feed=True)
@@ -28,7 +30,9 @@ class ArticleList(generic.ListView):
 
 
 class ArticleDetail(generic.DetailView):
-    """Detailed view of article"""
+    """Detailed view of article.
+
+    Base template is ``blog/article_detail.html``."""
     model = Article
 
     def get_context_data(self, **kwargs):
@@ -39,7 +43,7 @@ class ArticleDetail(generic.DetailView):
         return context
 
 
-# TODO legacy, articles are created through admin interface
+# TODO outdated, articles are created through admin interface
 @method_decorator(permission_required('blog.add_article'), name='dispatch')
 class ArticleCreate(generic.edit.CreateView):
     model = Article

@@ -1,3 +1,12 @@
+"""Functions for dealing with messages.
+
+They take care of different notification providers, user's notifications settings, staff groups...
+
+Currently only functions for vk.com are implemented, other are represented by skeletons
+
+VK Api (v5.46) is actively used.
+"""
+
 from django.core.mail import send_mail
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User, Group
@@ -17,6 +26,13 @@ vk_api = vk.API(vk_session, v='5.46')
 
 
 def get_vk_uid(user: User):
+    """Get user's **vk uid** or None
+
+    If user logged not through vk, tries to find his vk profile in :class:`profiles.models.StudentInfo`
+    UID needed (formerly?) for sendind messages, displaying beautiful links in VK messages and, maybe, some other staff
+
+    Safe, as long as user is valid :class:`django.contrib.auth.models.User` instance, no additional checks are needed.
+    """
     if user.is_authenticated:
         try:
             social = UserSocialAuth.objects.get(user=user, provider="vk-oauth2")
@@ -32,6 +48,12 @@ def get_vk_uid(user: User):
 
 
 def vk_message_user_link(user):
+    """Get code displaying **internal link** to user's profile for embedding into **vk messages**.
+
+    If it's impossible to find user's vk, return user's name without a link.
+
+    Safe, as long as user is valid :class:`django.contrib.auth.models.User` instance, no additional checks are needed.
+    """
     if user.is_authenticated:
         vk_uid = get_vk_uid(user)
         if vk_uid:
@@ -43,6 +65,12 @@ def vk_message_user_link(user):
 
 
 def vk_html_user_link(user):
+    """Get code displaying **html link** to user's profile.
+
+    If it's impossible to find user's vk, return user's name without a link.
+
+    Safe, as long as user is valid :class:`django.contrib.auth.models.User` instance, no additional checks are needed.
+    """
     if user.is_authenticated:
         vk_uid = get_vk_uid(user)
         if vk_uid:
@@ -54,14 +82,17 @@ def vk_html_user_link(user):
 
 
 def get_email(user: User):
+    """Skeleton for function, retrieving user's **email for notifications**"""
     pass
 
 
 def get_telegram_uid(user: User):
+    """Skeleton for function retrieving user's **telegram uid**"""
     pass
 
 
 def _notify_vk(user: User, text, title=None):
+    """Private finction, sends vk notifications"""
     uid = str(get_vk_uid(user))
     hash = message_int_hash(uid + text)
     response = vk_api.messages.send(user_id=get_vk_uid(user), message=text, random_id=hash)
@@ -70,19 +101,31 @@ def _notify_vk(user: User, text, title=None):
 
 
 def _notify_email(user: User, text, title=None):
+    """Skeleton for internal function which sends email notifications"""
     pass
 
 
 def _notify_telegram(user: User, text, title=None):
+    """Skeleton for internal function which sends telegram notifications"""
     pass
 
 
 def message_int_hash(text):
+    """Generate hash by message text. Different mesasages get different hashes
+
+    Used in vk api to prevent sending duplicate messages"""
     hash = int(md5(text.encode("utf-8")).hexdigest(), 16)
     return abs(hash % 10**6)
 
 
 def notify(user: User, text, title=None):
+    """Main function for sending notifications.
+
+    Aggregates internal functions for managing different providers and,
+    according to :class:`notifications.models.UserNotificationsSettings`, sends messages.
+
+    "Safe and simple": no checks on user are required, just pass user and proper text.
+    You don't have to worry if user has email of allowed messages from vk"""
     try:
         settings = user.usernotificationssettings
         if settings.allow_vk:
@@ -96,6 +139,10 @@ def notify(user: User, text, title=None):
 
 
 def notify_group(group, text, title=None):
+    """Function for notifying whole department about some event.
+
+    Based on :func:`notifications.notify.notify`.
+    You only have to provide group (name or :class:`Group` instance) and message text."""
     if type(group) == str:
         group_object = Group.objects.get(name=group)
     else:
@@ -111,6 +158,9 @@ def notify_group(group, text, title=None):
 # TODO if user has no VK? Currently returns True to avoid stupid messages
 # TODO error handling?
 def vk_messages_allowed(user):
+    """Returns ``True`` if user allowed vk notifications from our community or we can't find user's vk
+
+    Useg, eg, to remind user allow messages:)"""
     user_id = get_vk_uid(user)
     if user_id:
         try:

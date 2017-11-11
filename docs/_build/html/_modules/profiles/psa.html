@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>profiles.psa &#8212; DGAP Services 0.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -22,16 +22,22 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-   
-  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="search" title="Search" href="../../search.html" /> 
   </head>
   <body>
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">DGAP Services 0.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -48,6 +54,7 @@
 
 
 <div class="viewcode-block" id="set_middlename"><a class="viewcode-back" href="../../profiles.html#profiles.psa.set_middlename">[docs]</a><span class="k">def</span> <span class="nf">set_middlename</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Legacy social auth middleware to set middlename. Currently middlename is stored in :class:`profiles.models.StudentInfo`&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">student_info</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">student_info</span><span class="o">.</span><span class="n">fio</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
@@ -68,6 +75,14 @@
 
 
 <div class="viewcode-block" id="approve_student"><a class="viewcode-back" href="../../profiles.html#profiles.psa.approve_student">[docs]</a><span class="k">def</span> <span class="nf">approve_student</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Tries to verify user as enrolled student.</span>
+
+<span class="sd">    * If backend is ``google-oauth2``, then ``user.email`` should be student&#39;s corporate email</span>
+<span class="sd">    * If backend is ``vk-oauth-2``, then ``user.username`` is vk profile&#39;s screen name</span>
+
+<span class="sd">    Function is invoked as part of :const:`core.settings.SOCIAL_AUTH_PIPELINE`.</span>
+<span class="sd">    ``user.email`` &amp; so on after social login are populated also in that pipeline</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">student_info</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">is_approved</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">backend</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;google-oauth2&#39;</span><span class="p">:</span>
@@ -89,17 +104,23 @@
 
 
 <div class="viewcode-block" id="SocialAuthExceptionMiddlewareExtended"><a class="viewcode-back" href="../../profiles.html#profiles.psa.SocialAuthExceptionMiddlewareExtended">[docs]</a><span class="k">class</span> <span class="nc">SocialAuthExceptionMiddlewareExtended</span><span class="p">(</span><span class="n">SocialAuthExceptionMiddleware</span><span class="p">):</span>
-<div class="viewcode-block" id="SocialAuthExceptionMiddlewareExtended.get_message"><a class="viewcode-back" href="../../profiles.html#profiles.psa.SocialAuthExceptionMiddlewareExtended.get_message">[docs]</a>    <span class="k">def</span> <span class="nf">get_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception wich raised after authentification error. Describing message is provided</span>
+
+<span class="sd">    Currently handled errors:</span>
+<span class="sd">    ``AuthForbidden``: users can login only with google accounta at @phystech.edu. See :const:`core.settings.SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS`</span>
+<span class="sd">    ``AuthAlreadyAssociated``: you can associate your social account with only on user.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">get_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">exception</span><span class="p">)</span> <span class="ow">is</span> <span class="n">AuthForbidden</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;Поддерживаются только аккаунты phystech.edu&quot;</span>
         <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">exception</span><span class="p">)</span> <span class="ow">is</span> <span class="n">AuthAlreadyAssociated</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;Данный аккаунт phystech.edu или Вконтакте уже привязан&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">exception</span><span class="p">)</span></div></div>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">exception</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="MiptOAuth2"><a class="viewcode-back" href="../../profiles.html#profiles.psa.MiptOAuth2">[docs]</a><span class="k">class</span> <span class="nc">MiptOAuth2</span><span class="p">(</span><span class="n">BaseOAuth2</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;MIPT OAuth authentication backend&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;MIPT OAuth authentication backend. Not used currently&quot;&quot;&quot;</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;mipt-oauth2&#39;</span>
     <span class="n">ID_KEY</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span>
     <span class="n">AUTHORIZATION_URL</span> <span class="o">=</span> <span class="s1">&#39;https://mipt.ru/oauth/authorize.php&#39;</span>
@@ -116,14 +137,14 @@
         <span class="p">(</span><span class="s1">&#39;login&#39;</span><span class="p">,</span> <span class="s1">&#39;login&#39;</span><span class="p">),</span>
     <span class="p">]</span>
 
-<div class="viewcode-block" id="MiptOAuth2.get_user_details"><a class="viewcode-back" href="../../profiles.html#profiles.psa.MiptOAuth2.get_user_details">[docs]</a>    <span class="k">def</span> <span class="nf">get_user_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_user_details</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;username&#39;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;login&#39;</span><span class="p">),</span>
                 <span class="s1">&#39;email&#39;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;email&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
                 <span class="s1">&#39;first_name&#39;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;firstname&#39;</span><span class="p">),</span>
                 <span class="s1">&#39;last_name&#39;</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lastname&#39;</span><span class="p">),</span>
-                <span class="p">}</span></div>
+                <span class="p">}</span>
 
-<div class="viewcode-block" id="MiptOAuth2.user_data"><a class="viewcode-back" href="../../profiles.html#profiles.psa.MiptOAuth2.user_data">[docs]</a>    <span class="k">def</span> <span class="nf">user_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">access_token</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">user_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">access_token</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">userinfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_json</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">API_URL</span><span class="p">,</span>
             <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;access_token&#39;</span><span class="p">:</span> <span class="n">access_token</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">:</span> <span class="s1">&#39;userinfo&#39;</span><span class="p">}</span>
@@ -137,22 +158,14 @@
         <span class="n">userinfo</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>
         <span class="n">response</span> <span class="o">=</span> <span class="n">userinfo</span>
         <span class="c1"># print(response)</span>
-        <span class="k">return</span> <span class="n">response</span></div></div>
+        <span class="k">return</span> <span class="n">response</span></div>
 </pre></div>
 
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
+        <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -167,17 +180,22 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2017, Pavel Semenenko.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
-      
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">DGAP Services 0.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Pavel Semenenko.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
   </body>
 </html>

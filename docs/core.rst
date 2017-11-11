@@ -44,14 +44,6 @@ core\.urls module
     :undoc-members:
     :show-inheritance:
 
-core\.wsgi module
------------------
-
-.. automodule:: core.wsgi
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 
 Module contents
 ---------------

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>blog.views &#8212; DGAP Services 0.3 documentation</title>
-    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -22,16 +22,22 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-   
-  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="search" title="Search" href="../../search.html" /> 
   </head>
   <body>
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">DGAP Services 0.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -49,16 +55,16 @@
 
 
 <span class="c1"># may be not all stuff, but people with particular rights</span>
-<div class="viewcode-block" id="can_view_hidden_post"><a class="viewcode-back" href="../../blog.html#blog.views.can_view_hidden_post">[docs]</a><span class="k">def</span> <span class="nf">can_view_hidden_post</span><span class="p">(</span><span class="n">user</span><span class="p">):</span> <span class="c1"># TODO move to models</span>
-    <span class="k">return</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">is_superuser</span> <span class="ow">or</span> <span class="n">user</span><span class="o">.</span><span class="n">is_staff</span><span class="p">)</span></div>
+<span class="k">def</span> <span class="nf">can_view_hidden_post</span><span class="p">(</span><span class="n">user</span><span class="p">):</span> <span class="c1"># TODO move to models</span>
+    <span class="k">return</span> <span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">is_superuser</span> <span class="ow">or</span> <span class="n">user</span><span class="o">.</span><span class="n">is_staff</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="ArticleList"><a class="viewcode-back" href="../../blog.html#blog.views.ArticleList">[docs]</a><span class="k">class</span> <span class="nc">ArticleList</span><span class="p">(</span><span class="n">generic</span><span class="o">.</span><span class="n">ListView</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Blog&#39;s newsfeed.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Blog&#39;s newsfeed. Shows all visible articles with ``show_in_feed == True``&quot;&quot;&quot;</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">Article</span>
 
 <div class="viewcode-block" id="ArticleList.get_context_data"><a class="viewcode-back" href="../../blog.html#blog.views.ArticleList.get_context_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns list of articles to be shown in feed. See :class:`Article` params for details&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Returns list of articles to be shown in feed. See :class:`blog.models.Article` params for details&quot;&quot;&quot;</span>
         <span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">ArticleList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">can_view_hidden_post</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">):</span>
             <span class="n">objects</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">show_in_feed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -81,31 +87,23 @@
 
 
 <span class="c1"># TODO legacy, articles are created through admin interface</span>
-<div class="viewcode-block" id="ArticleCreate"><a class="viewcode-back" href="../../blog.html#blog.views.ArticleCreate">[docs]</a><span class="nd">@method_decorator</span><span class="p">(</span><span class="n">permission_required</span><span class="p">(</span><span class="s1">&#39;blog.add_article&#39;</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;dispatch&#39;</span><span class="p">)</span>
+<span class="nd">@method_decorator</span><span class="p">(</span><span class="n">permission_required</span><span class="p">(</span><span class="s1">&#39;blog.add_article&#39;</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;dispatch&#39;</span><span class="p">)</span>
 <span class="k">class</span> <span class="nc">ArticleCreate</span><span class="p">(</span><span class="n">generic</span><span class="o">.</span><span class="n">edit</span><span class="o">.</span><span class="n">CreateView</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">Article</span>
     <span class="n">form_class</span> <span class="o">=</span> <span class="n">ArticleCreateForm</span>
 
-<div class="viewcode-block" id="ArticleCreate.form_valid"><a class="viewcode-back" href="../../blog.html#blog.views.ArticleCreate.form_valid">[docs]</a>    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
         <span class="n">response</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">ArticleCreate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">form_valid</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">author</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">response</span></div></div>
+        <span class="k">return</span> <span class="n">response</span>
 </pre></div>
 
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
-</ul>
-</div>
+        <div class="sphinxsidebarwrapper">
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
@@ -120,17 +118,22 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2017, Pavel Semenenko.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
-      
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">DGAP Services 0.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Pavel Semenenko.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
   </body>
 </html>

@@ -17,7 +17,9 @@ class Article(models.Model):
     slug = models.SlugField("URL")
     """:class:`models.SlugField` storing user-friendly article URL"""
     title = models.CharField("Заголовок", max_length=255, default=None, blank=True, null=True)
-    """Article title"""
+    """Article title. 
+    
+    Don't insert HTML tags like <h3> - it's rendered in templates. But, you may apply some text formatting like <b>."""
     author = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, blank=True, null=True)
     """Article author, relates to :class:`profiles.models.UserProfile`"""
     publish_dttm = models.DateTimeField('Дата публикации', auto_now_add=True)

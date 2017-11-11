@@ -22,6 +22,7 @@ Indices and tables
    fin_aid.rst
    notifications.rst
    polls.rst
+   profiles.rst
    senate.rst
    servertime.rst
 

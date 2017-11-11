@@ -20,6 +20,9 @@ logger = logging.getLogger(__name__)
 
 @receiver(post_save, sender=AidRequest, dispatch_uid='notifications')
 def aidrequest_save_notify(sender, instance, created, **kwargs):
+    """Receives ``post_save`` signal from :class:`fin_aid.models.AidRequest`.
+
+    Depending on new aid request status, sends notifictions to treasurers or users."""
     # AirRequestCreate view form_valid() method creates aid request, ONLY THEN adds current user to it.
     # So when 'create' signal received, there is no aidrequest.applicant yet
     try:
@@ -45,6 +48,10 @@ def aidrequest_save_notify(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=UserProfile, dispatch_uid='notifications')
 def user_create(sender, instance, created, **kwargs):
+    """Receives ``post_save`` signal from :class:`profiles.models.UserProfile`.
+
+    Used to update/create :class:`notifications.models.UserNotificationsSettings` when
+    :class:`profiles.models.UserProfile` is changes or created."""
     settings, created = UserNotificationsSettings.objects.get_or_create(user=instance.user)
     settings.allow_vk = instance.is_subscribed
     settings.save()
@@ -52,6 +59,7 @@ def user_create(sender, instance, created, **kwargs):
 
 @receiver(user_logged_in, dispatch_uid='notifications')
 def remind_to_allow_messages(sender, request, **kwargs):
+    """After user logs in, displays reminder to allow vk notifications."""
     user = request.user
     try:
         settings = user.usernotificationssettings
@@ -67,6 +75,9 @@ def remind_to_allow_messages(sender, request, **kwargs):
 
 @receiver(post_save, sender=Bicycle, dispatch_uid='notifications')
 def bicycle_save_notify(sender, instance, created, **kwargs):
+    """Receives ``post_save`` signal from :class:`fin_aid.models.AidRequest`.
+
+    Depending on new bicycle storage request status, sends notifictions to staff or users."""
     # BicycleCreate view form_valid() method creates aid request, ONLY THEN adds current user to it.
     # So when 'create' signal received, there is no aidrequest.applicant yet
     try:

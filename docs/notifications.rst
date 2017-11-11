@@ -1,5 +1,8 @@
 notifications package
 =====================
+Provides functions for notifications sending and takes care of user's preferences.
+You can use this functions to add notifications functionality to your app.
+
 
 Subpackages
 -----------
@@ -9,20 +12,12 @@ Subpackages
 Submodules
 ----------
 
-notifications\.admin module
----------------------------
+notifications\.notify module
+----------------------------
 
-.. automodule:: notifications.admin
+.. automodule:: notifications.notify
     :members:
-    :undoc-members:
-    :show-inheritance:
-
-notifications\.app module
--------------------------
-
-.. automodule:: notifications.app
-    :members:
-    :undoc-members:
+    :private-members: _notify_vk, _notify_telegram, _notify_email
     :show-inheritance:
 
 notifications\.models module
@@ -30,23 +25,29 @@ notifications\.models module
 
 .. automodule:: notifications.models
     :members:
-    :undoc-members:
     :show-inheritance:
 
-notifications\.notify module
-----------------------------
+notifications\.admin module
+---------------------------
 
-.. automodule:: notifications.notify
+.. automodule:: notifications.admin
     :members:
-    :undoc-members:
+    :show-inheritance:
+
+notifications\.app module
+-------------------------
+
+.. automodule:: notifications.app
+    :members:
     :show-inheritance:
 
 notifications\.signals module
 -----------------------------
+.. todo:: Currently used to send notifications from apps like :mod:`fin_aid` and :mod:`cycle_storage`. It'll be better
+to move this functionality directly to that apps. Maybe create submodule ``notifications.py`` in every package?
 
 .. automodule:: notifications.signals
     :members:
-    :undoc-members:
     :show-inheritance:
 
 notifications\.templates module
@@ -54,7 +55,6 @@ notifications\.templates module
 
 .. automodule:: notifications.templates
     :members:
-    :undoc-members:
     :show-inheritance:
 
 notifications\.tests module
@@ -62,7 +62,6 @@ notifications\.tests module
 
 .. automodule:: notifications.tests
     :members:
-    :undoc-members:
     :show-inheritance:
 
 
@@ -71,5 +70,4 @@ Module contents
 
 .. automodule:: notifications
     :members:
-    :undoc-members:
     :show-inheritance:

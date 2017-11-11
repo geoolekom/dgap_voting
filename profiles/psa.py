@@ -7,6 +7,7 @@ from social_core.backends.oauth import BaseOAuth2
 
 
 def set_middlename(backend, user, response, *args, **kwargs):
+    """Legacy social auth middleware to set middlename. Currently middlename is stored in :class:`profiles.models.StudentInfo`"""
     if user.userprofile.student_info:
         name = user.userprofile.student_info.fio.split()
         if len(name) == 3:
@@ -27,6 +28,14 @@ def set_middlename(backend, user, response, *args, **kwargs):
 
 
 def approve_student(backend, user, response, *args, **kwargs):
+    """Tries to verify user as enrolled student.
+
+    * If backend is ``google-oauth2``, then ``user.email`` should be student's corporate email
+    * If backend is ``vk-oauth-2``, then ``user.username`` is vk profile's screen name
+
+    Function is invoked as part of :const:`core.settings.SOCIAL_AUTH_PIPELINE`.
+    ``user.email`` & so on are populated after social login also in that pipeline
+    """
     if not user.userprofile.student_info or not user.userprofile.is_approved:
         try:
             if backend.name == 'google-oauth2':
@@ -48,6 +57,12 @@ def approve_student(backend, user, response, *args, **kwargs):
 
 
 class SocialAuthExceptionMiddlewareExtended(SocialAuthExceptionMiddleware):
+    """Exception wich raised after authentification error. Describing message is provided
+
+    Currently handled errors:
+    ``AuthForbidden``: users can login only with google accounta at @phystech.edu. See :const:`core.settings.SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS`
+    ``AuthAlreadyAssociated``: you can associate your social account with only on user.
+    """
     def get_message(self, request, exception):
         if type(exception) is AuthForbidden:
             return "Поддерживаются только аккаунты phystech.edu"
@@ -58,7 +73,7 @@ class SocialAuthExceptionMiddlewareExtended(SocialAuthExceptionMiddleware):
 
 
 class MiptOAuth2(BaseOAuth2):
-    """MIPT OAuth authentication backend"""
+    """MIPT OAuth authentication backend. Not used currently"""
     name = 'mipt-oauth2'
     ID_KEY = 'id'
     AUTHORIZATION_URL = 'https://mipt.ru/oauth/authorize.php'

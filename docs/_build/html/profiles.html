@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>profiles package &#8212; DGAP Services 0.3 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,15 +23,28 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
-
+    <link rel="next" title="senate package" href="senate.html" />
+    <link rel="prev" title="polls.templatetags package" href="polls.templatetags.html" /> 
   </head>
   <body>
-  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="senate.html" title="senate package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="polls.templatetags.html" title="polls.templatetags package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DGAP Services 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -40,120 +53,180 @@
             
   <div class="section" id="profiles-package">
 <h1>profiles package<a class="headerlink" href="#profiles-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
+<ul class="simple">
+<li>Handling OAuth-2 authorization and user authentication.</li>
+<li>Verification of students.</li>
+</ul>
+<p>User can log in (and sign up) through one of the available OAuth providers (VK, Google). For each social auth a new user
+(instance of <code class="xref py py-class docutils literal"><span class="pre">django.contrib.auth.models.User</span></code>) is created. This process is handled by <code class="xref py py-const docutils literal"><span class="pre">core.settings.SOCIAL_AUTH_PIPELINE</span></code>.
+For each new user an <a class="reference internal" href="#profiles.models.UserProfile" title="profiles.models.UserProfile"><code class="xref py py-class docutils literal"><span class="pre">profiles.models.UserProfile</span></code></a> is created (See <a class="reference internal" href="#module-profiles.signals" title="profiles.signals"><code class="xref py py-mod docutils literal"><span class="pre">profiles.signals</span></code></a>).</p>
+<p><a class="reference internal" href="#profiles.models.StudentInfo" title="profiles.models.StudentInfo"><code class="xref py py-class docutils literal"><span class="pre">profiles.models.StudentInfo</span></code></a> stores info about all DGAP students (received from administration). If system can
+associate logged user with DGAP student (<a class="reference internal" href="#profiles.psa.approve_student" title="profiles.psa.approve_student"><code class="xref py py-func docutils literal"><span class="pre">profiles.psa.approve_student()</span></code></a>), then link to <code class="xref py py-class docutils literal"><span class="pre">UserProfile</span></code> is created.</p>
+<p>Each student have only one <code class="xref py py-class docutils literal"><span class="pre">StudentInfo</span></code> but can have multile <code class="xref py py-class docutils literal"><span class="pre">User</span></code> (one for each OAuth provider)</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Refactoring in auth system needed. Now multiple accounts of singe student are linked through User -&gt; UserProfile -&gt; StudentInfo.
+Super stupid.</p>
 </div>
+<div class="section" id="module-profiles.models">
+<span id="profiles-models-module"></span><h2>profiles.models module<a class="headerlink" href="#module-profiles.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="profiles.models.StudentInfo">
+<em class="property">class </em><code class="descclassname">profiles.models.</code><code class="descname">StudentInfo</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/models.html#StudentInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.models.StudentInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<p>Model for storing info about students. Created from administration database. If user is verificated as
+enrolled student (by vk profile or corporate email), <a class="reference internal" href="#profiles.models.StudentInfo" title="profiles.models.StudentInfo"><code class="xref py py-class docutils literal"><span class="pre">StudentInfo</span></code></a> is linked with <a class="reference internal" href="#profiles.models.UserProfile" title="profiles.models.UserProfile"><code class="xref py py-class docutils literal"><span class="pre">UserProfile</span></code></a>. See <a class="reference internal" href="#profiles.psa.approve_student" title="profiles.psa.approve_student"><code class="xref py py-func docutils literal"><span class="pre">profiles.psa.approve_student()</span></code></a>.</p>
+<dl class="attribute">
+<dt id="profiles.models.StudentInfo.course">
+<code class="descname">course</code><a class="headerlink" href="#profiles.models.StudentInfo.course" title="Permalink to this definition">¶</a></dt>
+<dd><p>Course. Valid for students in gap year</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="profiles.models.StudentInfo.fio">
+<code class="descname">fio</code><a class="headerlink" href="#profiles.models.StudentInfo.fio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Student’s full name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="profiles.models.StudentInfo.first_name">
+<code class="descname">first_name</code><a class="headerlink" href="#profiles.models.StudentInfo.first_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Student’s first name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="profiles.models.StudentInfo.group">
+<code class="descname">group</code><a class="headerlink" href="#profiles.models.StudentInfo.group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Academic group. If data is taken from settlement database (like in 2017), for students in gap year group number is outdated.
+Must be taken into account when managing elections.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="profiles.models.StudentInfo.last_name">
+<code class="descname">last_name</code><a class="headerlink" href="#profiles.models.StudentInfo.last_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Student’s last name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="profiles.models.StudentInfo.phystech">
+<code class="descname">phystech</code><a class="headerlink" href="#profiles.models.StudentInfo.phystech" title="Permalink to this definition">¶</a></dt>
+<dd><p>Student’s corporate email - <a class="reference external" href="mailto:name&#46;surname&#37;&#52;&#48;phystech&#46;edu">name<span>&#46;</span>surname<span>&#64;</span>phystech<span>&#46;</span>edu</a>. Used for student’s verification</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="profiles.models.StudentInfo.room">
+<code class="descname">room</code><a class="headerlink" href="#profiles.models.StudentInfo.room" title="Permalink to this definition">¶</a></dt>
+<dd><p>Student’s room. Currently unused, but who knows?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="profiles.models.StudentInfo.sex">
+<code class="descname">sex</code><a class="headerlink" href="#profiles.models.StudentInfo.sex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Student’s sex. Currently used to obtain genitive case of user’s name when creating official papers.</p>
+<p>See <a class="reference internal" href="fin_aid.html#module-fin_aid.create_paper" title="fin_aid.create_paper"><code class="xref py py-mod docutils literal"><span class="pre">fin_aid.create_paper</span></code></a></p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="profiles.models.StudentInfo.upload_csv">
+<em class="property">static </em><code class="descname">upload_csv</code><span class="sig-paren">(</span><em>filename='~/spiski.csv'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/models.html#StudentInfo.upload_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.models.StudentInfo.upload_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Populate database from csv with student’s data. CSV can be obtained, for example, from settlement database.
+:param str filename: file name (including path) of csv file with student’s data</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="profiles.models.StudentInfo.vk">
+<code class="descname">vk</code><a class="headerlink" href="#profiles.models.StudentInfo.vk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Link to student’s vk.com profile. It is quite challenging to obtain links for all students, but during last two
+elections electoral commission did it so we only have to collect accounts of freshmen yearly, which is much easier.</p>
+<p><strong>This field includes https://   prefix and contains screen name, not id</strong>!</p>
+<p><strong>https://vk.com/smnnk</strong>, not vk.com/smmnk or <a class="reference external" href="https://vk.com/id28749823">https://vk.com/id28749823</a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="profiles.models.UserProfile">
+<em class="property">class </em><code class="descclassname">profiles.models.</code><code class="descname">UserProfile</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/models.html#UserProfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.models.UserProfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
+<p>Helper model, created after each new user registration.</p>
+<p>Formerly stored essential data about user, now only links to <a class="reference internal" href="#profiles.models.StudentInfo" title="profiles.models.StudentInfo"><code class="xref py py-class docutils literal"><span class="pre">StudentInfo</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="profiles.models.is_same_student">
+<code class="descclassname">profiles.models.</code><code class="descname">is_same_student</code><span class="sig-paren">(</span><em>student1: django.contrib.auth.models.User</em>, <em>student2: django.contrib.auth.models.User</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/models.html#is_same_student"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.models.is_same_student" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns <cite>True</cite> if student1 and student2 are linked to the same <a class="reference internal" href="#profiles.models.StudentInfo" title="profiles.models.StudentInfo"><code class="xref py py-class docutils literal"><span class="pre">StudentInfo</span></code></a> (= they belong to one person)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="profiles.models.is_same_student_or_admin">
+<code class="descclassname">profiles.models.</code><code class="descname">is_same_student_or_admin</code><span class="sig-paren">(</span><em>student1: django.contrib.auth.models.User</em>, <em>student2: django.contrib.auth.models.User</em>, <em>group_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/models.html#is_same_student_or_admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.models.is_same_student_or_admin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if student1 is the same student as student2 or student1 is admin with appropriate access rights.</p>
+<p>Returns <code class="docutils literal"><span class="pre">True</span></code> if both <code class="docutils literal"><span class="pre">student1</span></code> and <code class="docutils literal"><span class="pre">student2</span></code> are linked to the same <a class="reference internal" href="#profiles.models.StudentInfo" title="profiles.models.StudentInfo"><code class="xref py py-class docutils literal"><span class="pre">StudentInfo</span></code></a>
+or <code class="docutils literal"><span class="pre">student1</span></code> has specific group or <code class="docutils literal"><span class="pre">student1</span></code> is superuser.
+Can be useful when checkng access/update permissions: student may create object from one social account and
+then login from another.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="profiles.models.same_users_list">
+<code class="descclassname">profiles.models.</code><code class="descname">same_users_list</code><span class="sig-paren">(</span><em>user: django.contrib.auth.models.User</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/models.html#same_users_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.models.same_users_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of all users, associated with given user’s <a class="reference internal" href="#profiles.models.StudentInfo" title="profiles.models.StudentInfo"><code class="xref py py-class docutils literal"><span class="pre">StudentInfo</span></code></a>.</p>
+<p>Logins through different OAuth providers create multiple <code class="xref py py-class docutils literal"><span class="pre">User</span></code> objects for one student. This function allows
+us to get list of all <code class="xref py py-class docutils literal"><span class="pre">User</span></code> objects, belonging to the same student. It must be taken into account when working with
+user-related objects.</p>
+<p>Let’s imagine fragment of <cite>dispatch</cite> method in <cite>UpdateView</cite></p>
+<p>Correct usage:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">author</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">same_users_list</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="n">PermissionDenied</span>
+</pre></div>
 </div>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<p>Incorrect usage:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">author</span> <span class="o">!=</span> <span class="n">user</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="n">PermissionDenied</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </div>
 <div class="section" id="module-profiles.admin">
 <span id="profiles-admin-module"></span><h2>profiles.admin module<a class="headerlink" href="#module-profiles.admin" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-profiles.psa">
+<span id="profiles-psa-module"></span><h2>profiles.psa module<a class="headerlink" href="#module-profiles.psa" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="profiles.admin.StudentInfoAdmin">
-<em class="property">class </em><code class="descclassname">profiles.admin.</code><code class="descname">StudentInfoAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/admin.html#StudentInfoAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.admin.StudentInfoAdmin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
-<dl class="attribute">
-<dt id="profiles.admin.StudentInfoAdmin.list_display">
-<code class="descname">list_display</code><em class="property"> = ['first_name', 'last_name', 'group', 'vk', 'phystech']</em><a class="headerlink" href="#profiles.admin.StudentInfoAdmin.list_display" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.admin.StudentInfoAdmin.list_filter">
-<code class="descname">list_filter</code><em class="property"> = ['course']</em><a class="headerlink" href="#profiles.admin.StudentInfoAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.admin.StudentInfoAdmin.media">
-<code class="descname">media</code><a class="headerlink" href="#profiles.admin.StudentInfoAdmin.media" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.admin.StudentInfoAdmin.search_fields">
-<code class="descname">search_fields</code><em class="property"> = ['first_name', 'last_name']</em><a class="headerlink" href="#profiles.admin.StudentInfoAdmin.search_fields" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<dt id="profiles.psa.MiptOAuth2">
+<em class="property">class </em><code class="descclassname">profiles.psa.</code><code class="descname">MiptOAuth2</code><span class="sig-paren">(</span><em>strategy=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/psa.html#MiptOAuth2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.psa.MiptOAuth2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">social_core.backends.oauth.BaseOAuth2</span></code></p>
+<p>MIPT OAuth authentication backend. Not used currently</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="profiles.admin.UserAdmin">
-<em class="property">class </em><code class="descclassname">profiles.admin.</code><code class="descname">UserAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/admin.html#UserAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.admin.UserAdmin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.auth.admin.UserAdmin</span></code></p>
-<dl class="method">
-<dt id="profiles.admin.UserAdmin.get_approved">
-<code class="descname">get_approved</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/admin.html#UserAdmin.get_approved"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.admin.UserAdmin.get_approved" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="profiles.admin.UserAdmin.get_formsets_with_inlines">
-<code class="descname">get_formsets_with_inlines</code><span class="sig-paren">(</span><em>request</em>, <em>obj=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/admin.html#UserAdmin.get_formsets_with_inlines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.admin.UserAdmin.get_formsets_with_inlines" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.admin.UserAdmin.inlines">
-<code class="descname">inlines</code><em class="property"> = (&lt;class 'profiles.admin.UserProfileInline'&gt;,)</em><a class="headerlink" href="#profiles.admin.UserAdmin.inlines" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.admin.UserAdmin.list_display">
-<code class="descname">list_display</code><em class="property"> = ['username', 'email', 'first_name', 'last_name', 'is_staff', 'get_approved']</em><a class="headerlink" href="#profiles.admin.UserAdmin.list_display" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.admin.UserAdmin.media">
-<code class="descname">media</code><a class="headerlink" href="#profiles.admin.UserAdmin.media" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<dt id="profiles.psa.SocialAuthExceptionMiddlewareExtended">
+<em class="property">class </em><code class="descclassname">profiles.psa.</code><code class="descname">SocialAuthExceptionMiddlewareExtended</code><span class="sig-paren">(</span><em>get_response=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/psa.html#SocialAuthExceptionMiddlewareExtended"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.psa.SocialAuthExceptionMiddlewareExtended" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">social_django.middleware.SocialAuthExceptionMiddleware</span></code></p>
+<p>Exception wich raised after authentification error. Describing message is provided</p>
+<p>Currently handled errors:
+<code class="docutils literal"><span class="pre">AuthForbidden</span></code>: users can login only with google accounta at &#64;phystech.edu. See <code class="xref py py-const docutils literal"><span class="pre">core.settings.SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS</span></code>
+<code class="docutils literal"><span class="pre">AuthAlreadyAssociated</span></code>: you can associate your social account with only on user.</p>
 </dd></dl>
 
-<dl class="class">
-<dt id="profiles.admin.UserProfileAdmin">
-<em class="property">class </em><code class="descclassname">profiles.admin.</code><code class="descname">UserProfileAdmin</code><span class="sig-paren">(</span><em>model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/admin.html#UserProfileAdmin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.admin.UserProfileAdmin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.ModelAdmin</span></code></p>
-<dl class="attribute">
-<dt id="profiles.admin.UserProfileAdmin.list_display">
-<code class="descname">list_display</code><em class="property"> = ['user', 'group', 'is_approved']</em><a class="headerlink" href="#profiles.admin.UserProfileAdmin.list_display" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.admin.UserProfileAdmin.list_filter">
-<code class="descname">list_filter</code><em class="property"> = ['is_subscribed', 'is_approved']</em><a class="headerlink" href="#profiles.admin.UserProfileAdmin.list_filter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.admin.UserProfileAdmin.media">
-<code class="descname">media</code><a class="headerlink" href="#profiles.admin.UserProfileAdmin.media" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.admin.UserProfileAdmin.model">
-<code class="descname">model</code><a class="headerlink" href="#profiles.admin.UserProfileAdmin.model" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">UserProfile</span></code></p>
+<dl class="function">
+<dt id="profiles.psa.approve_student">
+<code class="descclassname">profiles.psa.</code><code class="descname">approve_student</code><span class="sig-paren">(</span><em>backend</em>, <em>user</em>, <em>response</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/psa.html#approve_student"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.psa.approve_student" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tries to verify user as enrolled student.</p>
+<ul class="simple">
+<li>If backend is <code class="docutils literal"><span class="pre">google-oauth2</span></code>, then <code class="docutils literal"><span class="pre">user.email</span></code> should be student’s corporate email</li>
+<li>If backend is <code class="docutils literal"><span class="pre">vk-oauth-2</span></code>, then <code class="docutils literal"><span class="pre">user.username</span></code> is vk profile’s screen name</li>
+</ul>
+<p>Function is invoked as part of <code class="xref py py-const docutils literal"><span class="pre">core.settings.SOCIAL_AUTH_PIPELINE</span></code>.
+<code class="docutils literal"><span class="pre">user.email</span></code> &amp; so on after social login are populated also in that pipeline</p>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="class">
-<dt id="profiles.admin.UserProfileInline">
-<em class="property">class </em><code class="descclassname">profiles.admin.</code><code class="descname">UserProfileInline</code><span class="sig-paren">(</span><em>parent_model</em>, <em>admin_site</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/admin.html#UserProfileInline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.admin.UserProfileInline" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.contrib.admin.options.StackedInline</span></code></p>
-<dl class="attribute">
-<dt id="profiles.admin.UserProfileInline.can_delete">
-<code class="descname">can_delete</code><em class="property"> = False</em><a class="headerlink" href="#profiles.admin.UserProfileInline.can_delete" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.admin.UserProfileInline.media">
-<code class="descname">media</code><a class="headerlink" href="#profiles.admin.UserProfileInline.media" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.admin.UserProfileInline.model">
-<code class="descname">model</code><a class="headerlink" href="#profiles.admin.UserProfileInline.model" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">UserProfile</span></code></p>
-</dd></dl>
-
+<dl class="function">
+<dt id="profiles.psa.set_middlename">
+<code class="descclassname">profiles.psa.</code><code class="descname">set_middlename</code><span class="sig-paren">(</span><em>backend</em>, <em>user</em>, <em>response</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/psa.html#set_middlename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.psa.set_middlename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Legacy social auth middleware to set middlename. Currently middlename is stored in <a class="reference internal" href="#profiles.models.StudentInfo" title="profiles.models.StudentInfo"><code class="xref py py-class docutils literal"><span class="pre">profiles.models.StudentInfo</span></code></a></p>
 </dd></dl>
 
 </div>
@@ -163,420 +236,14 @@
 <dt id="profiles.app.ProfilesConfig">
 <em class="property">class </em><code class="descclassname">profiles.app.</code><code class="descname">ProfilesConfig</code><span class="sig-paren">(</span><em>app_name</em>, <em>app_module</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/app.html#ProfilesConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.app.ProfilesConfig" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.apps.config.AppConfig</span></code></p>
-<dl class="attribute">
-<dt id="profiles.app.ProfilesConfig.name">
-<code class="descname">name</code><em class="property"> = 'profiles'</em><a class="headerlink" href="#profiles.app.ProfilesConfig.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<p>Configuration class for <a class="reference internal" href="#module-profiles" title="profiles"><code class="xref py py-mod docutils literal"><span class="pre">profiles</span></code></a> module</p>
 <dl class="method">
 <dt id="profiles.app.ProfilesConfig.ready">
 <code class="descname">ready</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/app.html#ProfilesConfig.ready"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.app.ProfilesConfig.ready" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.app.ProfilesConfig.verbose_name">
-<code class="descname">verbose_name</code><em class="property"> = 'Пользовательские профили'</em><a class="headerlink" href="#profiles.app.ProfilesConfig.verbose_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-profiles.models">
-<span id="profiles-models-module"></span><h2>profiles.models module<a class="headerlink" href="#module-profiles.models" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="profiles.models.StudentInfo">
-<em class="property">class </em><code class="descclassname">profiles.models.</code><code class="descname">StudentInfo</code><span class="sig-paren">(</span><em>id</em>, <em>fio</em>, <em>group</em>, <em>course</em>, <em>phystech</em>, <em>vk</em>, <em>first_name</em>, <em>last_name</em>, <em>sex</em>, <em>room</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/models.html#StudentInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.models.StudentInfo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
-<dl class="exception">
-<dt id="profiles.models.StudentInfo.DoesNotExist">
-<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#profiles.models.StudentInfo.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.StudentInfo.FEMALE">
-<code class="descname">FEMALE</code><em class="property"> = 2</em><a class="headerlink" href="#profiles.models.StudentInfo.FEMALE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.StudentInfo.MALE">
-<code class="descname">MALE</code><em class="property"> = 1</em><a class="headerlink" href="#profiles.models.StudentInfo.MALE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="exception">
-<dt id="profiles.models.StudentInfo.MultipleObjectsReturned">
-<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#profiles.models.StudentInfo.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.StudentInfo.SEX">
-<code class="descname">SEX</code><em class="property"> = [(1, 'male'), (2, 'female')]</em><a class="headerlink" href="#profiles.models.StudentInfo.SEX" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.StudentInfo.course">
-<code class="descname">course</code><a class="headerlink" href="#profiles.models.StudentInfo.course" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.StudentInfo.fio">
-<code class="descname">fio</code><a class="headerlink" href="#profiles.models.StudentInfo.fio" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.StudentInfo.first_name">
-<code class="descname">first_name</code><a class="headerlink" href="#profiles.models.StudentInfo.first_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="profiles.models.StudentInfo.get_sex_display">
-<code class="descname">get_sex_display</code><span class="sig-paren">(</span><em>*moreargs</em>, <em>**morekwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#profiles.models.StudentInfo.get_sex_display" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.StudentInfo.group">
-<code class="descname">group</code><a class="headerlink" href="#profiles.models.StudentInfo.group" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.StudentInfo.id">
-<code class="descname">id</code><a class="headerlink" href="#profiles.models.StudentInfo.id" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.StudentInfo.last_name">
-<code class="descname">last_name</code><a class="headerlink" href="#profiles.models.StudentInfo.last_name" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.StudentInfo.objects">
-<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#profiles.models.StudentInfo.objects" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.StudentInfo.participant_set">
-<code class="descname">participant_set</code><a class="headerlink" href="#profiles.models.StudentInfo.participant_set" title="Permalink to this definition">¶</a></dt>
-<dd><p>Accessor to the related objects manager on the reverse side of a
-many-to-one relation.</p>
-<p>In the example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal"><span class="pre">parent.children</span></code> is a <code class="docutils literal"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
-<p>Most of the implementation is delegated to a dynamically defined manager
-class built by <code class="docutils literal"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.StudentInfo.phystech">
-<code class="descname">phystech</code><a class="headerlink" href="#profiles.models.StudentInfo.phystech" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.StudentInfo.room">
-<code class="descname">room</code><a class="headerlink" href="#profiles.models.StudentInfo.room" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.StudentInfo.scholar_set">
-<code class="descname">scholar_set</code><a class="headerlink" href="#profiles.models.StudentInfo.scholar_set" title="Permalink to this definition">¶</a></dt>
-<dd><p>Accessor to the related objects manager on the reverse side of a
-many-to-one relation.</p>
-<p>In the example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal"><span class="pre">parent.children</span></code> is a <code class="docutils literal"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
-<p>Most of the implementation is delegated to a dynamically defined manager
-class built by <code class="docutils literal"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.StudentInfo.sex">
-<code class="descname">sex</code><a class="headerlink" href="#profiles.models.StudentInfo.sex" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="staticmethod">
-<dt id="profiles.models.StudentInfo.upload_csv">
-<em class="property">static </em><code class="descname">upload_csv</code><span class="sig-paren">(</span><em>filename='~/spiski.csv'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/models.html#StudentInfo.upload_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.models.StudentInfo.upload_csv" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.StudentInfo.userprofile_set">
-<code class="descname">userprofile_set</code><a class="headerlink" href="#profiles.models.StudentInfo.userprofile_set" title="Permalink to this definition">¶</a></dt>
-<dd><p>Accessor to the related objects manager on the reverse side of a
-many-to-one relation.</p>
-<p>In the example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal"><span class="pre">parent.children</span></code> is a <code class="docutils literal"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
-<p>Most of the implementation is delegated to a dynamically defined manager
-class built by <code class="docutils literal"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.StudentInfo.vk">
-<code class="descname">vk</code><a class="headerlink" href="#profiles.models.StudentInfo.vk" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
+<dd><p>Connect <a class="reference internal" href="#module-profiles.signals" title="profiles.signals"><code class="xref py py-mod docutils literal"><span class="pre">profiles.signals</span></code></a></p>
 </dd></dl>
 
 </dd></dl>
-
-<dl class="class">
-<dt id="profiles.models.UserProfile">
-<em class="property">class </em><code class="descclassname">profiles.models.</code><code class="descname">UserProfile</code><span class="sig-paren">(</span><em>id</em>, <em>user</em>, <em>dorm</em>, <em>middlename</em>, <em>group</em>, <em>room</em>, <em>is_approved</em>, <em>is_subscribed</em>, <em>student_info</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/models.html#UserProfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.models.UserProfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.db.models.base.Model</span></code></p>
-<dl class="exception">
-<dt id="profiles.models.UserProfile.DoesNotExist">
-<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#profiles.models.UserProfile.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
-</dd></dl>
-
-<dl class="exception">
-<dt id="profiles.models.UserProfile.MultipleObjectsReturned">
-<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#profiles.models.UserProfile.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.UserProfile.article_set">
-<code class="descname">article_set</code><a class="headerlink" href="#profiles.models.UserProfile.article_set" title="Permalink to this definition">¶</a></dt>
-<dd><p>Accessor to the related objects manager on the reverse side of a
-many-to-one relation.</p>
-<p>In the example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal"><span class="pre">parent.children</span></code> is a <code class="docutils literal"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
-<p>Most of the implementation is delegated to a dynamically defined manager
-class built by <code class="docutils literal"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.UserProfile.dorm">
-<code class="descname">dorm</code><a class="headerlink" href="#profiles.models.UserProfile.dorm" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.UserProfile.group">
-<code class="descname">group</code><a class="headerlink" href="#profiles.models.UserProfile.group" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.UserProfile.id">
-<code class="descname">id</code><a class="headerlink" href="#profiles.models.UserProfile.id" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.UserProfile.is_approved">
-<code class="descname">is_approved</code><a class="headerlink" href="#profiles.models.UserProfile.is_approved" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.UserProfile.is_subscribed">
-<code class="descname">is_subscribed</code><a class="headerlink" href="#profiles.models.UserProfile.is_subscribed" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.UserProfile.middlename">
-<code class="descname">middlename</code><a class="headerlink" href="#profiles.models.UserProfile.middlename" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.UserProfile.objects">
-<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#profiles.models.UserProfile.objects" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.UserProfile.room">
-<code class="descname">room</code><a class="headerlink" href="#profiles.models.UserProfile.room" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.UserProfile.student_info">
-<code class="descname">student_info</code><a class="headerlink" href="#profiles.models.UserProfile.student_info" title="Permalink to this definition">¶</a></dt>
-<dd><p>Accessor to the related object on the forward side of a many-to-one or
-one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
-<p>In the example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal"><span class="pre">child.parent</span></code> is a <code class="docutils literal"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.UserProfile.student_info_id">
-<code class="descname">student_info_id</code><a class="headerlink" href="#profiles.models.UserProfile.student_info_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.UserProfile.user">
-<code class="descname">user</code><a class="headerlink" href="#profiles.models.UserProfile.user" title="Permalink to this definition">¶</a></dt>
-<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
-<p>In the example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><code class="docutils literal"><span class="pre">restaurant.place</span></code> is a <code class="docutils literal"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.models.UserProfile.user_id">
-<code class="descname">user_id</code><a class="headerlink" href="#profiles.models.UserProfile.user_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>A wrapper for a deferred-loading field. When the value is read from this
-object the first time, the query is executed.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="profiles.models.get_profiles">
-<code class="descclassname">profiles.models.</code><code class="descname">get_profiles</code><span class="sig-paren">(</span><em>user</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/models.html#get_profiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.models.get_profiles" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="profiles.models.is_same_student">
-<code class="descclassname">profiles.models.</code><code class="descname">is_same_student</code><span class="sig-paren">(</span><em>student1: django.contrib.auth.models.User</em>, <em>student2: django.contrib.auth.models.User</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/models.html#is_same_student"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.models.is_same_student" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="profiles.models.is_same_student_or_admin">
-<code class="descclassname">profiles.models.</code><code class="descname">is_same_student_or_admin</code><span class="sig-paren">(</span><em>student1: django.contrib.auth.models.User</em>, <em>student2: django.contrib.auth.models.User</em>, <em>group_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/models.html#is_same_student_or_admin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.models.is_same_student_or_admin" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="profiles.models.same_users_list">
-<code class="descclassname">profiles.models.</code><code class="descname">same_users_list</code><span class="sig-paren">(</span><em>user: django.contrib.auth.models.User</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/models.html#same_users_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.models.same_users_list" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-profiles.psa">
-<span id="profiles-psa-module"></span><h2>profiles.psa module<a class="headerlink" href="#module-profiles.psa" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="profiles.psa.MiptOAuth2">
-<em class="property">class </em><code class="descclassname">profiles.psa.</code><code class="descname">MiptOAuth2</code><span class="sig-paren">(</span><em>strategy=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/psa.html#MiptOAuth2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.psa.MiptOAuth2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">social_core.backends.oauth.BaseOAuth2</span></code></p>
-<p>MIPT OAuth authentication backend</p>
-<dl class="attribute">
-<dt id="profiles.psa.MiptOAuth2.ACCESS_TOKEN_METHOD">
-<code class="descname">ACCESS_TOKEN_METHOD</code><em class="property"> = 'POST'</em><a class="headerlink" href="#profiles.psa.MiptOAuth2.ACCESS_TOKEN_METHOD" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.psa.MiptOAuth2.ACCESS_TOKEN_URL">
-<code class="descname">ACCESS_TOKEN_URL</code><em class="property"> = 'https://mipt.ru/oauth/token.php'</em><a class="headerlink" href="#profiles.psa.MiptOAuth2.ACCESS_TOKEN_URL" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.psa.MiptOAuth2.API_URL">
-<code class="descname">API_URL</code><em class="property"> = 'https://mipt.ru/oauth/api.php'</em><a class="headerlink" href="#profiles.psa.MiptOAuth2.API_URL" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.psa.MiptOAuth2.AUTHORIZATION_URL">
-<code class="descname">AUTHORIZATION_URL</code><em class="property"> = 'https://mipt.ru/oauth/authorize.php'</em><a class="headerlink" href="#profiles.psa.MiptOAuth2.AUTHORIZATION_URL" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.psa.MiptOAuth2.DEFAULT_SCOPE">
-<code class="descname">DEFAULT_SCOPE</code><em class="property"> = ['userinfo', 'settle', 'email']</em><a class="headerlink" href="#profiles.psa.MiptOAuth2.DEFAULT_SCOPE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.psa.MiptOAuth2.EXTRA_DATA">
-<code class="descname">EXTRA_DATA</code><em class="property"> = [('id', 'id'), ('expires_in', 'expires_in'), ('refresh_token', 'refresh_token', True), ('token_type', 'token_type'), ('login', 'login')]</em><a class="headerlink" href="#profiles.psa.MiptOAuth2.EXTRA_DATA" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.psa.MiptOAuth2.ID_KEY">
-<code class="descname">ID_KEY</code><em class="property"> = 'id'</em><a class="headerlink" href="#profiles.psa.MiptOAuth2.ID_KEY" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.psa.MiptOAuth2.REDIRECT_STATE">
-<code class="descname">REDIRECT_STATE</code><em class="property"> = False</em><a class="headerlink" href="#profiles.psa.MiptOAuth2.REDIRECT_STATE" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="profiles.psa.MiptOAuth2.get_user_details">
-<code class="descname">get_user_details</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/psa.html#MiptOAuth2.get_user_details"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.psa.MiptOAuth2.get_user_details" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.psa.MiptOAuth2.name">
-<code class="descname">name</code><em class="property"> = 'mipt-oauth2'</em><a class="headerlink" href="#profiles.psa.MiptOAuth2.name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="profiles.psa.MiptOAuth2.user_data">
-<code class="descname">user_data</code><span class="sig-paren">(</span><em>access_token</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/psa.html#MiptOAuth2.user_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.psa.MiptOAuth2.user_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="profiles.psa.SocialAuthExceptionMiddlewareExtended">
-<em class="property">class </em><code class="descclassname">profiles.psa.</code><code class="descname">SocialAuthExceptionMiddlewareExtended</code><span class="sig-paren">(</span><em>get_response=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/psa.html#SocialAuthExceptionMiddlewareExtended"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.psa.SocialAuthExceptionMiddlewareExtended" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">social_django.middleware.SocialAuthExceptionMiddleware</span></code></p>
-<dl class="method">
-<dt id="profiles.psa.SocialAuthExceptionMiddlewareExtended.get_message">
-<code class="descname">get_message</code><span class="sig-paren">(</span><em>request</em>, <em>exception</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/psa.html#SocialAuthExceptionMiddlewareExtended.get_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.psa.SocialAuthExceptionMiddlewareExtended.get_message" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="profiles.psa.approve_student">
-<code class="descclassname">profiles.psa.</code><code class="descname">approve_student</code><span class="sig-paren">(</span><em>backend</em>, <em>user</em>, <em>response</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/psa.html#approve_student"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.psa.approve_student" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="profiles.psa.set_middlename">
-<code class="descclassname">profiles.psa.</code><code class="descname">set_middlename</code><span class="sig-paren">(</span><em>backend</em>, <em>user</em>, <em>response</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/psa.html#set_middlename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.psa.set_middlename" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </div>
 <div class="section" id="module-profiles.signals">
@@ -584,12 +251,15 @@ object the first time, the query is executed.</p>
 <dl class="function">
 <dt id="profiles.signals.create_user_profile">
 <code class="descclassname">profiles.signals.</code><code class="descname">create_user_profile</code><span class="sig-paren">(</span><em>sender</em>, <em>instance</em>, <em>created</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/signals.html#create_user_profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.signals.create_user_profile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Receives <code class="docutils literal"><span class="pre">post_save</span></code> signal from <code class="xref py py-class docutils literal"><span class="pre">User</span></code>. Creates <code class="xref py py-class docutils literal"><span class="pre">profiles.models.Userprofile</span></code> for new users</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="profiles.signals.update_student_info">
 <code class="descclassname">profiles.signals.</code><code class="descname">update_student_info</code><span class="sig-paren">(</span><em>sender</em>, <em>instance</em>, <em>created</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/signals.html#update_student_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.signals.update_student_info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Receives <code class="docutils literal"><span class="pre">post_save</span></code> signal from <a class="reference internal" href="#profiles.models.StudentInfo" title="profiles.models.StudentInfo"><code class="xref py py-class docutils literal"><span class="pre">profiles.models.StudentInfo</span></code></a>. Updates linked <a class="reference internal" href="#profiles.models.UserProfile" title="profiles.models.UserProfile"><code class="xref py py-class docutils literal"><span class="pre">profiles.models.UserProfile</span></code></a></p>
+<p>As <code class="xref py py-class docutils literal"><span class="pre">UserProfile</span></code> is no longer used to store ersonal data, this function is unnecessary.</p>
+</dd></dl>
 
 </div>
 <div class="section" id="module-profiles.tests">
@@ -597,61 +267,14 @@ object the first time, the query is executed.</p>
 </div>
 <div class="section" id="module-profiles.urls">
 <span id="profiles-urls-module"></span><h2>profiles.urls module<a class="headerlink" href="#module-profiles.urls" title="Permalink to this headline">¶</a></h2>
+<p>URL dispatcher for module <a class="reference internal" href="#module-profiles" title="profiles"><code class="xref py py-mod docutils literal"><span class="pre">profiles</span></code></a>.</p>
+<ul class="simple">
+<li>At root url info about user is shown (see <code class="xref py py-func docutils literal"><span class="pre">profiles.views.profile_view()</span></code>)</li>
+<li>Call to <code class="docutils literal"><span class="pre">change_subscribing</span></code> url changes subscribing status - <code class="xref py py-func docutils literal"><span class="pre">profiles.views.change_subsribing_status()</span></code></li>
+</ul>
 </div>
 <div class="section" id="module-profiles.views">
 <span id="profiles-views-module"></span><h2>profiles.views module<a class="headerlink" href="#module-profiles.views" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="profiles.views.UserChangeEmail">
-<em class="property">class </em><code class="descclassname">profiles.views.</code><code class="descname">UserChangeEmail</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/views.html#UserChangeEmail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.views.UserChangeEmail" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">django.views.generic.edit.UpdateView</span></code></p>
-<dl class="method">
-<dt id="profiles.views.UserChangeEmail.dispatch">
-<code class="descname">dispatch</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/views.html#UserChangeEmail.dispatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.views.UserChangeEmail.dispatch" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.views.UserChangeEmail.fields">
-<code class="descname">fields</code><em class="property"> = ['email']</em><a class="headerlink" href="#profiles.views.UserChangeEmail.fields" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="profiles.views.UserChangeEmail.form_valid">
-<code class="descname">form_valid</code><span class="sig-paren">(</span><em>form</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/views.html#UserChangeEmail.form_valid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.views.UserChangeEmail.form_valid" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="profiles.views.UserChangeEmail.get_object">
-<code class="descname">get_object</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/views.html#UserChangeEmail.get_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.views.UserChangeEmail.get_object" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.views.UserChangeEmail.model">
-<code class="descname">model</code><a class="headerlink" href="#profiles.views.UserChangeEmail.model" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <code class="xref py py-class docutils literal"><span class="pre">User</span></code></p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.views.UserChangeEmail.success_url">
-<code class="descname">success_url</code><em class="property"> = '/polls/done/'</em><a class="headerlink" href="#profiles.views.UserChangeEmail.success_url" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="profiles.views.UserChangeEmail.template_name">
-<code class="descname">template_name</code><em class="property"> = 'profiles/user_change_email.html'</em><a class="headerlink" href="#profiles.views.UserChangeEmail.template_name" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="profiles.views.change_subscribing_status">
-<code class="descclassname">profiles.views.</code><code class="descname">change_subscribing_status</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/views.html#change_subscribing_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.views.change_subscribing_status" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="profiles.views.profile_view">
-<code class="descclassname">profiles.views.</code><code class="descname">profile_view</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/profiles/views.html#profile_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#profiles.views.profile_view" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </div>
 <div class="section" id="module-profiles">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-profiles" title="Permalink to this headline">¶</a></h2>
@@ -663,13 +286,13 @@ object the first time, the query is executed.</p>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-  </ul></li>
-</ul>
-</div>
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="polls.templatetags.html"
+                        title="previous chapter">polls.templatetags package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="senate.html"
+                        title="next chapter">senate package</a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
@@ -684,20 +307,27 @@ object the first time, the query is executed.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2017, Pavel Semenenko.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
-      
-      |
-      <a href="_sources/profiles.rst.txt"
-          rel="nofollow">Page source</a>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="senate.html" title="senate package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="polls.templatetags.html" title="polls.templatetags package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DGAP Services 0.3 documentation</a> &#187;</li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Pavel Semenenko.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
   </body>
 </html>
