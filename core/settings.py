@@ -62,6 +62,7 @@ INSTALLED_APPS = (
     'social_django',
     'servertime',
     'profiles',
+    'vk_iframe',
     'nested_inline',
 )
 

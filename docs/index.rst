@@ -25,5 +25,6 @@ Indices and tables
    profiles.rst
    senate.rst
    servertime.rst
+   vk_iframe
 
 
