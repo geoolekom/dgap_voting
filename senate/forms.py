@@ -10,10 +10,6 @@ class IssueCreateForm(forms.ModelForm):
 
 
 class DeptEventCreateForm(forms.ModelForm):
-    #photo1 = forms.ImageField(required=False, label="Фотография")
-    #photo2 = forms.ImageField(required=False, label="Фотография")
-    #photo3 = forms.ImageField(required=False, label="Фотография")
-
     class Meta:
         model = Event
         fields = ["cls", "info", "new_status", "new_dept"]
@@ -21,10 +17,6 @@ class DeptEventCreateForm(forms.ModelForm):
 
 
 class UserEventCreateForm(forms.ModelForm):
-    #photo1 = forms.ImageField(required=False, label="Фотография")
-    #photo2 = forms.ImageField(required=False, label="Фотография")
-    #photo3 = forms.ImageField(required=False, label="Фотография")
-
     class Meta:
         model = Event
         fields = ["info"]
