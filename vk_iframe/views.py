@@ -128,4 +128,5 @@ def index(request):
     elif page == 'senate':
         base_class = IssueCreate
 
+
     return iframe(mix_iframe(base_class).as_view(**params))(request)
