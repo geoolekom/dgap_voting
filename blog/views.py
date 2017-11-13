@@ -33,11 +33,8 @@ class ArticleDetail(generic.DetailView):
     """Detailed view of article.
 
     Base template is ``blog/article_detail.html``.
-
-    Slug is provided as arrtibute to allow calls like ``ArticleDetail.as_view(slug="awesome-slug")``.
     """
     model = Article
-    slug = None
 
     def get_context_data(self, **kwargs):
         """Raises 403 error if user can't view this article. See :func:`Article.is_visible`"""

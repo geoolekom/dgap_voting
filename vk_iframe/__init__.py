@@ -3,8 +3,9 @@
 Installation
 ------------
 
-1. Add ``vk_iframe`` to INSTALLED_APPS
-2. Set valid VK_APP_SECRET in settings
+1. Create VK application. Docs can be found at <https://vk.com/dev/community_apps_docs>
+2. Add ``vk_iframe`` to INSTALLED_APPS
+3. Set valid VK_APP_SECRET in settings
 
 Static files & templates
 ------------

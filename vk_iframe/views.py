@@ -29,6 +29,7 @@ class VkIframeMixin:
     """Mixin that Adds VK JS SDK files, removes menu. Allows to 'natively' embed class-based views.
 
     Must be used with class-based view, inheriting ``ContextMixin`` and ``TemplateResponseMixin``.
+    Aslo ``template_name`` **must be set in base class**.
     Example:
     ::
         class AidRequestCreateIframe(VkIframeMixin, AidRequestCreate):
@@ -63,11 +64,12 @@ def check_signature(params):
     if 'sign' not in params or 'viewer_id' not in params:
         return False
 
-    sign = ""
+    pairs = []
     for key, value in params.items():
         if key not in ['sign', 'hash']:
-            sign += value
+            pairs.append("{}={}".format(key, value))
 
+    sign = "".join(sorted(pairs))
     return hmac.new(sign.encode('ascii'), VK_APP_SECRET.encode('ascii'), hashlib.sha256).hexdigest() == params['sign']
 
 
@@ -85,7 +87,7 @@ def iframe(base_view):
 
     """
     # TODO maybe drop support of func-based views and move all this code to VkIframeMixin?
-    # TODO we are disabling anti-clickjacking and anti-csrf protection. Shell we really do it?
+    # TODO we are disabling anti-clickjacking and anti-csrf protection. Shall we really do it?
     # TODO check_signature is currently disabled due to incorrect behaviour of check_signature function.
     @csrf_exempt
     @xframe_options_exempt
@@ -120,13 +122,11 @@ def index(request):
     4. Adapt for iframe
     5. Server view to user"""
     page = request.GET.get('hash', '')
-    params = {}
     base_class = AidRequestCreate
     if page == 'club':
         base_class = ArticleDetail
-        params['slug'] = 'club'
     elif page == 'senate':
         base_class = IssueCreate
 
+    return iframe(mix_iframe(base_class).as_view())(request)
 
-    return iframe(mix_iframe(base_class).as_view(**params))(request)

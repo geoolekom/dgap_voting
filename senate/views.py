@@ -94,7 +94,7 @@ class IssueDetail(View):
 class IssueCreate(generic.CreateView):
     model = Issue
     form_class = IssueCreateForm
-    template_name = "senate/issue_form"
+    template_name = "senate/issue_form.html"
 
     def get_initial(self):
         initial = super(IssueCreate, self).get_initial()
