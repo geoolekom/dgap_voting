@@ -7,13 +7,13 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-xs-6">
-                    <div class="card mx-auto">
+                    <div class="card">
                         <div class="card-header">Тип голосования</div>
                         <div class="card-body">{% if poll.public %}Открытое{% else %}Тайное{% endif %}</div>
                     </div>
                 </div>
                 <div class="col-xs-6">
-                    <div class="card mx-auto">
+                    <div class="card">
                         <div class="card-header">Конец голосования</div>
                         <div class="card-body">{{ poll.end_date|date:"d M" }} {{ poll.end_date|time:"H:i" }}	</div>
                     </div>

@@ -13,3 +13,11 @@ span.post-info {
 .student-select {
     min-width: 250px;
 }
+
+.card-single-column {
+    column-count: 1;
+}
+
+.dropdown-menu a.nav-link:hover {
+    color: #0056b3!important; // TODO move to saas variable
+}

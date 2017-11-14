@@ -6,17 +6,18 @@
 {% endblock %}
 
 {% block content %}
-    <div class="card mx-auto">
-        <div class="card-header">
-            <h2>{{ object.category }}: {{ object.name }}</h2>
-            <p><strong>Статус:</strong> {{ object.get_status_display }}</p>
-            <p><strong>Назначено:</strong> {{ object.assigned_dept.department.name }}</p>
-            <p><strong>Последнее действие:</strong> {{ object.last_event }}</p>
-            {% if object.want_to_help %}<p>Студент готов помогать с реализацией</p>{% endif %}
+    <div class="card-column card-single-column">
+        <div class="card">
+            <div class="card-header">
+                <h2>{{ object.category }}: {{ object.name }}</h2>
+                <p><strong>Статус:</strong> {{ object.get_status_display }}</p>
+                <p><strong>Назначено:</strong> {{ object.assigned_dept.department.name }}</p>
+                <p><strong>Последнее действие:</strong> {{ object.last_event }}</p>
+                {% if object.want_to_help %}<p>Студент готов помогать с реализацией</p>{% endif %}
+            </div>
         </div>
-    </div>
         {% for event in events %}
-            <div class="card mx-auto">
+            <div class="card">
                 <div class="card-body">
                     <p><span class="post-info">
                         {% if event.author.userprofile.student_info.vk %}
@@ -47,7 +48,7 @@
             </div>
         {% endfor %}
         {% if form %}
-            <div class="card mx-auto">
+            <div class="card">
                 <div class="card-body">
                     {% if department_form %}
                         {% if not notifications_allowed %}

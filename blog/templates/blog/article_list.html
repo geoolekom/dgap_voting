@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="panel-group">
+    <div class="card-columns card-single-column">
         {% article_panel "welcome" True False %}
         {% for article in object_list %}
             {% include "blog/article_panel.html" with header_link=True show_creation_time=True%}

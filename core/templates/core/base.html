@@ -6,42 +6,53 @@
     <title>{% block title %} DGAP services {% endblock %}</title>
 
     {% load staticfiles %}
-    {% load bootstrap4 %}
 
-    {% bootstrap_css %}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.4.3/css/mdb.min.css" rel="stylesheet">
-    <link href="{% static 'core/sidebar.css' %}?{{ TAG }}" rel="stylesheet">
-    <link href="{% static 'core/style.css' %}?{{ TAG }}" rel="stylesheet">
-    <link rel="shortcut icon" type="image/png" href="{% static 'core/favicon.png' %}?{{ TAG }}"/>
+    {% block  css %}
+        {% load bootstrap4 %}
+
+        {% bootstrap_css %}
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.4.3/css/mdb.min.css" rel="stylesheet">
+        <link href="{% static 'core/sidebar.css' %}?{{ TAG }}" rel="stylesheet">
+        <link href="{% static 'core/style.css' %}?{{ TAG }}" rel="stylesheet">
+        <link rel="shortcut icon" type="image/png" href="{% static 'core/favicon.png' %}?{{ TAG }}"/>
+    {% endblock css %}
 
     <script src="//code.jquery.com/jquery-3.2.1.min.js"></script> {# In the beggining bc many other scripts require it #}
 </head>
 
 <body>
-{% include 'core/nav.html' %}
-{% include 'core/messages.html' %}
+{% block navigation %}
+    {% include 'core/nav.html' %}
+{% endblock navigation %}
+{% block messages %}
+    {% include 'core/messages.html' %}
+{% endblock messages %}
+
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2" style="padding-top:16px;">
+            <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 mx-auto" style="padding-top:16px;">
                 {% block content %}
-                {% endblock %}
+                {% endblock content%}
             </div>
-        </div><!--/.row-->
-        <div class="row">
-            {% include "core/footer.html" %}
         </div>
-    </div><!--/.container-->
+        <div class="row">
+            {% block footer %}
+                {% include "core/footer.html" %}
+            {% endblock footer %}
+        </div>
+    </div>
     {# <link href="{% static 'polls/js/countdown/jquery.countdown.css' %}" rel="stylesheet" > #}
+    {% block js %}
         {% bootstrap_javascript %}
-    <script src="{% static 'polls/collapse.js' %}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.4.3/js/mdb.min.js"></script>
-    <script src="{% static 'core/js/countdown/jquery.plugin.min.js' %}?{{ TAG }}"></script>
-    <script src="{% static 'core/js/countdown/jquery.countdown.min.js' %}?{{ TAG }}"></script>
-    <script src="{% static 'core/js/script.js' %}?{{ TAG }}"></script>
+        <script src="{% static 'polls/collapse.js' %}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.4.3/js/mdb.min.js"></script>
+        <script src="{% static 'core/js/countdown/jquery.plugin.min.js' %}?{{ TAG }}"></script>
+        <script src="{% static 'core/js/countdown/jquery.countdown.min.js' %}?{{ TAG }}"></script>
+        <script src="{% static 'core/js/script.js' %}?{{ TAG }}"></script>
+    {% endblock js %}
 
-
-    {% include 'core/metrics.html' %}
+    {% block metrics %}
+        {% include 'core/metrics.html' %}
+    {% endblock metrics %}
 </body>
-
-
 </html>
