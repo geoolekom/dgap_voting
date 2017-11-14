@@ -1,0 +1,16 @@
+{% comment %}
+Based on https://github.com/idlesign/django-sitetree/blob/master/sitetree/templates/sitetree/menu_bootstrap3_dropdown.html
+{% endcomment %}
+
+{% load sitetree %}
+<ul class="dropdown-menu">
+    {% for item in sitetree_items %}
+        {% if item.title_resolved == "divider" %}
+            <div class="dropdown-divider"></div>
+        {% else %}
+            <li class="nav-item {% if item.is_current or item.in_current_branch %}active {% endif %}">
+                <a class="nav-link" href="{% sitetree_url for item %}" {% if item.hint %}title="{{ item.hint }}"{% endif %}>{{ item.title_resolved }}</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>
