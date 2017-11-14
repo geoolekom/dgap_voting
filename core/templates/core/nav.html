@@ -2,23 +2,23 @@
 
 <nav role="navigation" class="navbar navbar-default">
     <div class="container-fluid">
-    <div class="navbar-header">
-        <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <a href="{% url 'index' %}" class="navbar-brand">DGAP services</a>
-    </div>
-    <div id="navbarCollapse" class="collapse navbar-collapse">
-        <ul class="nav navbar-nav">
-            <li><a> <div id="defaultTime" url_serverdate="{% url 'servertime:server_date' %}" url_servertime="{% url 'servertime:server_time' %}"></div></a></li>
-            {% sitetree_menu from 'mainmenu' include 'trunk' template "core/menu_bootstrap3.html" %}
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            {% sitetree_menu from 'rightmenu' include 'trunk' template "core/menu_bootstrap3.html" %}
-        </ul>
-    </div>
+        <div class="navbar-header">
+            <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="{% url 'index' %}" class="navbar-brand">DGAP services</a>
+        </div>
+        <div id="navbarCollapse" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a> <div id="defaultTime" url_serverdate="{% url 'servertime:server_date' %}" url_servertime="{% url 'servertime:server_time' %}"></div></a></li>
+                {% sitetree_menu from 'mainmenu' include 'trunk' template "core/menu_bootstrap3.html" %}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% sitetree_menu from 'rightmenu' include 'trunk' template "core/menu_bootstrap3.html" %}
+            </ul>
+        </div>
     </div>
 </nav>

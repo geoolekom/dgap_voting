@@ -1,11 +1,11 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
+<div class="card">
+    <div class="card-header">
         <h2>
             {% if header_link %}<a href="{{ article.get_absolute_url }}">{{ article.title|safe }}</a>
             {% else %}{{ article.title|safe }}{% endif %}
         </h2>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         {% if show_creation_time %}<p><span class="post-info">{{ article.publish_dttm }}</span></p>{% endif %}
         {% if article.is_django_template %}
             {{ article.rendered_content|safe }}

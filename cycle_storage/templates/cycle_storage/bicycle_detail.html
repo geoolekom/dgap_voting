@@ -5,37 +5,35 @@
 {% endblock %}
 
 {% block content %}
-    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h2>{% if request.user == object.owner %}
-                        Мой велосипед
-                    {% else %}
-                        Велосипед, хозяин - {{ object.owner }}
-                    {% endif %}
-                </h2>
-            </div>
-            <div class="panel-body">
-                {% if object %}
-                    <p>Производитель: {{ object.manufacturer }}</p>
-                    <p>Модель: {{ object.model }}</p>
-                    {% if object.place %}<p>Хранится: {{ object.place }}</p>{% endif %}
-                    <p>Добавлен: {{ object.add_dttm }}</p>
-                    <p>Статус заявки: <span class="label {% if object.request_status == object.ACCEPTED %}label-success
-                                {% elif object.request_status == object.DECLINED or object.request_status == object.NO_PLACE %}label-danger
-                                {% else %}label-default{% endif %}">{{ object.get_request_status_display }}</p>
-                    <img src={{ object.photo.url }} class="aiddocument">
-                    {% if object.request_status == object.WAITING %}
-                        <p>
-                            <a href='{% url "bicycle:bicycle_update" object.id %}' class="btn btn-primary">Редактировать заявку</a>
-                            <a href='{% url "bicycle:bicycle_delete" object.id %}' class="btn btn-danger">Отозвать заявку</a>
-                        </p>
-                    {% endif %}
+    <div class="card">
+        <div class="card-header">
+            <h2>{% if request.user == object.owner %}
+                    Мой велосипед
                 {% else %}
-                    <p>У вас нет зарегистрированных велосипедов.</p>
-                    <p><a href={% url "bicycle:bicycle_create" class="btn btn-primary"%}>Добавить</a></p>
+                    Велосипед, хозяин - {{ object.owner }}
                 {% endif %}
-            </div>
+            </h2>
+        </div>
+        <div class="card-body">
+            {% if object %}
+                <p>Производитель: {{ object.manufacturer }}</p>
+                <p>Модель: {{ object.model }}</p>
+                {% if object.place %}<p>Хранится: {{ object.place }}</p>{% endif %}
+                <p>Добавлен: {{ object.add_dttm }}</p>
+                <p>Статус заявки: <span class="label {% if object.request_status == object.ACCEPTED %}label-success
+                            {% elif object.request_status == object.DECLINED or object.request_status == object.NO_PLACE %}label-danger
+                            {% else %}label-default{% endif %}">{{ object.get_request_status_display }}</p>
+                <img src={{ object.photo.url }} class="aiddocument">
+                {% if object.request_status == object.WAITING %}
+                    <p>
+                        <a href='{% url "bicycle:bicycle_update" object.id %}' class="btn btn-primary">Редактировать заявку</a>
+                        <a href='{% url "bicycle:bicycle_delete" object.id %}' class="btn btn-danger">Отозвать заявку</a>
+                    </p>
+                {% endif %}
+            {% else %}
+                <p>У вас нет зарегистрированных велосипедов.</p>
+                <p><a href={% url "bicycle:bicycle_create" class="btn btn-primary"%}>Добавить</a></p>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

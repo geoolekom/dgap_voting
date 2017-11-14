@@ -1,5 +1,5 @@
 {% extends "core/base.html" %}
-{% load bootstrap3 %}
+{% load bootstrap4 %}
 {% load staticfiles %}
 
 {% block title %}
@@ -8,10 +8,10 @@
 
 {% block content %}
 <div class="row">
-	<div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				<h1 class="panel-title"><strong>Профиль</strong></h1> 
+	<div class="col-lg-10 col-lg-offset-1">
+		<div class="card">
+			<div class="card-header">
+				<h1 class="card-title"><strong>Профиль</strong></h1>
 			</div>
 			{% if user.userprofile.is_approved or user.social_auth.exists %}
                 {% with student_info=user.userprofile.student_info %}
@@ -72,7 +72,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="panel-footer clearfix">
+			<div class="card-footer">
 				{% buttons %}
 					{% comment %}<a href="{% url 'password_change' %}" class="btn btn-default">Изменить пароль</a>{% endcomment %}
 					<a href="{% url 'profiles:change_subscribing' %}" class="btn btn-default pull-right">
@@ -82,15 +82,17 @@
 			</div>
                 {% endwith %}
 			{% else %}
-			<div class="panel-body">
+			<div class="card-body">
 				<table class="table table-bordered">
 					<tbody>
+                        {%  buttons %}
 						<tr>
 							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт phystech.edu</a>
 						</tr>
 						<tr>
 							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'vk-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт VK</a>
 						</tr>
+                        {% endbuttons %}
 					{% comment %}
 						<tr>
 							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт mipt.ru</a>
@@ -99,7 +101,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="panel-footer clearfix">
+			<div class="card-footer">
 					{% comment %}{% buttons %}
 						<a class="pull-right btn btn-default" role="button" href="{% url 'password_change' %}" >Изменение пароля</a>
 					{% endbuttons %}{% endcomment %}

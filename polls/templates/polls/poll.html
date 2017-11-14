@@ -1,50 +1,47 @@
 {% block content %}
-
-	<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-		<div class="panel panel-{% if not poll.is_closed %}primary{% else %}info{% endif %}">
-			<div class="panel-heading clearfix">
-				<h1 class="panel-title pull-left">{{ poll.name }} </h1> 
-				<h1 class="panel-title pull-right">{% if poll.is_closed %}Завершено{% endif %}</h1>
-			</div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Тип голосования</div>
-                            <div class="panel-body">{% if poll.public %}Открытое{% else %}Тайное{% endif %}</div>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Конец голосования</div>
-                            <div class="panel-body">{{ poll.end_date|date:"d M" }} {{ poll.end_date|time:"H:i" }}	</div>
-                        </div>
+    <div class="panel panel-{% if not poll.is_closed %}primary{% else %}info{% endif %}">
+        <div class="card-header clearfix">
+            <h1 class="panel-title pull-left">{{ poll.name }} </h1>
+            <h1 class="panel-title pull-right">{% if poll.is_closed %}Завершено{% endif %}</h1>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="card">
+                        <div class="card-header">Тип голосования</div>
+                        <div class="card-body">{% if poll.public %}Открытое{% else %}Тайное{% endif %}</div>
                     </div>
                 </div>
-                {% if target == 'available'%}
-                    <form action="{% url 'polls:vote' poll.id %}" method="post">
-                    {% csrf_token %}
-                {% endif %}
-                {% for question in poll.question_set.all %}
-                    {% include 'polls/question.html' %}
-                {% endfor %}
+                <div class="col-xs-6">
+                    <div class="card">
+                        <div class="card-header">Конец голосования</div>
+                        <div class="card-body">{{ poll.end_date|date:"d M" }} {{ poll.end_date|time:"H:i" }}	</div>
+                    </div>
+                </div>
             </div>
-            <div class="panel-footer clearfix">
-                {% if poll.is_closed %}
-                    <a href="{% url 'polls:detailed' poll.id %}" class="btn btn-default">Детализированные результаты</a>
-                {% else %}
-                    {% if target == "voted" %}
-                        <div>Вы уже приняли участие в этом голосовании</div>
-                    {% elif target == "available" %}
-                        <button type="submit" value="vote" class="btn btn-default">Голосовать</button>
-                        </form>
-                    {% else %}
-                        <div>Вы не авторизовались или не имеете права принимать участие в данном голосовании</div>
-                    {% endif %}
-                {% endif %}
-            </div>
+            {% if target == 'available'%}
+                <form action="{% url 'polls:vote' poll.id %}" method="post">
+                {% csrf_token %}
+            {% endif %}
+            {% for question in poll.question_set.all %}
+                {% include 'polls/question.html' %}
+            {% endfor %}
         </div>
-	</div>
+        <div class="panel-footer clearfix">
+            {% if poll.is_closed %}
+                <a href="{% url 'polls:detailed' poll.id %}" class="btn btn-default">Детализированные результаты</a>
+            {% else %}
+                {% if target == "voted" %}
+                    <div>Вы уже приняли участие в этом голосовании</div>
+                {% elif target == "available" %}
+                    <button type="submit" value="vote" class="btn btn-default">Голосовать</button>
+                    </form>
+                {% else %}
+                    <div>Вы не авторизовались или не имеете права принимать участие в данном голосовании</div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
 
 {% endblock content %}
 

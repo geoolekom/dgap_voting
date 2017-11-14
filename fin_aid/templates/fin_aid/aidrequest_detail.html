@@ -6,56 +6,54 @@
 {% endblock %}
 
 {% block content %}
-    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h2>Заявление от {{ object.add_dttm|date }} в категории "{{ object.category }}"</h2>
-            </div>
-            <div class="panel-body">
-                <p>Дата подачи: {{ object.add_dttm|date }}</p>
-                <p>Категория: {{ object.category }}</p>
-                <p>Обоснование: {{ object.reason | safe }}</p>
-                <p>Запрошенная сумма: {{ object.req_sum|floatformat }} руб.</p>
-                <p>Срочно: {% if object.urgent %} да {% else %} нет {% endif %}</p>
-                <p>Статус: <span class="label {% if object.status == object.ACCEPTED %}label-success
-                                                {% elif object.status == object.DECLINED %}label-danger
-                                                {% elif object.status == object.INFO_NEEDED %}label-warning
-                                                {% else %}label-default{% endif %}
-                ">{{ object.status_text }}</span></p>
-                {% if object.examination_dttm and object.status != object.PRE_ACCEPTED%}
-                    <p>Дата рассмотрения заявки: {{ object.examination_dttm|date }}</p>
-                {% endif %}
-                {% if object.accepted_sum and object.status != object.PRE_ACCEPTED %}
-                    <p>Одобренная сумма: {{ object.accepted_sum|floatformat }} руб.</p>
-                {% endif %}
-                {% if object.payment_dt and not object.paid_with_cash and object.status != object.PRE_ACCEPTED %}
-                    <p>Ожидаемая дата выплаты: {{ object.payment_dt|date }}</p>
-                {% endif %}
-                {% if object.paid_with_cash %}
-                    <p> Выплата наличными. Для уточнения деталей обращайтесь к <a href="https://vk.com/fizikaislove">стипкомиссии</a></p>
-                {% endif %}
-                {% if object.examination_comment %}
-                    <p>Комментарий стип. комиссии: {{ object.examination_comment }}</p>
-                {% endif %}
-                {% if object.aiddocument_set.all %}
-                    <p>Приложенные документы:</p>
-                {% endif %}
-                {{ object.images_tags | safe }}
-                {% for document in object.aiddocument_set.all %}
-                    {% if document.is_application_paper %}
-                        {% if not object.submitted_paper and object.status == object.ACCEPTED %}
-                            <p>Не забудьте распечатать заявление и опустить в ящик на 1 этаже общежития!</p>
-                        {% endif %}
-                        <p><a href="{{ document.file.url }}">Заявление на матпомощь</a></p>
-                    {% elif not document.is_image %}
-                        <p><a href="{{ document.file.url }}"> {{ document.file|filename }} </a></p>
+    <div class="card">
+        <div class="card-header">
+            <h2>Заявление от {{ object.add_dttm|date }} в категории "{{ object.category }}"</h2>
+        </div>
+        <div class="card-body">
+            <p>Дата подачи: {{ object.add_dttm|date }}</p>
+            <p>Категория: {{ object.category }}</p>
+            <p>Обоснование: {{ object.reason | safe }}</p>
+            <p>Запрошенная сумма: {{ object.req_sum|floatformat }} руб.</p>
+            <p>Срочно: {% if object.urgent %} да {% else %} нет {% endif %}</p>
+            <p>Статус: <span class="label {% if object.status == object.ACCEPTED %}label-success
+                                            {% elif object.status == object.DECLINED %}label-danger
+                                            {% elif object.status == object.INFO_NEEDED %}label-warning
+                                            {% else %}label-default{% endif %}
+            ">{{ object.status_text }}</span></p>
+            {% if object.examination_dttm and object.status != object.PRE_ACCEPTED%}
+                <p>Дата рассмотрения заявки: {{ object.examination_dttm|date }}</p>
+            {% endif %}
+            {% if object.accepted_sum and object.status != object.PRE_ACCEPTED %}
+                <p>Одобренная сумма: {{ object.accepted_sum|floatformat }} руб.</p>
+            {% endif %}
+            {% if object.payment_dt and not object.paid_with_cash and object.status != object.PRE_ACCEPTED %}
+                <p>Ожидаемая дата выплаты: {{ object.payment_dt|date }}</p>
+            {% endif %}
+            {% if object.paid_with_cash %}
+                <p> Выплата наличными. Для уточнения деталей обращайтесь к <a href="https://vk.com/fizikaislove">стипкомиссии</a></p>
+            {% endif %}
+            {% if object.examination_comment %}
+                <p>Комментарий стип. комиссии: {{ object.examination_comment }}</p>
+            {% endif %}
+            {% if object.aiddocument_set.all %}
+                <p>Приложенные документы:</p>
+            {% endif %}
+            {{ object.images_tags | safe }}
+            {% for document in object.aiddocument_set.all %}
+                {% if document.is_application_paper %}
+                    {% if not object.submitted_paper and object.status == object.ACCEPTED %}
+                        <p>Не забудьте распечатать заявление и опустить в ящик на 1 этаже общежития!</p>
                     {% endif %}
-                {% endfor %}
-                {% if object.status == object.WAITING or object.status == object.INFO_NEEDED%}
-                    <a href={% url "fin_aid:aid_request_update" object.id %} class="btn btn-primary">Редактировать заявление</a>
-                    <a href={% url "fin_aid:aid_request_delete" object.id %} class="btn btn-danger">Удалить заявление</a>
+                    <p><a href="{{ document.file.url }}">Заявление на матпомощь</a></p>
+                {% elif not document.is_image %}
+                    <p><a href="{{ document.file.url }}"> {{ document.file|filename }} </a></p>
                 {% endif %}
-            </div>
+            {% endfor %}
+            {% if object.status == object.WAITING or object.status == object.INFO_NEEDED%}
+                <a href={% url "fin_aid:aid_request_update" object.id %} class="btn btn-primary">Редактировать заявление</a>
+                <a href={% url "fin_aid:aid_request_delete" object.id %} class="btn btn-danger">Удалить заявление</a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

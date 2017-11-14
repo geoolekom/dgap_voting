@@ -1,29 +1,17 @@
 {% extends "core/base.html" %}
 {% block content %}
 	{% if not poll.is_started %}
-		<div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
-			<div class="alert alert-info">
-				<a class="close" data-dismiss="alert" href="#">&times;</a>
-				<p style="text-align:center"> Голосование начнётся {{poll.begin_date|date:"j E в H:i"}} </p>
-			</div>
-		</div>
+        <div class="alert alert-info">
+            <a class="close" data-dismiss="alert" href="#">&times;</a>
+            <p style="text-align:center"> Голосование начнётся {{poll.begin_date|date:"j E в H:i"}} </p>
+        </div>
 	{% else %}
-		<div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-			{% if messages %}
-				{% for message in messages %}
-					<div class="alert alert-danger">
-						<a class="close" data-dismiss="alert" href="#">&times;</a>
-						{{ message }}
-					</div>
-				{% endfor %}
-			{% endif %}
-			{% if not poll.is_started %}
-				<div class="alert alert-info">
-					<a class="close" data-dismiss="alert" href="#">&times;</a>
-					<p style="text-align:center"> Голосование начнётся {{poll.begin_date|date:"j E в H:i"}} </p>
-				</div>
-			{% endif %}
-		</div>
+        {% if not poll.is_started %}
+            <div class="alert alert-info">
+                <a class="close" data-dismiss="alert" href="#">&times;</a>
+                <p style="text-align:center"> Голосование начнётся {{poll.begin_date|date:"j E в H:i"}} </p>
+            </div>
+        {% endif %}
 
 		{% include "polls/poll.html" %}
 	{% endif %}

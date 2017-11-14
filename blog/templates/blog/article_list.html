@@ -5,14 +5,12 @@
 {% endblock %}
 
 {% block content %}
-    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-        <div class="panel-group">
-            {% article_panel "welcome" True False %}
-            {% for article in object_list %}
-                {% include "blog/article_panel.html" with header_link=True show_creation_time=True%}
-            {% empty %}
-            <p>Нет постов</p>
-            {% endfor %}
-        </div>
-    <div>
+    <div class="panel-group">
+        {% article_panel "welcome" True False %}
+        {% for article in object_list %}
+            {% include "blog/article_panel.html" with header_link=True show_creation_time=True%}
+        {% empty %}
+        <p>Нет постов</p>
+        {% endfor %}
+    </div>
 {% endblock %}

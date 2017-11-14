@@ -1,14 +1,14 @@
 {% extends "core/base.html" %}
 
 {% block content %}
-{% load bootstrap3 %}
+{% load bootstrap4 %}
 <div class="row">
 	<div class="col-sm-6 col-sm-offset-3">
 		<div class="panel panel-primary">
-			<div class="panel-heading">
+			<div class="card-header">
 				<h1 class="panel-title"><strong>Изменение email</strong></h1> 
 			</div>
-			<div class="panel-body">
+			<div class="card-body">
 	
 				<form action="{% url 'profiles:profile_change_email' %}" method="post" class="form">
 					{% csrf_token %}

@@ -44,7 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'registration',
-    'bootstrap3',
+    'bootstrap4',
     'sitetree',
     'dealer',
     'django_select2',

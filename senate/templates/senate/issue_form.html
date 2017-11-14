@@ -1,5 +1,5 @@
 {% extends 'core/base.html' %}
-{% load bootstrap3 %}
+{% load bootstrap4 %}
 {% load blog_extras %}
 
 {% block title %}
@@ -7,23 +7,21 @@
 {% endblock %}
 
 {% block content %}
-    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h2>Обращение в Сенат ФОПФ</h2>
-            </div>
-            <div class="panel-body">
-                {% article_content "embedded-senateissue-form" %}
-                <form action="" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    {% bootstrap_form form%}
-                    {% buttons %}
-                    <button type="submit" class="btn btn-primary">
-                        Отправить обращение
-                    </button>
-                    {% endbuttons %}
-                </form>
-            </div>
+    <div class="card">
+        <div class="card-header">
+            <h2>Обращение в Сенат ФОПФ</h2>
+        </div>
+        <div class="card-body">
+            {% article_content "embedded-senateissue-form" %}
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% bootstrap_form form%}
+                {% buttons %}
+                <button type="submit" class="btn btn-primary">
+                    Отправить обращение
+                </button>
+                {% endbuttons %}
+            </form>
         </div>
     </div>
 {% endblock %}

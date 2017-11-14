@@ -6,32 +6,35 @@
     <title>{% block title %} DGAP services {% endblock %}</title>
 
     {% load staticfiles %}
-    {% load bootstrap3 %}
+    {% load bootstrap4 %}
 
     {% bootstrap_css %}
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.4.3/css/mdb.min.css" rel="stylesheet">
     <link href="{% static 'core/sidebar.css' %}?{{ TAG }}" rel="stylesheet">
     <link href="{% static 'core/style.css' %}?{{ TAG }}" rel="stylesheet">
     <link rel="shortcut icon" type="image/png" href="{% static 'core/favicon.png' %}?{{ TAG }}"/>
-    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script> {# In the beggining bc many other scripts require it #}
+
+    <script src="//code.jquery.com/jquery-3.2.1.min.js"></script> {# In the beggining bc many other scripts require it #}
 </head>
 
 <body>
 {% include 'core/nav.html' %}
 {% include 'core/messages.html' %}
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-xs-12" style="padding-top:16px;"{# class="container" #}>
-            {% block content %}
-            {% endblock %}
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2" style="padding-top:16px;">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div><!--/.row-->
+        <div class="row">
+            {% include "core/footer.html" %}
         </div>
-      {% include "core/footer.html" %}
-        
-    </div><!--/.row-->
-  </div><!--/.container-->
+    </div><!--/.container-->
     {# <link href="{% static 'polls/js/countdown/jquery.countdown.css' %}" rel="stylesheet" > #}
         {% bootstrap_javascript %}
     <script src="{% static 'polls/collapse.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.4.3/js/mdb.min.js"></script>
     <script src="{% static 'core/js/countdown/jquery.plugin.min.js' %}?{{ TAG }}"></script>
     <script src="{% static 'core/js/countdown/jquery.countdown.min.js' %}?{{ TAG }}"></script>
     <script src="{% static 'core/js/script.js' %}?{{ TAG }}"></script>
