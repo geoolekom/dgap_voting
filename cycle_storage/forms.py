@@ -10,7 +10,7 @@ class BicycleCreateForm(forms.ModelForm):
 
 
 class BicycleAdminForm(forms.ModelForm):
-    place = forms.ModelChoiceField(Place.objects.filter(bicycle=None))
+    place = forms.ModelChoiceField(Place.objects.filter(bicycle=None), required=False)
 
     class Meta:
         model = Bicycle
