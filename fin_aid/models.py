@@ -131,8 +131,8 @@ class AidRequest(models.Model):
                                                  paid_with_cash=False).order_by('category'):
             dct = {
                 "req_sum": request.req_sum,
-                "Исх. сумма": int(request.accepted_sum/TOTAL_TAX) if request.accepted_sum != 0 else 0,
-                "Реал. сумма": int(request.accepted_sum),
+                "Исх. сумма": int(request.accepted_sum/TOTAL_TAX) if (request.accepted_sum is not None) and (request.accepted_sum != 0) else 0,
+                "Реал. сумма": int(request.accepted_sum) if request.accepted_sum is not None else 0,
                 "За что": request.category.name,
                 "Комментарии": request.examination_comment,
                 "text": "",
