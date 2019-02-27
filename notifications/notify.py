@@ -7,15 +7,14 @@ Currently only functions for vk.com are implemented, other are represented by sk
 VK Api (v5.46) is actively used.
 """
 
-from django.core.mail import send_mail
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User, Group
 from social_django.models import UserSocialAuth
 from hashlib import md5
 import vk
 
-from .models import UserNotificationsSettings, Notification
-from core.local_settings import VK_MESSAGES_TOKEN, VK_GROUP_ID, DEBUG
+from notifications.models import Notification
+from core.settings import VK_MESSAGES_TOKEN, VK_GROUP_ID
 
 
 # import python-telegram-bot
