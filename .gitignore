@@ -12,3 +12,4 @@ __pycache__/
 *.csv
 .ipynb_checkpoints/
 *.ipynb
+build/conf/local.conf

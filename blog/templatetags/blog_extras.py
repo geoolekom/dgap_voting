@@ -54,7 +54,6 @@ def article_panel(slug, header_link=False, show_creation_time=False):
     :param bool show_creation_time: If ``True`` then publication datetime is shown.
     :return: rendered article template
     """
-    post = Article.objects.get(slug=slug)
-    return {'article': post,
-            'header_link': header_link,
-            'show_creation_time': show_creation_time}
+    post = Article.objects.filter(slug=slug).first()
+    if post:
+        return {'article': post, 'header_link': header_link, 'show_creation_time': show_creation_time}

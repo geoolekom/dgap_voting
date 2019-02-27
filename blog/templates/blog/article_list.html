@@ -1,7 +1,7 @@
 {% extends 'core/base.html' %}
 {% load blog_extras %}
 {% block title %}
-    DGAP services
+    Сервисы ФОПФ
 {% endblock %}
 
 {% block content %}
@@ -9,10 +9,10 @@
         <div class="panel-group">
             {% article_panel "welcome" True False %}
             {% for article in object_list %}
-                {% include "blog/article_panel.html" with header_link=True show_creation_time=True%}
+                {% include "blog/article_panel.html" with header_link=True show_creation_time=True %}
             {% empty %}
-            <p>Нет постов</p>
+                <p>Нет постов</p>
             {% endfor %}
         </div>
-    <div>
+    </div>
 {% endblock %}

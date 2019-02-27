@@ -1,38 +1,43 @@
-
-"""
-Django settings for core project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.6/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.6/ref/settings/
-"""
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+import sys
+from configparser import ConfigParser
+
+config = ConfigParser()
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_DIR = os.path.dirname(BASE_DIR)
+
+# Build Info
+try:
+    with open(os.path.join(BASE_DIR, 'build', 'BUILD_INFO'), 'r') as build_info:
+        PROJECT_VERSION = build_info.readline().strip()
+        PROJECT_NAME = build_info.readline().strip()
+except IOError as e:
+    PROJECT_VERSION = '0.0.0'
+    PROJECT_NAME = 'project'
+
+prod_config_path = '/etc/{0}/{0}.conf'.format(PROJECT_NAME)
+local_config_path = os.path.join(BASE_DIR, 'build', 'conf', 'local.conf')
+default_config_path = os.path.join(BASE_DIR, 'build', 'conf', 'default.conf')
+
+if os.path.exists(prod_config_path):
+    config_path = prod_config_path
+elif os.path.exists(local_config_path):
+    config_path = local_config_path
+else:
+    config_path = default_config_path
+config.read(config_path)
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# WARNING override it in local_settings!
 ADMINS = (
-    ('DGAP_Voting Admins', 'levyi@email.com'),
+    ('Егор Комаров', 'geoolekom@gmail.com'),
 )
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
+DEBUG = config.getboolean('main', 'DEBUG')
+SECRET_KEY = config.get('main', 'SECRET')
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'gp9e%(8c5)^-738+ha==f1-&3j8@3@xpruk)1cxvfsg@%35f8@'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['canetoad.mooo.com', 'vote.dgap-mipt.ru']
-
-
-# Application definition
+ALLOWED_HOSTS = ['*', ]
 
 INSTALLED_APPS = (
     'flat_responsive',
@@ -107,6 +112,7 @@ CACHES = {
         'LOCATION': '127.0.0.1:11211',
     }
 }
+
 SELECT2_CACHE_BACKEND = 'select2'
 
 #BOOTSTRAP3 = {
@@ -143,12 +149,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE':'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dgap_voting_db',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres2014',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': config.get('database', 'ENGINE'),
+        'NAME': config.get('database', 'NAME'),
+        'USER': config.get('database', 'USER'),
+        'PASSWORD': config.get('database', 'PASSWORD'),
+        'HOST': config.get('database', 'HOST'),
+        'PORT': config.getint('database', 'PORT'),
     },
 }
 
@@ -174,30 +180,23 @@ BLEACH_STRIP_COMMENTS = False
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
 LANGUAGE_CODE = 'ru-ru'
-
 TIME_ZONE = 'Europe/Moscow'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 DATE_FORMAT = "j E Y"
 DATETIME_FORMAT = DATE_FORMAT + " G:i"
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.6/howto/static-files/
 
-MEDIA_ROOT = (os.path.join(BASE_DIR, 'media'))
-SENDFILE_ROOT = MEDIA_ROOT
-STATIC_ROOT = (os.path.join(BASE_DIR, 'static'))
 MEDIA_URL = '/media/'
-STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media', '')
+SENDFILE_ROOT = MEDIA_ROOT
 FILE_UPLOAD_PERMISSIONS = 0o644
 
-LOGIN_REDIRECT_URL = '/'
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+STATIC_URL = '/static/'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = ['phystech.edu']
+LOGIN_REDIRECT_URL = '/'
 
 SOCIAL_AUTH_LOGIN_ERROR_URL = 'polls:done'
 
@@ -218,15 +217,9 @@ SOCIAL_AUTH_PIPELINE = (
     'profiles.psa.set_middlename',
 )
 
-import sys
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
-    'root': {
-        'level': 'WARNING',
-        'handlers': ['sentry'],
-    },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
@@ -248,12 +241,7 @@ LOGGING = {
             'level': 'WARNING',
             'class': 'logging.StreamHandler',
             'stream': sys.stderr
-        },
-        'sentry': {
-            'level': 'WARNING',  # To capture more than ERROR, change to WARNING, INFO, etc.
-            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
-            'tags': {'custom-tag': 'x'},
-        },
+        }
     },
     'loggers': {
         'django.db.backends': {
@@ -265,28 +253,19 @@ LOGGING = {
             'level': 'DEBUG',
             'handlers': ['console'],
             'propagate': False,
-        },
-        'sentry.errors': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': False,
-        },
+        }
     }
 }
 
-import raven
-# Following code is workaround to allow setting up Django from docs/ subdir
-try:
-    RELEASE = raven.fetch_git_sha(os.path.dirname(os.pardir))
-except raven.exceptions.InvalidGitRepository:
-    RELEASE = raven.fetch_git_sha(os.path.abspath('..'))
 
-RAVEN_CONFIG = {
-    'dsn': 'https://af8512c3bfe6466e92610a28d10584af:232450226e59481fb4f1020cdaad9d3e@sentry.io/225398',
-    # If you are using git, you can also automatically configure the
-    # release based on the git info.
-    'release': RELEASE,
-}
+# Messages
+VK_GROUP_ID = config.get('messages', 'VK_GROUP_ID')
+VK_MESSAGES_TOKEN = config.get('messages', 'VK_MESSAGES_TOKEN')
 
+# Social Auth
+SOCIAL_AUTH_VK_OAUTH2_KEY = config.get('oauth', 'VK_KEY')
+SOCIAL_AUTH_VK_OAUTH2_SECRET = config.get('oauth', 'VK_SECRET')
 
-from core.local_settings import *
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config.get('oauth', 'GOOGLE_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config.get('oauth', 'GOOGLE_SECRET')
+SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = config.get('oauth', 'GOOGLE_WHITELIST').split(', ')
