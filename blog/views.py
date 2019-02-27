@@ -3,7 +3,7 @@ from django.core.exceptions import PermissionDenied
 from django.views import generic
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 from .models import Article
 from .forms import ArticleCreateForm
@@ -28,18 +28,17 @@ class ArticleList(ListView):
             return queryset.filter(publish_dttm__lte=timezone.now(), hidden=False, show_in_feed=True)
 
 
-class ArticleDetail(generic.DetailView):
-    """Detailed view of article.
-
-    Base template is ``blog/article_detail.html``."""
+class ArticleDetail(DetailView):
+    template_name = 'blog/article_detail.html'
     model = Article
 
-    def get_context_data(self, **kwargs):
-        """Raises 403 error if user can't view this article. See :func:`Article.is_visible`"""
-        context = super(ArticleDetail, self).get_context_data(**kwargs)
-        if not context["object"].is_visible(self.request.user):
-            raise PermissionDenied
-        return context
+    def get_queryset(self):
+        user = self.request.user
+        queryset = super().get_queryset()
+        if can_view_hidden_post(user):
+            return queryset
+        else:
+            return queryset.filter(publish_dttm__lte=timezone.now(), hidden=False, show_in_feed=True)
 
 
 # TODO outdated, articles are created through admin interface
