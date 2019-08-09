@@ -33,6 +33,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=False, verbose_name='активен?')
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name='дата регистрации')
 
+    # is_verified = models.BooleanField(default=False, verbose_name='проверен?')
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = tuple()
 

@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        Статьи
+                    </div>
+                </div>
+                <div class="panel-body">
+                    {% for category in categories %}
+                        <div>
+                            <a href="{% url 'materials:category_detail' category.slug %}">{{ category.name }}</a>
+                        </div>
+                    {% empty %}
+                        <div>Разделов нет.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <h3>Последние новости</h3>
+            {% for post in recent_posts %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title">{{ post.title }}</div>
+                    </div>
+                    <div class="panel-body">
+                        {{ post.text|truncatechars_html:500|safe }}
+                    </div>
+                </div>
+            {% empty %}
+                Новостей нет.
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

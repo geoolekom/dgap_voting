@@ -1,4 +1,6 @@
 """Currently uses only one template - ``profiles/profile.html``"""
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import TemplateView
 
 from accounts.models import User
 from django.shortcuts import render, redirect
@@ -69,7 +71,7 @@ def profile_view(request):
                 messages.error(request, 'В базе более одного студента с данной почтой. Вы можете попробовать авторизоваться через vk или напишите администраторам сайта')
             phystech = user.social_auth.get(provider='google-oauth2').uid
         elif user.social_auth.filter(provider='vk-oauth2'):
-            student_infos = StudentInfo.objects.filter(vk='https://vk.com/' + user.username)
+            student_infos = StudentInfo.objects.filter(vk='https://vk.com/' + user.get_username())
             if len(student_infos) == 1:
                 if user.userprofile.is_approved:
                     phystech = user.userprofile.student_info.phystech
@@ -82,8 +84,12 @@ def profile_view(request):
         else:
             messages.error(request, 'Вы не являетесь студентом или аспирантом ФОПФ. Если вы так не считаете, то пишите администраторам сайта')
 
-    return render(request, 'profiles/profile.html', {
+    return render(request, 'profiles/profile_1.html', {
         'mipt': mipt,
         'phystech': phystech,
         'vk': vk,
     })
+
+
+class ProfileView(LoginRequiredMixin, TemplateView):
+    template_name = 'profiles/profile.html'

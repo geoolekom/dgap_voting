@@ -1,0 +1,122 @@
+{% extends "core/base.html" %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block title %}
+    Мой профиль
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h1 class="panel-title"><strong>Профиль</strong></h1> 
+			</div>
+			{% if user.userprofile.is_approved or user.social_auth.exists %}
+                {% with student_info=user.userprofile.student_info %}
+				<table class="table table-bordered">
+					<tbody>
+						<tr>
+							<td>Логин</td>
+							<td>{{ user.username}}</td>
+						</tr>
+					</tbody>
+					<tbody>
+						<tr>
+							<td>Фамилия</td>
+							<td>{{ student_info.last_name}}</td>
+						</tr>
+						<tr>
+							<td>Имя</td>
+							<td>{{ student_info.first_name}}</td>
+						</tr>
+						<tr>
+							<td>Отчество</td>
+							<td>{{ user.userprofile.middlename }}</td>
+						</tr>
+					</tbody>
+					<tbody>
+						<tr>
+							<td>Комната</td>
+							<td>{{ user.userprofile.room }}</td>
+						</tr>
+						<tr>
+							<td>Группа</td>
+							<td>{{ student_info.group }}</td>
+						</tr>
+					</tbody>
+					<tbody>
+						{% comment %}<tr>
+							<td>Почтовый адрес</td>
+							<td>{{ user.email }}  <a href="{% url 'profiles:profile_change_email' %}">(изменить)</a> </td>
+						</tr>{% endcomment %}
+						<tr>
+							<td>Аккаунт phystech.edu</td>
+                            <td>{{ phystech|default_if_none:"" }}</td>
+						</tr>
+                        <tr>
+                            <td>Аккаунт VK</td>
+                            <td>{{ student_info.vk|default_if_none:"" }}</td>
+						</tr>
+						{% comment %}
+						<tr>
+						<td>Аккаунт mipt.ru</td>
+							{% if not mipt %}
+								<td><a class="btn btn-success" role="button" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт</a></td>
+							{% else %}
+							<td>{{ mipt }}<td>
+							{% endif %}
+						</tr>
+						{% endcomment %}
+					</tbody>
+				</table>
+			</div>
+			<div class="panel-footer clearfix">
+				{% buttons %}
+					{% comment %}<a href="{% url 'password_change' %}" class="btn btn-default">Изменить пароль</a>{% endcomment %}
+					<a href="{% url 'profiles:change_subscribing' %}" class="btn btn-default pull-right">
+                        {% if user.userprofile.is_subscribed %}Отключить уведомления{% else %}Включить уведомления{% endif %}
+                    </a>
+				{% endbuttons %}
+			</div>
+                {% endwith %}
+			{% else %}
+			<div class="panel-body">
+				<table class="table table-bordered">
+					<tbody>
+						<tr>
+							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт phystech.edu</a>
+						</tr>
+						<tr>
+							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'vk-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт VK</a>
+						</tr>
+					{% comment %}
+						<tr>
+							<a class="btn btn-success btn-lg btn-block" role="button" href="{% url 'social:begin' 'mipt-oauth2' %}?next={% url 'profiles:profile_view' %}">Привязать аккаунт mipt.ru</a>
+						</tr>
+					{% endcomment %}
+					</tbody>
+				</table>
+			</div>
+			<div class="panel-footer clearfix">
+					{% comment %}{% buttons %}
+						<a class="pull-right btn btn-default" role="button" href="{% url 'password_change' %}" >Изменение пароля</a>
+					{% endbuttons %}{% endcomment %}
+			</div>
+			{% endif %}
+		</div>	
+	</div>
+</div>
+
+{% comment %}
+<a href="{% url 'polls:password_change' %}">Изменение пароля</a>
+<form action="{% url 'polls:profile_view' %}" method="post">{% csrf_token %}
+{{ user_form.as_p }}
+{{ profile_form.as_p }}
+<input type="submit" value="Submit" />
+</form>
+
+{% endcomment %}
+
+{% endblock content %}

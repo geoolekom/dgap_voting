@@ -15,7 +15,10 @@ class MyRegistrationView(RegistrationView):
 
 
 urlpatterns = [
-    url(r'^$', ArticleList.as_view(), name='index'),
+    # url(r'^$', ArticleList.as_view(), name='index'),
+    url(r'^', include('materials.urls', namespace='materials')),
+    url(r'^departments/', include('departments.urls', namespace='departments')),
+
     url(r'^polls/', include('polls.urls', namespace='polls')),
     url(r'^blog/', include('blog.urls', namespace='blog')),
     url(r'^bicycle/', include('cycle_storage.urls', namespace='bicycle')),
@@ -24,7 +27,7 @@ urlpatterns = [
     url(r'^aid/', include('fin_aid.urls', namespace='fin_aid')),
     url(r'^senate/', include('senate.urls', namespace='senate')),
     url(r'^servertime/', include('servertime.urls', namespace='servertime')),
-    url(r'^profiles/', include('profiles.urls', namespace='profiles')),
+    url(r'^profile/', include('profiles.urls', namespace='profiles')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/register/$', MyRegistrationView.as_view(), name='registration_register'),
     url(r'^accounts/', include('registration.backends.simple.urls')),

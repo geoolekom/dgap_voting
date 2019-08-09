@@ -36,24 +36,26 @@ def approve_student(backend, user, response, *args, **kwargs):
     Function is invoked as part of :const:`core.settings.SOCIAL_AUTH_PIPELINE`.
     ``user.email`` & so on are populated after social login also in that pipeline
     """
-    if not user.userprofile.student_info or not user.userprofile.is_approved:
-        try:
-            if backend.name == 'google-oauth2':
-                student_info = StudentInfo.objects.get(phystech__iexact=user.email)
-            elif backend.name == 'vk-oauth2':
-                student_info = StudentInfo.objects.get(vk='https://vk.com/' + user.username)
-            else:
-                return
-            user.userprofile.is_approved = True
-            user.userprofile.student_info = student_info
-            user.userprofile.group = student_info.group
-            user.userprofile.save()
-            user.first_name = student_info.first_name
-            user.last_name = student_info.last_name
-            user.save()
-        except (ObjectDoesNotExist, MultipleObjectsReturned):
-            user.userprofile.is_approved = False
-            user.userprofile.save()
+    profile = getattr(user, 'userprofile', None)
+    if profile:
+        if not profile.student_info or not profile.is_approved:
+            try:
+                if backend.name == 'google-oauth2':
+                    student_info = StudentInfo.objects.get(phystech__iexact=user.email)
+                elif backend.name == 'vk-oauth2':
+                    student_info = StudentInfo.objects.get(vk='https://vk.com/' + user.get_username())
+                else:
+                    return
+                profile.is_approved = True
+                profile.student_info = student_info
+                profile.group = student_info.group
+                profile.save()
+                user.first_name = student_info.first_name
+                user.last_name = student_info.last_name
+                user.save()
+            except (ObjectDoesNotExist, MultipleObjectsReturned):
+                profile.is_approved = False
+                profile.save()
 
 
 class SocialAuthExceptionMiddlewareExtended(SocialAuthExceptionMiddleware):

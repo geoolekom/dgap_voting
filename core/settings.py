@@ -72,6 +72,8 @@ INSTALLED_APPS = (
 
 DJANGO_APPS = (
     'accounts.apps.AccountsConfig',
+    'departments.apps.DepartmentsConfig',
+    'materials.apps.MaterialsConfig',
 )
 
 INSTALLED_APPS = DJANGO_APPS + INSTALLED_APPS
@@ -216,7 +218,6 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
     'profiles.psa.approve_student',
-    'profiles.psa.set_middlename',
 )
 
 LOGGING = {

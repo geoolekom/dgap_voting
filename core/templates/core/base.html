@@ -17,28 +17,25 @@
 </head>
 
 <body>
-{% include 'core/nav.html' %}
-{% include 'core/messages.html' %}
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-xs-12" style="padding-top:16px;"{# class="container" #}>
+    {% include 'core/nav.html' %}
+    {% include 'core/messages.html' %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12" style="padding-top:16px;">
             {% block content %}
             {% endblock %}
-        </div>
-      {% include "core/footer.html" %}
+            </div>
         
-    </div><!--/.row-->
-  </div><!--/.container-->
-    {# <link href="{% static 'polls/js/countdown/jquery.countdown.css' %}" rel="stylesheet" > #}
-        {% bootstrap_javascript %}
+        </div>
+    </div>
+
+    {% include "core/footer.html" %}
+    {% bootstrap_javascript %}
     <script src="{% static 'polls/collapse.js' %}"></script>
     <script src="{% static 'core/js/countdown/jquery.plugin.min.js' %}?{{ TAG }}"></script>
     <script src="{% static 'core/js/countdown/jquery.countdown.min.js' %}?{{ TAG }}"></script>
     <script src="{% static 'core/js/script.js' %}?{{ TAG }}"></script>
 
-
     {% include 'core/metrics.html' %}
 </body>
-
-
 </html>

@@ -1,0 +1,37 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <h2>{{ activist.user.get_full_name }}</h2>
+    <h4>{{ activist.position }}</h4>
+    <div class="row" style="margin-top: 2rem;">
+        <div class="col-sm-4">
+            {% with person=activist.user %}
+            <table class="table table-hover table-bordered">
+                <tbody>
+                    <tr>
+                        <td>Email</td>
+                        <td><a href="mailto:{{ person.email }}">{{ person.email }}</a></td>
+                    </tr>
+                    <tr>
+                        <td>Курс</td>
+                        <td>{{ person.course }}</td>
+                    </tr>
+                    <tr>
+                        <td>Группа</td>
+                        <td>{{ person.group }}</td>
+                    </tr>
+                    <tr>
+                        <td>Комната</td>
+                        <td>{{ person.room }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endwith %}
+        </div>
+        <div class="col-sm-8">
+            <b>Кредо: </b>
+            {{ activist.description }}
+
+        </div>
+    </div>
+{% endblock %}
