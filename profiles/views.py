@@ -1,9 +1,6 @@
 """Currently uses only one template - ``profiles/profile.html``"""
 
-from django.core.exceptions import MultipleObjectsReturned
-
-from profiles.models import UserProfile
-from django.contrib.auth.models import User
+from accounts.models import User
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required

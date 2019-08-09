@@ -1,5 +1,6 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
+from accounts.models import User
 import django.db.models.options as options
 from pandas import DataFrame
 options.DEFAULT_NAMES = options.DEFAULT_NAMES + ('in_db',) # добавление нового атрибута в мета # TODO is it used now?
@@ -87,7 +88,7 @@ class UserProfile(models.Model):
     """Helper model, created after each new user registration.
 
     Formerly stored essential data about user, now only links to :class:`StudentInfo`"""
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL)
     """Link to user"""
     dorm = models.IntegerField(default=0)
     """Super old, lol"""

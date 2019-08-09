@@ -1,5 +1,5 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 
 
 class UserNotificationsSettings(models.Model):
@@ -7,7 +7,7 @@ class UserNotificationsSettings(models.Model):
 
     Currently :func:`profiles.views.change_subscribing_status` changes :class:`profiles.models.UserProfile`,
     that triggers :func:`notifications.signals.user_create` signal, which updates ``UserNotificationsSettings``."""
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL)
     "OneToOne link to :class:`django.contrib.auth.models.user` instance"
     allow_email = models.BooleanField("Разрешить уведомления на эл. почту", default=False)
     """Boolean field"""
@@ -35,7 +35,7 @@ class Notification(models.Model):
         (TELEGRAM, "telegram")
     ]
     """List of all available notifications providers."""
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL)
     "OneToOne link to :class:`django.contrib.auth.models.User` instance"
     send_dttm = models.DateTimeField("Отправлено", auto_now_add=True)
     "Added automatically"

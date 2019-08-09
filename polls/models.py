@@ -1,5 +1,5 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 from django.utils import timezone
 import re
 
@@ -16,7 +16,7 @@ class Poll(models.Model):
     public = models.BooleanField('Открытое голосование', default=True)
     times_mailed = models.IntegerField(default=0, blank=True)  # how many times the mailing was made
     last_mailing = models.DateTimeField('Последняя рассылка', null=True)  # when was the last informational mailing made
-    voted_users = models.ManyToManyField(User)
+    voted_users = models.ManyToManyField(settings.AUTH_USER_MODEL)
     WITHOUT_TARGET_LIST = 'WITHOUT_TARGET_LIST'
     TARGET_LIST = 'TARGET_LIST'
     POLL_TYPE = (
@@ -165,4 +165,4 @@ class UserHash(models.Model):
     value = models.BigIntegerField()  # для очень старых опросов планируется удалять хэши, оставляя результаты в виде файла
     # надо переосмыслить предыдущий комментарий
     choice = models.ForeignKey(Choice)
-    user = models.ForeignKey(User, null=True, blank=True, default=None)  # при анонимном голосовании не заполнять это поле
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, default=None)  # при анонимном голосовании не заполнять это поле

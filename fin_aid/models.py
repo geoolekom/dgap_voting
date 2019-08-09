@@ -1,5 +1,5 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils import timezone
 
@@ -11,19 +11,6 @@ import pandas as pd
 from profiles.models import StudentInfo, same_users_list
 
 TOTAL_TAX = 0.86
-
-
-def get_name(self: User):
-    try:
-        name = self.userprofile.student_info.fio
-    except Exception:
-        name = "{} {}".format(self.last_name, self.first_name)
-    if self.social_auth.exists():
-        name += " | " + self.social_auth.all()[0].provider.split('-oauth')[0]
-    return name
-
-
-User.add_to_class("__str__", get_name)
 
 
 class Category(models.Model):
@@ -67,8 +54,8 @@ class AidRequest(models.Model):
         (INFO_NEEDED, "Необходимо уточнить данные"),
         (PRE_ACCEPTED, "Предварительно одобрено"),
     )
-    author = models.ForeignKey(User, blank=True, null=True, verbose_name="Автор", related_name='author')
-    applicant = models.ForeignKey(User, blank=True, null=True, verbose_name='Получатель')  # find out how to add applicant to form before validation
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, verbose_name="Автор", related_name='author')
+    applicant = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, verbose_name='Получатель')  # find out how to add applicant to form before validation
     category = models.ForeignKey(Category, verbose_name="Категория")
     reason = models.TextField("Причина", max_length=2048)
     req_sum = models.FloatField("Запрошенная сумма", blank=True, null=True)
@@ -167,7 +154,7 @@ class AidRequest(models.Model):
         return None
 
     @classmethod
-    def user_requests(cls, user: User):
+    def user_requests(cls, user):
         users = same_users_list(user)
         return cls.objects.filter(applicant__in=users).order_by("-add_dttm")
 

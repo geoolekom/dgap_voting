@@ -1,7 +1,6 @@
 from django.test import TestCase
 from polls.models import Poll, Choice
-from profiles.models import UserProfile
-from django.contrib.auth.models import User
+from accounts.models import User
 from django.utils import timezone
 from django.test.utils import override_settings
 

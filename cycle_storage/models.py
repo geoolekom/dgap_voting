@@ -1,5 +1,5 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from profiles.models import UserProfile
 
@@ -20,7 +20,7 @@ class Bicycle(models.Model):
         (NO_PLACE, "Нет мест"),
     )
 
-    owner = models.ForeignKey(User, blank=True, null=True, verbose_name="Владелец")
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, verbose_name="Владелец")
     manufacturer = models.CharField("Производитель", max_length=255, default="Неизвестно", blank=True, null=True)
     model = models.CharField("Модель", max_length=255, default="Неизвестно", blank=True, null=True)
     info = models.TextField("Доп. описание", max_length=1024, blank=True, null=True)

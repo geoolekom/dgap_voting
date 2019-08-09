@@ -1,5 +1,5 @@
 """This module defines models for blog app"""
-
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -14,14 +14,13 @@ class Article(models.Model):
     """Describes model for storing articles. Can render it's content as Django template.
 
     """
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     slug = models.SlugField("URL")
     """:class:`models.SlugField` storing user-friendly article URL"""
     title = models.CharField("Заголовок", max_length=255, default=None, blank=True, null=True)
     """Article title. 
     
     Don't insert HTML tags like <h3> - it's rendered in templates. But, you may apply some text formatting like <b>."""
-    author = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, blank=True, null=True)
-    """Article author, relates to :class:`profiles.models.UserProfile`"""
     publish_dttm = models.DateTimeField('Дата публикации', auto_now_add=True)
     """Publication Date and time. Auto populated at article creation."""
     content = models.TextField("Контент", max_length=20000)
@@ -65,5 +64,5 @@ class Article(models.Model):
                or (user.is_authenticated() and (user.is_superuser or user.is_staff))
 
     def __str__(self):
-        return "{} posted: {} on {}".format(self.author.__str__(), self.title, self.publish_dttm.__str__())
+        return "{} posted: {} on {}".format(self.author, self.title, self.publish_dttm)
 

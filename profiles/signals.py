@@ -1,25 +1,14 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.auth.models import User
-from .models import UserProfile, StudentInfo
-
-
-@receiver(post_save, sender=User, dispatch_uid='profiles')
-def create_user_profile(sender, instance, created, **kwargs):
-    """Receives ``post_save`` signal from :class:`User`. Creates :class:`profiles.models.Userprofile` for new users"""
-    if created:
-        profile, created = UserProfile.objects.get_or_create(user=instance)
-# move to views
-#        url = reverse("blog:article_detail", kwargs={"slug": "notifications"})
-#        messages.add_message(self.request, messages.INFO,
-#                         "Регистрация прошла успешно. Осталось только <a href={}>настроить уведоления</a>".format(url))
+from accounts.models import User
+from .models import StudentInfo
 
 
 @receiver(post_save, sender=StudentInfo, dispatch_uid='profiles')
 def update_student_info(sender, instance, created, **kwargs):
     """Receives ``post_save`` signal from :class:`profiles.models.StudentInfo`. Updates linked :class:`profiles.models.UserProfile`
 
-    As :class:`UserProfile` is no longer used to store ersonal data, this function is unnecessary."""
+    As :class:`UserProfile` is no longer used to store personal data, this function is unnecessary."""
     try:
         user = User.objects.get(username=instance.vk.split("/")[-1])
         if not user.userprofile.is_aproved:

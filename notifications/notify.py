@@ -8,7 +8,8 @@ VK Api (v5.46) is actively used.
 """
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
+from accounts.models import User
 from social_django.models import UserSocialAuth
 from hashlib import md5
 import vk

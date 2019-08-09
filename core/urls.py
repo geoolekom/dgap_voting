@@ -1,15 +1,11 @@
 from django.conf.urls import include, url, static
 from django.conf import settings
-from django.views.generic import RedirectView
-from django.urls import reverse_lazy
 from django.contrib import admin
 
 from registration.backends.simple.views import RegistrationView
 
 from blog.views import ArticleList, ArticleDetail
-from .settings import DEBUG
 
-admin.autodiscover()
 admin.site.site_header = 'Сенат ФОПФ'
 admin.site.index_title = "Администрирование DGAP services"
 
@@ -33,9 +29,9 @@ urlpatterns = [
     url(r'^accounts/register/$', MyRegistrationView.as_view(), name='registration_register'),
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^accounts/', include('django.contrib.auth.urls')),
-    url('', include('social_django.urls', namespace='social')),
+    url(r'^social/', include('social_django.urls', namespace='social')),
     url(r'^select2/', include('django_select2.urls')),
     url(r'^(?P<slug>[\w-]+)/$', ArticleDetail.as_view(), name='article_detail_short'),  # TODO think thrice
 ] 
-if DEBUG:
+if settings.DEBUG:
     urlpatterns += static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

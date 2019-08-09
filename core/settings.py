@@ -70,6 +70,12 @@ INSTALLED_APPS = (
     'nested_inline',
 )
 
+DJANGO_APPS = (
+    'accounts.apps.AccountsConfig',
+)
+
+INSTALLED_APPS = DJANGO_APPS + INSTALLED_APPS
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -94,6 +100,8 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTH_USER_MODEL = 'accounts.User'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
@@ -140,12 +148,6 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'core.urls'
 
 WSGI_APPLICATION = 'core.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-
-# SECURITY WARNING: don't run with this passwords in production!
 
 DATABASES = {
     'default': {

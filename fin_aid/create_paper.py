@@ -1,8 +1,7 @@
 # TODO check importancy of this feature. If essential, make create_paper method of AidRequest class
 # all further imports are needed only to make application paper!
 from django.core.files import File
-from django.contrib.auth.models import User
-from django.utils import timezone
+from accounts.models import User
 from docxtpl import DocxTemplate  # create word document from template
 from petrovich.enums import Case, Gender  # склоняем фамилию (в заявлении нужен родительский падеж
 from petrovich.main import Petrovich
