@@ -15,8 +15,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(verbose_name='имя', max_length=50)
     patronymic = models.CharField(verbose_name='отчество', max_length=50, blank=True)
 
-    mifare_pass = models.CharField(verbose_name='код пропуска', max_length=100, unique=True, blank=True)
-
     group = models.CharField(verbose_name='группа', max_length=10)
     course = models.PositiveIntegerField(verbose_name='курс', default=1)
     room = models.CharField(verbose_name='комната', max_length=32, blank=True)
@@ -33,7 +31,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=False, verbose_name='активен?')
     date_joined = models.DateTimeField(auto_now_add=True, verbose_name='дата регистрации')
 
-    # is_verified = models.BooleanField(default=False, verbose_name='проверен?')
+    is_verified = models.BooleanField(default=False, verbose_name='проверен?')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = tuple()

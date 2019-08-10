@@ -48,7 +48,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'registration',
     'bootstrap3',
     'sitetree',
     'dealer',
@@ -109,7 +108,6 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.vk.VKOAuth2',
-    #'profiles.psa.MiptOAuth2',
 )
 
 CACHES = {
@@ -124,10 +122,6 @@ CACHES = {
 }
 
 SELECT2_CACHE_BACKEND = 'select2'
-
-#BOOTSTRAP3 = {
-#    'include_jquery': True,
-#}
 
 SENDFILE_BACKEND = 'sendfile.backends.development'
 
@@ -217,7 +211,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
-    'profiles.psa.approve_student',
+    'accounts.pipeline.populate_user',
 )
 
 LOGGING = {

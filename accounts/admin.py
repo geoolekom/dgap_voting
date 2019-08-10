@@ -17,7 +17,7 @@ class UserAdmin(DjangoUserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password', )}),
         ('Личные данные', {'fields': ('last_name', 'first_name', 'patronymic', 'sex',
-                                      'group', 'course', 'room')}),
+                                      'group', 'course', 'room', 'is_verified', )}),
         ('Даты', {'fields': ('date_joined', 'last_login', )}),
         ('Права', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
     )

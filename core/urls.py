@@ -2,22 +2,20 @@ from django.conf.urls import include, url, static
 from django.conf import settings
 from django.contrib import admin
 
-from registration.backends.simple.views import RegistrationView
-
-from blog.views import ArticleList, ArticleDetail
-
-admin.site.site_header = 'Сенат ФОПФ'
-admin.site.index_title = "Администрирование DGAP services"
-
-
-class MyRegistrationView(RegistrationView):
-    success_url = '/profiles'
+admin.site.site_header = 'Сервисы ФОПФ'
+admin.site.index_title = 'Администрирование сервисов ФОПФ'
 
 
 urlpatterns = [
     # url(r'^$', ArticleList.as_view(), name='index'),
+    url(r'^admin/', include(admin.site.urls)),
+
     url(r'^', include('materials.urls', namespace='materials')),
     url(r'^departments/', include('departments.urls', namespace='departments')),
+    url(r'^social/', include('social_django.urls', namespace='social')),
+    url(r'^select2/', include('django_select2.urls')),
+    url(r'^profile/', include('profiles.urls', namespace='profiles')),
+    url(r'^accounts/', include('accounts.urls', namespace='accounts')),
 
     url(r'^polls/', include('polls.urls', namespace='polls')),
     url(r'^blog/', include('blog.urls', namespace='blog')),
@@ -27,14 +25,6 @@ urlpatterns = [
     url(r'^aid/', include('fin_aid.urls', namespace='fin_aid')),
     url(r'^senate/', include('senate.urls', namespace='senate')),
     url(r'^servertime/', include('servertime.urls', namespace='servertime')),
-    url(r'^profile/', include('profiles.urls', namespace='profiles')),
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^accounts/register/$', MyRegistrationView.as_view(), name='registration_register'),
-    url(r'^accounts/', include('registration.backends.simple.urls')),
-    url(r'^accounts/', include('django.contrib.auth.urls')),
-    url(r'^social/', include('social_django.urls', namespace='social')),
-    url(r'^select2/', include('django_select2.urls')),
-    url(r'^(?P<slug>[\w-]+)/$', ArticleDetail.as_view(), name='article_detail_short'),  # TODO think thrice
-] 
+]
 if settings.DEBUG:
     urlpatterns += static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

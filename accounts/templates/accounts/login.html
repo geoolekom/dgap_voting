@@ -1,0 +1,28 @@
+{% extends 'core/base.html' %}
+{% load bootstrap3 %}
+
+{% block content %}
+    <div class="row" style="height: 50px;"></div>
+    <div class="row">
+        <div class="col-sm-offset-3 col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Вход в сервисы ФОПФ</h3>
+                </div>
+                <form method="post" action="{{ request.get_full_path }}">
+                    {% csrf_token %}
+                    <div class="panel-body">
+
+                        <a class="btn btn-default" href="{% url 'social:begin' 'google-oauth2' %}">Войти через phystech.edu</a>
+                        <a class="btn btn-default" href="{% url 'social:begin' 'google-oauth2' %}">Войти через ВК</a>
+                        <hr/>
+                        {% bootstrap_form form %}
+                    </div>
+                    <div class="panel-footer">
+                        <button type="submit" class="btn btn-primary">Войти</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

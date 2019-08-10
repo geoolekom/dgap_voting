@@ -11,16 +11,18 @@
 {% if user.is_authenticated and not user.is_verified %}
     <div class="alert alert-info">
         <a class="close" data-dismiss="alert" href="#">&times;</a>
-        <p><a class="alert-link" href="{% url 'profiles:profile_view' %}">
-            Завершить процедуру регистрации,
-        </a> чтобы получить доступ ко всем сервисам</p>
+        <p>
+            <a class="alert-link" href="{% url 'profiles:profile_view' %}">Завершить процедуру регистрации</a>,
+            чтобы получить доступ ко всем сервисам
+        </p>
     </div>
 {% endif %}
 {% if not user.is_authenticated %}
     <div class="alert alert-info">
         <a class="close" data-dismiss="alert" href="#">&times;</a>
-        <p> <a class="alert-link" href="{% url 'profiles:profile_view' %}">
-            Создать аккаунт для использования сервиса,
-        </a> авторизовавшись через ВКонтакте или почту на phystech.edu</p>
+        <p>
+            <a class="alert-link" href="{% url 'profiles:profile_view' %}">Создать аккаунт для использования сервиса</a>,
+            авторизовавшись через ВКонтакте или с помощью почты на phystech.edu
+        </p>
     </div>
 {% endif %}

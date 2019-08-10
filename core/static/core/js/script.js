@@ -4,11 +4,10 @@ jQuery(document).ready(function($) {
     });
 });
 
-
 /* Move following code to servertime app*/
 function serverTime() {
     var time = null;
-    $.ajax({url: $('#defaultTime').attr("url_servertime"),
+    $.ajax({url: $('#defaultTime').attr("data-url-servertime"),
         async: false, dataType: 'text',
         success: function(text) {
             time = new Date(text);
@@ -16,10 +15,11 @@ function serverTime() {
             time = new Date();
     }});
     return time;
-};
+}
+
 function serverDate() {
     var time = null;
-    $.ajax({url: $('#defaultTime').attr("url_serverdate"),
+    $.ajax({url: $('#defaultTime').attr("data-url-serverdate"),
         async: false, dataType: 'text',
         success: function(text) {
             time = new Date(text);
@@ -27,9 +27,9 @@ function serverDate() {
             time = new Date();
     }});
     return time;
-};
+}
 
 $(function () {
-        var startDay = serverDate();
-        $('#defaultTime').countdown({since: startDay, compact: true, format: 'HMS', description: '', serverSync: serverTime});
+    var startDay = serverDate();
+    $('#defaultTime').countdown({since: startDay, compact: true, format: 'HMS', description: '', serverSync: serverTime});
 });
