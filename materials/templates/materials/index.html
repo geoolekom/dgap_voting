@@ -25,7 +25,12 @@
             {% for post in recent_posts %}
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <div class="panel-title">{{ post.title }}</div>
+                        <div class="row">
+                            <div class="col-sm-8 panel-title">
+                                <a href="{% url 'materials:post_detail' post.id %}">{{ post.title }}</a>
+                            </div>
+                            <div class="col-sm-4 text-muted text-right">{{ post.published_at }}</div>
+                        </div>
                     </div>
                     <div class="panel-body">
                         {{ post.text|truncatechars_html:500|safe }}
@@ -34,6 +39,15 @@
             {% empty %}
                 Новостей нет.
             {% endfor %}
+
+            {% if recent_posts.count != 0 %}
+                <div class="text-right">
+                    <a class="btn btn-default" href="{% url 'materials:post_list' %}">
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                        Показать все
+                    </a>
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

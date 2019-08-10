@@ -1,0 +1,51 @@
+{% load utils %}
+
+<div class="row">
+    <div class="col-sm-12 text-center">
+        {% if paginator.page_range|length > 1 %}
+            <ul class="pagination">
+                <li>
+                    <span>
+                        Всего: {{ paginator.count }}
+                    </span>
+                </li>
+                {% if page_obj.has_previous %}
+                    <li>
+                        <a href="?page=1{% for key, val in request.GET.items %}{% if key != 'page' %}&amp;{{ key }}={{ val }}{% endif %}{% endfor %}">
+                            <span title="В начало" aria-hidden="true"> << </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="?page={{ page_obj.previous_page_number }}{% for key, val in request.GET.items %}{% if key != 'page' %}&amp;{{ key }}={{ val }}{% endif %}{% endfor %}">
+                            <span title="Предыдущая" aria-hidden="true"> < </span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% for page in paginator.page_range|paginator_range:page_obj.number %}
+                    <li {% if page_obj.number == page %}class="active"{% endif %}>
+                        <a href="?page={{ page }}{% for key, val in request.GET.items %}{% if key != 'page' %}&amp;{{ key }}={{ val }}{% endif %}{% endfor %}">
+                            <span>{{ page }}</span>
+                        </a>
+                    </li>
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li>
+                        <a href="?page={{ page_obj.next_page_number }}{% for key, val in request.GET.items %}{% if key != 'page' %}&amp;{{ key }}={{ val }}{% endif %}{% endfor %}">
+                            <span title="Следующая" aria-hidden="true"> > </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="?page={{ paginator.num_pages }}{% for key, val in request.GET.items %}{% if key != 'page' %}&amp;{{ key }}={{ val }}{% endif %}{% endfor %}">
+                            <span title="В конец" aria-hidden="true"> >> </span>
+                        </a>
+                    </li>
+                {% endif %}
+                <li>
+                    <span>
+                        Страниц: {{ paginator.num_pages }}
+                    </span>
+                </li>
+            </ul>
+        {% endif %}
+    </div>
+</div>

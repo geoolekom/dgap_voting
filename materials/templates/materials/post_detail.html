@@ -1,0 +1,10 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <h2>{{ post.title }}</h2>
+    <div class="text-muted">{{ post.published_at }}</div>
+
+    <div style="margin-top: 2rem;">
+        {{ post.text|safe }}
+    </div>
+{% endblock %}

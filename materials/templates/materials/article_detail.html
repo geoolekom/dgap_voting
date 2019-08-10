@@ -1,0 +1,10 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <h2>{{ article.category }}: {{ article.title }}</h2>
+    <div class="text-muted">{{ article.published_at }}</div>
+
+    <div style="margin-top: 2rem;">
+        {{ article.text|safe }}
+    </div>
+{% endblock %}

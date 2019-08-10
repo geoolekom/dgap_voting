@@ -12,6 +12,7 @@ class MaterialBase(models.Model):
     text = RichTextField(verbose_name='текст', max_length=4096)
 
     is_published = models.BooleanField(verbose_name='опубликован?', default=False)
+    published_at = models.DateTimeField(verbose_name='дата публикации', blank=True, null=True)
 
     created_at = models.DateTimeField(verbose_name='дата создания', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='дата изменения', auto_now=True)
@@ -38,7 +39,7 @@ class Post(MaterialBase):
     class Meta:
         verbose_name = 'пост'
         verbose_name_plural = 'посты'
-        ordering = '-created_at',
+        ordering = '-published_at',
 
 
 class Article(MaterialBase):

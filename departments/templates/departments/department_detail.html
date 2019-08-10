@@ -13,24 +13,22 @@
                         Активисты
                     </div>
                 </div>
-                <div class="panel-body">
-                    <div class="list-group">
-                    {% for activist in department.activists.all %}
-                        <div class="list-group-item">
-                            <div>
-                                <a href="{% url 'departments:activist_detail' activist.id %}">{{ activist.user.get_short_name }}</a>
-                            </div>
-                            <div class="text-muted">
-                                {{ activist.position }}
-                            </div>
-                            <div class="text-muted">
-                                <a href="mailto:{{ activist.user.email }}">{{ activist.user.email }}</a>
-                            </div>
+                <div class="list-group">
+                {% for activist in department.activists.all %}
+                    <div class="list-group-item">
+                        <div>
+                            <a href="{% url 'departments:activist_detail' activist.id %}">{{ activist.user.get_short_name }}</a>
                         </div>
-                    {% empty %}
-                        <div>Активистов нет.</div>
-                    {% endfor %}
+                        <div class="text-muted">
+                            {{ activist.position }}
+                        </div>
+                        <div class="text-muted">
+                            <a href="mailto:{{ activist.user.email }}">{{ activist.user.email }}</a>
+                        </div>
                     </div>
+                {% empty %}
+                    <div>Активистов нет.</div>
+                {% endfor %}
                 </div>
             </div>
         </div>
@@ -41,24 +39,24 @@
                         Вакансии
                     </div>
                 </div>
-                <div class="panel-body">
-                    <div class="list-group">
-                    {% for vacancy in department.vacancies.open %}
-                        <div class="list-group-item">
-                            <div>{{ vacancy.position }}</div>
-                            <div class="text-muted">
-                                {{ vacancy.description }}
-                            </div>
-                            <br/>
-                            <div>
-{#                                <a href="">Откликнуться</a>#}
-                                Для того, чтобы откликнуться, пишите на почту главе отдела.
-                            </div>
+                <div class="list-group">
+                {% for vacancy in department.vacancies.open %}
+                    <div class="list-group-item">
+                        <div>{{ vacancy.position }}</div>
+                        <div class="text-muted">
+                            {{ vacancy.description }}
                         </div>
-                    {% empty %}
-                        <div>Вакансий нет.</div>
-                    {% endfor %}
+{#                        <br/>#}
+{#                        <div>#}
+{#                            <a href="">Откликнуться</a>#}
+{#                        </div>#}
                     </div>
+                {% empty %}
+                    <div>Вакансий нет.</div>
+                {% endfor %}
+                </div>
+                <div class="panel-body">
+                    Для того, чтобы откликнуться, пишите на почту главе отдела.
                 </div>
             </div>
         </div>

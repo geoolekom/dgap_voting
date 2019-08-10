@@ -1,26 +1,26 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h2>{{ category.name }}</h2>
-
-    {% for article in category.articles.public %}
+    {% for post in post_list %}
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-sm-8 panel-title">
-                        <a href="{% url 'materials:article_detail' article.id %}">{{ article.title }}</a>
+                        <a href="{% url 'materials:post_detail' post.id %}">{{ post.title }}</a>
                     </div>
-                    <div class="col-sm-4 text-muted text-right">{{ article.published_at }}</div>
+                    <div class="col-sm-4 text-muted text-right">{{ post.published_at }}</div>
                 </div>
             </div>
 
             <div class="panel-body">
-                {{ article.text|truncatechars_html:500|safe }}
+                {{ post.text|truncatechars_html:500|safe }}
             </div>
         </div>
     {% empty %}
         <div>
-            Статей нет.
+            Новостей нет.
         </div>
     {% endfor %}
+
+    {% include 'core/paginator.html' %}
 {% endblock %}
