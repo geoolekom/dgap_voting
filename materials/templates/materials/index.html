@@ -9,13 +9,25 @@
                         Статьи
                     </div>
                 </div>
-                <div class="panel-body">
+                <div class="list-group">
                     {% for category in categories %}
-                        <div>
-                            <a href="{% url 'materials:category_detail' category.slug %}">{{ category.name }}</a>
-                        </div>
+                        <a class="list-group-item" href="{% url 'materials:category_detail' category.slug %}">{{ category.name }}</a>
                     {% empty %}
                         <div>Разделов нет.</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        Отделы
+                    </div>
+                </div>
+                <div class="list-group">
+                    {% for dept in departments %}
+                        <a class="list-group-item" href="{% url 'departments:department_detail' dept.slug %}">{{ dept.name }}</a>
+                    {% empty %}
+                        <div>Отделов нет.</div>
                     {% endfor %}
                 </div>
             </div>

@@ -1,5 +1,6 @@
 from django.views.generic import TemplateView, DetailView, ListView
 
+from departments.models import Department
 from materials.models import Category, Post, Article
 
 
@@ -9,6 +10,7 @@ class Index(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
+        context['departments'] = Department.objects.all()
         context['recent_posts'] = Post.objects.public().order_by('-created_at')[:3]
         return context
 
