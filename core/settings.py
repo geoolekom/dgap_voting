@@ -48,12 +48,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'bootstrap3',
     'sitetree',
     'dealer',
-    'django_select2',
     'raven.contrib.django.raven_compat',
-    'ckeditor',
     'core',
     'polls.apps.PollsConfig',
     'blog.apps.BlogConfig',
@@ -63,10 +60,15 @@ INSTALLED_APPS = (
     'senate',
     'django_user_agents',
     'django_bleach',
-    'social_django',
     'servertime',
     'profiles',
     'nested_inline',
+
+    'bootstrap3',
+    'social_django',
+    'django_select2',
+    'ckeditor',
+    'import_export',
 )
 
 DJANGO_APPS = (
@@ -133,6 +135,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -207,11 +210,13 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
     'social_core.pipeline.social_auth.associate_by_email',
+    'accounts.pipeline.associate_by_student_info',
     'social_core.pipeline.user.create_user',
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
-    'accounts.pipeline.populate_user',
+    'accounts.pipeline.student_info_verify',
+    'accounts.pipeline.phystech_edu_verify',
 )
 
 LOGGING = {
@@ -262,6 +267,7 @@ VK_MESSAGES_TOKEN = config.get('messages', 'VK_MESSAGES_TOKEN')
 # Social Auth
 SOCIAL_AUTH_VK_OAUTH2_KEY = config.get('oauth', 'VK_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = config.get('oauth', 'VK_SECRET')
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', ]
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config.get('oauth', 'GOOGLE_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config.get('oauth', 'GOOGLE_SECRET')

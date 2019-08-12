@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
+from import_export.admin import ImportMixin
 
-from accounts.models import User
+from accounts.models import User, StudentInfo
+from accounts.resources import StudentInfoResource
 
 
 @admin.register(User)
@@ -30,3 +32,11 @@ class UserAdmin(DjangoUserAdmin):
                                       'group', 'course', 'room')}),
         ('Права', {'fields': ('is_active', 'is_staff', 'is_superuser', )}),
     )
+
+
+@admin.register(StudentInfo)
+class StudentInfoAdmin(ImportMixin, admin.ModelAdmin):
+    resource_class = StudentInfoResource
+    list_display = 'get_full_name', 'email', 'vk_url', 'user',
+    search_fields = 'email', 'last_name', 'first_name', 'patronymic', 'vk_url',
+    raw_id_fields = 'user',

@@ -9,6 +9,7 @@ django-select2==6.3.1
 django-ckeditor==5.7.1
 python-slugify==3.0.3
 django-bootstrap3==11.1.0
+django-import-export==1.2.0
 
 bleach==2.0.0
 chardet==3.0.4
