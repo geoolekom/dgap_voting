@@ -43,9 +43,15 @@ def student_info_verify(backend, user, details, **kwargs):
         info.save()
 
 
-def phystech_edu_verify(backend, user, **kwargs):
+def phystech_edu_verify(backend, user, details, **kwargs):
     if user.is_verified:
         return
     if backend.name == GoogleOAuth2.name:
+        if not user.patronymic:
+            google_first_name = details.get('first_name')
+            name_parts = google_first_name.split()
+            if len(name_parts) == 2:
+                user.first_name = name_parts[0]
+                user.patronymic = name_parts[1]
         user.is_verified = True
         user.save()

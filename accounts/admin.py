@@ -11,7 +11,7 @@ class UserAdmin(DjangoUserAdmin):
     ordering = '-date_joined', 'email',
     readonly_fields = 'date_joined', 'last_login',
     list_display = 'email', 'get_short_name', 'group', 'sex', 'room'
-    list_filter = 'is_active', 'is_staff', 'is_superuser', 'groups', 'sex', 'group',
+    list_filter = 'is_active', 'is_staff', 'is_verified', 'is_superuser', 'sex', 'group',
 
     search_fields = 'email', 'last_name', 'first_name', 'patronymic',
     filter_horizontal = 'groups', 'user_permissions',
@@ -21,7 +21,7 @@ class UserAdmin(DjangoUserAdmin):
         ('Личные данные', {'fields': ('last_name', 'first_name', 'patronymic', 'sex',
                                       'group', 'course', 'room', 'is_verified', )}),
         ('Даты', {'fields': ('date_joined', 'last_login', )}),
-        ('Права', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
+        ('Права', {'fields': ('is_active', 'is_staff', 'is_superuser', 'user_permissions')}),
     )
     add_fieldsets = (
         (None, {
@@ -30,7 +30,7 @@ class UserAdmin(DjangoUserAdmin):
         }),
         ('Личные данные', {'fields': ('last_name', 'first_name', 'patronymic', 'sex',
                                       'group', 'course', 'room')}),
-        ('Права', {'fields': ('is_active', 'is_staff', 'is_superuser', )}),
+        ('Права', {'fields': ('is_active', 'is_staff', 'is_superuser', 'user_permissions')}),
     )
 
 
